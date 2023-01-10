@@ -10,7 +10,7 @@ import (
 
 	"math"
 
-	"gitee.com/quant1x/pandas/series/series"
+	"gitee.com/quant1x/pandas/series"
 )
 
 // compareFloats compares floating point values up to the number of digits specified.

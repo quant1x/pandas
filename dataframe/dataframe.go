@@ -13,7 +13,7 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"gitee.com/quant1x/pandas/series/series"
+	"gitee.com/quant1x/pandas/series"
 	"golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
 )
