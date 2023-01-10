@@ -3,11 +3,15 @@ module gitee.com/quant1x/pandas
 go 1.19
 
 require (
-	golang.org/x/net v0.0.0-20211015210444-4f30a5c0130f
+	github.com/WinPooh32/math v1.0.5
+	github.com/viterin/vek v0.4.0
+	golang.org/x/net v0.0.0-20220722155237-a158d28d115b
 	gonum.org/v1/gonum v0.12.0
 )
 
 require (
-	golang.org/x/exp v0.0.0-20191002040644-a1355ae1e2c3 // indirect
-	golang.org/x/tools v0.1.9 // indirect
+	github.com/chewxy/math32 v1.10.1 // indirect
+	github.com/viterin/partial v1.0.0 // indirect
+	golang.org/x/exp v0.0.0-20220907003533-145caa8ea1d0 // indirect
+	golang.org/x/sys v0.0.0-20220722155257-8c9f86f7a55f // indirect
 )
