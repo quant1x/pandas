@@ -30,6 +30,9 @@ func (e *intElement) Set(value interface{}) {
 		e.e = i
 	case int:
 		e.e = int(val)
+	case int64:
+		// TODO: 只支持int???
+		e.e = int(val)
 	case float64:
 		f := val
 		if math.IsNaN(f) ||

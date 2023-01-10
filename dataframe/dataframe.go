@@ -93,11 +93,11 @@ func checkColumnsDimensions(se ...series.Series) (nrows, ncols int, err error) {
 
 // Copy returns a copy of the DataFrame
 func (df DataFrame) Copy() DataFrame {
-	copy := New(df.columns...)
+	_copy := New(df.columns...)
 	if df.Err != nil {
-		copy.Err = df.Err
+		_copy.Err = df.Err
 	}
-	return copy
+	return _copy
 }
 
 // String implements the Stringer interface for DataFrame

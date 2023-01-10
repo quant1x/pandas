@@ -52,6 +52,7 @@ type Element interface {
 	String() string
 	Int() (int, error)
 	Float() float64
+	//FloatPoint() *float64
 	Bool() (bool, error)
 
 	// Information methods
