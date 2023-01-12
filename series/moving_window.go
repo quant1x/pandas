@@ -128,42 +128,12 @@ func (ExponentialMovingWindow) adjustedMean(data Series, alpha DType, ignoreNA b
 	}
 }
 
-// TODO: 未做指针处理
-func (ExponentialMovingWindow) v1_adjustedMean(data Series, alpha DType, ignoreNA bool) {
-	var (
-		//values []DType = data.Values()
-		values []DType = data.Float()
-		weight DType   = 1
-		last   DType   = 0
-	)
-
-	alpha = 1 - alpha
-	for t, x := range values {
-
-		w := alpha*weight + 1
-
-		if winpooh32.IsNA(x) {
-			if ignoreNA {
-				weight = w
-			}
-			values[t] = last
-			continue
-		}
-
-		last = last + (x-last)/w
-
-		weight = w
-
-		values[t] = last
-	}
-}
-
 func (ExponentialMovingWindow) notadjustedMean(data Series, alpha DType, ignoreNA bool) {
 	var (
 		count int
 		//values []DType = data.Values()
 		//values []DType = data.Float()
-		values = data.elements
+		values floatElements = data.elements.(floatElements)
 
 		beta DType = 1 - alpha
 		//last DType = values[0]
@@ -187,35 +157,6 @@ func (ExponentialMovingWindow) notadjustedMean(data Series, alpha DType, ignoreN
 		// yt = (1−α)*y(t−1) + α*x(t)
 		last = (beta * last) + (alpha * x)
 		values.Elem(t).Set(last)
-
-		count++
-	}
-}
-
-func (ExponentialMovingWindow) v1_notadjustedMean(data Series, alpha DType, ignoreNA bool) {
-	var (
-		count int
-		//values []DType = data.Values()
-		values []DType = data.Float()
-
-		beta DType = 1 - alpha
-		last DType = values[0]
-	)
-	if winpooh32.IsNA(last) {
-		last = 0
-		values[0] = last
-	}
-	for t := 1; t < len(values); t++ {
-		x := values[t]
-
-		if winpooh32.IsNA(x) {
-			values[t] = last
-			continue
-		}
-
-		// yt = (1−α)*y(t−1) + α*x(t)
-		last = (beta * last) + (alpha * x)
-		values[t] = last
 
 		count++
 	}
