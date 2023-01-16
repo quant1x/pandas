@@ -1,7 +1,9 @@
 package series
 
-import "gitee.com/quant1x/pandas/winpooh32/math"
-import "gitee.com/quant1x/pandas/winpooh32"
+import (
+	"gitee.com/quant1x/pandas/series/winpooh32"
+	"gitee.com/quant1x/pandas/series/winpooh32/math"
+)
 
 type DType = float64
 
