@@ -28,13 +28,13 @@ func compareFloats(lvalue, rvalue float64, digits int) bool {
 func TestDataFrame_New(t *testing.T) {
 	series := []series.Series{
 		series.Strings([]int{1, 2, 3, 4, 5}),
-		series.New([]int{1, 2, 3, 4, 5}, series.String, "0"),
+		series.NewSeries([]int{1, 2, 3, 4, 5}, series.String, "0"),
 		series.Ints([]int{1, 2, 3, 4, 5}),
-		series.New([]int{1, 2, 3, 4, 5}, series.String, "0"),
-		series.New([]int{1, 2, 3, 4, 5}, series.Float, "1"),
-		series.New([]int{1, 2, 3, 4, 5}, series.Bool, "1"),
+		series.NewSeries([]int{1, 2, 3, 4, 5}, series.String, "0"),
+		series.NewSeries([]int{1, 2, 3, 4, 5}, series.Float, "1"),
+		series.NewSeries([]int{1, 2, 3, 4, 5}, series.Bool, "1"),
 	}
-	d := New(series...)
+	d := NewFrame(series...)
 
 	// Check that the names are renamed properly
 	received := d.Names()
@@ -48,10 +48,10 @@ func TestDataFrame_New(t *testing.T) {
 }
 
 func TestDataFrame_Copy(t *testing.T) {
-	a := New(
-		series.New([]string{"b", "a"}, series.String, "COL.1"),
-		series.New([]int{1, 2}, series.Int, "COL.2"),
-		series.New([]float64{3.0, 4.0}, series.Float, "COL.3"),
+	a := NewFrame(
+		series.NewSeries([]string{"b", "a"}, series.String, "COL.1"),
+		series.NewSeries([]int{1, 2}, series.Int, "COL.2"),
+		series.NewSeries([]float64{3.0, 4.0}, series.Float, "COL.3"),
 	)
 	b := a.Copy()
 
@@ -70,10 +70,10 @@ func TestDataFrame_Copy(t *testing.T) {
 }
 
 func TestDataFrame_Subset(t *testing.T) {
-	a := New(
-		series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
-		series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
-		series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+	a := NewFrame(
+		series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
+		series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+		series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
 	)
 	table := []struct {
 		indexes interface{}
@@ -81,34 +81,34 @@ func TestDataFrame_Subset(t *testing.T) {
 	}{
 		{
 			[]int{1, 2},
-			New(
-				series.New([]string{"a", "b"}, series.String, "COL.1"),
-				series.New([]int{2, 4}, series.Int, "COL.2"),
-				series.New([]float64{4.0, 5.3}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]string{"a", "b"}, series.String, "COL.1"),
+				series.NewSeries([]int{2, 4}, series.Int, "COL.2"),
+				series.NewSeries([]float64{4.0, 5.3}, series.Float, "COL.3"),
 			),
 		},
 		{
 			[]bool{false, true, true, false, false},
-			New(
-				series.New([]string{"a", "b"}, series.String, "COL.1"),
-				series.New([]int{2, 4}, series.Int, "COL.2"),
-				series.New([]float64{4.0, 5.3}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]string{"a", "b"}, series.String, "COL.1"),
+				series.NewSeries([]int{2, 4}, series.Int, "COL.2"),
+				series.NewSeries([]float64{4.0, 5.3}, series.Float, "COL.3"),
 			),
 		},
 		{
 			series.Ints([]int{1, 2}),
-			New(
-				series.New([]string{"a", "b"}, series.String, "COL.1"),
-				series.New([]int{2, 4}, series.Int, "COL.2"),
-				series.New([]float64{4.0, 5.3}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]string{"a", "b"}, series.String, "COL.1"),
+				series.NewSeries([]int{2, 4}, series.Int, "COL.2"),
+				series.NewSeries([]float64{4.0, 5.3}, series.Float, "COL.3"),
 			),
 		},
 		{
 			[]int{0, 0, 1, 1, 2, 2, 3, 4},
-			New(
-				series.New([]string{"b", "b", "a", "a", "b", "b", "c", "d"}, series.String, "COL.1"),
-				series.New([]int{1, 1, 2, 2, 4, 4, 5, 4}, series.Int, "COL.2"),
-				series.New([]float64{3.0, 3.0, 4.0, 4.0, 5.3, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]string{"b", "b", "a", "a", "b", "b", "c", "d"}, series.String, "COL.1"),
+				series.NewSeries([]int{1, 1, 2, 2, 4, 4, 5, 4}, series.Int, "COL.2"),
+				series.NewSeries([]float64{3.0, 3.0, 4.0, 4.0, 5.3, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
 			),
 		},
 	}
@@ -138,10 +138,10 @@ func TestDataFrame_Subset(t *testing.T) {
 }
 
 func TestDataFrame_Select(t *testing.T) {
-	a := New(
-		series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
-		series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
-		series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+	a := NewFrame(
+		series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
+		series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+		series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
 	)
 	table := []struct {
 		indexes interface{}
@@ -149,83 +149,83 @@ func TestDataFrame_Select(t *testing.T) {
 	}{
 		{
 			series.Bools([]bool{false, true, true}),
-			New(
-				series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
 			),
 		},
 		{
 			[]bool{false, true, true},
-			New(
-				series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
 			),
 		},
 		{
 			series.Ints([]int{1, 2}),
-			New(
-				series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
 			),
 		},
 		{
 			[]int{1, 2},
-			New(
-				series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
 			),
 		},
 		{
 			[]int{1},
-			New(
-				series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+			NewFrame(
+				series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
 			),
 		},
 		{
 			1,
-			New(
-				series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+			NewFrame(
+				series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
 			),
 		},
 		{
 			[]int{1, 2, 0},
-			New(
-				series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
-				series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
+			NewFrame(
+				series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+				series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
 			),
 		},
 		{
 			[]int{0, 0},
-			New(
-				series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
-				series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
+			NewFrame(
+				series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
+				series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
 			),
 		},
 		{
 			"COL.3",
-			New(
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
 			),
 		},
 		{
 			[]string{"COL.3"},
-			New(
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
 			),
 		},
 		{
 			[]string{"COL.3", "COL.1"},
-			New(
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
-				series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
+			NewFrame(
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+				series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
 			),
 		},
 		{
 			series.Strings([]string{"COL.3", "COL.1"}),
-			New(
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
-				series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
+			NewFrame(
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+				series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
 			),
 		},
 	}
@@ -255,10 +255,10 @@ func TestDataFrame_Select(t *testing.T) {
 }
 
 func TestDataFrame_Drop(t *testing.T) {
-	a := New(
-		series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
-		series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
-		series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+	a := NewFrame(
+		series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
+		series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+		series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
 	)
 	table := []struct {
 		indexes interface{}
@@ -266,73 +266,73 @@ func TestDataFrame_Drop(t *testing.T) {
 	}{
 		{
 			series.Bools([]bool{false, true, true}),
-			New(
-				series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
+			NewFrame(
+				series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
 			),
 		},
 		{
 			[]bool{false, true, true},
-			New(
-				series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
+			NewFrame(
+				series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
 			),
 		},
 		{
 			series.Ints([]int{1, 2}),
-			New(
-				series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
+			NewFrame(
+				series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
 			),
 		},
 		{
 			[]int{1, 2},
-			New(
-				series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
+			NewFrame(
+				series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
 			),
 		},
 		{
 			[]int{1},
-			New(
-				series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
 			),
 		},
 		{
 			1,
-			New(
-				series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
 			),
 		},
 		{
 			[]int{0, 0},
-			New(
-				series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
 			),
 		},
 		{
 			"COL.3",
-			New(
-				series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
-				series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+			NewFrame(
+				series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
+				series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
 			),
 		},
 		{
 			[]string{"COL.3"},
-			New(
-				series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
-				series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+			NewFrame(
+				series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
+				series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
 			),
 		},
 		{
 			[]string{"COL.3", "COL.1"},
-			New(
-				series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+			NewFrame(
+				series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
 			),
 		},
 		{
 			series.Strings([]string{"COL.3", "COL.1"}),
-			New(
-				series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+			NewFrame(
+				series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
 			),
 		},
 	}
@@ -359,10 +359,10 @@ func TestDataFrame_Drop(t *testing.T) {
 }
 
 func TestDataFrame_Rename(t *testing.T) {
-	a := New(
-		series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
-		series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
-		series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+	a := NewFrame(
+		series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
+		series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+		series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
 	)
 	table := []struct {
 		newname string
@@ -372,28 +372,28 @@ func TestDataFrame_Rename(t *testing.T) {
 		{
 			"NEWCOL.1",
 			"COL.1",
-			New(
-				series.New([]string{"b", "a", "b", "c", "d"}, series.String, "NEWCOL.1"),
-				series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "NEWCOL.1"),
+				series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
 			),
 		},
 		{
 			"NEWCOL.3",
 			"COL.3",
-			New(
-				series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
-				series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "NEWCOL.3"),
+			NewFrame(
+				series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
+				series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "NEWCOL.3"),
 			),
 		},
 		{
 			"NEWCOL.2",
 			"COL.2",
-			New(
-				series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
-				series.New([]int{1, 2, 4, 5, 4}, series.Int, "NEWCOL.2"),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
+				series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "NEWCOL.2"),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
 			),
 		},
 	}
@@ -422,52 +422,52 @@ func TestDataFrame_Rename(t *testing.T) {
 }
 
 func TestDataFrame_CBind(t *testing.T) {
-	a := New(
-		series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
-		series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
-		series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+	a := NewFrame(
+		series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
+		series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+		series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
 	)
 	table := []struct {
 		dfb   DataFrame
 		expDf DataFrame
 	}{
 		{
-			New(
-				series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.4"),
-				series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.5"),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.6"),
+			NewFrame(
+				series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.4"),
+				series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.5"),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.6"),
 			),
-			New(
-				series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
-				series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
-				series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.4"),
-				series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.5"),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.6"),
-			),
-		},
-		{
-			New(
-				series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.4"),
-			),
-			New(
-				series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
-				series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
-				series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.4"),
+			NewFrame(
+				series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
+				series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+				series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.4"),
+				series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.5"),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.6"),
 			),
 		},
 		{
-			New(
-				series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.4"),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.6"),
+			NewFrame(
+				series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.4"),
 			),
-			New(
-				series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
-				series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
-				series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.4"),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.6"),
+			NewFrame(
+				series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
+				series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+				series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.4"),
+			),
+		},
+		{
+			NewFrame(
+				series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.4"),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.6"),
+			),
+			NewFrame(
+				series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
+				series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+				series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.4"),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.6"),
 			),
 		},
 	}
@@ -496,37 +496,37 @@ func TestDataFrame_CBind(t *testing.T) {
 }
 
 func TestDataFrame_RBind(t *testing.T) {
-	a := New(
-		series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
-		series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
-		series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+	a := NewFrame(
+		series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
+		series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+		series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
 	)
 	table := []struct {
 		dfb   DataFrame
 		expDf DataFrame
 	}{
 		{
-			New(
-				series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
-				series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
+				series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
 			),
-			New(
-				series.New([]string{"b", "a", "b", "c", "d", "b", "a", "b", "c", "d"}, series.String, "COL.1"),
-				series.New([]int{1, 2, 4, 5, 4, 1, 2, 4, 5, 4}, series.Int, "COL.2"),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2, 3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]string{"b", "a", "b", "c", "d", "b", "a", "b", "c", "d"}, series.String, "COL.1"),
+				series.NewSeries([]int{1, 2, 4, 5, 4, 1, 2, 4, 5, 4}, series.Int, "COL.2"),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2, 3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
 			),
 		},
 		{
-			New(
-				series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.1"),
-				series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.1"),
+				series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
 			),
-			New(
-				series.New([]string{"b", "a", "b", "c", "d", "1", "2", "4", "5", "4"}, series.String, "COL.1"),
-				series.New([]int{1, 2, 4, 5, 4, 1, 2, 4, 5, 4}, series.Int, "COL.2"),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2, 3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]string{"b", "a", "b", "c", "d", "1", "2", "4", "5", "4"}, series.String, "COL.1"),
+				series.NewSeries([]int{1, 2, 4, 5, 4, 1, 2, 4, 5, 4}, series.Int, "COL.2"),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2, 3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
 			),
 		},
 	}
@@ -557,10 +557,10 @@ func TestDataFrame_RBind(t *testing.T) {
 func TestDataFrame_Concat(t *testing.T) {
 	type NA struct{}
 
-	a := New(
-		series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
-		series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
-		series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+	a := NewFrame(
+		series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
+		series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+		series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
 	)
 	table := []struct {
 		dfa   DataFrame
@@ -569,71 +569,71 @@ func TestDataFrame_Concat(t *testing.T) {
 	}{
 		{
 			a,
-			New(
-				series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
-				series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
+				series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
 			),
-			New(
-				series.New([]string{"b", "a", "b", "c", "d", "b", "a", "b", "c", "d"}, series.String, "COL.1"),
-				series.New([]int{1, 2, 4, 5, 4, 1, 2, 4, 5, 4}, series.Int, "COL.2"),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2, 3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]string{"b", "a", "b", "c", "d", "b", "a", "b", "c", "d"}, series.String, "COL.1"),
+				series.NewSeries([]int{1, 2, 4, 5, 4, 1, 2, 4, 5, 4}, series.Int, "COL.2"),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2, 3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
 			),
 		},
 		{
 			a,
-			New(
-				series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.1"),
-				series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.1"),
+				series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
 			),
-			New(
-				series.New([]string{"b", "a", "b", "c", "d", "1", "2", "4", "5", "4"}, series.String, "COL.1"),
-				series.New([]int{1, 2, 4, 5, 4, 1, 2, 4, 5, 4}, series.Int, "COL.2"),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2, 3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]string{"b", "a", "b", "c", "d", "1", "2", "4", "5", "4"}, series.String, "COL.1"),
+				series.NewSeries([]int{1, 2, 4, 5, 4, 1, 2, 4, 5, 4}, series.Int, "COL.2"),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2, 3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
 			),
 		},
 
 		{
 			a,
-			New(
-				series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
 			),
-			New(
-				series.New([]string{"b", "a", "b", "c", "d", "b", "a", "b", "c", "d"}, series.String, "COL.1"),
-				series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2").Concat(series.New([]NA{NA{}, NA{}, NA{}, NA{}, NA{}}, series.Int, "")),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2, 3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
-			),
-		},
-		{
-			a,
-			New(
-				series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.1"),
-				series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
-				series.New([]string{"a", "b", "c", "d", "e"}, series.String, "COL.4"),
-			),
-			New(
-				series.New([]string{"b", "a", "b", "c", "d", "1", "2", "4", "5", "4"}, series.String, "COL.1"),
-				series.New([]int{1, 2, 4, 5, 4, 1, 2, 4, 5, 4}, series.Int, "COL.2"),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2, 3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
-				series.New([]NA{NA{}, NA{}, NA{}, NA{}, NA{}}, series.String, "COL.4").Concat(series.New([]string{"a", "b", "c", "d", "e"}, series.String, "COL.4")),
+			NewFrame(
+				series.NewSeries([]string{"b", "a", "b", "c", "d", "b", "a", "b", "c", "d"}, series.String, "COL.1"),
+				series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2").Concat(series.NewSeries([]NA{NA{}, NA{}, NA{}, NA{}, NA{}}, series.Int, "")),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2, 3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
 			),
 		},
 		{
 			a,
-			New(
-				series.New([]string{"a", "b", "c", "d", "e"}, series.String, "COL.0"),
-				series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.1"),
-				series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.1"),
+				series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+				series.NewSeries([]string{"a", "b", "c", "d", "e"}, series.String, "COL.4"),
 			),
-			New(
-				series.New([]string{"b", "a", "b", "c", "d", "1", "2", "4", "5", "4"}, series.String, "COL.1"),
-				series.New([]int{1, 2, 4, 5, 4, 1, 2, 4, 5, 4}, series.Int, "COL.2"),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2, 3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
-				series.New([]NA{NA{}, NA{}, NA{}, NA{}, NA{}}, series.String, "COL.0").Concat(series.New([]string{"a", "b", "c", "d", "e"}, series.String, "COL.0")),
+			NewFrame(
+				series.NewSeries([]string{"b", "a", "b", "c", "d", "1", "2", "4", "5", "4"}, series.String, "COL.1"),
+				series.NewSeries([]int{1, 2, 4, 5, 4, 1, 2, 4, 5, 4}, series.Int, "COL.2"),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2, 3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+				series.NewSeries([]NA{NA{}, NA{}, NA{}, NA{}, NA{}}, series.String, "COL.4").Concat(series.NewSeries([]string{"a", "b", "c", "d", "e"}, series.String, "COL.4")),
+			),
+		},
+		{
+			a,
+			NewFrame(
+				series.NewSeries([]string{"a", "b", "c", "d", "e"}, series.String, "COL.0"),
+				series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.1"),
+				series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+			),
+			NewFrame(
+				series.NewSeries([]string{"b", "a", "b", "c", "d", "1", "2", "4", "5", "4"}, series.String, "COL.1"),
+				series.NewSeries([]int{1, 2, 4, 5, 4, 1, 2, 4, 5, 4}, series.Int, "COL.2"),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2, 3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+				series.NewSeries([]NA{NA{}, NA{}, NA{}, NA{}, NA{}}, series.String, "COL.0").Concat(series.NewSeries([]string{"a", "b", "c", "d", "e"}, series.String, "COL.0")),
 			),
 		},
 		{
@@ -666,10 +666,10 @@ func TestDataFrame_Concat(t *testing.T) {
 	}
 }
 func TestDataFrame_Records(t *testing.T) {
-	a := New(
-		series.New([]string{"a", "b", "c"}, series.String, "COL.1"),
-		series.New([]int{1, 2, 3}, series.Int, "COL.2"),
-		series.New([]float64{3, 2, 1}, series.Float, "COL.3"))
+	a := NewFrame(
+		series.NewSeries([]string{"a", "b", "c"}, series.String, "COL.1"),
+		series.NewSeries([]int{1, 2, 3}, series.Int, "COL.2"),
+		series.NewSeries([]float64{3, 2, 1}, series.Float, "COL.3"))
 	expected := [][]string{
 		{"COL.1", "COL.2", "COL.3"},
 		{"a", "1", "3.000000"},
@@ -687,38 +687,38 @@ func TestDataFrame_Records(t *testing.T) {
 }
 
 func TestDataFrame_Mutate(t *testing.T) {
-	a := New(
-		series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
-		series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
-		series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+	a := NewFrame(
+		series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
+		series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+		series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
 	)
 	table := []struct {
 		s     series.Series
 		expDf DataFrame
 	}{
 		{
-			series.New([]string{"A", "B", "A", "A", "A"}, series.String, "COL.1"),
-			New(
-				series.New([]string{"A", "B", "A", "A", "A"}, series.String, "COL.1"),
-				series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+			series.NewSeries([]string{"A", "B", "A", "A", "A"}, series.String, "COL.1"),
+			NewFrame(
+				series.NewSeries([]string{"A", "B", "A", "A", "A"}, series.String, "COL.1"),
+				series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
 			),
 		},
 		{
-			series.New([]string{"A", "B", "A", "A", "A"}, series.String, "COL.2"),
-			New(
-				series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
-				series.New([]string{"A", "B", "A", "A", "A"}, series.String, "COL.2"),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+			series.NewSeries([]string{"A", "B", "A", "A", "A"}, series.String, "COL.2"),
+			NewFrame(
+				series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
+				series.NewSeries([]string{"A", "B", "A", "A", "A"}, series.String, "COL.2"),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
 			),
 		},
 		{
-			series.New([]string{"A", "B", "A", "A", "A"}, series.String, "COL.4"),
-			New(
-				series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
-				series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
-				series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
-				series.New([]string{"A", "B", "A", "A", "A"}, series.String, "COL.4"),
+			series.NewSeries([]string{"A", "B", "A", "A", "A"}, series.String, "COL.4"),
+			NewFrame(
+				series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
+				series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+				series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+				series.NewSeries([]string{"A", "B", "A", "A", "A"}, series.String, "COL.4"),
 			),
 		},
 	}
@@ -747,10 +747,10 @@ func TestDataFrame_Mutate(t *testing.T) {
 }
 
 func TestDataFrame_Filter_Or(t *testing.T) {
-	a := New(
-		series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
-		series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
-		series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+	a := NewFrame(
+		series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
+		series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+		series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
 	)
 	table := []struct {
 		filters []F
@@ -758,10 +758,10 @@ func TestDataFrame_Filter_Or(t *testing.T) {
 	}{
 		{
 			[]F{{0, "COL.2", series.GreaterEq, 4}},
-			New(
-				series.New([]string{"b", "c", "d"}, series.String, "COL.1"),
-				series.New([]int{4, 5, 4}, series.Int, "COL.2"),
-				series.New([]float64{5.3, 3.2, 1.2}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]string{"b", "c", "d"}, series.String, "COL.1"),
+				series.NewSeries([]int{4, 5, 4}, series.Int, "COL.2"),
+				series.NewSeries([]float64{5.3, 3.2, 1.2}, series.Float, "COL.3"),
 			),
 		},
 		{
@@ -769,10 +769,10 @@ func TestDataFrame_Filter_Or(t *testing.T) {
 				{0, "COL.2", series.Greater, 4},
 				{0, "COL.2", series.Eq, 1},
 			},
-			New(
-				series.New([]string{"b", "c"}, series.String, "COL.1"),
-				series.New([]int{1, 5}, series.Int, "COL.2"),
-				series.New([]float64{3.0, 3.2}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]string{"b", "c"}, series.String, "COL.1"),
+				series.NewSeries([]int{1, 5}, series.Int, "COL.2"),
+				series.NewSeries([]float64{3.0, 3.2}, series.Float, "COL.3"),
 			),
 		},
 		{
@@ -781,10 +781,10 @@ func TestDataFrame_Filter_Or(t *testing.T) {
 				{0, "COL.2", series.Eq, 1},
 				{0, "COL.1", series.Eq, "d"},
 			},
-			New(
-				series.New([]string{"b", "c", "d"}, series.String, "COL.1"),
-				series.New([]int{1, 5, 4}, series.Int, "COL.2"),
-				series.New([]float64{3.0, 3.2, 1.2}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]string{"b", "c", "d"}, series.String, "COL.1"),
+				series.NewSeries([]int{1, 5, 4}, series.Int, "COL.2"),
+				series.NewSeries([]float64{3.0, 3.2, 1.2}, series.Float, "COL.3"),
 			),
 		},
 		{
@@ -793,10 +793,10 @@ func TestDataFrame_Filter_Or(t *testing.T) {
 				{1, "", series.Eq, 1},
 				{0, "", series.Eq, "d"},
 			},
-			New(
-				series.New([]string{"b", "c", "d"}, series.String, "COL.1"),
-				series.New([]int{1, 5, 4}, series.Int, "COL.2"),
-				series.New([]float64{3.0, 3.2, 1.2}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]string{"b", "c", "d"}, series.String, "COL.1"),
+				series.NewSeries([]int{1, 5, 4}, series.Int, "COL.2"),
+				series.NewSeries([]float64{3.0, 3.2, 1.2}, series.Float, "COL.3"),
 			),
 		},
 	}
@@ -840,10 +840,10 @@ func TestDataFrame_Filter_Or(t *testing.T) {
 }
 
 func TestDataFrame_Filter_And(t *testing.T) {
-	a := New(
-		series.New([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
-		series.New([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
-		series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
+	a := NewFrame(
+		series.NewSeries([]string{"b", "a", "b", "c", "d"}, series.String, "COL.1"),
+		series.NewSeries([]int{1, 2, 4, 5, 4}, series.Int, "COL.2"),
+		series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "COL.3"),
 	)
 	table := []struct {
 		filters []F
@@ -851,18 +851,18 @@ func TestDataFrame_Filter_And(t *testing.T) {
 	}{
 		{
 			[]F{{Colname: "COL.2", Comparator: series.GreaterEq, Comparando: 4}},
-			New(
-				series.New([]string{"b", "c", "d"}, series.String, "COL.1"),
-				series.New([]int{4, 5, 4}, series.Int, "COL.2"),
-				series.New([]float64{5.3, 3.2, 1.2}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]string{"b", "c", "d"}, series.String, "COL.1"),
+				series.NewSeries([]int{4, 5, 4}, series.Int, "COL.2"),
+				series.NewSeries([]float64{5.3, 3.2, 1.2}, series.Float, "COL.3"),
 			),
 		},
 		{
 			[]F{{Colidx: 1, Comparator: series.GreaterEq, Comparando: 4}},
-			New(
-				series.New([]string{"b", "c", "d"}, series.String, "COL.1"),
-				series.New([]int{4, 5, 4}, series.Int, "COL.2"),
-				series.New([]float64{5.3, 3.2, 1.2}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]string{"b", "c", "d"}, series.String, "COL.1"),
+				series.NewSeries([]int{4, 5, 4}, series.Int, "COL.2"),
+				series.NewSeries([]float64{5.3, 3.2, 1.2}, series.Float, "COL.3"),
 			),
 		},
 		// should not have any rows
@@ -871,10 +871,10 @@ func TestDataFrame_Filter_And(t *testing.T) {
 				{Colname: "COL.2", Comparator: series.Greater, Comparando: 4},
 				{Colname: "COL.2", Comparator: series.Eq, Comparando: 1},
 			},
-			New(
-				series.New([]string{}, series.String, "COL.1"),
-				series.New([]int{}, series.Int, "COL.2"),
-				series.New([]float64{}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]string{}, series.String, "COL.1"),
+				series.NewSeries([]int{}, series.Int, "COL.2"),
+				series.NewSeries([]float64{}, series.Float, "COL.3"),
 			),
 		},
 		{
@@ -882,10 +882,10 @@ func TestDataFrame_Filter_And(t *testing.T) {
 				{Colidx: 1, Comparator: series.Greater, Comparando: 4},
 				{Colidx: 1, Comparator: series.Eq, Comparando: 1},
 			},
-			New(
-				series.New([]string{}, series.String, "COL.1"),
-				series.New([]int{}, series.Int, "COL.2"),
-				series.New([]float64{}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]string{}, series.String, "COL.1"),
+				series.NewSeries([]int{}, series.Int, "COL.2"),
+				series.NewSeries([]float64{}, series.Float, "COL.3"),
 			),
 		},
 		{
@@ -893,10 +893,10 @@ func TestDataFrame_Filter_And(t *testing.T) {
 				{Colname: "COL.2", Comparator: series.Less, Comparando: 4},
 				{Colname: "COL.1", Comparator: series.Eq, Comparando: "b"},
 			},
-			New(
-				series.New([]string{"b"}, series.String, "COL.1"),
-				series.New([]int{1}, series.Int, "COL.2"),
-				series.New([]float64{3.0}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]string{"b"}, series.String, "COL.1"),
+				series.NewSeries([]int{1}, series.Int, "COL.2"),
+				series.NewSeries([]float64{3.0}, series.Float, "COL.3"),
 			),
 		},
 		{
@@ -904,10 +904,10 @@ func TestDataFrame_Filter_And(t *testing.T) {
 				{Colidx: 1, Comparator: series.Less, Comparando: 4},
 				{Colidx: 0, Comparator: series.Eq, Comparando: "b"},
 			},
-			New(
-				series.New([]string{"b"}, series.String, "COL.1"),
-				series.New([]int{1}, series.Int, "COL.2"),
-				series.New([]float64{3.0}, series.Float, "COL.3"),
+			NewFrame(
+				series.NewSeries([]string{"b"}, series.String, "COL.1"),
+				series.NewSeries([]int{1}, series.Int, "COL.2"),
+				series.NewSeries([]float64{3.0}, series.Float, "COL.3"),
 			),
 		},
 	}
@@ -949,11 +949,11 @@ func TestLoadRecords(t *testing.T) {
 					{"b", "2", "true", "0.5"},
 				},
 			),
-			New(
-				series.New([]string{"a", "b"}, series.String, "A"),
-				series.New([]int{1, 2}, series.Int, "B"),
-				series.New([]bool{true, true}, series.Bool, "C"),
-				series.New([]float64{0, 0.5}, series.Float, "D"),
+			NewFrame(
+				series.NewSeries([]string{"a", "b"}, series.String, "A"),
+				series.NewSeries([]int{1, 2}, series.Int, "B"),
+				series.NewSeries([]bool{true, true}, series.Bool, "C"),
+				series.NewSeries([]float64{0, 0.5}, series.Float, "D"),
 			),
 			false,
 		},
@@ -968,11 +968,11 @@ func TestLoadRecords(t *testing.T) {
 				DetectTypes(false),
 				DefaultType(series.String),
 			),
-			New(
-				series.New([]string{"a", "b"}, series.String, "A"),
-				series.New([]int{1, 2}, series.String, "B"),
-				series.New([]bool{true, true}, series.String, "C"),
-				series.New([]string{"0", "0.5"}, series.String, "D"),
+			NewFrame(
+				series.NewSeries([]string{"a", "b"}, series.String, "A"),
+				series.NewSeries([]int{1, 2}, series.String, "B"),
+				series.NewSeries([]bool{true, true}, series.String, "C"),
+				series.NewSeries([]string{"0", "0.5"}, series.String, "D"),
 			),
 			false,
 		},
@@ -987,11 +987,11 @@ func TestLoadRecords(t *testing.T) {
 				DetectTypes(false),
 				DefaultType(series.String),
 			),
-			New(
-				series.New([]string{"A", "a", "b"}, series.String, "X0"),
-				series.New([]string{"B", "1", "2"}, series.String, "X1"),
-				series.New([]string{"C", "true", "true"}, series.String, "X2"),
-				series.New([]string{"D", "0", "0.5"}, series.String, "X3"),
+			NewFrame(
+				series.NewSeries([]string{"A", "a", "b"}, series.String, "X0"),
+				series.NewSeries([]string{"B", "1", "2"}, series.String, "X1"),
+				series.NewSeries([]string{"C", "true", "true"}, series.String, "X2"),
+				series.NewSeries([]string{"D", "0", "0.5"}, series.String, "X3"),
 			),
 			false,
 		},
@@ -1010,11 +1010,11 @@ func TestLoadRecords(t *testing.T) {
 					"C": series.String,
 				}),
 			),
-			New(
-				series.New([]string{"a", "b"}, series.String, "A"),
-				series.New([]float64{1, 2}, series.Float, "B"),
-				series.New([]bool{true, true}, series.String, "C"),
-				series.New([]string{"0", "0.5"}, series.String, "D"),
+			NewFrame(
+				series.NewSeries([]string{"a", "b"}, series.String, "A"),
+				series.NewSeries([]float64{1, 2}, series.Float, "B"),
+				series.NewSeries([]bool{true, true}, series.String, "C"),
+				series.NewSeries([]string{"0", "0.5"}, series.String, "D"),
 			),
 			false,
 		},
@@ -1032,11 +1032,11 @@ func TestLoadRecords(t *testing.T) {
 					"B": series.Float,
 				}),
 			),
-			New(
-				series.New([]string{"a", "b"}, series.String, "A"),
-				series.New([]float64{1, 2}, series.Float, "B"),
-				series.New([]bool{true, true}, series.Bool, "C"),
-				series.New([]string{"0", "0.5"}, series.Float, "D"),
+			NewFrame(
+				series.NewSeries([]string{"a", "b"}, series.String, "A"),
+				series.NewSeries([]float64{1, 2}, series.Float, "B"),
+				series.NewSeries([]bool{true, true}, series.Bool, "C"),
+				series.NewSeries([]string{"0", "0.5"}, series.Float, "D"),
 			),
 			false,
 		},
@@ -1050,11 +1050,11 @@ func TestLoadRecords(t *testing.T) {
 				HasHeader(true),
 				Names("MyA", "MyB", "MyC", "MyD"),
 			),
-			New(
-				series.New([]string{"a", "b"}, series.String, "MyA"),
-				series.New([]int{1, 2}, series.Int, "MyB"),
-				series.New([]bool{true, true}, series.Bool, "MyC"),
-				series.New([]string{"0", "0.5"}, series.Float, "MyD"),
+			NewFrame(
+				series.NewSeries([]string{"a", "b"}, series.String, "MyA"),
+				series.NewSeries([]int{1, 2}, series.Int, "MyB"),
+				series.NewSeries([]bool{true, true}, series.Bool, "MyC"),
+				series.NewSeries([]string{"0", "0.5"}, series.Float, "MyD"),
 			),
 			false,
 		},
@@ -1068,11 +1068,11 @@ func TestLoadRecords(t *testing.T) {
 				HasHeader(false),
 				Names("MyA", "MyB", "MyC", "MyD"),
 			),
-			New(
-				series.New([]string{"A", "a", "b"}, series.String, "MyA"),
-				series.New([]string{"B", "1", "2"}, series.String, "MyB"),
-				series.New([]string{"C", "true", "true"}, series.String, "MyC"),
-				series.New([]string{"D", "0", "0.5"}, series.String, "MyD"),
+			NewFrame(
+				series.NewSeries([]string{"A", "a", "b"}, series.String, "MyA"),
+				series.NewSeries([]string{"B", "1", "2"}, series.String, "MyB"),
+				series.NewSeries([]string{"C", "true", "true"}, series.String, "MyC"),
+				series.NewSeries([]string{"D", "0", "0.5"}, series.String, "MyD"),
 			),
 			false,
 		},
@@ -1110,11 +1110,11 @@ func TestLoadRecords(t *testing.T) {
 					{"a", "2", "true", "0.5"},
 				},
 			),
-			New(
-				series.New([]string{"1", "a"}, series.String, "A"),
-				series.New([]int{1, 2}, series.Int, "B"),
-				series.New([]bool{true, true}, series.Bool, "C"),
-				series.New([]float64{0, 0.5}, series.Float, "D"),
+			NewFrame(
+				series.NewSeries([]string{"1", "a"}, series.String, "A"),
+				series.NewSeries([]int{1, 2}, series.Int, "B"),
+				series.NewSeries([]bool{true, true}, series.Bool, "C"),
+				series.NewSeries([]float64{0, 0.5}, series.Float, "D"),
 			),
 			false,
 		},
@@ -1126,11 +1126,11 @@ func TestLoadRecords(t *testing.T) {
 					{"1", "2", "true", "0.5"},
 				},
 			),
-			New(
-				series.New([]string{"a", "1"}, series.String, "A"),
-				series.New([]int{1, 2}, series.Int, "B"),
-				series.New([]bool{true, true}, series.Bool, "C"),
-				series.New([]float64{0, 0.5}, series.Float, "D"),
+			NewFrame(
+				series.NewSeries([]string{"a", "1"}, series.String, "A"),
+				series.NewSeries([]int{1, 2}, series.Int, "B"),
+				series.NewSeries([]bool{true, true}, series.Bool, "C"),
+				series.NewSeries([]float64{0, 0.5}, series.Float, "D"),
 			),
 			false,
 		},
@@ -1142,11 +1142,11 @@ func TestLoadRecords(t *testing.T) {
 					{"1", "2", "true", "1"},
 				},
 			),
-			New(
-				series.New([]string{"a", "1"}, series.String, "A"),
-				series.New([]int{1, 2}, series.Int, "B"),
-				series.New([]bool{true, true}, series.Bool, "C"),
-				series.New([]float64{0.5, 1}, series.Float, "D"),
+			NewFrame(
+				series.NewSeries([]string{"a", "1"}, series.String, "A"),
+				series.NewSeries([]int{1, 2}, series.Int, "B"),
+				series.NewSeries([]bool{true, true}, series.Bool, "C"),
+				series.NewSeries([]float64{0.5, 1}, series.Float, "D"),
 			),
 			false,
 		},
@@ -1158,11 +1158,11 @@ func TestLoadRecords(t *testing.T) {
 					{"1", "2", "true", "1"},
 				},
 			),
-			New(
-				series.New([]string{"a", "1"}, series.String, "A"),
-				series.New([]int{1, 2}, series.Int, "B"),
-				series.New([]string{"trueee", "true"}, series.String, "C"),
-				series.New([]float64{0.5, 1}, series.Float, "D"),
+			NewFrame(
+				series.NewSeries([]string{"a", "1"}, series.String, "A"),
+				series.NewSeries([]int{1, 2}, series.Int, "B"),
+				series.NewSeries([]string{"trueee", "true"}, series.String, "C"),
+				series.NewSeries([]float64{0.5, 1}, series.Float, "D"),
 			),
 			false,
 		},
@@ -1174,11 +1174,11 @@ func TestLoadRecords(t *testing.T) {
 					{"1", "2", "trueee", "1"},
 				},
 			),
-			New(
-				series.New([]string{"a", "1"}, series.String, "A"),
-				series.New([]int{1, 2}, series.Int, "B"),
-				series.New([]string{"true", "trueee"}, series.String, "C"),
-				series.New([]float64{0.5, 1}, series.Float, "D"),
+			NewFrame(
+				series.NewSeries([]string{"a", "1"}, series.String, "A"),
+				series.NewSeries([]int{1, 2}, series.Int, "B"),
+				series.NewSeries([]string{"true", "trueee"}, series.String, "C"),
+				series.NewSeries([]float64{0.5, 1}, series.Float, "D"),
 			),
 			false,
 		},
@@ -1190,11 +1190,11 @@ func TestLoadRecords(t *testing.T) {
 					{"1", "2", "true", "a"},
 				},
 			),
-			New(
-				series.New([]string{"a", "1"}, series.String, "A"),
-				series.New([]int{1, 2}, series.Int, "B"),
-				series.New([]bool{true, true}, series.Bool, "C"),
-				series.New([]string{"0.5", "a"}, series.String, "D"),
+			NewFrame(
+				series.NewSeries([]string{"a", "1"}, series.String, "A"),
+				series.NewSeries([]int{1, 2}, series.Int, "B"),
+				series.NewSeries([]bool{true, true}, series.Bool, "C"),
+				series.NewSeries([]string{"0.5", "a"}, series.String, "D"),
 			),
 			false,
 		},
@@ -1206,11 +1206,11 @@ func TestLoadRecords(t *testing.T) {
 					{"1", "2", "0.5", "a"},
 				},
 			),
-			New(
-				series.New([]string{"a", "1"}, series.String, "A"),
-				series.New([]int{1, 2}, series.Int, "B"),
-				series.New([]string{"true", "NaN"}, series.Bool, "C"),
-				series.New([]string{"0.5", "a"}, series.String, "D"),
+			NewFrame(
+				series.NewSeries([]string{"a", "1"}, series.String, "A"),
+				series.NewSeries([]int{1, 2}, series.Int, "B"),
+				series.NewSeries([]string{"true", "NaN"}, series.Bool, "C"),
+				series.NewSeries([]string{"0.5", "a"}, series.String, "D"),
 			),
 			false,
 		},
@@ -1257,11 +1257,11 @@ func TestLoadMaps(t *testing.T) {
 					},
 				},
 			),
-			New(
-				series.New([]string{"a", "b"}, series.String, "A"),
-				series.New([]int{1, 2}, series.Int, "B"),
-				series.New([]bool{true, true}, series.Bool, "C"),
-				series.New([]float64{0, 0.5}, series.Float, "D"),
+			NewFrame(
+				series.NewSeries([]string{"a", "b"}, series.String, "A"),
+				series.NewSeries([]int{1, 2}, series.Int, "B"),
+				series.NewSeries([]bool{true, true}, series.Bool, "C"),
+				series.NewSeries([]float64{0, 0.5}, series.Float, "D"),
 			),
 		},
 		{ // Test: 1
@@ -1284,11 +1284,11 @@ func TestLoadMaps(t *testing.T) {
 				DetectTypes(false),
 				DefaultType(series.String),
 			),
-			New(
-				series.New([]string{"a", "b"}, series.String, "A"),
-				series.New([]int{1, 2}, series.String, "B"),
-				series.New([]bool{true, true}, series.String, "C"),
-				series.New([]string{"0", "0.5"}, series.String, "D"),
+			NewFrame(
+				series.NewSeries([]string{"a", "b"}, series.String, "A"),
+				series.NewSeries([]int{1, 2}, series.String, "B"),
+				series.NewSeries([]bool{true, true}, series.String, "C"),
+				series.NewSeries([]string{"0", "0.5"}, series.String, "D"),
 			),
 		},
 		{ // Test: 2
@@ -1311,11 +1311,11 @@ func TestLoadMaps(t *testing.T) {
 				DetectTypes(false),
 				DefaultType(series.String),
 			),
-			New(
-				series.New([]string{"A", "a", "b"}, series.String, "X0"),
-				series.New([]string{"B", "1", "2"}, series.String, "X1"),
-				series.New([]string{"C", "true", "true"}, series.String, "X2"),
-				series.New([]string{"D", "0", "0.5"}, series.String, "X3"),
+			NewFrame(
+				series.NewSeries([]string{"A", "a", "b"}, series.String, "X0"),
+				series.NewSeries([]string{"B", "1", "2"}, series.String, "X1"),
+				series.NewSeries([]string{"C", "true", "true"}, series.String, "X2"),
+				series.NewSeries([]string{"D", "0", "0.5"}, series.String, "X3"),
 			),
 		},
 		{ // Test: 3
@@ -1342,11 +1342,11 @@ func TestLoadMaps(t *testing.T) {
 					"C": series.String,
 				}),
 			),
-			New(
-				series.New([]string{"a", "b"}, series.String, "A"),
-				series.New([]float64{1, 2}, series.Float, "B"),
-				series.New([]bool{true, true}, series.String, "C"),
-				series.New([]string{"0", "0.5"}, series.String, "D"),
+			NewFrame(
+				series.NewSeries([]string{"a", "b"}, series.String, "A"),
+				series.NewSeries([]float64{1, 2}, series.Float, "B"),
+				series.NewSeries([]bool{true, true}, series.String, "C"),
+				series.NewSeries([]string{"0", "0.5"}, series.String, "D"),
 			),
 		},
 		{ // Test: 4
@@ -1372,11 +1372,11 @@ func TestLoadMaps(t *testing.T) {
 					"B": series.Float,
 				}),
 			),
-			New(
-				series.New([]string{"a", "b"}, series.String, "A"),
-				series.New([]float64{1, 2}, series.Float, "B"),
-				series.New([]bool{true, true}, series.Bool, "C"),
-				series.New([]string{"0", "0.5"}, series.Float, "D"),
+			NewFrame(
+				series.NewSeries([]string{"a", "b"}, series.String, "A"),
+				series.NewSeries([]float64{1, 2}, series.Float, "B"),
+				series.NewSeries([]bool{true, true}, series.Bool, "C"),
+				series.NewSeries([]string{"0", "0.5"}, series.Float, "D"),
 			),
 		},
 	}
@@ -1547,10 +1547,10 @@ func TestReadHTML(t *testing.T) {
 }
 
 func TestDataFrame_SetNames(t *testing.T) {
-	a := New(
-		series.New([]string{"a", "b", "c"}, series.String, "COL.1"),
-		series.New([]int{1, 2, 3}, series.Int, "COL.2"),
-		series.New([]float64{3, 2, 1}, series.Float, "COL.3"),
+	a := NewFrame(
+		series.NewSeries([]string{"a", "b", "c"}, series.String, "COL.1"),
+		series.NewSeries([]int{1, 2, 3}, series.Int, "COL.2"),
+		series.NewSeries([]float64{3, 2, 1}, series.Float, "COL.3"),
 	)
 
 	err := a.SetNames("wot", "tho", "tree")
@@ -1942,10 +1942,10 @@ A_0,B,C,D_0,A_1,F,D_1
 }
 
 func TestDataFrame_Maps(t *testing.T) {
-	a := New(
-		series.New([]string{"a", "b", "c"}, series.String, "COL.1"),
-		series.New([]string{"", "2", "3"}, series.Int, "COL.2"),
-		series.New([]string{"", "", "3"}, series.Int, "COL.3"),
+	a := NewFrame(
+		series.NewSeries([]string{"a", "b", "c"}, series.String, "COL.1"),
+		series.NewSeries([]string{"", "2", "3"}, series.Int, "COL.2"),
+		series.NewSeries([]string{"", "", "3"}, series.Int, "COL.3"),
 	)
 	m := a.Maps()
 	expected := []map[string]interface{}{
@@ -2072,7 +2072,7 @@ func TestDataFrame_Col(t *testing.T) {
 		DefaultType(series.Int),
 	)
 	b := a.Col("COL.2")
-	expected := series.New([]int{1, 2, 3}, series.Int, "COL.2")
+	expected := series.NewSeries([]int{1, 2, 3}, series.Int, "COL.2")
 	if !reflect.DeepEqual(b.Records(), expected.Records()) {
 		t.Errorf("\nexpected: %v\nreceived: %v", expected, b)
 	}
@@ -2430,25 +2430,25 @@ func TestDataFrame_Arrange2(t *testing.T) {
 		expDf    DataFrame
 	}{
 		{
-			New(
-				series.New([]string{"A", "C", "B", "D", "C", "A", "D", "B"}, series.String, "A"),
-				series.New([]string{"103", "103", "103", "103", "100", "100", "100", "100"}, series.Int, "B"),
+			NewFrame(
+				series.NewSeries([]string{"A", "C", "B", "D", "C", "A", "D", "B"}, series.String, "A"),
+				series.NewSeries([]string{"103", "103", "103", "103", "100", "100", "100", "100"}, series.Int, "B"),
 			),
 			[]Order{Sort("B")},
-			New(
-				series.New([]string{"C", "A", "D", "B", "A", "C", "B", "D"}, series.String, "A"),
-				series.New([]string{"100", "100", "100", "100", "103", "103", "103", "103"}, series.Int, "B"),
+			NewFrame(
+				series.NewSeries([]string{"C", "A", "D", "B", "A", "C", "B", "D"}, series.String, "A"),
+				series.NewSeries([]string{"100", "100", "100", "100", "103", "103", "103", "103"}, series.Int, "B"),
 			),
 		},
 		{
-			New(
-				series.New([]string{"A", "C", "B", "D", "C", "A", "D", "B"}, series.String, "A"),
-				series.New([]string{"103", "103", "103", "103", "100", "100", "100", "100"}, series.Int, "B"),
+			NewFrame(
+				series.NewSeries([]string{"A", "C", "B", "D", "C", "A", "D", "B"}, series.String, "A"),
+				series.NewSeries([]string{"103", "103", "103", "103", "100", "100", "100", "100"}, series.Int, "B"),
 			),
 			[]Order{Sort("A"), Sort("B")},
-			New(
-				series.New([]string{"A", "A", "B", "B", "C", "C", "D", "D"}, series.String, "A"),
-				series.New([]string{"100", "103", "100", "103", "100", "103", "100", "103"}, series.Int, "B"),
+			NewFrame(
+				series.NewSeries([]string{"A", "A", "B", "B", "C", "C", "D", "D"}, series.String, "A"),
+				series.NewSeries([]string{"100", "103", "100", "103", "100", "103", "100", "103"}, series.Int, "B"),
 			),
 		},
 	}
@@ -2686,11 +2686,11 @@ func TestLoadMatrix(t *testing.T) {
 					{"3", "2", "true", "0.5"},
 				},
 			),
-			New(
-				series.New([]string{"4", "3"}, series.Float, "X0"),
-				series.New([]int{1, 2}, series.Float, "X1"),
-				series.New([]bool{true, true}, series.Float, "X2"),
-				series.New([]float64{0, 0.5}, series.Float, "X3"),
+			NewFrame(
+				series.NewSeries([]string{"4", "3"}, series.Float, "X0"),
+				series.NewSeries([]int{1, 2}, series.Float, "X1"),
+				series.NewSeries([]bool{true, true}, series.Float, "X2"),
+				series.NewSeries([]float64{0, 0.5}, series.Float, "X3"),
 			),
 		},
 	}
@@ -2744,20 +2744,20 @@ func TestLoadStructs(t *testing.T) {
 	}{
 		{
 			LoadStructs(dataTags),
-			New(
-				series.New([]string{"a", "NaN"}, series.String, "a"),
-				series.New([]int{1, 2}, series.String, "b"),
-				series.New([]bool{true, true}, series.String, "c"),
-				series.New([]string{"0.000000", "0.500000"}, series.String, "d"),
+			NewFrame(
+				series.NewSeries([]string{"a", "NaN"}, series.String, "a"),
+				series.NewSeries([]int{1, 2}, series.String, "b"),
+				series.NewSeries([]bool{true, true}, series.String, "c"),
+				series.NewSeries([]string{"0.000000", "0.500000"}, series.String, "d"),
 			),
 		},
 		{
 			LoadStructs(data),
-			New(
-				series.New([]string{"a", "b"}, series.String, "A"),
-				series.New([]int{1, 2}, series.Int, "B"),
-				series.New([]bool{true, true}, series.Bool, "C"),
-				series.New([]float64{0, 0.5}, series.Float, "D"),
+			NewFrame(
+				series.NewSeries([]string{"a", "b"}, series.String, "A"),
+				series.NewSeries([]int{1, 2}, series.Int, "B"),
+				series.NewSeries([]bool{true, true}, series.Bool, "C"),
+				series.NewSeries([]float64{0, 0.5}, series.Float, "D"),
 			),
 		},
 		{
@@ -2767,11 +2767,11 @@ func TestLoadStructs(t *testing.T) {
 				DetectTypes(false),
 				DefaultType(series.String),
 			),
-			New(
-				series.New([]string{"a", "b"}, series.String, "A"),
-				series.New([]int{1, 2}, series.String, "B"),
-				series.New([]bool{true, true}, series.String, "C"),
-				series.New([]string{"0.000000", "0.500000"}, series.String, "D"),
+			NewFrame(
+				series.NewSeries([]string{"a", "b"}, series.String, "A"),
+				series.NewSeries([]int{1, 2}, series.String, "B"),
+				series.NewSeries([]bool{true, true}, series.String, "C"),
+				series.NewSeries([]string{"0.000000", "0.500000"}, series.String, "D"),
 			),
 		},
 		{
@@ -2781,11 +2781,11 @@ func TestLoadStructs(t *testing.T) {
 				DetectTypes(false),
 				DefaultType(series.String),
 			),
-			New(
-				series.New([]string{"A", "a", "b"}, series.String, "X0"),
-				series.New([]string{"B", "1", "2"}, series.String, "X1"),
-				series.New([]string{"C", "true", "true"}, series.String, "X2"),
-				series.New([]string{"D", "0.000000", "0.500000"}, series.String, "X3"),
+			NewFrame(
+				series.NewSeries([]string{"A", "a", "b"}, series.String, "X0"),
+				series.NewSeries([]string{"B", "1", "2"}, series.String, "X1"),
+				series.NewSeries([]string{"C", "true", "true"}, series.String, "X2"),
+				series.NewSeries([]string{"D", "0.000000", "0.500000"}, series.String, "X3"),
 			),
 		},
 		{
@@ -2799,11 +2799,11 @@ func TestLoadStructs(t *testing.T) {
 					"C": series.String,
 				}),
 			),
-			New(
-				series.New([]string{"a", "b"}, series.String, "A"),
-				series.New([]float64{1, 2}, series.Float, "B"),
-				series.New([]bool{true, true}, series.String, "C"),
-				series.New([]string{"0.000000", "0.500000"}, series.String, "D"),
+			NewFrame(
+				series.NewSeries([]string{"a", "b"}, series.String, "A"),
+				series.NewSeries([]float64{1, 2}, series.Float, "B"),
+				series.NewSeries([]bool{true, true}, series.String, "C"),
+				series.NewSeries([]string{"0.000000", "0.500000"}, series.String, "D"),
 			),
 		},
 		{
@@ -2816,11 +2816,11 @@ func TestLoadStructs(t *testing.T) {
 					"B": series.Float,
 				}),
 			),
-			New(
-				series.New([]string{"a", "b"}, series.String, "A"),
-				series.New([]float64{1, 2}, series.Float, "B"),
-				series.New([]bool{true, true}, series.Bool, "C"),
-				series.New([]string{"0", "0.5"}, series.Float, "D"),
+			NewFrame(
+				series.NewSeries([]string{"a", "b"}, series.String, "A"),
+				series.NewSeries([]float64{1, 2}, series.Float, "B"),
+				series.NewSeries([]bool{true, true}, series.Bool, "C"),
+				series.NewSeries([]string{"0", "0.5"}, series.Float, "D"),
 			),
 		},
 	}
@@ -2858,28 +2858,28 @@ func TestDescribe(t *testing.T) {
 					{"a", "2", "7.1", "false"},
 				}),
 
-			New(
-				series.New(
+			NewFrame(
+				series.NewSeries(
 					[]string{"mean", "median", "stddev", "min", "25%", "50%", "75%", "max"},
 					series.String,
 					"",
 				),
-				series.New(
+				series.NewSeries(
 					[]string{"-", "-", "-", "a", "-", "-", "-", "c"},
 					series.String,
 					"A",
 				),
-				series.New(
+				series.NewSeries(
 					[]float64{3.25, 3.5, 0.957427, 2.0, 2.0, 3.0, 4.0, 4.0},
 					series.Float,
 					"B",
 				),
-				series.New(
+				series.NewSeries(
 					[]float64{6.05, 6., 0.818535, 5.1, 5.1, 6.0, 6.0, 7.1},
 					series.Float,
 					"C",
 				),
-				series.New(
+				series.NewSeries(
 					[]float64{0.5, math.NaN(), 0.57735, 0.0, 0.0, 0.0, 1.0, 1.0},
 					series.Float,
 					"D",
@@ -2929,10 +2929,10 @@ func IsEqual(f1, f2 float64) bool {
 	}
 }
 func TestDataFrame_GroupBy(t *testing.T) {
-	a := New(
-		series.New([]string{"b", "a", "b", "a", "b"}, series.String, "key1"),
-		series.New([]int{1, 2, 1, 2, 2}, series.Int, "key2"),
-		series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "values"),
+	a := NewFrame(
+		series.NewSeries([]string{"b", "a", "b", "a", "b"}, series.String, "key1"),
+		series.NewSeries([]int{1, 2, 1, 2, 2}, series.Int, "key2"),
+		series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "values"),
 	)
 	groups := a.GroupBy("key1", "key2")
 	resultMap := make(map[string]float32, 3)
@@ -2955,8 +2955,8 @@ func TestDataFrame_GroupBy(t *testing.T) {
 		}
 	}
 
-	b := New(
-		series.New([]string{"b", "a", "b", "a", "b"}, series.String, "key3"),
+	b := NewFrame(
+		series.NewSeries([]string{"b", "a", "b", "a", "b"}, series.String, "key3"),
 	)
 	groups = b.GroupBy("key1", "key2")
 	if groups.Err == nil {
@@ -2965,11 +2965,11 @@ func TestDataFrame_GroupBy(t *testing.T) {
 }
 
 func TestDataFrame_Aggregation(t *testing.T) {
-	a := New(
-		series.New([]string{"b", "a", "b", "a", "b"}, series.String, "key1"),
-		series.New([]int{1, 2, 1, 2, 2}, series.Int, "key2"),
-		series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "values"),
-		series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "values2"),
+	a := NewFrame(
+		series.NewSeries([]string{"b", "a", "b", "a", "b"}, series.String, "key1"),
+		series.NewSeries([]int{1, 2, 1, 2, 2}, series.Int, "key2"),
+		series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "values"),
+		series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "values2"),
 	)
 	groups := a.GroupBy("key1", "key2")
 	df := groups.Aggregation([]AggregationType{Aggregation_MAX, Aggregation_MIN, Aggregation_COUNT, Aggregation_SUM}, []string{"values", "values2", "values2", "values2"})
@@ -2986,10 +2986,10 @@ func TestDataFrame_Aggregation(t *testing.T) {
 }
 
 func TestGroups_GetGroups(t *testing.T) {
-	a := New(
-		series.New([]string{"b", "a", "b", "a", "b"}, series.String, "key1"),
-		series.New([]int{1, 2, 1, 2, 2}, series.Int, "key2"),
-		series.New([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "values"),
+	a := NewFrame(
+		series.NewSeries([]string{"b", "a", "b", "a", "b"}, series.String, "key1"),
+		series.NewSeries([]int{1, 2, 1, 2, 2}, series.Int, "key2"),
+		series.NewSeries([]float64{3.0, 4.0, 5.3, 3.2, 1.2}, series.Float, "values"),
 	)
 	groups := a.GroupBy("key1", "key2").GetGroups()
 	groupNames := []string{}

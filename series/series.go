@@ -132,7 +132,7 @@ const (
 type Indexes interface{}
 
 // New is the generic Series constructor
-func New(values interface{}, t Type, name string) Series {
+func NewSeries(values interface{}, t Type, name string) Series {
 	ret := Series{
 		Name: name,
 		t:    t,
@@ -214,27 +214,27 @@ func New(values interface{}, t Type, name string) Series {
 
 // Strings is a constructor for a String Series
 func Strings(values interface{}) Series {
-	return New(values, String, "")
+	return NewSeries(values, String, "")
 }
 
 // Ints is a constructor for an Int Series
 func Ints(values interface{}) Series {
-	return New(values, Int, "")
+	return NewSeries(values, Int, "")
 }
 
 // Floats is a constructor for a Float Series
 func Floats(values interface{}) Series {
-	return New(values, Float, "")
+	return NewSeries(values, Float, "")
 }
 
 // Bools is a constructor for a Bool Series
 func Bools(values interface{}) Series {
-	return New(values, Bool, "")
+	return NewSeries(values, Bool, "")
 }
 
 // Empty returns an empty Series of the same type
 func (s Series) Empty() Series {
-	return New([]int{}, s.t, s.Name)
+	return NewSeries([]int{}, s.t, s.Name)
 }
 
 // Returns Error or nil if no error occured
@@ -248,7 +248,7 @@ func (s *Series) Append(values interface{}) {
 	if err := s.Err; err != nil {
 		return
 	}
-	news := New(values, s.t, s.Name)
+	news := NewSeries(values, s.t, s.Name)
 	switch s.t {
 	case String:
 		s.elements = append(s.elements.(stringElements), news.elements.(stringElements)...)
@@ -414,7 +414,7 @@ func (s Series) Compare(comparator Comparator, comparando interface{}) Series {
 		return Bools(bools)
 	}
 
-	comp := New(comparando, s.t, "")
+	comp := NewSeries(comparando, s.t, "")
 	// In comparator comparison
 	if comparator == In {
 		for i := 0; i < s.Len(); i++ {
@@ -805,7 +805,7 @@ func (s Series) Map(f MapFunction) Series {
 		value := f(s.elements.Elem(i))
 		mappedValues[i] = value
 	}
-	return New(mappedValues, s.Type(), s.Name)
+	return NewSeries(mappedValues, s.Type(), s.Name)
 }
 
 // Sum calculates the sum value of a series

@@ -50,7 +50,7 @@ func (d Series) EWM(alpha Alpha, adjust bool, ignoreNA bool) ExponentialMovingWi
 		param = alpha.Halflife
 	}
 
-	dest := New(d.Float(), Float, d.Name)
+	dest := NewSeries(d.Float(), Float, d.Name)
 	return ExponentialMovingWindow{
 		data:     dest,
 		atype:    atype,

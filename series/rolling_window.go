@@ -16,7 +16,7 @@ func (s Series) Rolling(window int) RollingWindow {
 
 // Mean returns the rolling mean.
 func (r RollingWindow) Mean() (s Series) {
-	s = New([]float64{}, Float, "Mean")
+	s = NewSeries([]float64{}, Float, "Mean")
 	for _, block := range r.getBlocks() {
 		s.Append(block.Mean())
 	}
@@ -26,7 +26,7 @@ func (r RollingWindow) Mean() (s Series) {
 
 // StdDev returns the rolling mean.
 func (r RollingWindow) StdDev() (s Series) {
-	s = New([]float64{}, Float, "StdDev")
+	s = NewSeries([]float64{}, Float, "StdDev")
 	for _, block := range r.getBlocks() {
 		s.Append(block.StdDev())
 	}

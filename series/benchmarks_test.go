@@ -139,7 +139,7 @@ func BenchmarkSeries_New(b *testing.B) {
 	for _, test := range table {
 		b.Run(test.name, func(b *testing.B) {
 			for i := 0; i < b.N; i++ {
-				series.New(test.data, test.seriesType, test.name)
+				series.NewSeries(test.data, test.seriesType, test.name)
 			}
 		})
 	}

@@ -39,8 +39,8 @@ type DataFrame struct {
 	Err error
 }
 
-// New is the generic DataFrame constructor
-func New(se ...series.Series) DataFrame {
+// NewFrame New is the generic DataFrame constructor
+func NewFrame(se ...series.Series) DataFrame {
 	if se == nil || len(se) == 0 {
 		return DataFrame{Err: fmt.Errorf("empty DataFrame")}
 	}
@@ -93,7 +93,7 @@ func checkColumnsDimensions(se ...series.Series) (nrows, ncols int, err error) {
 
 // Copy returns a copy of the DataFrame
 func (df DataFrame) Copy() DataFrame {
-	_copy := New(df.columns...)
+	_copy := NewFrame(df.columns...)
 	if df.Err != nil {
 		_copy.Err = df.Err
 	}
@@ -541,9 +541,9 @@ func (df DataFrame) Rename(newname, oldname string) DataFrame {
 		return DataFrame{Err: fmt.Errorf("rename: can't find column name")}
 	}
 
-	copy := df.Copy()
-	copy.columns[idx].Name = newname
-	return copy
+	_copy := df.Copy()
+	_copy.columns[idx].Name = newname
+	return _copy
 }
 
 // CBind combines the columns of this DataFrame and dfb DataFrame.
@@ -555,7 +555,7 @@ func (df DataFrame) CBind(dfb DataFrame) DataFrame {
 		return dfb
 	}
 	cols := append(df.columns, dfb.columns...)
-	return New(cols...)
+	return NewFrame(cols...)
 }
 
 // RBind matches the column names of two DataFrames and returns combined
@@ -582,7 +582,7 @@ func (df DataFrame) RBind(dfb DataFrame) DataFrame {
 		}
 		expandedSeries[k] = newSeries
 	}
-	return New(expandedSeries...)
+	return NewFrame(expandedSeries...)
 }
 
 // Concat concatenates rows of two DataFrames like RBind, but also including
@@ -617,12 +617,12 @@ func (df DataFrame) Concat(dfb DataFrame) DataFrame {
 			a = df.columns[aidx]
 		} else {
 			bb := dfb.columns[bidx]
-			a = series.New(make([]struct{}, df.nrows), bb.Type(), bb.Name)
+			a = series.NewSeries(make([]struct{}, df.nrows), bb.Type(), bb.Name)
 		}
 		if bidx != -1 {
 			b = dfb.columns[bidx]
 		} else {
-			b = series.New(make([]struct{}, dfb.nrows), a.Type(), a.Name)
+			b = series.NewSeries(make([]struct{}, dfb.nrows), a.Type(), a.Name)
 		}
 		newSeries := a.Concat(b)
 		if err := newSeries.Err; err != nil {
@@ -630,7 +630,7 @@ func (df DataFrame) Concat(dfb DataFrame) DataFrame {
 		}
 		expandedSeries[k] = newSeries
 	}
-	return New(expandedSeries...)
+	return NewFrame(expandedSeries...)
 }
 
 // Mutate changes a column of the DataFrame with the given Series or adds it as
@@ -826,7 +826,7 @@ func (df DataFrame) Capply(f func(series.Series) series.Series) DataFrame {
 		applied.Name = s.Name
 		columns[i] = applied
 	}
-	return New(columns...)
+	return NewFrame(columns...)
 }
 
 // Rapply applies the given function to the rows of a DataFrame. Prior to applying
@@ -874,7 +874,7 @@ func (df DataFrame) Rapply(f func(series.Series) series.Series) DataFrame {
 	elements := make([][]series.Element, df.nrows)
 	rowlen := -1
 	for i := 0; i < df.nrows; i++ {
-		row := series.New(nil, rowType, "").Empty()
+		row := series.NewSeries(nil, rowType, "").Empty()
 		for _, col := range df.columns {
 			row.Append(col.Elem(i))
 		}
@@ -903,7 +903,7 @@ func (df DataFrame) Rapply(f func(series.Series) series.Series) DataFrame {
 			types[i] = elements[i][j].Type()
 		}
 		colType := detectType(types)
-		s := series.New(nil, colType, "").Empty()
+		s := series.NewSeries(nil, colType, "").Empty()
 		for i := 0; i < df.nrows; i++ {
 			s.Append(elements[i][j])
 		}
@@ -1156,9 +1156,9 @@ func LoadStructs(i interface{}, options ...LoadOption) DataFrame {
 				elements = append(tmp, elements...)
 				fieldName = ""
 			}
-			columns = append(columns, series.New(elements, t, fieldName))
+			columns = append(columns, series.NewSeries(elements, t, fieldName))
 		}
-		return New(columns...)
+		return NewFrame(columns...)
 	}
 	return DataFrame{Err: fmt.Errorf(
 		"load: type %s (%s) is not supported, must be []struct", tpy.Name(), tpy.Kind())}
@@ -1242,7 +1242,7 @@ func LoadRecords(records [][]string, options ...LoadOption) DataFrame {
 
 	columns := make([]series.Series, len(headers))
 	for i, colname := range headers {
-		col := series.New(rawcols[i], types[i], colname)
+		col := series.NewSeries(rawcols[i], types[i], colname)
 		if col.Err != nil {
 			return DataFrame{Err: col.Err}
 		}
@@ -1685,7 +1685,7 @@ func (df DataFrame) InnerJoin(b DataFrame, keys ...string) DataFrame {
 			}
 		}
 	}
-	return New(newCols...)
+	return NewFrame(newCols...)
 }
 
 // LeftJoin returns a DataFrame containing the left join of two DataFrames.
@@ -1783,7 +1783,7 @@ func (df DataFrame) LeftJoin(b DataFrame, keys ...string) DataFrame {
 			}
 		}
 	}
-	return New(newCols...)
+	return NewFrame(newCols...)
 }
 
 // RightJoin returns a DataFrame containing the right join of two DataFrames.
@@ -1891,7 +1891,7 @@ func (df DataFrame) RightJoin(b DataFrame, keys ...string) DataFrame {
 			ii++
 		}
 	}
-	return New(newCols...)
+	return NewFrame(newCols...)
 }
 
 // OuterJoin returns a DataFrame containing the outer join of two DataFrames.
@@ -2020,7 +2020,7 @@ func (df DataFrame) OuterJoin(b DataFrame, keys ...string) DataFrame {
 			}
 		}
 	}
-	return New(newCols...)
+	return NewFrame(newCols...)
 }
 
 // CrossJoin returns a DataFrame containing the cross join of two DataFrames.
@@ -2049,7 +2049,7 @@ func (df DataFrame) CrossJoin(b DataFrame) DataFrame {
 			}
 		}
 	}
-	return New(newCols...)
+	return NewFrame(newCols...)
 }
 
 // colIndex returns the index of the column with name `s`. If it fails to find the
@@ -2319,7 +2319,7 @@ func (df DataFrame) Describe() DataFrame {
 		var newCol series.Series
 		switch col.Type() {
 		case series.String:
-			newCol = series.New([]string{
+			newCol = series.NewSeries([]string{
 				"-",
 				"-",
 				"-",
@@ -2337,7 +2337,7 @@ func (df DataFrame) Describe() DataFrame {
 		case series.Float:
 			fallthrough
 		case series.Int:
-			newCol = series.New([]float64{
+			newCol = series.NewSeries([]float64{
 				col.Mean(),
 				col.Median(),
 				col.StdDev(),
@@ -2354,6 +2354,6 @@ func (df DataFrame) Describe() DataFrame {
 		ss = append(ss, newCol)
 	}
 
-	ddf := New(ss...)
+	ddf := NewFrame(ss...)
 	return ddf
 }
