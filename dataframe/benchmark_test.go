@@ -9,7 +9,7 @@ import (
 	"gitee.com/quant1x/pandas/series"
 )
 
-func generateSeries(n, rep int) (data []series.Series) {
+func frameGenerateSeries(n, rep int) (data []series.Series) {
 	rand.Seed(100)
 	for j := 0; j < rep; j++ {
 		var is []int
@@ -41,7 +41,7 @@ func generateSeries(n, rep int) (data []series.Series) {
 	return
 }
 
-func generateIntsN(n, k int) (data []int) {
+func frameGenerateIntsN(n, k int) (data []int) {
 	for i := 0; i < n; i++ {
 		data = append(data, rand.Intn(k))
 	}
@@ -55,27 +55,27 @@ func BenchmarkNew(b *testing.B) {
 	}{
 		{
 			"100000x4",
-			generateSeries(100000, 1),
+			frameGenerateSeries(100000, 1),
 		},
 		{
 			"100000x40",
-			generateSeries(100000, 10),
+			frameGenerateSeries(100000, 10),
 		},
 		{
 			"100000x400",
-			generateSeries(100000, 100),
+			frameGenerateSeries(100000, 100),
 		},
 		{
 			"1000x40",
-			generateSeries(1000, 10),
+			frameGenerateSeries(1000, 10),
 		},
 		{
 			"1000x4000",
-			generateSeries(1000, 1000),
+			frameGenerateSeries(1000, 1000),
 		},
 		{
 			"1000x40000",
-			generateSeries(1000, 10000),
+			frameGenerateSeries(1000, 10000),
 		},
 	}
 	for _, test := range table {
@@ -88,7 +88,7 @@ func BenchmarkNew(b *testing.B) {
 }
 
 func BenchmarkDataFrame_Arrange(b *testing.B) {
-	data := dataframe.New(generateSeries(100000, 5)...)
+	data := dataframe.New(frameGenerateSeries(100000, 5)...)
 	table := []struct {
 		name string
 		data dataframe.DataFrame
@@ -128,17 +128,17 @@ func BenchmarkDataFrame_Arrange(b *testing.B) {
 
 func BenchmarkDataFrame_Subset(b *testing.B) {
 	b.ReportAllocs()
-	data1000x20 := dataframe.New(generateSeries(1000, 5)...)
-	data1000x200 := dataframe.New(generateSeries(1000, 50)...)
-	data1000x2000 := dataframe.New(generateSeries(1000, 500)...)
-	data100000x20 := dataframe.New(generateSeries(100000, 5)...)
-	data1000000x20 := dataframe.New(generateSeries(1000000, 5)...)
-	idx10 := generateIntsN(10, 10)
-	idx100 := generateIntsN(100, 100)
-	idx1000 := generateIntsN(1000, 1000)
-	idx10000 := generateIntsN(10000, 10000)
-	idx100000 := generateIntsN(100000, 100000)
-	idx1000000 := generateIntsN(1000000, 1000000)
+	data1000x20 := dataframe.New(frameGenerateSeries(1000, 5)...)
+	data1000x200 := dataframe.New(frameGenerateSeries(1000, 50)...)
+	data1000x2000 := dataframe.New(frameGenerateSeries(1000, 500)...)
+	data100000x20 := dataframe.New(frameGenerateSeries(100000, 5)...)
+	data1000000x20 := dataframe.New(frameGenerateSeries(1000000, 5)...)
+	idx10 := frameGenerateIntsN(10, 10)
+	idx100 := frameGenerateIntsN(100, 100)
+	idx1000 := frameGenerateIntsN(1000, 1000)
+	idx10000 := frameGenerateIntsN(10000, 10000)
+	idx100000 := frameGenerateIntsN(100000, 100000)
+	idx1000000 := frameGenerateIntsN(1000000, 1000000)
 	table := []struct {
 		name    string
 		data    dataframe.DataFrame
@@ -245,7 +245,7 @@ func BenchmarkDataFrame_Subset(b *testing.B) {
 }
 
 func BenchmarkDataFrame_Elem(b *testing.B) {
-	data := dataframe.New(generateSeries(100000, 5)...)
+	data := dataframe.New(frameGenerateSeries(100000, 5)...)
 	table := []struct {
 		name string
 		data dataframe.DataFrame
