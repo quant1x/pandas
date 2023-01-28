@@ -686,6 +686,10 @@ func (s Series) StdDev() float64 {
 // Mean calculates the average value of a series
 func (s Series) Mean() float64 {
 	stdDev := stat.Mean(s.Float(), nil)
+	//if s.Len() < 1 {
+	//	return math.NaN()
+	//}
+	//stdDev := vek.Mean(s.Float())
 	return stdDev
 }
 
