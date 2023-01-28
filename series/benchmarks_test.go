@@ -8,28 +8,28 @@ import (
 	"gitee.com/quant1x/pandas/series"
 )
 
-func generateInts(n int) (data []int) {
+func seriesGenerateInts(n int) (data []int) {
 	for i := 0; i < n; i++ {
 		data = append(data, rand.Int())
 	}
 	return
 }
 
-func generateFloats(n int) (data []float64) {
+func seriesGenerateFloats(n int) (data []float64) {
 	for i := 0; i < n; i++ {
 		data = append(data, rand.Float64())
 	}
 	return
 }
 
-func generateStrings(n int) (data []string) {
+func seriesGenerateStrings(n int) (data []string) {
 	for i := 0; i < n; i++ {
 		data = append(data, strconv.Itoa(rand.Int()))
 	}
 	return
 }
 
-func generateBools(n int) (data []bool) {
+func seriesGenerateBools(n int) (data []bool) {
 	for i := 0; i < n; i++ {
 		r := rand.Intn(2)
 		b := false
@@ -41,7 +41,7 @@ func generateBools(n int) (data []bool) {
 	return
 }
 
-func generateIntsN(n, k int) (data []int) {
+func seriesGenerateIntsN(n, k int) (data []int) {
 	for i := 0; i < n; i++ {
 		data = append(data, rand.Intn(k))
 	}
@@ -57,82 +57,82 @@ func BenchmarkSeries_New(b *testing.B) {
 	}{
 		{
 			"[]bool(100000)_Int",
-			generateBools(100000),
+			seriesGenerateBools(100000),
 			series.Int,
 		},
 		{
 			"[]bool(100000)_String",
-			generateBools(100000),
+			seriesGenerateBools(100000),
 			series.String,
 		},
 		{
 			"[]bool(100000)_Bool",
-			generateBools(100000),
+			seriesGenerateBools(100000),
 			series.Bool,
 		},
 		{
 			"[]bool(100000)_Float",
-			generateBools(100000),
+			seriesGenerateBools(100000),
 			series.Float,
 		},
 		{
 			"[]string(100000)_Int",
-			generateStrings(100000),
+			seriesGenerateStrings(100000),
 			series.Int,
 		},
 		{
 			"[]string(100000)_String",
-			generateStrings(100000),
+			seriesGenerateStrings(100000),
 			series.String,
 		},
 		{
 			"[]string(100000)_Bool",
-			generateStrings(100000),
+			seriesGenerateStrings(100000),
 			series.Bool,
 		},
 		{
 			"[]string(100000)_Float",
-			generateStrings(100000),
+			seriesGenerateStrings(100000),
 			series.Float,
 		},
 		{
 			"[]float64(100000)_Int",
-			generateFloats(100000),
+			seriesGenerateFloats(100000),
 			series.Int,
 		},
 		{
 			"[]float64(100000)_String",
-			generateFloats(100000),
+			seriesGenerateFloats(100000),
 			series.String,
 		},
 		{
 			"[]float64(100000)_Bool",
-			generateFloats(100000),
+			seriesGenerateFloats(100000),
 			series.Bool,
 		},
 		{
 			"[]float64(100000)_Float",
-			generateFloats(100000),
+			seriesGenerateFloats(100000),
 			series.Float,
 		},
 		{
 			"[]int(100000)_Int",
-			generateInts(100000),
+			seriesGenerateInts(100000),
 			series.Int,
 		},
 		{
 			"[]int(100000)_String",
-			generateInts(100000),
+			seriesGenerateInts(100000),
 			series.String,
 		},
 		{
 			"[]int(100000)_Bool",
-			generateInts(100000),
+			seriesGenerateInts(100000),
 			series.Bool,
 		},
 		{
 			"[]int(100000)_Float",
-			generateInts(100000),
+			seriesGenerateInts(100000),
 			series.Float,
 		},
 	}
@@ -153,19 +153,19 @@ func BenchmarkSeries_Copy(b *testing.B) {
 	}{
 		{
 			"[]int(100000)_Int",
-			series.Ints(generateInts(100000)),
+			series.Ints(seriesGenerateInts(100000)),
 		},
 		{
 			"[]int(100000)_String",
-			series.Strings(generateInts(100000)),
+			series.Strings(seriesGenerateInts(100000)),
 		},
 		{
 			"[]int(100000)_Bool",
-			series.Bools(generateInts(100000)),
+			series.Bools(seriesGenerateInts(100000)),
 		},
 		{
 			"[]int(100000)_Float",
-			series.Floats(generateInts(100000)),
+			series.Floats(seriesGenerateInts(100000)),
 		},
 	}
 	for _, test := range table {
@@ -186,23 +186,23 @@ func BenchmarkSeries_Subset(b *testing.B) {
 	}{
 		{
 			"[]int(100000)_Int",
-			generateIntsN(10000, 2),
-			series.Ints(generateInts(100000)),
+			seriesGenerateIntsN(10000, 2),
+			series.Ints(seriesGenerateInts(100000)),
 		},
 		{
 			"[]int(100000)_String",
-			generateIntsN(10000, 2),
-			series.Strings(generateInts(100000)),
+			seriesGenerateIntsN(10000, 2),
+			series.Strings(seriesGenerateInts(100000)),
 		},
 		{
 			"[]int(100000)_Bool",
-			generateIntsN(10000, 2),
-			series.Bools(generateInts(100000)),
+			seriesGenerateIntsN(10000, 2),
+			series.Bools(seriesGenerateInts(100000)),
 		},
 		{
 			"[]int(100000)_Float",
-			generateIntsN(10000, 2),
-			series.Floats(generateInts(100000)),
+			seriesGenerateIntsN(10000, 2),
+			series.Floats(seriesGenerateInts(100000)),
 		},
 	}
 	for _, test := range table {
@@ -224,27 +224,27 @@ func BenchmarkSeries_Set(b *testing.B) {
 	}{
 		{
 			"[]int(100000)_Int",
-			generateIntsN(10000, 2),
-			series.Ints(generateIntsN(10000, 2)),
-			series.Ints(generateInts(100000)),
+			seriesGenerateIntsN(10000, 2),
+			series.Ints(seriesGenerateIntsN(10000, 2)),
+			series.Ints(seriesGenerateInts(100000)),
 		},
 		{
 			"[]int(100000)_String",
-			generateIntsN(10000, 2),
-			series.Strings(generateIntsN(10000, 2)),
-			series.Strings(generateInts(100000)),
+			seriesGenerateIntsN(10000, 2),
+			series.Strings(seriesGenerateIntsN(10000, 2)),
+			series.Strings(seriesGenerateInts(100000)),
 		},
 		{
 			"[]int(100000)_Bool",
-			generateIntsN(10000, 2),
-			series.Bools(generateIntsN(10000, 2)),
-			series.Bools(generateInts(100000)),
+			seriesGenerateIntsN(10000, 2),
+			series.Bools(seriesGenerateIntsN(10000, 2)),
+			series.Bools(seriesGenerateInts(100000)),
 		},
 		{
 			"[]int(100000)_Float",
-			generateIntsN(10000, 2),
-			series.Floats(generateIntsN(10000, 2)),
-			series.Floats(generateInts(100000)),
+			seriesGenerateIntsN(10000, 2),
+			series.Floats(seriesGenerateIntsN(10000, 2)),
+			series.Floats(seriesGenerateInts(100000)),
 		},
 	}
 	for _, test := range table {

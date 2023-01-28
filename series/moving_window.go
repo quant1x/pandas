@@ -1,8 +1,8 @@
 package series
 
 import (
-	"gitee.com/quant1x/pandas/series/winpooh32"
-	"gitee.com/quant1x/pandas/series/winpooh32/math"
+	"gitee.com/quant1x/pandas/algorithms/winpooh32"
+	math2 "gitee.com/quant1x/pandas/algorithms/winpooh32/math"
 )
 
 type DType = float64
@@ -86,7 +86,7 @@ func (w ExponentialMovingWindow) Mean() Series {
 		if w.param <= 0 {
 			panic("halflife param must be > 0")
 		}
-		alpha = 1 - math.Exp(-math.Ln2/w.param)
+		alpha = 1 - math2.Exp(-math2.Ln2/w.param)
 	}
 
 	//return w.applyMean(w.data.Clone(), alpha)

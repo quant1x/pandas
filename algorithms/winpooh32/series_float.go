@@ -1,7 +1,7 @@
 package winpooh32
 
 import (
-	"gitee.com/quant1x/pandas/series/winpooh32/math"
+	"gitee.com/quant1x/pandas/algorithms/winpooh32/math"
 )
 
 func fpEq(v1, v2, eps float64) bool {
