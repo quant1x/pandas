@@ -131,7 +131,7 @@ const (
 //	Series [Bool]  // Same as []bool
 type Indexes interface{}
 
-// New is the generic Series constructor
+// NewSeries is the generic Series constructor
 func NewSeries(values interface{}, t Type, name string) Series {
 	ret := Series{
 		Name: name,

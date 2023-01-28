@@ -38,7 +38,7 @@ type DataFrame struct {
 	Err error
 }
 
-// NewFrame New is the generic DataFrame constructor
+// NewFrame is the generic DataFrame constructor
 func NewFrame(se ...Series) DataFrame {
 	if se == nil || len(se) == 0 {
 		return DataFrame{Err: fmt.Errorf("empty DataFrame")}
