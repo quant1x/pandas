@@ -1,15 +1,13 @@
-package dataframe_test
+package pandas_test
 
 import (
+	"gitee.com/quant1x/pandas"
 	"math/rand"
 	"strconv"
 	"testing"
-
-	"gitee.com/quant1x/pandas/dataframe"
-	"gitee.com/quant1x/pandas/series"
 )
 
-func frameGenerateSeries(n, rep int) (data []series.Series) {
+func frameGenerateSeries(n, rep int) (data []pandas.Series) {
 	rand.Seed(100)
 	for j := 0; j < rep; j++ {
 		var is []int
@@ -33,10 +31,10 @@ func frameGenerateSeries(n, rep int) (data []series.Series) {
 			}
 			bs = append(bs, b)
 		}
-		data = append(data, series.Ints(is))
-		data = append(data, series.Bools(bs))
-		data = append(data, series.Floats(fs))
-		data = append(data, series.Strings(ss))
+		data = append(data, pandas.Ints(is))
+		data = append(data, pandas.Bools(bs))
+		data = append(data, pandas.Floats(fs))
+		data = append(data, pandas.Strings(ss))
 	}
 	return
 }
@@ -51,7 +49,7 @@ func frameGenerateIntsN(n, k int) (data []int) {
 func BenchmarkNew(b *testing.B) {
 	table := []struct {
 		name string
-		data []series.Series
+		data []pandas.Series
 	}{
 		{
 			"100000x4",
@@ -81,39 +79,39 @@ func BenchmarkNew(b *testing.B) {
 	for _, test := range table {
 		b.Run(test.name, func(b *testing.B) {
 			for i := 0; i < b.N; i++ {
-				dataframe.NewFrame(test.data...)
+				pandas.NewFrame(test.data...)
 			}
 		})
 	}
 }
 
 func BenchmarkDataFrame_Arrange(b *testing.B) {
-	data := dataframe.NewFrame(frameGenerateSeries(100000, 5)...)
+	data := pandas.NewFrame(frameGenerateSeries(100000, 5)...)
 	table := []struct {
 		name string
-		data dataframe.DataFrame
-		key  []dataframe.Order
+		data pandas.DataFrame
+		key  []pandas.Order
 	}{
 		{
 			"100000x20_1",
 			data,
-			[]dataframe.Order{dataframe.Sort("X0")},
+			[]pandas.Order{pandas.Sort("X0")},
 		},
 		{
 			"100000x20_2",
 			data,
-			[]dataframe.Order{
-				dataframe.Sort("X0"),
-				dataframe.Sort("X1"),
+			[]pandas.Order{
+				pandas.Sort("X0"),
+				pandas.Sort("X1"),
 			},
 		},
 		{
 			"100000x20_3",
 			data,
-			[]dataframe.Order{
-				dataframe.Sort("X0"),
-				dataframe.Sort("X1"),
-				dataframe.Sort("X2"),
+			[]pandas.Order{
+				pandas.Sort("X0"),
+				pandas.Sort("X1"),
+				pandas.Sort("X2"),
 			},
 		},
 	}
@@ -128,11 +126,11 @@ func BenchmarkDataFrame_Arrange(b *testing.B) {
 
 func BenchmarkDataFrame_Subset(b *testing.B) {
 	b.ReportAllocs()
-	data1000x20 := dataframe.NewFrame(frameGenerateSeries(1000, 5)...)
-	data1000x200 := dataframe.NewFrame(frameGenerateSeries(1000, 50)...)
-	data1000x2000 := dataframe.NewFrame(frameGenerateSeries(1000, 500)...)
-	data100000x20 := dataframe.NewFrame(frameGenerateSeries(100000, 5)...)
-	data1000000x20 := dataframe.NewFrame(frameGenerateSeries(1000000, 5)...)
+	data1000x20 := pandas.NewFrame(frameGenerateSeries(1000, 5)...)
+	data1000x200 := pandas.NewFrame(frameGenerateSeries(1000, 50)...)
+	data1000x2000 := pandas.NewFrame(frameGenerateSeries(1000, 500)...)
+	data100000x20 := pandas.NewFrame(frameGenerateSeries(100000, 5)...)
+	data1000000x20 := pandas.NewFrame(frameGenerateSeries(1000000, 5)...)
 	idx10 := frameGenerateIntsN(10, 10)
 	idx100 := frameGenerateIntsN(100, 100)
 	idx1000 := frameGenerateIntsN(1000, 1000)
@@ -141,7 +139,7 @@ func BenchmarkDataFrame_Subset(b *testing.B) {
 	idx1000000 := frameGenerateIntsN(1000000, 1000000)
 	table := []struct {
 		name    string
-		data    dataframe.DataFrame
+		data    pandas.DataFrame
 		indexes interface{}
 	}{
 		{
@@ -245,10 +243,10 @@ func BenchmarkDataFrame_Subset(b *testing.B) {
 }
 
 func BenchmarkDataFrame_Elem(b *testing.B) {
-	data := dataframe.NewFrame(frameGenerateSeries(100000, 5)...)
+	data := pandas.NewFrame(frameGenerateSeries(100000, 5)...)
 	table := []struct {
 		name string
-		data dataframe.DataFrame
+		data pandas.DataFrame
 	}{
 		{
 			"100000x20_ALL",

@@ -1,4 +1,4 @@
-package series
+package pandas
 
 import (
 	"gitee.com/quant1x/pandas/algorithms/winpooh32"

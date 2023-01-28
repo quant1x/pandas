@@ -1,18 +1,16 @@
-package dataframe_test
+package pandas_test
 
 import (
 	"fmt"
+	"gitee.com/quant1x/pandas"
 	"strings"
-
-	"gitee.com/quant1x/pandas/dataframe"
-	"gitee.com/quant1x/pandas/series"
 )
 
 func ExampleNew() {
-	df := dataframe.NewFrame(
-		series.NewSeries([]string{"b", "a"}, series.String, "COL.1"),
-		series.NewSeries([]int{1, 2}, series.Int, "COL.2"),
-		series.NewSeries([]float64{3.0, 4.0}, series.Float, "COL.3"),
+	df := pandas.NewFrame(
+		pandas.NewSeries([]string{"b", "a"}, pandas.String, "COL.1"),
+		pandas.NewSeries([]int{1, 2}, pandas.Int, "COL.2"),
+		pandas.NewSeries([]float64{3.0, 4.0}, pandas.Float, "COL.3"),
 	)
 	fmt.Println(df)
 
@@ -37,7 +35,7 @@ func ExampleLoadStructs() {
 		{"Juan", 18, 0.8},
 		{"Ana", 22, 0.5},
 	}
-	df := dataframe.LoadStructs(users)
+	df := pandas.LoadStructs(users)
 	fmt.Println(df)
 
 	// Output:
@@ -52,7 +50,7 @@ func ExampleLoadStructs() {
 }
 
 func ExampleLoadRecords() {
-	df := dataframe.LoadRecords(
+	df := pandas.LoadRecords(
 		[][]string{
 			{"A", "B", "C", "D"},
 			{"a", "4", "5.1", "true"},
@@ -76,7 +74,7 @@ func ExampleLoadRecords() {
 }
 
 func ExampleLoadRecords_options() {
-	df := dataframe.LoadRecords(
+	df := pandas.LoadRecords(
 		[][]string{
 			{"A", "B", "C", "D"},
 			{"a", "4", "5.1", "true"},
@@ -84,11 +82,11 @@ func ExampleLoadRecords_options() {
 			{"k", "4", "6.0", "true"},
 			{"a", "2", "7.1", "false"},
 		},
-		dataframe.DetectTypes(false),
-		dataframe.DefaultType(series.Float),
-		dataframe.WithTypes(map[string]series.Type{
-			"A": series.String,
-			"D": series.Bool,
+		pandas.DetectTypes(false),
+		pandas.DefaultType(pandas.Float),
+		pandas.WithTypes(map[string]pandas.Type{
+			"A": pandas.String,
+			"D": pandas.Bool,
 		}),
 	)
 	fmt.Println(df)
@@ -106,7 +104,7 @@ func ExampleLoadRecords_options() {
 }
 
 func ExampleLoadMaps() {
-	df := dataframe.LoadMaps(
+	df := pandas.LoadMaps(
 		[]map[string]interface{}{
 			{
 				"A": "a",
@@ -146,7 +144,7 @@ Country,Date,Age,Amount,Id
 "United States",2012-02-01,32,321.31,54320
 Spain,2012-02-01,66,555.42,00241
 `
-	df := dataframe.ReadCSV(strings.NewReader(csvStr))
+	df := pandas.ReadCSV(strings.NewReader(csvStr))
 	fmt.Println(df)
 
 	// Output:
@@ -167,7 +165,7 @@ Spain,2012-02-01,66,555.42,00241
 
 func ExampleReadJSON() {
 	jsonStr := `[{"COL.2":1,"COL.3":3},{"COL.1":5,"COL.2":2,"COL.3":2},{"COL.1":6,"COL.2":3,"COL.3":1}]`
-	df := dataframe.ReadJSON(strings.NewReader(jsonStr))
+	df := pandas.ReadJSON(strings.NewReader(jsonStr))
 	fmt.Println(df)
 
 	// Output:
@@ -182,7 +180,7 @@ func ExampleReadJSON() {
 }
 
 func ExampleDataFrame_Subset() {
-	df := dataframe.LoadRecords(
+	df := pandas.LoadRecords(
 		[][]string{
 			{"A", "B", "C", "D"},
 			{"a", "4", "5.1", "true"},
@@ -205,7 +203,7 @@ func ExampleDataFrame_Subset() {
 }
 
 func ExampleDataFrame_Select() {
-	df := dataframe.LoadRecords(
+	df := pandas.LoadRecords(
 		[][]string{
 			{"A", "B", "C", "D"},
 			{"a", "4", "5.1", "true"},
@@ -241,7 +239,7 @@ func ExampleDataFrame_Select() {
 }
 
 func ExampleDataFrame_Filter() {
-	df := dataframe.LoadRecords(
+	df := pandas.LoadRecords(
 		[][]string{
 			{"A", "B", "C", "D"},
 			{"a", "4", "5.1", "true"},
@@ -251,21 +249,21 @@ func ExampleDataFrame_Filter() {
 		},
 	)
 	fil := df.Filter(
-		dataframe.F{
+		pandas.F{
 			Colname:    "A",
-			Comparator: series.Eq,
+			Comparator: pandas.Eq,
 			Comparando: "a",
 		},
-		dataframe.F{
+		pandas.F{
 			Colname:    "B",
-			Comparator: series.Greater,
+			Comparator: pandas.Greater,
 			Comparando: 4,
 		},
 	)
 	fil2 := fil.Filter(
-		dataframe.F{
+		pandas.F{
 			Colname:    "D",
-			Comparator: series.Eq,
+			Comparator: pandas.Eq,
 			Comparando: true,
 		},
 	)
@@ -291,7 +289,7 @@ func ExampleDataFrame_Filter() {
 }
 
 func ExampleDataFrame_Mutate() {
-	df := dataframe.LoadRecords(
+	df := pandas.LoadRecords(
 		[][]string{
 			{"A", "B", "C", "D"},
 			{"a", "4", "5.1", "true"},
@@ -302,11 +300,11 @@ func ExampleDataFrame_Mutate() {
 	)
 	// Change column C with a new one
 	mut := df.Mutate(
-		series.NewSeries([]string{"a", "b", "c", "d"}, series.String, "C"),
+		pandas.NewSeries([]string{"a", "b", "c", "d"}, pandas.String, "C"),
 	)
 	// Add a new column E
 	mut2 := df.Mutate(
-		series.NewSeries([]string{"a", "b", "c", "d"}, series.String, "E"),
+		pandas.NewSeries([]string{"a", "b", "c", "d"}, pandas.String, "E"),
 	)
 	fmt.Println(mut)
 	fmt.Println(mut2)
@@ -333,7 +331,7 @@ func ExampleDataFrame_Mutate() {
 }
 
 func ExampleDataFrame_InnerJoin() {
-	df := dataframe.LoadRecords(
+	df := pandas.LoadRecords(
 		[][]string{
 			{"A", "B", "C", "D"},
 			{"a", "4", "5.1", "true"},
@@ -342,7 +340,7 @@ func ExampleDataFrame_InnerJoin() {
 			{"a", "2", "7.1", "false"},
 		},
 	)
-	df2 := dataframe.LoadRecords(
+	df2 := pandas.LoadRecords(
 		[][]string{
 			{"A", "F", "D"},
 			{"1", "1", "true"},
@@ -369,7 +367,7 @@ func ExampleDataFrame_InnerJoin() {
 }
 
 func ExampleDataFrame_Set() {
-	df := dataframe.LoadRecords(
+	df := pandas.LoadRecords(
 		[][]string{
 			{"A", "B", "C", "D"},
 			{"a", "4", "5.1", "true"},
@@ -379,8 +377,8 @@ func ExampleDataFrame_Set() {
 		},
 	)
 	df2 := df.Set(
-		series.Ints([]int{0, 2}),
-		dataframe.LoadRecords(
+		pandas.Ints([]int{0, 2}),
+		pandas.LoadRecords(
 			[][]string{
 				{"A", "B", "C", "D"},
 				{"b", "4", "6.0", "true"},
@@ -403,7 +401,7 @@ func ExampleDataFrame_Set() {
 }
 
 func ExampleDataFrame_Arrange() {
-	df := dataframe.LoadRecords(
+	df := pandas.LoadRecords(
 		[][]string{
 			{"A", "B", "C", "D"},
 			{"a", "4", "5.1", "true"},
@@ -413,8 +411,8 @@ func ExampleDataFrame_Arrange() {
 		},
 	)
 	sorted := df.Arrange(
-		dataframe.Sort("A"),
-		dataframe.RevSort("B"),
+		pandas.Sort("A"),
+		pandas.RevSort("B"),
 	)
 	fmt.Println(sorted)
 
@@ -431,7 +429,7 @@ func ExampleDataFrame_Arrange() {
 }
 
 func ExampleDataFrame_Describe() {
-	df := dataframe.LoadRecords(
+	df := pandas.LoadRecords(
 		[][]string{
 			{"A", "B", "C", "D"},
 			{"a", "4", "5.1", "true"},

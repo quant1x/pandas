@@ -1,11 +1,10 @@
-package series_test
+package pandas_test
 
 import (
+	"gitee.com/quant1x/pandas"
 	"math/rand"
 	"strconv"
 	"testing"
-
-	"gitee.com/quant1x/pandas/series"
 )
 
 func seriesGenerateInts(n int) (data []int) {
@@ -53,93 +52,93 @@ func BenchmarkSeries_New(b *testing.B) {
 	table := []struct {
 		name       string
 		data       interface{}
-		seriesType series.Type
+		seriesType pandas.Type
 	}{
 		{
 			"[]bool(100000)_Int",
 			seriesGenerateBools(100000),
-			series.Int,
+			pandas.Int,
 		},
 		{
 			"[]bool(100000)_String",
 			seriesGenerateBools(100000),
-			series.String,
+			pandas.String,
 		},
 		{
 			"[]bool(100000)_Bool",
 			seriesGenerateBools(100000),
-			series.Bool,
+			pandas.Bool,
 		},
 		{
 			"[]bool(100000)_Float",
 			seriesGenerateBools(100000),
-			series.Float,
+			pandas.Float,
 		},
 		{
 			"[]string(100000)_Int",
 			seriesGenerateStrings(100000),
-			series.Int,
+			pandas.Int,
 		},
 		{
 			"[]string(100000)_String",
 			seriesGenerateStrings(100000),
-			series.String,
+			pandas.String,
 		},
 		{
 			"[]string(100000)_Bool",
 			seriesGenerateStrings(100000),
-			series.Bool,
+			pandas.Bool,
 		},
 		{
 			"[]string(100000)_Float",
 			seriesGenerateStrings(100000),
-			series.Float,
+			pandas.Float,
 		},
 		{
 			"[]float64(100000)_Int",
 			seriesGenerateFloats(100000),
-			series.Int,
+			pandas.Int,
 		},
 		{
 			"[]float64(100000)_String",
 			seriesGenerateFloats(100000),
-			series.String,
+			pandas.String,
 		},
 		{
 			"[]float64(100000)_Bool",
 			seriesGenerateFloats(100000),
-			series.Bool,
+			pandas.Bool,
 		},
 		{
 			"[]float64(100000)_Float",
 			seriesGenerateFloats(100000),
-			series.Float,
+			pandas.Float,
 		},
 		{
 			"[]int(100000)_Int",
 			seriesGenerateInts(100000),
-			series.Int,
+			pandas.Int,
 		},
 		{
 			"[]int(100000)_String",
 			seriesGenerateInts(100000),
-			series.String,
+			pandas.String,
 		},
 		{
 			"[]int(100000)_Bool",
 			seriesGenerateInts(100000),
-			series.Bool,
+			pandas.Bool,
 		},
 		{
 			"[]int(100000)_Float",
 			seriesGenerateInts(100000),
-			series.Float,
+			pandas.Float,
 		},
 	}
 	for _, test := range table {
 		b.Run(test.name, func(b *testing.B) {
 			for i := 0; i < b.N; i++ {
-				series.NewSeries(test.data, test.seriesType, test.name)
+				pandas.NewSeries(test.data, test.seriesType, test.name)
 			}
 		})
 	}
@@ -149,23 +148,23 @@ func BenchmarkSeries_Copy(b *testing.B) {
 	rand.Seed(100)
 	table := []struct {
 		name   string
-		series series.Series
+		series pandas.Series
 	}{
 		{
 			"[]int(100000)_Int",
-			series.Ints(seriesGenerateInts(100000)),
+			pandas.Ints(seriesGenerateInts(100000)),
 		},
 		{
 			"[]int(100000)_String",
-			series.Strings(seriesGenerateInts(100000)),
+			pandas.Strings(seriesGenerateInts(100000)),
 		},
 		{
 			"[]int(100000)_Bool",
-			series.Bools(seriesGenerateInts(100000)),
+			pandas.Bools(seriesGenerateInts(100000)),
 		},
 		{
 			"[]int(100000)_Float",
-			series.Floats(seriesGenerateInts(100000)),
+			pandas.Floats(seriesGenerateInts(100000)),
 		},
 	}
 	for _, test := range table {
@@ -182,27 +181,27 @@ func BenchmarkSeries_Subset(b *testing.B) {
 	table := []struct {
 		name    string
 		indexes interface{}
-		series  series.Series
+		series  pandas.Series
 	}{
 		{
 			"[]int(100000)_Int",
 			seriesGenerateIntsN(10000, 2),
-			series.Ints(seriesGenerateInts(100000)),
+			pandas.Ints(seriesGenerateInts(100000)),
 		},
 		{
 			"[]int(100000)_String",
 			seriesGenerateIntsN(10000, 2),
-			series.Strings(seriesGenerateInts(100000)),
+			pandas.Strings(seriesGenerateInts(100000)),
 		},
 		{
 			"[]int(100000)_Bool",
 			seriesGenerateIntsN(10000, 2),
-			series.Bools(seriesGenerateInts(100000)),
+			pandas.Bools(seriesGenerateInts(100000)),
 		},
 		{
 			"[]int(100000)_Float",
 			seriesGenerateIntsN(10000, 2),
-			series.Floats(seriesGenerateInts(100000)),
+			pandas.Floats(seriesGenerateInts(100000)),
 		},
 	}
 	for _, test := range table {
@@ -219,32 +218,32 @@ func BenchmarkSeries_Set(b *testing.B) {
 	table := []struct {
 		name      string
 		indexes   interface{}
-		newValues series.Series
-		series    series.Series
+		newValues pandas.Series
+		series    pandas.Series
 	}{
 		{
 			"[]int(100000)_Int",
 			seriesGenerateIntsN(10000, 2),
-			series.Ints(seriesGenerateIntsN(10000, 2)),
-			series.Ints(seriesGenerateInts(100000)),
+			pandas.Ints(seriesGenerateIntsN(10000, 2)),
+			pandas.Ints(seriesGenerateInts(100000)),
 		},
 		{
 			"[]int(100000)_String",
 			seriesGenerateIntsN(10000, 2),
-			series.Strings(seriesGenerateIntsN(10000, 2)),
-			series.Strings(seriesGenerateInts(100000)),
+			pandas.Strings(seriesGenerateIntsN(10000, 2)),
+			pandas.Strings(seriesGenerateInts(100000)),
 		},
 		{
 			"[]int(100000)_Bool",
 			seriesGenerateIntsN(10000, 2),
-			series.Bools(seriesGenerateIntsN(10000, 2)),
-			series.Bools(seriesGenerateInts(100000)),
+			pandas.Bools(seriesGenerateIntsN(10000, 2)),
+			pandas.Bools(seriesGenerateInts(100000)),
 		},
 		{
 			"[]int(100000)_Float",
 			seriesGenerateIntsN(10000, 2),
-			series.Floats(seriesGenerateIntsN(10000, 2)),
-			series.Floats(seriesGenerateInts(100000)),
+			pandas.Floats(seriesGenerateIntsN(10000, 2)),
+			pandas.Floats(seriesGenerateInts(100000)),
 		},
 	}
 	for _, test := range table {

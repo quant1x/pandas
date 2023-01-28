@@ -1,6 +1,6 @@
 // Package dataframe provides an implementation of data frames and methods to
 // subset, join, mutate, set, arrange, summarize, etc.
-package dataframe
+package pandas
 
 import (
 	"encoding/csv"
@@ -13,7 +13,6 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"gitee.com/quant1x/pandas/series"
 	"golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
 )
@@ -31,7 +30,7 @@ import (
 // columns), different Join operations (Inner, Outer, Left, Right, Cross) and the
 // ability to read and write from different formats (CSV/JSON).
 type DataFrame struct {
-	columns []series.Series
+	columns []Series
 	ncols   int
 	nrows   int
 
@@ -40,12 +39,12 @@ type DataFrame struct {
 }
 
 // NewFrame New is the generic DataFrame constructor
-func NewFrame(se ...series.Series) DataFrame {
+func NewFrame(se ...Series) DataFrame {
 	if se == nil || len(se) == 0 {
 		return DataFrame{Err: fmt.Errorf("empty DataFrame")}
 	}
 
-	columns := make([]series.Series, len(se))
+	columns := make([]Series, len(se))
 	for i, s := range se {
 		columns[i] = s.Copy()
 	}
@@ -68,7 +67,7 @@ func NewFrame(se ...series.Series) DataFrame {
 	return df
 }
 
-func checkColumnsDimensions(se ...series.Series) (nrows, ncols int, err error) {
+func checkColumnsDimensions(se ...Series) (nrows, ncols int, err error) {
 	ncols = len(se)
 	nrows = -1
 	if se == nil || ncols == 0 {
@@ -260,7 +259,7 @@ func (df DataFrame) print(
 // =======================================================
 
 // Set will update the values of a DataFrame for the rows selected via indexes.
-func (df DataFrame) Set(indexes series.Indexes, newvalues DataFrame) DataFrame {
+func (df DataFrame) Set(indexes Indexes, newvalues DataFrame) DataFrame {
 	if df.Err != nil {
 		return df
 	}
@@ -270,7 +269,7 @@ func (df DataFrame) Set(indexes series.Indexes, newvalues DataFrame) DataFrame {
 	if df.ncols != newvalues.ncols {
 		return DataFrame{Err: fmt.Errorf("different number of columns")}
 	}
-	columns := make([]series.Series, df.ncols)
+	columns := make([]Series, df.ncols)
 	for i, s := range df.columns {
 		columns[i] = s.Set(indexes, newvalues.columns[i])
 		if columns[i].Err != nil {
@@ -283,11 +282,11 @@ func (df DataFrame) Set(indexes series.Indexes, newvalues DataFrame) DataFrame {
 
 // Subset returns a subset of the rows of the original DataFrame based on the
 // Series subsetting indexes.
-func (df DataFrame) Subset(indexes series.Indexes) DataFrame {
+func (df DataFrame) Subset(indexes Indexes) DataFrame {
 	if df.Err != nil {
 		return df
 	}
-	columns := make([]series.Series, df.ncols)
+	columns := make([]Series, df.ncols)
 	for i, column := range df.columns {
 		s := column.Subset(indexes)
 		columns[i] = s
@@ -324,7 +323,7 @@ func (df DataFrame) Select(indexes SelectIndexes) DataFrame {
 	if err != nil {
 		return DataFrame{Err: fmt.Errorf("can't select columns: %v", err)}
 	}
-	columns := make([]series.Series, len(idx))
+	columns := make([]Series, len(idx))
 	for k, i := range idx {
 		if i < 0 || i >= df.ncols {
 			return DataFrame{Err: fmt.Errorf("can't select columns: index out of range")}
@@ -357,7 +356,7 @@ func (df DataFrame) Drop(indexes SelectIndexes) DataFrame {
 	if err != nil {
 		return DataFrame{Err: fmt.Errorf("can't select columns: %v", err)}
 	}
-	var columns []series.Series
+	var columns []Series
 	for k, col := range df.columns {
 		if !inIntSlice(k, idx) {
 			columns = append(columns, col.Copy())
@@ -422,7 +421,7 @@ func (df DataFrame) GroupBy(colnames ...string) *Groups {
 	}
 
 	// Save column types
-	colTypes := map[string]series.Type{}
+	colTypes := map[string]Type{}
 	for _, c := range df.columns {
 		colTypes[c.Name] = c.Type()
 	}
@@ -506,15 +505,15 @@ func (gps Groups) Aggregation(typs []AggregationType, colnames []string) DataFra
 	}
 
 	// Save column types
-	colTypes := map[string]series.Type{}
+	colTypes := map[string]Type{}
 	for k := range dfMaps[0] {
 		switch dfMaps[0][k].(type) {
 		case string:
-			colTypes[k] = series.String
+			colTypes[k] = String
 		case int, int16, int32, int64:
-			colTypes[k] = series.Int
+			colTypes[k] = Int
 		case float32, float64:
-			colTypes[k] = series.Float
+			colTypes[k] = Float
 		default:
 			continue
 		}
@@ -567,7 +566,7 @@ func (df DataFrame) RBind(dfb DataFrame) DataFrame {
 	if dfb.Err != nil {
 		return dfb
 	}
-	expandedSeries := make([]series.Series, df.ncols)
+	expandedSeries := make([]Series, df.ncols)
 	for k, v := range df.Names() {
 		idx := findInStringSlice(v, dfb.Names())
 		if idx == -1 {
@@ -606,23 +605,23 @@ func (df DataFrame) Concat(dfb DataFrame) DataFrame {
 		}
 	}
 
-	expandedSeries := make([]series.Series, len(cols))
+	expandedSeries := make([]Series, len(cols))
 	for k, v := range cols {
 		aidx := findInStringSlice(v, df.Names())
 		bidx := findInStringSlice(v, dfb.Names())
 
 		// aidx and bidx must not be -1 at the same time.
-		var a, b series.Series
+		var a, b Series
 		if aidx != -1 {
 			a = df.columns[aidx]
 		} else {
 			bb := dfb.columns[bidx]
-			a = series.NewSeries(make([]struct{}, df.nrows), bb.Type(), bb.Name)
+			a = NewSeries(make([]struct{}, df.nrows), bb.Type(), bb.Name)
 		}
 		if bidx != -1 {
 			b = dfb.columns[bidx]
 		} else {
-			b = series.NewSeries(make([]struct{}, dfb.nrows), a.Type(), a.Name)
+			b = NewSeries(make([]struct{}, dfb.nrows), a.Type(), a.Name)
 		}
 		newSeries := a.Concat(b)
 		if err := newSeries.Err; err != nil {
@@ -635,7 +634,7 @@ func (df DataFrame) Concat(dfb DataFrame) DataFrame {
 
 // Mutate changes a column of the DataFrame with the given Series or adds it as
 // a new column if the column name does not exist.
-func (df DataFrame) Mutate(s series.Series) DataFrame {
+func (df DataFrame) Mutate(s Series) DataFrame {
 	if df.Err != nil {
 		return df
 	}
@@ -671,7 +670,7 @@ func (df DataFrame) Mutate(s series.Series) DataFrame {
 type F struct {
 	Colidx     int
 	Colname    string
-	Comparator series.Comparator
+	Comparator Comparator
 	Comparando interface{}
 }
 
@@ -711,7 +710,7 @@ func (df DataFrame) FilterAggregation(agg Aggregation, filters ...F) DataFrame {
 		return df
 	}
 
-	compResults := make([]series.Series, len(filters))
+	compResults := make([]Series, len(filters))
 	for i, f := range filters {
 		var idx int
 		if f.Colname == "" {
@@ -816,11 +815,11 @@ func (df DataFrame) Arrange(order ...Order) DataFrame {
 }
 
 // Capply applies the given function to the columns of a DataFrame
-func (df DataFrame) Capply(f func(series.Series) series.Series) DataFrame {
+func (df DataFrame) Capply(f func(Series) Series) DataFrame {
 	if df.Err != nil {
 		return df
 	}
-	columns := make([]series.Series, df.ncols)
+	columns := make([]Series, df.ncols)
 	for i, s := range df.columns {
 		applied := f(s)
 		applied.Name = s.Name
@@ -833,34 +832,34 @@ func (df DataFrame) Capply(f func(series.Series) series.Series) DataFrame {
 // the function the elements of each row are cast to a Series of a specific
 // type. In order of priority: String -> Float -> Int -> Bool. This casting also
 // takes place after the function application to equalize the type of the columns.
-func (df DataFrame) Rapply(f func(series.Series) series.Series) DataFrame {
+func (df DataFrame) Rapply(f func(Series) Series) DataFrame {
 	if df.Err != nil {
 		return df
 	}
 
-	detectType := func(types []series.Type) series.Type {
+	detectType := func(types []Type) Type {
 		var hasStrings, hasFloats, hasInts, hasBools bool
 		for _, t := range types {
 			switch t {
-			case series.String:
+			case String:
 				hasStrings = true
-			case series.Float:
+			case Float:
 				hasFloats = true
-			case series.Int:
+			case Int:
 				hasInts = true
-			case series.Bool:
+			case Bool:
 				hasBools = true
 			}
 		}
 		switch {
 		case hasStrings:
-			return series.String
+			return String
 		case hasBools:
-			return series.Bool
+			return Bool
 		case hasFloats:
-			return series.Float
+			return Float
 		case hasInts:
-			return series.Int
+			return Int
 		default:
 			panic("type not supported")
 		}
@@ -871,10 +870,10 @@ func (df DataFrame) Rapply(f func(series.Series) series.Series) DataFrame {
 	rowType := detectType(types)
 
 	// Create Element matrix
-	elements := make([][]series.Element, df.nrows)
+	elements := make([][]Element, df.nrows)
 	rowlen := -1
 	for i := 0; i < df.nrows; i++ {
-		row := series.NewSeries(nil, rowType, "").Empty()
+		row := NewSeries(nil, rowType, "").Empty()
 		for _, col := range df.columns {
 			row.Append(col.Elem(i))
 		}
@@ -888,7 +887,7 @@ func (df DataFrame) Rapply(f func(series.Series) series.Series) DataFrame {
 		}
 		rowlen = row.Len()
 
-		rowElems := make([]series.Element, rowlen)
+		rowElems := make([]Element, rowlen)
 		for j := 0; j < rowlen; j++ {
 			rowElems[j] = row.Elem(j)
 		}
@@ -896,14 +895,14 @@ func (df DataFrame) Rapply(f func(series.Series) series.Series) DataFrame {
 	}
 
 	// Cast columns if necessary
-	columns := make([]series.Series, rowlen)
+	columns := make([]Series, rowlen)
 	for j := 0; j < rowlen; j++ {
-		types := make([]series.Type, df.nrows)
+		types := make([]Type, df.nrows)
 		for i := 0; i < df.nrows; i++ {
 			types[i] = elements[i][j].Type()
 		}
 		colType := detectType(types)
-		s := series.NewSeries(nil, colType, "").Empty()
+		s := NewSeries(nil, colType, "").Empty()
 		for i := 0; i < df.nrows; i++ {
 			s.Append(elements[i][j])
 		}
@@ -935,7 +934,7 @@ type LoadOption func(*loadOptions)
 
 type loadOptions struct {
 	// Specifies which is the default type in case detectTypes is disabled.
-	defaultType series.Type
+	defaultType Type
 
 	// If set, the type of each column will be automatically detected unless
 	// otherwise specified.
@@ -961,11 +960,11 @@ type loadOptions struct {
 	comment rune
 
 	// The types of specific columns can be specified via column name.
-	types map[string]series.Type
+	types map[string]Type
 }
 
 // DefaultType sets the defaultType option for loadOptions.
-func DefaultType(t series.Type) LoadOption {
+func DefaultType(t Type) LoadOption {
 	return func(c *loadOptions) {
 		c.defaultType = t
 	}
@@ -1000,7 +999,7 @@ func NaNValues(nanValues []string) LoadOption {
 }
 
 // WithTypes sets the types option for loadOptions.
-func WithTypes(coltypes map[string]series.Type) LoadOption {
+func WithTypes(coltypes map[string]Type) LoadOption {
 	return func(c *loadOptions) {
 		c.types = coltypes
 	}
@@ -1066,7 +1065,7 @@ func LoadStructs(i interface{}, options ...LoadOption) DataFrame {
 
 	// Set the default load options
 	cfg := loadOptions{
-		defaultType: series.String,
+		defaultType: String,
 		detectTypes: true,
 		hasHeader:   true,
 		nanValues:   []string{"NA", "NaN", "<nil>"},
@@ -1089,7 +1088,7 @@ func LoadStructs(i interface{}, options ...LoadOption) DataFrame {
 		}
 
 		numFields := val.Index(0).Type().NumField()
-		var columns []series.Series
+		var columns []Series
 		for j := 0; j < numFields; j++ {
 			// Extract field metadata
 			if !val.Index(0).Field(j).CanInterface() {
@@ -1120,7 +1119,7 @@ func LoadStructs(i interface{}, options ...LoadOption) DataFrame {
 			}
 
 			// Handle `types` option
-			var t series.Type
+			var t Type
 			if cfgtype, ok := cfg.types[fieldName]; ok {
 				t = cfgtype
 			} else {
@@ -1156,7 +1155,7 @@ func LoadStructs(i interface{}, options ...LoadOption) DataFrame {
 				elements = append(tmp, elements...)
 				fieldName = ""
 			}
-			columns = append(columns, series.NewSeries(elements, t, fieldName))
+			columns = append(columns, NewSeries(elements, t, fieldName))
 		}
 		return NewFrame(columns...)
 	}
@@ -1164,16 +1163,16 @@ func LoadStructs(i interface{}, options ...LoadOption) DataFrame {
 		"load: type %s (%s) is not supported, must be []struct", tpy.Name(), tpy.Kind())}
 }
 
-func parseType(s string) (series.Type, error) {
+func parseType(s string) (Type, error) {
 	switch s {
 	case "float", "float64", "float32":
-		return series.Float, nil
+		return Float, nil
 	case "int", "int64", "int32", "int16", "int8":
-		return series.Int, nil
+		return Int, nil
 	case "string":
-		return series.String, nil
+		return String, nil
 	case "bool":
-		return series.Bool, nil
+		return Bool, nil
 	}
 	return "", fmt.Errorf("type (%s) is not supported", s)
 }
@@ -1182,7 +1181,7 @@ func parseType(s string) (series.Type, error) {
 func LoadRecords(records [][]string, options ...LoadOption) DataFrame {
 	// Set the default load options
 	cfg := loadOptions{
-		defaultType: series.String,
+		defaultType: String,
 		detectTypes: true,
 		hasHeader:   true,
 		nanValues:   []string{"NA", "NaN", "<nil>"},
@@ -1216,7 +1215,7 @@ func LoadRecords(records [][]string, options ...LoadOption) DataFrame {
 		headers = cfg.names
 	}
 
-	types := make([]series.Type, len(headers))
+	types := make([]Type, len(headers))
 	rawcols := make([][]string, len(headers))
 	for i, colname := range headers {
 		rawcol := make([]string, len(records))
@@ -1240,9 +1239,9 @@ func LoadRecords(records [][]string, options ...LoadOption) DataFrame {
 		types[i] = t
 	}
 
-	columns := make([]series.Series, len(headers))
+	columns := make([]Series, len(headers))
 	for i, colname := range headers {
-		col := series.NewSeries(rawcols[i], types[i], colname)
+		col := NewSeries(rawcols[i], types[i], colname)
 		if col.Err != nil {
 			return DataFrame{Err: col.Err}
 		}
@@ -1311,13 +1310,13 @@ func LoadMaps(maps []map[string]interface{}, options ...LoadOption) DataFrame {
 // TODO: Add Loadoptions
 func LoadMatrix(mat Matrix) DataFrame {
 	nrows, ncols := mat.Dims()
-	columns := make([]series.Series, ncols)
+	columns := make([]Series, ncols)
 	for i := 0; i < ncols; i++ {
 		floats := make([]float64, nrows)
 		for j := 0; j < nrows; j++ {
 			floats[j] = mat.At(j, i)
 		}
-		columns[i] = series.Floats(floats)
+		columns[i] = Floats(floats)
 	}
 	nrows, ncols, err := checkColumnsDimensions(columns...)
 	if err != nil {
@@ -1558,8 +1557,8 @@ func (df DataFrame) Names() []string {
 }
 
 // Types returns the types of the columns on a DataFrame.
-func (df DataFrame) Types() []series.Type {
-	coltypes := make([]series.Type, df.ncols)
+func (df DataFrame) Types() []Type {
+	coltypes := make([]Type, df.ncols)
 	for i, s := range df.columns {
 		coltypes[i] = s.Type()
 	}
@@ -1597,14 +1596,14 @@ func (df DataFrame) Ncol() int {
 }
 
 // Col returns a copy of the Series with the given column name contained in the DataFrame.
-func (df DataFrame) Col(colname string) series.Series {
+func (df DataFrame) Col(colname string) Series {
 	if df.Err != nil {
-		return series.Series{Err: df.Err}
+		return Series{Err: df.Err}
 	}
 	// Check that colname exist on dataframe
 	idx := findInStringSlice(colname, df.Names())
 	if idx < 0 {
-		return series.Series{Err: fmt.Errorf("unknown column name")}
+		return Series{Err: fmt.Errorf("unknown column name")}
 	}
 	return df.columns[idx].Copy()
 }
@@ -1637,7 +1636,7 @@ func (df DataFrame) InnerJoin(b DataFrame, keys ...string) DataFrame {
 	aCols := df.columns
 	bCols := b.columns
 	// Initialize newCols
-	var newCols []series.Series
+	var newCols []Series
 	for _, i := range iKeysA {
 		newCols = append(newCols, aCols[i].Empty())
 	}
@@ -1716,7 +1715,7 @@ func (df DataFrame) LeftJoin(b DataFrame, keys ...string) DataFrame {
 	aCols := df.columns
 	bCols := b.columns
 	// Initialize newCols
-	var newCols []series.Series
+	var newCols []Series
 	for _, i := range iKeysA {
 		newCols = append(newCols, aCols[i].Empty())
 	}
@@ -1814,7 +1813,7 @@ func (df DataFrame) RightJoin(b DataFrame, keys ...string) DataFrame {
 	aCols := df.columns
 	bCols := b.columns
 	// Initialize newCols
-	var newCols []series.Series
+	var newCols []Series
 	for _, i := range iKeysA {
 		newCols = append(newCols, aCols[i].Empty())
 	}
@@ -1922,7 +1921,7 @@ func (df DataFrame) OuterJoin(b DataFrame, keys ...string) DataFrame {
 	aCols := df.columns
 	bCols := b.columns
 	// Initialize newCols
-	var newCols []series.Series
+	var newCols []Series
 	for _, i := range iKeysA {
 		newCols = append(newCols, aCols[i].Empty())
 	}
@@ -2028,7 +2027,7 @@ func (df DataFrame) CrossJoin(b DataFrame) DataFrame {
 	aCols := df.columns
 	bCols := b.columns
 	// Initialize newCols
-	var newCols []series.Series
+	var newCols []Series
 	for i := 0; i < df.ncols; i++ {
 		newCols = append(newCols, aCols[i].Empty())
 	}
@@ -2095,7 +2094,7 @@ func (df DataFrame) Maps() []map[string]interface{} {
 
 // Elem returns the element on row `r` and column `c`. Will panic if the index is
 // out of bounds.
-func (df DataFrame) Elem(r, c int) series.Element {
+func (df DataFrame) Elem(r, c int) Element {
 	return df.columns[c].Elem(r)
 }
 
@@ -2203,8 +2202,8 @@ func parseSelectIndexes(l int, indexes SelectIndexes, colnames []string) ([]int,
 			}
 			idx = append(idx, i)
 		}
-	case series.Series:
-		s := indexes.(series.Series)
+	case Series:
+		s := indexes.(Series)
 		if err := s.Err; err != nil {
 			return nil, fmt.Errorf("indexing error: new values has errors: %v", err)
 		}
@@ -2212,16 +2211,16 @@ func parseSelectIndexes(l int, indexes SelectIndexes, colnames []string) ([]int,
 			return nil, fmt.Errorf("indexing error: indexes contain NaN")
 		}
 		switch s.Type() {
-		case series.Int:
+		case Int:
 			return s.Int()
-		case series.Bool:
+		case Bool:
 			bools, err := s.Bool()
 			if err != nil {
 				return nil, fmt.Errorf("indexing error: %v", err)
 			}
 			return parseSelectIndexes(l, bools, colnames)
-		case series.String:
-			xs := indexes.(series.Series).Records()
+		case String:
+			xs := indexes.(Series).Records()
 			return parseSelectIndexes(l, xs, colnames)
 		default:
 			return nil, fmt.Errorf("indexing error: unknown indexing mode")
@@ -2232,7 +2231,7 @@ func parseSelectIndexes(l int, indexes SelectIndexes, colnames []string) ([]int,
 	return idx, nil
 }
 
-func findType(arr []string) (series.Type, error) {
+func findType(arr []string) (Type, error) {
 	var hasFloats, hasInts, hasBools, hasStrings bool
 	for _, str := range arr {
 		if str == "" || str == "NaN" {
@@ -2255,15 +2254,15 @@ func findType(arr []string) (series.Type, error) {
 
 	switch {
 	case hasStrings:
-		return series.String, nil
+		return String, nil
 	case hasBools:
-		return series.Bool, nil
+		return Bool, nil
 	case hasFloats:
-		return series.Float, nil
+		return Float, nil
 	case hasInts:
-		return series.Int, nil
+		return Int, nil
 	default:
-		return series.String, fmt.Errorf("couldn't detect type")
+		return String, fmt.Errorf("couldn't detect type")
 	}
 }
 
@@ -2301,7 +2300,7 @@ type Matrix interface {
 
 // Describe prints the summary statistics for each column of the dataframe
 func (df DataFrame) Describe() DataFrame {
-	labels := series.Strings([]string{
+	labels := Strings([]string{
 		"mean",
 		"median",
 		"stddev",
@@ -2313,13 +2312,13 @@ func (df DataFrame) Describe() DataFrame {
 	})
 	labels.Name = "column"
 
-	ss := []series.Series{labels}
+	ss := []Series{labels}
 
 	for _, col := range df.columns {
-		var newCol series.Series
+		var newCol Series
 		switch col.Type() {
-		case series.String:
-			newCol = series.NewSeries([]string{
+		case String:
+			newCol = NewSeries([]string{
 				"-",
 				"-",
 				"-",
@@ -2332,12 +2331,12 @@ func (df DataFrame) Describe() DataFrame {
 				col.Type(),
 				col.Name,
 			)
-		case series.Bool:
+		case Bool:
 			fallthrough
-		case series.Float:
+		case Float:
 			fallthrough
-		case series.Int:
-			newCol = series.NewSeries([]float64{
+		case Int:
+			newCol = NewSeries([]float64{
 				col.Mean(),
 				col.Median(),
 				col.StdDev(),
@@ -2347,7 +2346,7 @@ func (df DataFrame) Describe() DataFrame {
 				col.Quantile(0.75),
 				col.Max(),
 			},
-				series.Float,
+				Float,
 				col.Name,
 			)
 		}

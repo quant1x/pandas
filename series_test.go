@@ -1,4 +1,4 @@
-package series
+package pandas
 
 import (
 	"fmt"
@@ -39,9 +39,9 @@ func checkTypes(s Series) error {
 	return nil
 }
 
-// compareFloats compares floating point values up to the number of digits specified.
+// seriesCompareFloats compares floating point values up to the number of digits specified.
 // Returns true if both values are equal with the given precision
-func compareFloats(lvalue, rvalue float64, digits int) bool {
+func seriesCompareFloats(lvalue, rvalue float64, digits int) bool {
 	if math.IsNaN(lvalue) || math.IsNaN(rvalue) {
 		return math.IsNaN(lvalue) && math.IsNaN(rvalue)
 	}
@@ -1279,7 +1279,7 @@ func TestSeries_StdDev(t *testing.T) {
 	for testnum, test := range tests {
 		received := test.series.StdDev()
 		expected := test.expected
-		if !compareFloats(received, expected, 6) {
+		if !seriesCompareFloats(received, expected, 6) {
 			t.Errorf(
 				"Test:%v\nExpected:\n%v\nReceived:\n%v",
 				testnum, expected, received,
@@ -1318,7 +1318,7 @@ func TestSeries_Mean(t *testing.T) {
 	for testnum, test := range tests {
 		received := test.series.Mean()
 		expected := test.expected
-		if !compareFloats(received, expected, 6) {
+		if !seriesCompareFloats(received, expected, 6) {
 			t.Errorf(
 				"Test:%v\nExpected:\n%v\nReceived:\n%v",
 				testnum, expected, received,
@@ -1357,7 +1357,7 @@ func TestSeries_Max(t *testing.T) {
 	for testnum, test := range tests {
 		received := test.series.Max()
 		expected := test.expected
-		if !compareFloats(received, expected, 6) {
+		if !seriesCompareFloats(received, expected, 6) {
 			t.Errorf(
 				"Test:%v\nExpected:\n%v\nReceived:\n%v",
 				testnum, expected, received,
@@ -1411,7 +1411,7 @@ func TestSeries_Median(t *testing.T) {
 	for testnum, test := range tests {
 		received := test.series.Median()
 		expected := test.expected
-		if !compareFloats(received, expected, 6) {
+		if !seriesCompareFloats(received, expected, 6) {
 			t.Errorf(
 				"Test:%v\nExpected:\n%v\nReceived:\n%v",
 				testnum, expected, received,
@@ -1450,7 +1450,7 @@ func TestSeries_Min(t *testing.T) {
 	for testnum, test := range tests {
 		received := test.series.Min()
 		expected := test.expected
-		if !compareFloats(received, expected, 6) {
+		if !seriesCompareFloats(received, expected, 6) {
 			t.Errorf(
 				"Test:%v\nExpected:\n%v\nReceived:\n%v",
 				testnum, expected, received,
@@ -1586,7 +1586,7 @@ func TestSeries_Quantile(t *testing.T) {
 	for testnum, test := range tests {
 		received := test.series.Quantile(test.p)
 		expected := test.expected
-		if !compareFloats(received, expected, 6) {
+		if !seriesCompareFloats(received, expected, 6) {
 			t.Errorf(
 				"Test:%v\nExpected:\n%v\nReceived:\n%v",
 				testnum, expected, received,
@@ -1690,7 +1690,7 @@ func TestSeries_Map(t *testing.T) {
 			expected := test.expected
 			received := test.series.Map(doubleFloat64)
 			for i := 0; i < expected.Len(); i++ {
-				if !compareFloats(expected.Elem(i).Float(),
+				if !seriesCompareFloats(expected.Elem(i).Float(),
 					received.Elem(i).Float(), 6) {
 					t.Errorf(
 						"Test:%v\nExpected:\n%v\nReceived:\n%v",
@@ -1766,7 +1766,7 @@ func TestSeries_Sum(t *testing.T) {
 	for testnum, test := range tests {
 		received := test.series.Sum()
 		expected := test.expected
-		if !compareFloats(received, expected, 6) {
+		if !seriesCompareFloats(received, expected, 6) {
 			t.Errorf(
 				"Test:%v\nExpected:\n%v\nReceived:\n%v",
 				testnum, expected, received,
