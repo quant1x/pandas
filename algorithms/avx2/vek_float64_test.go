@@ -1,4 +1,4 @@
-package vek
+package avx2
 
 import (
 	"fmt"
