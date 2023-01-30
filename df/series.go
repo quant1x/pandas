@@ -578,7 +578,7 @@ func (s Series) Str() string {
 	ret = append(ret, "Type: "+fmt.Sprint(s.t))
 	ret = append(ret, "Length: "+fmt.Sprint(s.Len()))
 	if s.Len() != 0 {
-		ret = append(ret, "Values: "+fmt.Sprint(s))
+		ret = append(ret, "Data: "+fmt.Sprint(s))
 	}
 	return strings.Join(ret, "\n")
 }

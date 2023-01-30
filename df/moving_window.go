@@ -133,7 +133,7 @@ func (ExponentialMovingWindow) adjustedMean(data Series, alpha DType, ignoreNA b
 func (ExponentialMovingWindow) notadjustedMean(data Series, alpha DType, ignoreNA bool) {
 	var (
 		count int
-		//values []DType = data.Values()
+		//values []DType = data.Data()
 		//values []DType = data.Float()
 		values floatElements = data.elements.(floatElements)
 
