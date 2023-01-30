@@ -1,15 +1,16 @@
-package df
+package tests
 
 import (
 	"fmt"
+	"gitee.com/quant1x/pandas/gota"
 	"testing"
 )
 
 func Test1(t *testing.T) {
 	x := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9}
-	s := NewSeries(x, Float, "x")
+	s := dframe.NewSeries(x, dframe.Float, "x")
 	fmt.Println(s)
-	df := NewFrame(s)
+	df := dframe.NewFrame(s)
 	fmt.Println(df)
 	a := df.Col("x")
 	b := a.Rolling(2).Mean()

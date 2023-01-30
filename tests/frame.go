@@ -1,16 +1,19 @@
-package df
+package tests
 
-import "github.com/WinPooh32/series"
+import (
+	"gitee.com/quant1x/pandas/gota"
+	"github.com/WinPooh32/series"
+)
 
 type NDFrame struct {
 	series.Data
 }
 
-func New(se ...Series) DataFrame {
-	return NewFrame(se...)
+func New(se ...dframe.Series) dframe.DataFrame {
+	return dframe.NewFrame(se...)
 }
 
-func MakeValues(values []DType) NDFrame {
+func MakeValues(values []dframe.DType) NDFrame {
 	v_len := len(values)
 	indexs := make([]int64, v_len)
 	for i := 0; i < v_len; i++ {

@@ -1,6 +1,6 @@
 // Package dataframe provides an implementation of data frames and methods to
 // subset, join, mutate, set, arrange, summarize, etc.
-package df
+package dframe
 
 import (
 	"encoding/csv"

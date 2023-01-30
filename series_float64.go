@@ -5,6 +5,7 @@ import (
 	"gitee.com/quant1x/pandas/algorithms/winpooh32/math"
 	"github.com/huandu/go-clone"
 	"github.com/viterin/vek"
+	"gonum.org/v1/gonum/stat"
 )
 
 type SeriesFloat64 struct {
@@ -75,8 +76,8 @@ func NewSeriesFloat64(name string, vals ...interface{}) *SeriesFloat64 {
 	return &series
 }
 
-func (s *SeriesFloat64) valToPointer(v interface{}) float64 {
-	return AnyToFloat64(v)
+func (s *SeriesFloat64) Name() string {
+	return s.name
 }
 
 func (s *SeriesFloat64) Rename(n string) {
@@ -195,10 +196,11 @@ func (s *SeriesFloat64) Mean() float64 {
 		return math.NaN()
 	}
 	stdDev := avx2.Mean(s.Data)
-	//stdDev := stat.Mean(s.Float(), nil)
-	//if s.Len() < 1 {
-	//	return math.NaN()
-	//}
-	//stdDev := avx2.Mean(s.Float())
+	return stdDev
+}
+
+func (s *SeriesFloat64) StdDev() float64 {
+	values := s.Values().([]float64)
+	stdDev := stat.StdDev(values, nil)
 	return stdDev
 }

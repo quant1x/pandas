@@ -1,4 +1,4 @@
-package df
+package dframe
 
 // RollingWindow is used for rolling window calculations.
 type RollingWindow struct {

@@ -1,6 +1,9 @@
 package pandas
 
-import "math"
+import (
+	"gonum.org/v1/gonum/stat"
+	"math"
+)
 
 type SeriesInt64 struct {
 	SeriesFrame
@@ -70,52 +73,62 @@ func NewSeriesInt64(name string, vals ...interface{}) *SeriesInt64 {
 	return &series
 }
 
-func (s SeriesInt64) Rename(n string) {
+func (s *SeriesInt64) Name() string {
+	return s.name
+}
+
+func (s *SeriesInt64) Rename(n string) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s SeriesInt64) Type() string {
+func (s *SeriesInt64) Type() string {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s SeriesInt64) Shift(periods int) *Series {
+func (s *SeriesInt64) Shift(periods int) *Series {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s SeriesInt64) Len() int {
+func (s *SeriesInt64) Len() int {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s SeriesInt64) Values() any {
+func (s *SeriesInt64) Values() any {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s SeriesInt64) Repeat(x any, repeats int) *Series {
+func (s *SeriesInt64) Repeat(x any, repeats int) *Series {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s SeriesInt64) Rolling(window int) RollingWindow {
+func (s *SeriesInt64) Rolling(window int) RollingWindow {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s SeriesInt64) Empty() Series {
+func (s *SeriesInt64) Empty() Series {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s SeriesInt64) Subset(start, end int) *Series {
+func (s *SeriesInt64) Subset(start, end int) *Series {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s SeriesInt64) Mean() float64 {
+func (s *SeriesInt64) Mean() float64 {
 	//TODO implement me
 	panic("implement me")
+}
+
+func (s *SeriesInt64) StdDev() float64 {
+	values := s.Values().([]float64)
+	stdDev := stat.StdDev(values, nil)
+	return stdDev
 }

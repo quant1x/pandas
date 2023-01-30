@@ -1,4 +1,4 @@
-package df
+package dframe
 
 import (
 	"bytes"
