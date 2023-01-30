@@ -2,7 +2,7 @@ package tests
 
 import (
 	"fmt"
-	"gitee.com/quant1x/pandas"
+	"gitee.com/quant1x/pandas/df"
 	"strings"
 	"testing"
 )
@@ -19,7 +19,7 @@ Country,Date,Age,Amount,Id
 "United States",2012-02-01,32,321.31,54320
 Spain,2012-02-01,66,555.42,00241
 `
-	df := pandas.ReadCSV(strings.NewReader(csvStr))
+	df := df.ReadCSV(strings.NewReader(csvStr))
 	fmt.Println(df)
 	df.SetNames("a", "b", "c", "d", "e")
 	s1 := df.Col("d")
@@ -30,6 +30,6 @@ Spain,2012-02-01,66,555.42,00241
 	ma5 := closes.Rolling(5).Mean()
 	fmt.Println(ma5)
 
-	e1 := closes.EWM(pandas.Alpha{Span: 5, At: pandas.AlphaSpan}, false, false).Mean()
+	e1 := closes.EWM(df.Alpha{Span: 5, At: df.AlphaSpan}, false, false).Mean()
 	fmt.Println(e1)
 }

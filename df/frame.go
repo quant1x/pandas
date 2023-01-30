@@ -1,4 +1,4 @@
-package pandas
+package df
 
 import "github.com/WinPooh32/series"
 

@@ -3,7 +3,7 @@
 ## 1. 介绍
 python pandas库的golang版本的整合
 ## 2. 整合的代码库有:
-- https://github.com/go-gota/gota [gota介绍](README-gota.md)
+- https://github.com/go-gota/gota [gota介绍](df/README-gota.md)
 - https://github.com/WinPooh32/series 
 ## 3. 整合的目的
 - gota 缺少 ExponentialMovingWindow的用法, 从而缺失EWM的后续操作方法

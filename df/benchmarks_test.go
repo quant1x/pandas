@@ -1,7 +1,7 @@
-package pandas_test
+package df_test
 
 import (
-	"gitee.com/quant1x/pandas"
+	"gitee.com/quant1x/pandas/df"
 	"math/rand"
 	"strconv"
 	"testing"
@@ -52,93 +52,93 @@ func BenchmarkSeries_New(b *testing.B) {
 	table := []struct {
 		name       string
 		data       interface{}
-		seriesType pandas.Type
+		seriesType df.Type
 	}{
 		{
 			"[]bool(100000)_Int",
 			seriesGenerateBools(100000),
-			pandas.Int,
+			df.Int,
 		},
 		{
 			"[]bool(100000)_String",
 			seriesGenerateBools(100000),
-			pandas.String,
+			df.String,
 		},
 		{
 			"[]bool(100000)_Bool",
 			seriesGenerateBools(100000),
-			pandas.Bool,
+			df.Bool,
 		},
 		{
 			"[]bool(100000)_Float",
 			seriesGenerateBools(100000),
-			pandas.Float,
+			df.Float,
 		},
 		{
 			"[]string(100000)_Int",
 			seriesGenerateStrings(100000),
-			pandas.Int,
+			df.Int,
 		},
 		{
 			"[]string(100000)_String",
 			seriesGenerateStrings(100000),
-			pandas.String,
+			df.String,
 		},
 		{
 			"[]string(100000)_Bool",
 			seriesGenerateStrings(100000),
-			pandas.Bool,
+			df.Bool,
 		},
 		{
 			"[]string(100000)_Float",
 			seriesGenerateStrings(100000),
-			pandas.Float,
+			df.Float,
 		},
 		{
 			"[]float64(100000)_Int",
 			seriesGenerateFloats(100000),
-			pandas.Int,
+			df.Int,
 		},
 		{
 			"[]float64(100000)_String",
 			seriesGenerateFloats(100000),
-			pandas.String,
+			df.String,
 		},
 		{
 			"[]float64(100000)_Bool",
 			seriesGenerateFloats(100000),
-			pandas.Bool,
+			df.Bool,
 		},
 		{
 			"[]float64(100000)_Float",
 			seriesGenerateFloats(100000),
-			pandas.Float,
+			df.Float,
 		},
 		{
 			"[]int(100000)_Int",
 			seriesGenerateInts(100000),
-			pandas.Int,
+			df.Int,
 		},
 		{
 			"[]int(100000)_String",
 			seriesGenerateInts(100000),
-			pandas.String,
+			df.String,
 		},
 		{
 			"[]int(100000)_Bool",
 			seriesGenerateInts(100000),
-			pandas.Bool,
+			df.Bool,
 		},
 		{
 			"[]int(100000)_Float",
 			seriesGenerateInts(100000),
-			pandas.Float,
+			df.Float,
 		},
 	}
 	for _, test := range table {
 		b.Run(test.name, func(b *testing.B) {
 			for i := 0; i < b.N; i++ {
-				pandas.NewSeries(test.data, test.seriesType, test.name)
+				df.NewSeries(test.data, test.seriesType, test.name)
 			}
 		})
 	}
@@ -148,23 +148,23 @@ func BenchmarkSeries_Copy(b *testing.B) {
 	rand.Seed(100)
 	table := []struct {
 		name   string
-		series pandas.Series
+		series df.Series
 	}{
 		{
 			"[]int(100000)_Int",
-			pandas.Ints(seriesGenerateInts(100000)),
+			df.Ints(seriesGenerateInts(100000)),
 		},
 		{
 			"[]int(100000)_String",
-			pandas.Strings(seriesGenerateInts(100000)),
+			df.Strings(seriesGenerateInts(100000)),
 		},
 		{
 			"[]int(100000)_Bool",
-			pandas.Bools(seriesGenerateInts(100000)),
+			df.Bools(seriesGenerateInts(100000)),
 		},
 		{
 			"[]int(100000)_Float",
-			pandas.Floats(seriesGenerateInts(100000)),
+			df.Floats(seriesGenerateInts(100000)),
 		},
 	}
 	for _, test := range table {
@@ -181,27 +181,27 @@ func BenchmarkSeries_Subset(b *testing.B) {
 	table := []struct {
 		name    string
 		indexes interface{}
-		series  pandas.Series
+		series  df.Series
 	}{
 		{
 			"[]int(100000)_Int",
 			seriesGenerateIntsN(10000, 2),
-			pandas.Ints(seriesGenerateInts(100000)),
+			df.Ints(seriesGenerateInts(100000)),
 		},
 		{
 			"[]int(100000)_String",
 			seriesGenerateIntsN(10000, 2),
-			pandas.Strings(seriesGenerateInts(100000)),
+			df.Strings(seriesGenerateInts(100000)),
 		},
 		{
 			"[]int(100000)_Bool",
 			seriesGenerateIntsN(10000, 2),
-			pandas.Bools(seriesGenerateInts(100000)),
+			df.Bools(seriesGenerateInts(100000)),
 		},
 		{
 			"[]int(100000)_Float",
 			seriesGenerateIntsN(10000, 2),
-			pandas.Floats(seriesGenerateInts(100000)),
+			df.Floats(seriesGenerateInts(100000)),
 		},
 	}
 	for _, test := range table {
@@ -218,32 +218,32 @@ func BenchmarkSeries_Set(b *testing.B) {
 	table := []struct {
 		name      string
 		indexes   interface{}
-		newValues pandas.Series
-		series    pandas.Series
+		newValues df.Series
+		series    df.Series
 	}{
 		{
 			"[]int(100000)_Int",
 			seriesGenerateIntsN(10000, 2),
-			pandas.Ints(seriesGenerateIntsN(10000, 2)),
-			pandas.Ints(seriesGenerateInts(100000)),
+			df.Ints(seriesGenerateIntsN(10000, 2)),
+			df.Ints(seriesGenerateInts(100000)),
 		},
 		{
 			"[]int(100000)_String",
 			seriesGenerateIntsN(10000, 2),
-			pandas.Strings(seriesGenerateIntsN(10000, 2)),
-			pandas.Strings(seriesGenerateInts(100000)),
+			df.Strings(seriesGenerateIntsN(10000, 2)),
+			df.Strings(seriesGenerateInts(100000)),
 		},
 		{
 			"[]int(100000)_Bool",
 			seriesGenerateIntsN(10000, 2),
-			pandas.Bools(seriesGenerateIntsN(10000, 2)),
-			pandas.Bools(seriesGenerateInts(100000)),
+			df.Bools(seriesGenerateIntsN(10000, 2)),
+			df.Bools(seriesGenerateInts(100000)),
 		},
 		{
 			"[]int(100000)_Float",
 			seriesGenerateIntsN(10000, 2),
-			pandas.Floats(seriesGenerateIntsN(10000, 2)),
-			pandas.Floats(seriesGenerateInts(100000)),
+			df.Floats(seriesGenerateIntsN(10000, 2)),
+			df.Floats(seriesGenerateInts(100000)),
 		},
 	}
 	for _, test := range table {

@@ -1,4 +1,4 @@
-package pandas
+package df
 
 // RollingWindow is used for rolling window calculations.
 type RollingWindow struct {

@@ -3,7 +3,7 @@ package tests
 import (
 	"encoding/json"
 	"fmt"
-	"gitee.com/quant1x/pandas"
+	"gitee.com/quant1x/pandas/df"
 	"strings"
 	"testing"
 )
@@ -20,7 +20,7 @@ Country,Date,Age,Amount,Id
 "United States",2012-02-01,32,321.31,54320
 Spain,2012-02-01,66,555.42,00241
 `
-	df := pandas.ReadCSV(strings.NewReader(csvStr))
+	df := df.ReadCSV(strings.NewReader(csvStr))
 	fmt.Println(df)
 	df.SetNames("a", "b", "c", "d", "e")
 	s1 := df.Col("d")
@@ -28,7 +28,7 @@ Spain,2012-02-01,66,555.42,00241
 
 	closes := df.Col("d")
 	ma5 := closes.Rolling(5).Mean()
-	pandas.NewSeries(closes, pandas.Float, "")
+	df.NewSeries(closes, df.Float, "")
 	fmt.Println(ma5)
 }
 
@@ -55,25 +55,25 @@ func TestEwm(t *testing.T) {
 	var t2 map[string][]int
 	a2 := parser.Decode(&t2)
 	fmt.Println(a2, t2)
-	df := pandas.ReadJSON(reader)
+	df := df.ReadJSON(reader)
 	fmt.Println(df)
 	values := []int64{1, 2, 3, 4, 5, 6, 7, 8, 9}
-	s1 := pandas.NewSeries(values, pandas.Int, "x")
-	df = pandas.NewFrame(s1)
+	s1 := df.NewSeries(values, df.Int, "x")
+	df = df.NewFrame(s1)
 	fmt.Println(df)
 	xs := df.Col("x")
 	r1 := xs.Rolling(5).Mean()
 	fmt.Println(r1)
 
-	e1 := xs.EWM(pandas.Alpha{Span: 5, At: pandas.AlphaSpan}, false, false).Mean()
+	e1 := xs.EWM(df.Alpha{Span: 5, At: df.AlphaSpan}, false, false).Mean()
 	fmt.Println(e1)
 
-	df1 := pandas.NewFrame(e1)
+	df1 := df.NewFrame(e1)
 	fmt.Println(df1)
 
-	e2 := xs.EWM(pandas.Alpha{Span: 5, At: pandas.AlphaSpan}, true, false).Mean()
+	e2 := xs.EWM(df.Alpha{Span: 5, At: df.AlphaSpan}, true, false).Mean()
 	fmt.Println(e2)
 
-	df2 := pandas.NewFrame(e1, e2)
+	df2 := df.NewFrame(e1, e2)
 	fmt.Println(df2)
 }

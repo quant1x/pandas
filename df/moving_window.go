@@ -1,4 +1,4 @@
-package pandas
+package df
 
 import (
 	"gitee.com/quant1x/pandas/algorithms/winpooh32"
