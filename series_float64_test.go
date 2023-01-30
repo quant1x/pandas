@@ -26,4 +26,21 @@ func TestNewSeriesFloat64(t *testing.T) {
 
 	d5 := s4.Rolling(5).StdDev()
 	fmt.Printf("d4 = %+v\n", d5.Values())
+
+	s5 := NewSeriesFloat64("x", []float64{1, 2, 3, 4, 5, 6, 7, 8, 9})
+
+	e1 := s5.EWM(EW{Span: 5, Adjust: false}).Mean()
+	fmt.Println(e1)
+
+	e2 := s5.EWM(EW{Span: 5, Adjust: true}).Mean()
+	fmt.Println(e2)
+
+	e3 := s5.EWM(EW{Com: 5, Adjust: false}).Mean()
+	fmt.Println(e3)
+
+	e4 := s5.EWM(EW{Com: 5, Adjust: true}).Mean()
+	fmt.Println(e4)
+
+	e5 := s5.EWM(EW{Alpha: 1 / 5.0, Adjust: false}).Mean()
+	fmt.Println(e5)
 }
