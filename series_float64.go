@@ -1,11 +1,10 @@
 package pandas
 
 import (
-	"fmt"
+	"gitee.com/quant1x/pandas/algorithms/avx2"
 	"gitee.com/quant1x/pandas/algorithms/winpooh32/math"
 	"github.com/huandu/go-clone"
 	"github.com/viterin/vek"
-	"strconv"
 )
 
 type SeriesFloat64 struct {
@@ -30,7 +29,7 @@ func NewSeriesFloat64(name string, vals ...interface{}) *SeriesFloat64 {
 		if idx == 0 {
 			if fs, ok := vals[0].([]float64); ok {
 				for idx, v := range fs {
-					val := series.valToPointer(v)
+					val := AnyToFloat64(v)
 					if isNaN(val) {
 						series.nilCount++
 					}
@@ -44,7 +43,7 @@ func NewSeriesFloat64(name string, vals ...interface{}) *SeriesFloat64 {
 			}
 		}
 
-		val := series.valToPointer(v)
+		val := AnyToFloat64(v)
 		if isNaN(val) {
 			series.nilCount++
 		}
@@ -77,35 +76,13 @@ func NewSeriesFloat64(name string, vals ...interface{}) *SeriesFloat64 {
 }
 
 func (s *SeriesFloat64) valToPointer(v interface{}) float64 {
-	switch val := v.(type) {
-	case nil:
-		return nan()
-	case bool:
-		if val == true {
-			return float64(1)
-		}
-		return float64(0)
-	case int:
-		return float64(val)
-	case int32:
-		return float64(val)
-	case int64:
-		return float64(val)
-	case float64:
-		return val
-	case string:
-		f, err := strconv.ParseFloat(val, 64)
-		if err != nil {
-			_ = v.(float64) // Intentionally panic
-		}
-		return f
-	default:
-		f, err := strconv.ParseFloat(fmt.Sprintf("%v", v), 64)
-		if err != nil {
-			_ = v.(float64) // Intentionally panic
-		}
-		return f
-	}
+	return AnyToFloat64(v)
+}
+
+func (s *SeriesFloat64) Rename(n string) {
+	s.lock.RLock()
+	defer s.lock.RUnlock()
+	s.name = n
 }
 
 // Type returns the type of data the series holds.
@@ -113,7 +90,7 @@ func (s *SeriesFloat64) Type() string {
 	return SERIES_TYPE_FLOAT
 }
 
-func (s *SeriesFloat64) NRows() int {
+func (s *SeriesFloat64) Len() int {
 	s.lock.RLock()
 	defer s.lock.RUnlock()
 	return len(s.Data)
@@ -162,7 +139,7 @@ func (s *SeriesFloat64) Values() any {
 }
 
 func (s *SeriesFloat64) Repeat(x any, repeats int) *Series {
-	a := s.valToPointer(x)
+	a := AnyToFloat64(x)
 
 	//switch val := x.(type) {
 	//case int:
@@ -191,4 +168,37 @@ func (s *SeriesFloat64) Repeat(x any, repeats int) *Series {
 	var d Series
 	d = NewSeriesFloat64(s.name, data)
 	return &d
+}
+
+// Empty returns an empty Series of the same type
+func (s *SeriesFloat64) Empty() Series {
+	return NewSeriesFloat64(s.name, []float64{})
+}
+
+func (s *SeriesFloat64) Subset(start, end int) *Series {
+	var d Series
+	d = NewSeriesFloat64(s.name, s.Data[start:end])
+	return &d
+}
+
+// Rolling creates new RollingWindow
+func (s *SeriesFloat64) Rolling(window int) RollingWindow {
+	return RollingWindow{
+		window: window,
+		series: s,
+	}
+}
+
+// Mean calculates the average value of a series
+func (s *SeriesFloat64) Mean() float64 {
+	if s.Len() < 1 {
+		return math.NaN()
+	}
+	stdDev := avx2.Mean(s.Data)
+	//stdDev := stat.Mean(s.Float(), nil)
+	//if s.Len() < 1 {
+	//	return math.NaN()
+	//}
+	//stdDev := avx2.Mean(s.Float())
+	return stdDev
 }
