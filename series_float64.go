@@ -176,6 +176,17 @@ func (s *SeriesFloat64) Empty() Series {
 	return NewSeriesFloat64(s.name, []float64{})
 }
 
+// Records returns the elements of a Series as a []string
+func (s *SeriesFloat64) Records() []string {
+	ret := make([]string, s.Len())
+	for i := 0; i < s.Len(); i++ {
+		//e := s.elements.Elem(i)
+		e := s.Data[i]
+		ret[i] = float2String(e)
+	}
+	return ret
+}
+
 func (s *SeriesFloat64) Subset(start, end int) *Series {
 	var d Series
 	d = NewSeriesFloat64(s.name, s.Data[start:end])

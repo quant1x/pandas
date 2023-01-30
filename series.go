@@ -29,6 +29,8 @@ type Series interface {
 	Values() any
 	// Empty returns an empty Series of the same type
 	Empty() Series
+	// Records returns the elements of a Series as a []string
+	Records() []string
 	// Subset 获取子集
 	Subset(start, end int) *Series
 	// Repeat elements of an array.
@@ -104,4 +106,18 @@ func AnyToInt32(v any) int32 {
 func AnyToInt(v any) int {
 	f := AnyToFloat64(v)
 	return int(f)
+}
+
+func float2String(v float64) string {
+	if isNaN(v) {
+		return "NaN"
+	}
+	return fmt.Sprintf("%f", v)
+}
+
+func int2String(v int64) string {
+	if isNaN(float64(v)) {
+		return "NaN"
+	}
+	return fmt.Sprint(v)
 }

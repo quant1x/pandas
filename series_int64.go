@@ -117,6 +117,16 @@ func (s *SeriesInt64) Empty() Series {
 	panic("implement me")
 }
 
+// Records returns the elements of a Series as a []string
+func (s *SeriesInt64) Records() []string {
+	ret := make([]string, s.Len())
+	for i := 0; i < s.Len(); i++ {
+		e := s.Data[i]
+		ret[i] = int2String(e)
+	}
+	return ret
+}
+
 func (s *SeriesInt64) Subset(start, end int) *Series {
 	//TODO implement me
 	panic("implement me")
