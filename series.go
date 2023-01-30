@@ -2,12 +2,28 @@ package pandas
 
 import (
 	"fmt"
+	"gitee.com/quant1x/pandas/algorithms/winpooh32/math"
 	"github.com/google/go-cmp/cmp"
 	"strconv"
 )
 
+// Type is a convenience alias that can be used for a more type safe way of
+// reason and use Series types.
+type Type = string
+
+// Supported Series Types
 const (
-	SERIES_TYPE_FLOAT = "float64"
+	String Type = "string"
+	Int    Type = "int"
+	Float  Type = "float"
+	Bool   Type = "bool"
+)
+
+const (
+	SERIES_TYPE_FLOAT  = "float64"
+	SERIES_TYPE_INT    = "int64"
+	SERIES_TYPE_STRING = "string"
+	SERIES_TYPE_BOOL   = "bool"
 )
 
 // ValueToStringFormatter is used to convert a value
@@ -22,7 +38,7 @@ type Series interface {
 	Rename(n string)
 	// Type returns the type of data the series holds.
 	// 返回类型的字符串
-	Type() string
+	Type() Type
 	// NRows 获得行数
 	Len() int
 	// Values 获得全部数据集
@@ -52,11 +68,15 @@ func DefaultIsEqualFunc(a, b interface{}) bool {
 	return cmp.Equal(a, b)
 }
 
+const (
+	StringNaN = "NaN"
+)
+
 // DefaultValueFormatter will return a string representation
 // of the data in a particular row.
 func DefaultValueFormatter(v interface{}) string {
 	if v == nil {
-		return "NaN"
+		return StringNaN
 	}
 	return fmt.Sprintf("%v", v)
 }
@@ -81,13 +101,15 @@ func AnyToFloat64(v any) float64 {
 	case string:
 		f, err := strconv.ParseFloat(val, 64)
 		if err != nil {
-			_ = v.(float64) // Intentionally panic
+			//_ = v.(float64) // Intentionally panic
+			f = math.NaN()
 		}
 		return f
 	default:
 		f, err := strconv.ParseFloat(fmt.Sprintf("%v", v), 64)
 		if err != nil {
-			_ = v.(float64) // Intentionally panic
+			//_ = v.(float64) // Intentionally panic
+			f = math.NaN()
 		}
 		return f
 	}
@@ -110,14 +132,25 @@ func AnyToInt(v any) int {
 
 func float2String(v float64) string {
 	if isNaN(v) {
-		return "NaN"
+		return StringNaN
 	}
 	return fmt.Sprintf("%f", v)
 }
 
 func int2String(v int64) string {
 	if isNaN(float64(v)) {
-		return "NaN"
+		return StringNaN
 	}
 	return fmt.Sprint(v)
+}
+
+func string2Float(v string) float64 {
+	if StringNaN == v {
+		return math.NaN()
+	}
+	f, err := strconv.ParseFloat(v, 64)
+	if err != nil {
+		return math.NaN()
+	}
+	return f
 }

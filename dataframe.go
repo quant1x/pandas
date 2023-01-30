@@ -2,6 +2,7 @@ package pandas
 
 import (
 	"fmt"
+	"reflect"
 	"sort"
 	"strconv"
 	"strings"
@@ -387,4 +388,264 @@ func findInStringSlice(str string, s []string) int {
 		}
 	}
 	return -1
+}
+
+// Read/Write Methods
+// =================
+
+// LoadOption is the type used to configure the load of elements
+type LoadOption func(*loadOptions)
+
+type loadOptions struct {
+	// Specifies which is the default type in case detectTypes is disabled.
+	defaultType Type
+
+	// If set, the type of each column will be automatically detected unless
+	// otherwise specified.
+	detectTypes bool
+
+	// If set, the first row of the tabular structure will be used as column
+	// names.
+	hasHeader bool
+
+	// The names to set as columns names.
+	names []string
+
+	// Defines which values are going to be considered as NaN when parsing from string.
+	nanValues []string
+
+	// Defines the csv delimiter
+	delimiter rune
+
+	// EnablesLazyQuotes
+	lazyQuotes bool
+
+	// Defines the comment delimiter
+	comment rune
+
+	// The types of specific columns can be specified via column name.
+	types map[string]Type
+}
+
+// DefaultType sets the defaultType option for loadOptions.
+func DefaultType(t Type) LoadOption {
+	return func(c *loadOptions) {
+		c.defaultType = t
+	}
+}
+
+// DetectTypes sets the detectTypes option for loadOptions.
+func DetectTypes(b bool) LoadOption {
+	return func(c *loadOptions) {
+		c.detectTypes = b
+	}
+}
+
+// HasHeader sets the hasHeader option for loadOptions.
+func HasHeader(b bool) LoadOption {
+	return func(c *loadOptions) {
+		c.hasHeader = b
+	}
+}
+
+// Names sets the names option for loadOptions.
+func Names(names ...string) LoadOption {
+	return func(c *loadOptions) {
+		c.names = names
+	}
+}
+
+// NaNValues sets the nanValues option for loadOptions.
+func NaNValues(nanValues []string) LoadOption {
+	return func(c *loadOptions) {
+		c.nanValues = nanValues
+	}
+}
+
+// WithTypes sets the types option for loadOptions.
+func WithTypes(coltypes map[string]Type) LoadOption {
+	return func(c *loadOptions) {
+		c.types = coltypes
+	}
+}
+
+// WithDelimiter sets the csv delimiter other than ',', for example '\t'
+func WithDelimiter(b rune) LoadOption {
+	return func(c *loadOptions) {
+		c.delimiter = b
+	}
+}
+
+// WithLazyQuotes sets csv parsing option to LazyQuotes
+func WithLazyQuotes(b bool) LoadOption {
+	return func(c *loadOptions) {
+		c.lazyQuotes = b
+	}
+}
+
+// WithComments sets the csv comment line detect to remove lines
+func WithComments(b rune) LoadOption {
+	return func(c *loadOptions) {
+		c.comment = b
+	}
+}
+
+// LoadStructs creates a new DataFrame from arbitrary struct slices.
+//
+// LoadStructs will ignore unexported fields inside an struct. Note also that
+// unless otherwise specified the column names will correspond with the name of
+// the field.
+//
+// You can configure each field with the `dataframe:"name[,type]"` struct
+// tag. If the name on the tag is the empty string `""` the field name will be
+// used instead. If the name is `"-"` the field will be ignored.
+//
+// Examples:
+//
+//	// field will be ignored
+//	field int
+//
+//	// Field will be ignored
+//	Field int `dataframe:"-"`
+//
+//	// Field will be parsed with column name Field and type int
+//	Field int
+//
+//	// Field will be parsed with column name `field_column` and type int.
+//	Field int `dataframe:"field_column"`
+//
+//	// Field will be parsed with column name `field` and type string.
+//	Field int `dataframe:"field,string"`
+//
+//	// Field will be parsed with column name `Field` and type string.
+//	Field int `dataframe:",string"`
+//
+// If the struct tags and the given LoadOptions contradict each other, the later
+// will have preference over the former.
+func LoadStructs(i interface{}, options ...LoadOption) DataFrame {
+	if i == nil {
+		return DataFrame{Err: fmt.Errorf("load: can't create DataFrame from <nil> value")}
+	}
+
+	// Set the default load options
+	cfg := loadOptions{
+		defaultType: String,
+		detectTypes: true,
+		hasHeader:   true,
+		nanValues:   []string{"NA", "NaN", "<nil>"},
+	}
+
+	// Set any custom load options
+	for _, option := range options {
+		option(&cfg)
+	}
+
+	tpy, val := reflect.TypeOf(i), reflect.ValueOf(i)
+	switch tpy.Kind() {
+	case reflect.Slice:
+		if tpy.Elem().Kind() != reflect.Struct {
+			return DataFrame{Err: fmt.Errorf(
+				"load: type %s (%s %s) is not supported, must be []struct", tpy.Name(), tpy.Elem().Kind(), tpy.Kind())}
+		}
+		if val.Len() == 0 {
+			return DataFrame{Err: fmt.Errorf("load: can't create DataFrame from empty slice")}
+		}
+
+		numFields := val.Index(0).Type().NumField()
+		var columns []Series
+		for j := 0; j < numFields; j++ {
+			// Extract field metadata
+			if !val.Index(0).Field(j).CanInterface() {
+				continue
+			}
+			field := val.Index(0).Type().Field(j)
+			fieldName := field.Name
+			fieldType := field.Type.String()
+
+			// Process struct tags
+			fieldTags := field.Tag.Get("dataframe")
+			if fieldTags == "-" {
+				continue
+			}
+			tagOpts := strings.Split(fieldTags, ",")
+			if len(tagOpts) > 2 {
+				return DataFrame{Err: fmt.Errorf("malformed struct tag on field %s: %s", fieldName, fieldTags)}
+			}
+			if len(tagOpts) > 0 {
+				if name := strings.TrimSpace(tagOpts[0]); name != "" {
+					fieldName = name
+				}
+				if len(tagOpts) == 2 {
+					if tagType := strings.TrimSpace(tagOpts[1]); tagType != "" {
+						fieldType = tagType
+					}
+				}
+			}
+
+			// Handle `types` option
+			var t Type
+			if cfgtype, ok := cfg.types[fieldName]; ok {
+				t = cfgtype
+			} else {
+				// Handle `detectTypes` option
+				if cfg.detectTypes {
+					// Parse field type
+					parsedType, err := parseType(fieldType)
+					if err != nil {
+						return DataFrame{Err: err}
+					}
+					t = parsedType
+				} else {
+					t = cfg.defaultType
+				}
+			}
+
+			// Create Series for this field
+			elements := make([]interface{}, val.Len())
+			for i := 0; i < val.Len(); i++ {
+				fieldValue := val.Index(i).Field(j)
+				elements[i] = fieldValue.Interface()
+
+				// Handle `nanValues` option
+				if findInStringSlice(fmt.Sprint(elements[i]), cfg.nanValues) != -1 {
+					elements[i] = nil
+				}
+			}
+
+			// Handle `hasHeader` option
+			if !cfg.hasHeader {
+				tmp := make([]interface{}, 1)
+				tmp[0] = fieldName
+				elements = append(tmp, elements...)
+				fieldName = ""
+			}
+			if t == String {
+				columns = append(columns, NewSeriesFloat64(fieldName, elements))
+			} else if t == Bool {
+				columns = append(columns, NewSeriesInt64(fieldName, elements))
+			} else if t == Int {
+				columns = append(columns, NewSeriesFloat64(fieldName, elements))
+			} else {
+				// 默认float
+				columns = append(columns, NewSeriesFloat64(fieldName, elements))
+			}
+		}
+		return NewDataFrame(columns...)
+	}
+	return DataFrame{Err: fmt.Errorf(
+		"load: type %s (%s) is not supported, must be []struct", tpy.Name(), tpy.Kind())}
+}
+
+func parseType(s string) (Type, error) {
+	switch s {
+	case "float", "float64", "float32":
+		return Float, nil
+	case "int", "int64", "int32", "int16", "int8":
+		return Int, nil
+	case "string":
+		return String, nil
+	case "bool":
+		return Bool, nil
+	}
+	return "", fmt.Errorf("type (%s) is not supported", s)
 }

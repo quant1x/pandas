@@ -28,7 +28,20 @@ func NewSeriesFloat64(name string, vals ...interface{}) *SeriesFloat64 {
 	for idx, v := range vals {
 		// Special case
 		if idx == 0 {
-			if fs, ok := vals[0].([]float64); ok {
+			if fs, ok := vals[0].([]any); ok {
+				for idx, v := range fs {
+					val := AnyToFloat64(v)
+					if isNaN(val) {
+						series.nilCount++
+					}
+					if idx < size {
+						series.Data[idx] = val
+					} else {
+						series.Data = append(series.Data, val)
+					}
+				}
+				break
+			} else if fs, ok := vals[0].([]string); ok {
 				for idx, v := range fs {
 					val := AnyToFloat64(v)
 					if isNaN(val) {
@@ -87,7 +100,7 @@ func (s *SeriesFloat64) Rename(n string) {
 }
 
 // Type returns the type of data the series holds.
-func (s *SeriesFloat64) Type() string {
+func (s *SeriesFloat64) Type() Type {
 	return SERIES_TYPE_FLOAT
 }
 

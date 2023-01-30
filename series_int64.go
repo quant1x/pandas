@@ -25,7 +25,20 @@ func NewSeriesInt64(name string, vals ...interface{}) *SeriesInt64 {
 	for idx, v := range vals {
 		// Special case
 		if idx == 0 {
-			if fs, ok := vals[0].([]float64); ok {
+			if fs, ok := vals[0].([]any); ok {
+				for idx, v := range fs {
+					val := AnyToFloat64(v)
+					if isNaN(val) {
+						series.nilCount++
+					}
+					if idx < size {
+						series.Data[idx] = int64(val)
+					} else {
+						series.Data = append(series.Data, int64(val))
+					}
+				}
+				break
+			} else if fs, ok := vals[0].([]float64); ok {
 				for idx, v := range fs {
 					val := AnyToFloat64(v)
 					if isNaN(val) {
@@ -82,9 +95,8 @@ func (s *SeriesInt64) Rename(n string) {
 	panic("implement me")
 }
 
-func (s *SeriesInt64) Type() string {
-	//TODO implement me
-	panic("implement me")
+func (s *SeriesInt64) Type() Type {
+	return Int
 }
 
 func (s *SeriesInt64) Shift(periods int) *Series {
@@ -98,8 +110,7 @@ func (s *SeriesInt64) Len() int {
 }
 
 func (s *SeriesInt64) Values() any {
-	//TODO implement me
-	panic("implement me")
+	return s.Data
 }
 
 func (s *SeriesInt64) Repeat(x any, repeats int) *Series {
