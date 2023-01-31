@@ -4,7 +4,8 @@
 python pandas库的golang版本的整合
 ## 2. 整合的代码库有:
 - https://github.com/go-gota/gota [gota介绍](gota/README-gota.md)
-- https://github.com/WinPooh32/series 
+- https://github.com/WinPooh32/series
+- https://github.com/rocketlaunchr/dataframe-go.git
 ## 3. 整合的目的
 - gota 缺少 ExponentialMovingWindow的用法, 从而缺失EWM的后续操作方法
 - WinPooh32的series功能比较全, 缺少DataFrame的衔接
