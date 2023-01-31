@@ -1,6 +1,7 @@
 package pandas
 
 import (
+	"github.com/mymmsc/gox/logger"
 	"strconv"
 	"strings"
 )
@@ -75,6 +76,7 @@ func AnyToString(v any) string {
 	case int32:
 		return []string{strconv.FormatInt(int64(val), 10)}[0]
 	default:
+		logger.Errorf("%s, error=The type is not recognized\n", v)
 		_ = v.(string) // Intentionally panic
 		return Nil2String
 	}

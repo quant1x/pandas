@@ -1,8 +1,10 @@
 package tests
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"gitee.com/quant1x/pandas"
 	"strings"
 	"testing"
 )
@@ -19,8 +21,14 @@ Country,Date,Age,Amount,Id
 "United States",2012-02-01,32,321.31,54320
 Spain,2012-02-01,66,555.42,00241
 `
-	//df := dframe.ReadCSV(strings.NewReader(csvStr))
-	//fmt.Println(df)
+	df := pandas.ReadCSV(strings.NewReader(csvStr))
+	fmt.Println(df)
+	filename := "tutorials.csv"
+	_ = df.WriteCSV(filename)
+	buf := new(bytes.Buffer)
+	_ = df.WriteCSV(buf)
+	df = pandas.ReadCSV(filename)
+	fmt.Println(df)
 	//df.SetNames("a", "b", "c", "d", "e")
 	//s1 := df.Col("d")
 	//fmt.Println(s1)
@@ -29,8 +37,8 @@ Spain,2012-02-01,66,555.42,00241
 	//ma5 := closes.Rolling(5).Mean()
 	//dframe.NewSeries(closes, dframe.Float, "")
 	//fmt.Println(ma5)
-
 	_ = csvStr
+
 }
 
 type T1 struct {

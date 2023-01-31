@@ -11,80 +11,21 @@ type SeriesFrame struct {
 	lock         sync.RWMutex
 	name         string
 	nilCount     int
-	elements     any
+	//elements     any
 }
 
-func NewSeriesFrame(name string, vals ...interface{}) *SeriesFrame {
-	series := SeriesFloat64{
-		SeriesFrame: SeriesFrame{
-			name:         name,
-			nilCount:     0,
-			valFormatter: DefaultValueFormatter,
-		},
-		Data: []float64{},
+func NewSeries(t Type, name string, vals ...interface{}) *Series {
+	var series Series
+	if t == SERIES_TYPE_BOOL {
+		series = NewSeriesBool(name, vals...)
+	} else if t == SERIES_TYPE_INT {
+		series = NewSeriesInt64(name, vals...)
+	} else if t == SERIES_TYPE_STRING {
+		series = NewSeriesString(name, vals...)
+	} else {
+		series = NewSeriesFloat64(name, vals...)
 	}
-
-	series.Data = make([]float64, 0) // Warning: filled with 0.0 (not NaN)
-	size := len(series.Data)
-	for idx, v := range vals {
-		if fs, ok := v.([]float64); ok {
-			for idx, v := range fs {
-				val := AnyToFloat64(v)
-				if isNaN(val) {
-					series.nilCount++
-				}
-				if idx < size {
-					series.Data[idx] = val
-				} else {
-					series.Data = append(series.Data, val)
-				}
-			}
-			continue
-		} else if fs, ok := v.([]any); ok {
-			for idx, v := range fs {
-				val := AnyToFloat64(v)
-				if isNaN(val) {
-					series.nilCount++
-				}
-				if idx < size {
-					series.Data[idx] = val
-				} else {
-					series.Data = append(series.Data, val)
-				}
-			}
-			continue
-		}
-
-		val := AnyToFloat64(v)
-		if isNaN(val) {
-			series.nilCount++
-		}
-
-		if idx < size {
-			series.Data[idx] = val
-		} else {
-			series.Data = append(series.Data, val)
-		}
-	}
-
-	var lVals int
-	if len(vals) > 0 {
-		if fs, ok := vals[0].([]float64); ok {
-			lVals = len(fs)
-		} else {
-			lVals = len(vals)
-		}
-	}
-
-	if lVals < size {
-		series.nilCount = series.nilCount + size - lVals
-		// Fill with NaN
-		for i := lVals; i < size; i++ {
-			series.Data[i] = nan()
-		}
-	}
-	series.SeriesFrame.elements = series.Data
-	return &series.SeriesFrame
+	return &series
 }
 
 func Shift[T ~int64 | ~float64 | ~bool | ~string](s *Series, periods int, cbNan func() T) *Series {
@@ -122,4 +63,69 @@ func Shift[T ~int64 | ~float64 | ~bool | ~string](s *Series, periods int, cbNan 
 	}
 	_ = naVals
 	return &d
+}
+
+func (self *SeriesFrame) Name() string {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (self *SeriesFrame) Rename(n string) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (self *SeriesFrame) Type() Type {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (self *SeriesFrame) Len() int {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (self *SeriesFrame) Values() any {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (self *SeriesFrame) Empty() Series {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (self *SeriesFrame) Records() []string {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (self *SeriesFrame) Subset(start, end int) *Series {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (self *SeriesFrame) Repeat(x any, repeats int) *Series {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (self *SeriesFrame) Shift(periods int) *Series {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (self *SeriesFrame) Rolling(window int) RollingWindow {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (self *SeriesFrame) Mean() float64 {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (self *SeriesFrame) StdDev() float64 {
+	//TODO implement me
+	panic("implement me")
 }
