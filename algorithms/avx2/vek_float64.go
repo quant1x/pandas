@@ -36,12 +36,13 @@ func Dot(x []float64, y []float64) float64 { return vek.Dot(x, y) }
 func ArgMin(x []float64) int { return vek.ArgMin(x) }
 func ArgMax(x []float64) int { return vek.ArgMax(x) }
 
-func Repeat(dst []float64, a float64, n int) { vek.Repeat_Into(dst, a, n) }
-func RepeatAll(dst []float64, a float64)     { Repeat(dst, a, len(dst)) }
-func ToInt64(dst []int64, x []float64)       { vek.ToInt64_Into(dst, x) }
-func ToInt32(dst []int32, x []float64)       { vek.ToInt32_Into(dst, x) }
-func ToFloat64(dst []float64, x []float64)   { panic("not implemented!") }
-func ToFloat32(dst []float32, x []float64)   { vek.ToFloat32_Into(dst, x) }
+// func Repeat(dst []float64, a float64, n int) []float64 { return vek.Repeat_Into(dst, a, n) }
+func Repeat(a float64, n int) []float64            { return vek.Repeat(a, n) }
+func RepeatAll(dst []float64, a float64) []float64 { return vek.Repeat_Into(dst, a, len(dst)) }
+func ToInt64(dst []int64, x []float64)             { vek.ToInt64_Into(dst, x) }
+func ToInt32(dst []int32, x []float64)             { vek.ToInt32_Into(dst, x) }
+func ToFloat64(dst []float64, x []float64)         { panic("not implemented!") }
+func ToFloat32(dst []float32, x []float64)         { vek.ToFloat32_Into(dst, x) }
 
 // float32 exclusive.
 func Exp(x []float64)   { panic("not implemented!") }
