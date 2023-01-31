@@ -10,7 +10,7 @@ import (
 // 全局变量定义
 
 var (
-	// nil指针转换float64
+	// Nil2Float nil指针转换float64
 	Nil2Float = float64(0)
 )
 
@@ -25,7 +25,7 @@ func NaN() float64 {
 
 // IsNan float64是否NaN
 func IsNaN(f float64) bool {
-	return math.IsNaN(f)
+	return math.IsNaN(f) || math.IsInf(f, 0)
 }
 
 // IsEmpty Code to test if string is empty
