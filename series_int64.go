@@ -77,8 +77,8 @@ func NewSeriesInt64(name string, vals ...interface{}) *SeriesInt64 {
 }
 
 func (self *SeriesInt64) assign(idx, size int, n int64) {
-	//if StringIsNaN(s) {
-	//	s = StringNaN
+	//if StringIsNaN(self) {
+	//	self = StringNaN
 	//	self.nilCount++
 	//}
 	if idx < size {
@@ -88,45 +88,45 @@ func (self *SeriesInt64) assign(idx, size int, n int64) {
 	}
 }
 
-func (s *SeriesInt64) Name() string {
-	return s.name
+func (self *SeriesInt64) Name() string {
+	return self.name
 }
 
-func (s *SeriesInt64) Rename(n string) {
-	s.name = n
+func (self *SeriesInt64) Rename(n string) {
+	self.name = n
 }
 
-func (s *SeriesInt64) Type() Type {
+func (self *SeriesInt64) Type() Type {
 	return SERIES_TYPE_INT
 }
 
-func (s *SeriesInt64) Shift(periods int) *Series {
+func (self *SeriesInt64) Shift(periods int) *Series {
 	var d Series
-	d = clone.Clone(s).(Series)
+	d = clone.Clone(self).(Series)
 	return Shift[int64](&d, periods, func() int64 {
 		return IntNaN
 	})
 }
 
-func (s *SeriesInt64) Len() int {
-	s.lock.RLock()
-	defer s.lock.RUnlock()
-	return len(s.Data)
+func (self *SeriesInt64) Len() int {
+	self.lock.RLock()
+	defer self.lock.RUnlock()
+	return len(self.Data)
 }
 
-func (s *SeriesInt64) Values() any {
-	return s.Data
+func (self *SeriesInt64) Values() any {
+	return self.Data
 }
 
-func (s *SeriesInt64) Repeat(x any, repeats int) *Series {
+func (self *SeriesInt64) Repeat(x any, repeats int) *Series {
 	a := AnyToFloat64(x)
 	data := Repeat(a, repeats)
 	var d Series
-	d = NewSeriesInt64(s.name, data)
+	d = NewSeriesInt64(self.name, data)
 	return &d
 }
 
-func (s *SeriesInt64) Rolling(window int) RollingWindow {
+func (self *SeriesInt64) Rolling(window int) RollingWindow {
 	//TODO implement me
 	panic("implement me")
 }
@@ -136,28 +136,39 @@ func (self *SeriesInt64) Empty() Series {
 }
 
 // Records returns the elements of a Series as a []string
-func (s *SeriesInt64) Records() []string {
-	ret := make([]string, s.Len())
-	for i := 0; i < s.Len(); i++ {
-		e := s.Data[i]
+func (self *SeriesInt64) Records() []string {
+	ret := make([]string, self.Len())
+	for i := 0; i < self.Len(); i++ {
+		e := self.Data[i]
 		ret[i] = int2String(e)
 	}
 	return ret
 }
 
-func (s *SeriesInt64) Subset(start, end int) *Series {
+func (self *SeriesInt64) Subset(start, end int) *Series {
 	var d Series
-	d = NewSeriesInt64(s.name, s.Data[start:end])
+	d = NewSeriesInt64(self.name, self.Data[start:end])
 	return &d
 }
 
-func (s *SeriesInt64) Mean() float64 {
-	//TODO implement me
-	panic("implement me")
+func (self *SeriesInt64) Mean() float64 {
+	if self.Len() < 1 {
+		return NaN()
+	}
+	stdDev := Mean(self.Data)
+	return stdDev
 }
 
-func (s *SeriesInt64) StdDev() float64 {
-	values := s.Values().([]float64)
-	stdDev := stat.StdDev(values, nil)
+func (self *SeriesInt64) StdDev() float64 {
+	if self.Len() < 1 {
+		return NaN()
+	}
+	// TODO: 每次都需要转换一次, 有没有什么好办法优化?
+	d := make([]float64, self.Len())
+	for i := 0; i < len(d); i++ {
+		d[i] = float64(self.Data[i])
+	}
+	//values := self.Values().([]int64)
+	stdDev := stat.StdDev(d, nil)
 	return stdDev
 }

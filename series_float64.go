@@ -88,39 +88,39 @@ func (self *SeriesFloat64) assign(idx, size int, f float64) {
 	}
 }
 
-func (s *SeriesFloat64) Name() string {
-	return s.name
+func (self *SeriesFloat64) Name() string {
+	return self.name
 }
 
-func (s *SeriesFloat64) Rename(n string) {
-	s.lock.RLock()
-	defer s.lock.RUnlock()
-	s.name = n
+func (self *SeriesFloat64) Rename(n string) {
+	self.lock.RLock()
+	defer self.lock.RUnlock()
+	self.name = n
 }
 
 // Type returns the type of data the series holds.
-func (s *SeriesFloat64) Type() Type {
+func (self *SeriesFloat64) Type() Type {
 	return SERIES_TYPE_FLOAT
 }
 
-func (s *SeriesFloat64) Len() int {
-	s.lock.RLock()
-	defer s.lock.RUnlock()
-	return len(s.Data)
+func (self *SeriesFloat64) Len() int {
+	self.lock.RLock()
+	defer self.lock.RUnlock()
+	return len(self.Data)
 }
 
-func (s *SeriesFloat64) Shift(periods int) *Series {
+func (self *SeriesFloat64) Shift(periods int) *Series {
 	var d Series
-	d = clone.Clone(s).(Series)
+	d = clone.Clone(self).(Series)
 	return Shift[float64](&d, periods, func() float64 {
 		return Nil2Float
 	})
 }
 
 // deprecated: 不推荐使用
-func (s *SeriesFloat64) oldShift(periods int) *Series {
+func (self *SeriesFloat64) oldShift(periods int) *Series {
 	var d Series
-	d = clone.Clone(s).(Series)
+	d = clone.Clone(self).(Series)
 	if periods == 0 {
 		return &d
 	}
@@ -150,66 +150,69 @@ func (s *SeriesFloat64) oldShift(periods int) *Series {
 	}
 
 	for i := range naVals {
-		naVals[i] = algorithms.NaN()
+		naVals[i] = NaN()
 	}
 
 	return &d
 }
 
-func (s *SeriesFloat64) Values() any {
-	return s.Data
+func (self *SeriesFloat64) Values() any {
+	return self.Data
 }
 
-func (s *SeriesFloat64) Repeat(x any, repeats int) *Series {
+func (self *SeriesFloat64) Repeat(x any, repeats int) *Series {
 	a := AnyToFloat64(x)
 	//data := avx2.Repeat(a, repeats)
 	data := Repeat(a, repeats)
 	var d Series
-	d = NewSeriesFloat64(s.name, data)
+	d = NewSeriesFloat64(self.name, data)
 	return &d
 }
 
 // Empty returns an empty Series of the same type
-func (s *SeriesFloat64) Empty() Series {
-	return NewSeriesFloat64(s.name, []float64{})
+func (self *SeriesFloat64) Empty() Series {
+	return NewSeriesFloat64(self.name, []float64{})
 }
 
 // Records returns the elements of a Series as a []string
-func (s *SeriesFloat64) Records() []string {
-	ret := make([]string, s.Len())
-	for i := 0; i < s.Len(); i++ {
-		//e := s.elements.Elem(i)
-		e := s.Data[i]
+func (self *SeriesFloat64) Records() []string {
+	ret := make([]string, self.Len())
+	for i := 0; i < self.Len(); i++ {
+		//e := self.elements.Elem(i)
+		e := self.Data[i]
 		ret[i] = float2String(e)
 	}
 	return ret
 }
 
-func (s *SeriesFloat64) Subset(start, end int) *Series {
+func (self *SeriesFloat64) Subset(start, end int) *Series {
 	var d Series
-	d = NewSeriesFloat64(s.name, s.Data[start:end])
+	d = NewSeriesFloat64(self.name, self.Data[start:end])
 	return &d
 }
 
 // Rolling creates new RollingWindow
-func (s *SeriesFloat64) Rolling(window int) RollingWindow {
+func (self *SeriesFloat64) Rolling(window int) RollingWindow {
 	return RollingWindow{
 		window: window,
-		series: s,
+		series: self,
 	}
 }
 
 // Mean calculates the average value of a series
-func (s *SeriesFloat64) Mean() float64 {
-	if s.Len() < 1 {
-		return algorithms.NaN()
+func (self *SeriesFloat64) Mean() float64 {
+	if self.Len() < 1 {
+		return NaN()
 	}
-	stdDev := avx2.Mean(s.Data)
+	stdDev := avx2.Mean(self.Data)
 	return stdDev
 }
 
-func (s *SeriesFloat64) StdDev() float64 {
-	values := s.Values().([]float64)
+func (self *SeriesFloat64) StdDev() float64 {
+	if self.Len() < 1 {
+		return NaN()
+	}
+	values := self.Values().([]float64)
 	stdDev := stat.StdDev(values, nil)
 	return stdDev
 }

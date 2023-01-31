@@ -5,6 +5,7 @@ import (
 	"reflect"
 )
 
+// SeriesString 字符串类型序列
 type SeriesString struct {
 	SeriesFrame
 	Data []string
