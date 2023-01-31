@@ -1,8 +1,8 @@
 package pandas
 
 import (
-	"gitee.com/quant1x/pandas/algorithms/winpooh32"
-	math2 "gitee.com/quant1x/pandas/algorithms/winpooh32/math"
+	"gitee.com/quant1x/pandas/algorithms"
+	"math"
 )
 
 type DType = float64
@@ -97,7 +97,7 @@ func (w ExponentialMovingWindow) Mean() Series {
 		if w.param <= 0 {
 			panic("halflife param must be > 0")
 		}
-		alpha = 1 - math2.Exp(-math2.Ln2/w.param)
+		alpha = 1 - algorithms.Exp(-math.Ln2/w.param)
 	}
 
 	return w.applyMean(w.data, alpha)
@@ -124,7 +124,7 @@ func (ExponentialMovingWindow) adjustedMean(data Series, alpha DType, ignoreNA b
 
 		w := alpha*weight + 1
 		x := values[t]
-		if winpooh32.IsNA(x) {
+		if IsNaN(x) {
 			if ignoreNA {
 				weight = w
 			}
@@ -145,14 +145,14 @@ func (ExponentialMovingWindow) notadjustedMean(data Series, alpha DType, ignoreN
 		beta   = 1 - alpha
 		last   = values[0]
 	)
-	if winpooh32.IsNA(last) {
+	if IsNaN(last) {
 		last = 0
 		values[0] = last
 	}
 	for t := 1; t < len(values); t++ {
 		x := values[t]
 
-		if winpooh32.IsNA(x) {
+		if IsNaN(x) {
 			values[t] = last
 			continue
 		}

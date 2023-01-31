@@ -1,8 +1,8 @@
 package pandas
 
 import (
+	"gitee.com/quant1x/pandas/algorithms"
 	"gitee.com/quant1x/pandas/algorithms/avx2"
-	"gitee.com/quant1x/pandas/algorithms/winpooh32/math"
 	"github.com/huandu/go-clone"
 	"gonum.org/v1/gonum/stat"
 	"reflect"
@@ -133,7 +133,7 @@ func (s *SeriesFloat64) oldShift(periods int) *Series {
 		src    []float64
 	)
 
-	if shlen := int(math.Abs(float64(periods))); shlen < len(values) {
+	if shlen := int(algorithms.Abs(float64(periods))); shlen < len(values) {
 		if periods > 0 {
 			naVals = values[:shlen]
 			dst = values[shlen:]
@@ -150,7 +150,7 @@ func (s *SeriesFloat64) oldShift(periods int) *Series {
 	}
 
 	for i := range naVals {
-		naVals[i] = math.NaN()
+		naVals[i] = algorithms.NaN()
 	}
 
 	return &d
@@ -202,7 +202,7 @@ func (s *SeriesFloat64) Rolling(window int) RollingWindow {
 // Mean calculates the average value of a series
 func (s *SeriesFloat64) Mean() float64 {
 	if s.Len() < 1 {
-		return math.NaN()
+		return algorithms.NaN()
 	}
 	stdDev := avx2.Mean(s.Data)
 	return stdDev

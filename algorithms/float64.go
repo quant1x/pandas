@@ -1,6 +1,4 @@
-//go:build !series_f32
-
-package math
+package algorithms
 
 import (
 	m "math"
