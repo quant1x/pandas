@@ -27,7 +27,15 @@ func NewDataFrame(se ...Series) DataFrame {
 	columns := make([]Series, len(se))
 	for i, s := range se {
 		var d Series
-		d = NewSeriesFloat64(s.Name(), s.Values())
+		if s.Type() == SERIES_TYPE_INT {
+			d = NewSeriesInt64(s.Name(), s.Values())
+		} else if s.Type() == SERIES_TYPE_BOOL {
+			d = NewSeriesBool(s.Name(), s.Values())
+		} else if s.Type() == SERIES_TYPE_STRING {
+			d = NewSeriesString(s.Name(), s.Values())
+		} else {
+			d = NewSeriesFloat64(s.Name(), s.Values())
+		}
 		columns[i] = d
 	}
 	nrows, ncols, err := checkColumnsDimensions(columns...)
@@ -529,7 +537,7 @@ func LoadStructs(i interface{}, options ...LoadOption) DataFrame {
 
 	// Set the default load options
 	cfg := loadOptions{
-		defaultType: String,
+		defaultType: SERIES_TYPE_STRING,
 		detectTypes: true,
 		hasHeader:   true,
 		nanValues:   []string{"NA", "NaN", "<nil>"},
@@ -619,12 +627,12 @@ func LoadStructs(i interface{}, options ...LoadOption) DataFrame {
 				elements = append(tmp, elements...)
 				fieldName = ""
 			}
-			if t == String {
-				columns = append(columns, NewSeriesFloat64(fieldName, elements))
-			} else if t == Bool {
+			if t == SERIES_TYPE_STRING {
+				columns = append(columns, NewSeriesString(fieldName, elements))
+			} else if t == SERIES_TYPE_BOOL {
+				columns = append(columns, NewSeriesBool(fieldName, elements))
+			} else if t == SERIES_TYPE_INT {
 				columns = append(columns, NewSeriesInt64(fieldName, elements))
-			} else if t == Int {
-				columns = append(columns, NewSeriesFloat64(fieldName, elements))
 			} else {
 				// 默认float
 				columns = append(columns, NewSeriesFloat64(fieldName, elements))
@@ -639,13 +647,13 @@ func LoadStructs(i interface{}, options ...LoadOption) DataFrame {
 func parseType(s string) (Type, error) {
 	switch s {
 	case "float", "float64", "float32":
-		return Float, nil
+		return SERIES_TYPE_FLOAT, nil
 	case "int", "int64", "int32", "int16", "int8":
-		return Int, nil
+		return SERIES_TYPE_INT, nil
 	case "string":
-		return String, nil
+		return SERIES_TYPE_STRING, nil
 	case "bool":
-		return Bool, nil
+		return SERIES_TYPE_BOOL, nil
 	}
 	return "", fmt.Errorf("type (%s) is not supported", s)
 }

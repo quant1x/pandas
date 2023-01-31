@@ -9,6 +9,16 @@ import (
 	"unsafe"
 )
 
+var (
+	// IgnoreParseExceptions 忽略解析异常
+	IgnoreParseExceptions bool = true
+)
+
+// SetParseExceptions 设置处理解析异常的开关
+func SetParseExceptions(enabled bool) {
+	IgnoreParseExceptions = enabled
+}
+
 // nan returns nan.
 // See: https://golang.org/pkg/math/#NaN
 func nan() float64 {

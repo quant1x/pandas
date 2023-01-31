@@ -4,8 +4,8 @@ import (
 	"gitee.com/quant1x/pandas/algorithms/avx2"
 	"gitee.com/quant1x/pandas/algorithms/winpooh32/math"
 	"github.com/huandu/go-clone"
-	"github.com/viterin/vek"
 	"gonum.org/v1/gonum/stat"
+	"reflect"
 )
 
 type SeriesFloat64 struct {
@@ -26,53 +26,45 @@ func NewSeriesFloat64(name string, vals ...interface{}) *SeriesFloat64 {
 	series.Data = make([]float64, 0) // Warning: filled with 0.0 (not NaN)
 	size := len(series.Data)
 	for idx, v := range vals {
-		// Special case
-		if idx == 0 {
-			if fs, ok := vals[0].([]any); ok {
-				for idx, v := range fs {
-					val := AnyToFloat64(v)
-					if isNaN(val) {
-						series.nilCount++
-					}
-					if idx < size {
-						series.Data[idx] = val
-					} else {
-						series.Data = append(series.Data, val)
-					}
-				}
-				break
-			} else if fs, ok := vals[0].([]string); ok {
-				for idx, v := range fs {
-					val := AnyToFloat64(v)
-					if isNaN(val) {
-						series.nilCount++
-					}
-					if idx < size {
-						series.Data[idx] = val
-					} else {
-						series.Data = append(series.Data, val)
-					}
-				}
-				break
+		switch val := v.(type) {
+		case float64:
+			series.assign(idx, size, val)
+		case []float64:
+			for idx, v := range val {
+				series.assign(idx, size, v)
 			}
-		}
-
-		val := AnyToFloat64(v)
-		if isNaN(val) {
-			series.nilCount++
-		}
-
-		if idx < size {
-			series.Data[idx] = val
-		} else {
-			series.Data = append(series.Data, val)
+		default: // 其它容错处理
+			vv := reflect.ValueOf(val)
+			vk := vv.Kind()
+			switch vk {
+			case reflect.Invalid: // {interface} nil
+				series.assign(idx, size, Nil2Float)
+			case reflect.Slice: // 切片, 不定长
+				for i := 0; i < vv.Len(); i++ {
+					tv := vv.Index(i).Interface()
+					str := AnyToFloat64(tv)
+					series.assign(idx, size, str)
+				}
+			case reflect.Array: // 数组, 定长
+				for i := 0; i < vv.Len(); i++ {
+					tv := vv.Index(i).Interface()
+					av := AnyToFloat64(tv)
+					series.assign(idx, size, av)
+				}
+			case reflect.Struct: // 忽略结构体
+				continue
+			default:
+				vv := AnyToFloat64(val)
+				series.assign(idx, size, vv)
+			}
 		}
 	}
 
+	// TODO: 下面这段代码需要仔细研究, 是否存在冗余
 	var lVals int
 	if len(vals) > 0 {
-		if fs, ok := vals[0].([]float64); ok {
-			lVals = len(fs)
+		if ss, ok := vals[0].([]float64); ok {
+			lVals = len(ss)
 		} else {
 			lVals = len(vals)
 		}
@@ -80,13 +72,20 @@ func NewSeriesFloat64(name string, vals ...interface{}) *SeriesFloat64 {
 
 	if lVals < size {
 		series.nilCount = series.nilCount + size - lVals
-		// Fill with NaN
-		for i := lVals; i < size; i++ {
-			series.Data[i] = nan()
-		}
 	}
 
 	return &series
+}
+
+func (self *SeriesFloat64) assign(idx, size int, f float64) {
+	if IsNaN(f) {
+		self.nilCount++
+	}
+	if idx < size {
+		self.Data[idx] = float64(f)
+	} else {
+		self.Data = append(self.Data, float64(f))
+	}
 }
 
 func (s *SeriesFloat64) Name() string {
@@ -111,6 +110,15 @@ func (s *SeriesFloat64) Len() int {
 }
 
 func (s *SeriesFloat64) Shift(periods int) *Series {
+	var d Series
+	d = clone.Clone(s).(Series)
+	return Shift[float64](&d, periods, func() float64 {
+		return Nil2Float
+	})
+}
+
+// deprecated: 不推荐使用
+func (s *SeriesFloat64) oldShift(periods int) *Series {
 	var d Series
 	d = clone.Clone(s).(Series)
 	if periods == 0 {
@@ -154,31 +162,8 @@ func (s *SeriesFloat64) Values() any {
 
 func (s *SeriesFloat64) Repeat(x any, repeats int) *Series {
 	a := AnyToFloat64(x)
-
-	//switch val := x.(type) {
-	//case int:
-	//	a = float64(val)
-	//case int32:
-	//	a = float64(val)
-	//case int64:
-	//	a = float64(val)
-	//default:
-	//	a = float64(val)
-	//
-	//}
-	//
-	//switch reflect.TypeOf(x).Kind() {
-	//case reflect.Int, reflect.Int32, reflect.Int64:
-	//	a = x.(float64)
-	//case reflect.Float32, reflect.Float64:
-	//	a = x.(float64)
-	//}
-	//if f, ok := x.(float64); ok {
-	//	a = f
-	//} else {
-	//	a = nan()
-	//}
-	data := vek.Repeat_Into(s.Data, a, repeats)
+	//data := avx2.Repeat(a, repeats)
+	data := Repeat(a, repeats)
 	var d Series
 	d = NewSeriesFloat64(s.name, data)
 	return &d

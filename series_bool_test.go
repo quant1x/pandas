@@ -5,9 +5,9 @@ import (
 	"testing"
 )
 
-func TestNewSeriesInt64(t *testing.T) {
+func TestNewSeriesBool(t *testing.T) {
 	var s1 Series
-	s1 = NewSeriesInt64("sales", nil, 50.3, 23.4, 56.2)
+	s1 = NewSeriesBool("sales", nil, 50.3, 23.4, 56.2)
 	fmt.Println(s1)
 	expected := 4
 
@@ -20,7 +20,7 @@ func TestNewSeriesInt64(t *testing.T) {
 	s3 := s1.Repeat(1, 2)
 	fmt.Println((*s3).Values())
 
-	s4 := NewSeriesInt64("x", []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
-	d4 := s4.Rolling(5).Mean()
-	fmt.Printf("d4 = %+v\n", d4.Values())
+	//s4 := NewSeriesBool("x", []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
+	//d4 := s4.Rolling(5).Mean()
+	//fmt.Printf("d4 = %+v\n", d4.Values())
 }
