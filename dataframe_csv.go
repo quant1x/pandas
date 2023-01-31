@@ -3,6 +3,7 @@ package pandas
 import (
 	"encoding/csv"
 	"github.com/mymmsc/gox/api"
+	"github.com/mymmsc/gox/logger"
 	"github.com/mymmsc/gox/util/homedir"
 	"io"
 	"os"
@@ -10,8 +11,34 @@ import (
 
 // ReadCSV reads a CSV file from a io.Reader and builds a DataFrame with the
 // resulting records.
-func ReadCSV(r io.Reader, options ...LoadOption) DataFrame {
-	csvReader := csv.NewReader(r)
+func ReadCSV(in any, options ...LoadOption) DataFrame {
+	var (
+		reader   io.Reader
+		filename string
+	)
+	switch param := in.(type) {
+	case io.Reader:
+		reader = param
+	case string:
+		filename = param
+	}
+
+	if !IsEmpty(filename) {
+		filepath, err := homedir.Expand(filename)
+		if err != nil {
+			logger.Errorf("%s, error=%+v\n", filename, err)
+			return DataFrame{}
+		}
+		csvFile, err := os.Open(filepath)
+		if err != nil {
+			logger.Errorf("%s, error=%+v\n", filename, err)
+			return DataFrame{}
+		}
+		defer api.CloseQuietly(csvFile)
+		reader = csvFile
+	}
+
+	csvReader := csv.NewReader(reader)
 	cfg := loadOptions{
 		delimiter:  ',',
 		lazyQuotes: false,
@@ -59,9 +86,7 @@ func (df DataFrame) WriteCSV(out any, options ...WriteOption) error {
 	case string:
 		filename = param
 	}
-	//if df.Err != nil {
-	//	return df.Err
-	//}
+
 	if !IsEmpty(filename) {
 		filepath, err := homedir.Expand(filename)
 		if err != nil {
