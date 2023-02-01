@@ -85,7 +85,7 @@ func AnyToBool(v any) bool {
 	}
 }
 
-// ParseFloat 字符串转float64
+// ParseBool 字符串转bool
 // 任意组合的nan字符串都会被解析成NaN
 func ParseBool(s string, v any) bool {
 	f, err := strconv.ParseBool(s)

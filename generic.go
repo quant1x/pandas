@@ -354,3 +354,27 @@ func (self *NDFrame) StdDev() float64 {
 	stdDev := stat.StdDev(values, nil)
 	return stdDev
 }
+
+func (self *NDFrame) FillNa(v any, inplace bool) {
+	values := self.Values()
+	switch rows := values.(type) {
+	case []string:
+		for idx, iv := range rows {
+			if StringIsNaN(iv) && inplace {
+				rows[idx] = AnyToString(v)
+			}
+		}
+	case []int64:
+		for idx, iv := range rows {
+			if IsNaN(float64(iv)) && inplace {
+				rows[idx] = AnyToInt64(v)
+			}
+		}
+	case []float64:
+		for idx, iv := range rows {
+			if IsNaN(iv) && inplace {
+				rows[idx] = AnyToFloat64(v)
+			}
+		}
+	}
+}

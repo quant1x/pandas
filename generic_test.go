@@ -74,6 +74,7 @@ func TestNDFrameNew(t *testing.T) {
 	// string
 	d2 := []string{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "nan", "12"}
 	nd2 := NewNDFrame[string]("x", d2...)
+	nd2.FillNa(0, true)
 	fmt.Println(nd2)
 	fmt.Println(nd2.Records())
 	fmt.Println(nd2.Empty())
