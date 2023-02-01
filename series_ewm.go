@@ -21,7 +21,7 @@ const (
 	AlphaHalflife
 )
 
-// EW(Factor) 指数加权(EW)计算Alpha 结构属性非0即为有效启动同名算法
+// EW (Factor) 指数加权(EW)计算Alpha 结构属性非0即为有效启动同名算法
 type EW struct {
 	Com      float64 // 根据质心指定衰减
 	Span     float64 // 根据跨度指定衰减
@@ -31,6 +31,7 @@ type EW struct {
 	IgnoreNA bool    // 计算权重时忽略缺失值
 }
 
+// ExponentialMovingWindow 加权移动窗口
 type ExponentialMovingWindow struct {
 	data       Series    // 序列
 	atype      AlphaType // 计算方式: com/span/halflefe/alpha

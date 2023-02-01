@@ -151,8 +151,10 @@ func (self *SeriesInt64) Subset(start, end int, opt ...any) Series {
 }
 
 func (self *SeriesInt64) Rolling(window int) RollingWindow {
-	//TODO implement me
-	panic("implement me")
+	return RollingWindow{
+		window: window,
+		series: self,
+	}
 }
 
 func (self *SeriesInt64) Mean() float64 {

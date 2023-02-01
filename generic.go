@@ -1,6 +1,8 @@
 package pandas
 
 import (
+	"gitee.com/quant1x/pandas/algorithms/avx2"
+	"gonum.org/v1/gonum/stat"
 	"reflect"
 	"sync"
 )
@@ -98,6 +100,14 @@ func assign[T GenericType](frame *NDFrame, idx, size int, v T) {
 // Repeat 重复生成a
 func Repeat[T GenericType](a T, n int) []T {
 	dst := make([]T, n)
+	for i := 0; i < n; i++ {
+		dst[i] = a
+	}
+	return dst
+}
+
+// Repeat2 重复生成a
+func Repeat2[T GenericType](dst []T, a T, n int) []T {
 	for i := 0; i < n; i++ {
 		dst[i] = a
 	}
@@ -269,26 +279,78 @@ func (self *NDFrame) Subset(start, end int, opt ...any) Series {
 }
 
 func (self *NDFrame) Repeat(x any, repeats int) Series {
-	//TODO implement me
-	panic("implement me")
+	switch values := self.values.(type) {
+	case []bool:
+		_ = values
+		vs := Repeat(AnyToBool(x), repeats)
+		return NewNDFrame(self.name, vs...)
+	case []string:
+		vs := Repeat(AnyToString(x), repeats)
+		return NewNDFrame(self.name, vs...)
+	case []int64:
+		vs := Repeat(AnyToInt64(x), repeats)
+		return NewNDFrame(self.name, vs...)
+	default: //case []float64:
+		vs := Repeat(AnyToFloat64(x), repeats)
+		return NewNDFrame(self.name, vs...)
+	}
 }
 
 func (self *NDFrame) Shift(periods int) Series {
-	//TODO implement me
-	panic("implement me")
+	var d Series
+	d = clone(self).(Series)
+	//return Shift[float64](&d, periods, func() float64 {
+	//	return Nil2Float
+	//})
+	switch values := self.values.(type) {
+	case []bool:
+		_ = values
+		return Shift[bool](&d, periods, func() bool {
+			return BoolNaN
+		})
+	case []string:
+		return Shift[string](&d, periods, func() string {
+			return StringNaN
+		})
+	case []int64:
+		return Shift[int64](&d, periods, func() int64 {
+			return Nil2Int
+		})
+	default: //case []float64:
+		return Shift[float64](&d, periods, func() float64 {
+			return Nil2Float
+		})
+	}
 }
 
 func (self *NDFrame) Rolling(window int) RollingWindow {
-	//TODO implement me
-	panic("implement me")
+	return RollingWindow{
+		window: window,
+		series: self,
+	}
 }
 
 func (self *NDFrame) Mean() float64 {
-	//TODO implement me
-	panic("implement me")
+	if self.Len() < 1 {
+		return NaN()
+	}
+	fs := make([]float64, 0)
+	self.apply(func(idx int, v any) {
+		f := AnyToFloat64(v)
+		fs = append(fs, f)
+	})
+	stdDev := avx2.Mean(fs)
+	return stdDev
 }
 
 func (self *NDFrame) StdDev() float64 {
-	//TODO implement me
-	panic("implement me")
+	if self.Len() < 1 {
+		return NaN()
+	}
+	values := make([]float64, self.Len())
+	self.apply(func(idx int, v any) {
+		values[idx] = AnyToFloat64(v)
+	})
+	stdDev := stat.StdDev(values, nil)
+	return stdDev
 }
