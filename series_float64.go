@@ -221,3 +221,15 @@ func (self *SeriesFloat64) StdDev() float64 {
 	stdDev := stat.StdDev(values, nil)
 	return stdDev
 }
+
+func (self *SeriesFloat64) FillNa(v any, inplace bool) {
+	values := self.Values()
+	switch rows := values.(type) {
+	case []float64:
+		for idx, iv := range rows {
+			if IsNaN(iv) && inplace {
+				rows[idx] = AnyToFloat64(v)
+			}
+		}
+	}
+}

@@ -178,3 +178,16 @@ func (self *SeriesInt64) StdDev() float64 {
 	stdDev := stat.StdDev(d, nil)
 	return stdDev
 }
+
+// FillNa int64没有NaN
+func (self *SeriesInt64) FillNa(v any, inplace bool) {
+	values := self.Values()
+	switch rows := values.(type) {
+	case []int64:
+		for idx, iv := range rows {
+			if IsNaN(float64(iv)) && inplace {
+				rows[idx] = AnyToInt64(v)
+			}
+		}
+	}
+}

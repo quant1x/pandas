@@ -164,3 +164,15 @@ func (self *SeriesString) StdDev() float64 {
 	//TODO implement me
 	panic("implement me")
 }
+
+func (self *SeriesString) FillNa(v any, inplace bool) {
+	values := self.Values()
+	switch rows := values.(type) {
+	case []string:
+		for idx, iv := range rows {
+			if StringIsNaN(iv) && inplace {
+				rows[idx] = AnyToString(v)
+			}
+		}
+	}
+}

@@ -56,6 +56,8 @@ type Series interface {
 	Mean() float64
 	// StdDev calculates the standard deviation of a series
 	StdDev() float64
+	// FillNa Fill NA/NaN values using the specified method.
+	FillNa(v any, inplace bool)
 }
 
 // NewSeries 指定类型创建序列
@@ -192,4 +194,26 @@ func Shift[T GenericType](s *Series, periods int, cbNan func() T) Series {
 	}
 	_ = naVals
 	return d
+}
+
+// FillNa 填充NaN的元素为v
+// inplace为真是修改series元素的值
+// 如果v和Values()返回值的slice类型不一致就会panic
+func FillNa[T GenericType](s *NDFrame, v T, inplace bool) *NDFrame {
+	values := s.Values()
+	switch rows := values.(type) {
+	case []string:
+		for idx, iv := range rows {
+			if StringIsNaN(iv) && inplace {
+				rows[idx] = AnyToString(v)
+			}
+		}
+	case []float64:
+		for idx, iv := range rows {
+			if IsNaN(iv) && inplace {
+				rows[idx] = AnyToFloat64(v)
+			}
+		}
+	}
+	return s
 }

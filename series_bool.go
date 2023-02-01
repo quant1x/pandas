@@ -159,3 +159,16 @@ func (self *SeriesBool) StdDev() float64 {
 	//TODO implement me
 	panic("implement me")
 }
+
+// FillNa bool类型不可能在导入series还是NaN
+func (self *SeriesBool) FillNa(v any, inplace bool) {
+	//values := self.Values()
+	//switch rows := values.(type) {
+	//case []bool:
+	//	for idx, iv := range rows {
+	//		if IsNaN(float64(iv)) && inplace {
+	//			rows[idx] = AnyToFloat64(v)
+	//		}
+	//	}
+	//}
+}
