@@ -25,7 +25,7 @@ func TestNewSeriesFloat64(t *testing.T) {
 	fmt.Printf("d4 = %+v\n", d4.Values())
 
 	d5 := s4.Rolling(5).StdDev()
-	fmt.Printf("d4 = %+v\n", d5.Values())
+	fmt.Printf("d5 = %+v\n", d5.Values())
 
 	s5 := NewSeriesFloat64("x", []float64{1, 2, 3, 4, 5, 6, 7, 8, 9})
 
