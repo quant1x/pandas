@@ -48,7 +48,7 @@ func LoadStructs(i interface{}, options ...LoadOption) DataFrame {
 		defaultType: SERIES_TYPE_STRING,
 		detectTypes: true,
 		hasHeader:   true,
-		nanValues:   []string{"NA", "NaN", "<nil>"},
+		nanValues:   []string{"NA", "NaN", "nan", "<nil>"},
 	}
 
 	// Set any custom load options
