@@ -14,11 +14,13 @@ func TestNewSeriesBool(t *testing.T) {
 	if s1.Len() != expected {
 		t.Errorf("wrong val: expected: %v actual: %v", expected, s1.Len())
 	}
+	s11 := s1.Copy()
+	fmt.Println(s11.Values())
 	s2 := s1.Shift(2)
-	fmt.Println((*s2).Values())
+	fmt.Println(s2.Values())
 
 	s3 := s1.Repeat(1, 2)
-	fmt.Println((*s3).Values())
+	fmt.Println(s3.Values())
 
 	//s4 := NewSeriesBool("x", []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
 	//d4 := s4.Rolling(5).Mean()

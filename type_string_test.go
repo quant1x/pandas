@@ -22,16 +22,16 @@ func TestAnyToString(t *testing.T) {
 			want: StringNaN,
 		},
 		{
-			name: "test: float true",
+			name: "test: true true",
 			args: args{
 				v: true,
 			},
 			want: True2String,
 		},
 		{
-			name: "test: float false",
+			name: "test: false false",
 			args: args{
-				v: true,
+				v: false,
 			},
 			want: False2String,
 		},

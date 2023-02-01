@@ -1,6 +1,7 @@
 package pandas
 
 import (
+	gc "github.com/huandu/go-clone"
 	"math"
 	"strings"
 )
@@ -37,11 +38,7 @@ func IsEmpty(s string) bool {
 	}
 }
 
-// Repeat 重复生成a
-func Repeat[T SeriesGenericType](a T, n int) []T {
-	dst := make([]T, n)
-	for i := 0; i < n; i++ {
-		dst[i] = a
-	}
-	return dst
+// Clone 克隆一个any
+func clone(v any) any {
+	return gc.Clone(v)
 }

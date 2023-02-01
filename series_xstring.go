@@ -1,23 +1,22 @@
 package pandas
 
 import (
-	"github.com/huandu/go-clone"
 	"reflect"
 )
 
 // SeriesString 字符串类型序列
 type SeriesString struct {
-	SeriesFrame
+	NDFrame
 	Data []string
 }
 
 // NewSeriesString creates a new series with the underlying type as string.
 func NewSeriesString(name string, vals ...interface{}) *SeriesString {
 	series := SeriesString{
-		SeriesFrame: SeriesFrame{
-			name:         name,
-			nilCount:     0,
-			valFormatter: DefaultValueFormatter,
+		NDFrame: NDFrame{
+			name:      name,
+			nilCount:  0,
+			formatter: DefaultFormatter,
 		},
 		Data: []string{},
 	}
@@ -124,23 +123,28 @@ func (self *SeriesString) Records() []string {
 	return ret
 }
 
-func (self *SeriesString) Subset(start, end int) *Series {
-	var d Series
-	d = NewSeriesString(self.name, self.Data[start:end])
-	return &d
+func (self *SeriesString) Copy() Series {
+	vlen := self.Len()
+	return self.Subset(0, vlen)
 }
 
-func (self *SeriesString) Repeat(x any, repeats int) *Series {
+func (self *SeriesString) Subset(start, end int, opt ...any) Series {
+	var d Series
+	d = NewSeriesString(self.name, self.Data[start:end])
+	return d
+}
+
+func (self *SeriesString) Repeat(x any, repeats int) Series {
 	a := AnyToFloat64(x)
 	data := Repeat(a, repeats)
 	var d Series
 	d = NewSeriesString(self.name, data)
-	return &d
+	return d
 }
 
-func (self *SeriesString) Shift(periods int) *Series {
+func (self *SeriesString) Shift(periods int) Series {
 	var d Series
-	d = clone.Clone(self).(Series)
+	d = clone(self).(Series)
 	return Shift[string](&d, periods, func() string {
 		return Nil2String
 	})

@@ -8,6 +8,7 @@ import (
 	"unicode/utf8"
 )
 
+// DataFrame 以gota的DataFrame的方法为主, 兼顾新流程, 避免单元格元素结构化
 type DataFrame struct {
 	columns []Series
 	ncols   int
@@ -236,7 +237,7 @@ func (df DataFrame) Subset(start, end int) DataFrame {
 	columns := make([]Series, df.ncols)
 	for i, column := range df.columns {
 		s := column.Subset(start, end)
-		columns[i] = *s
+		columns[i] = s
 	}
 	nrows, ncols, err := checkColumnsDimensions(columns...)
 	if err != nil {

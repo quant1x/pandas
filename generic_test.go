@@ -19,7 +19,7 @@ func TestNewSeriesFrame(t *testing.T) {
 	tests := []struct {
 		name string
 		args args
-		want *SeriesFrame
+		want *NDFrame
 	}{
 		// TODO: Add test cases.
 	}
@@ -41,4 +41,30 @@ func TestSeriesFrame(t *testing.T) {
 	d1 = data
 	s2 := NewSeries(SERIES_TYPE_FLOAT, "x", d1)
 	fmt.Printf("%+v\n", s2)
+
+	var s3 Series
+	s3 = NewSeriesBool("x", data)
+	fmt.Printf("%+v\n", s3.Values())
+
+	var s4 Series
+	ts4 := GenericSeries[float64]("x", data...)
+	s4 = *ts4
+	fmt.Printf("%+v\n", s4.Values())
+}
+
+func TestNDFrameNew(t *testing.T) {
+	// float64
+	d1 := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, NaN(), 12}
+	nd1 := NewNDFrame[float64]("x", d1...)
+	fmt.Println(nd1)
+	fmt.Println(nd1.Records())
+	nd11 := nd1.Subset(1, 2, true)
+	fmt.Println(nd11.Records())
+
+	// string
+	d2 := []string{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "nan", "12"}
+	nd2 := NewNDFrame[string]("x", d2...)
+	fmt.Println(nd2)
+	fmt.Println(nd2.Records())
+	fmt.Println(nd2.Empty())
 }

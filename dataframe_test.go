@@ -15,7 +15,7 @@ func TestDataFrameT0(t *testing.T) {
 		t.Errorf("wrong val: expected: %v actual: %v", expected, s1.Len())
 	}
 	s2 := s1.Shift(-2)
-	df := NewDataFrame(s1, *s2)
+	df := NewDataFrame(s1, s2)
 	fmt.Println(df)
 
 	_ = s2

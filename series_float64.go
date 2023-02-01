@@ -3,22 +3,22 @@ package pandas
 import (
 	"gitee.com/quant1x/pandas/algorithms"
 	"gitee.com/quant1x/pandas/algorithms/avx2"
-	"github.com/huandu/go-clone"
+	//"github.com/huandu/go-clone"
 	"gonum.org/v1/gonum/stat"
 	"reflect"
 )
 
 type SeriesFloat64 struct {
-	SeriesFrame
+	NDFrame
 	Data []float64
 }
 
 func NewSeriesFloat64(name string, vals ...interface{}) *SeriesFloat64 {
 	series := SeriesFloat64{
-		SeriesFrame: SeriesFrame{
-			name:         name,
-			nilCount:     0,
-			valFormatter: DefaultValueFormatter,
+		NDFrame: NDFrame{
+			name:      name,
+			nilCount:  0,
+			formatter: DefaultFormatter,
 		},
 		Data: []float64{},
 	}
@@ -109,9 +109,9 @@ func (self *SeriesFloat64) Len() int {
 	return len(self.Data)
 }
 
-func (self *SeriesFloat64) Shift(periods int) *Series {
+func (self *SeriesFloat64) Shift(periods int) Series {
 	var d Series
-	d = clone.Clone(self).(Series)
+	d = clone(self).(Series)
 	return Shift[float64](&d, periods, func() float64 {
 		return Nil2Float
 	})
@@ -120,7 +120,7 @@ func (self *SeriesFloat64) Shift(periods int) *Series {
 // deprecated: 不推荐使用
 func (self *SeriesFloat64) oldShift(periods int) *Series {
 	var d Series
-	d = clone.Clone(self).(Series)
+	d = clone(self).(Series)
 	if periods == 0 {
 		return &d
 	}
@@ -160,13 +160,13 @@ func (self *SeriesFloat64) Values() any {
 	return self.Data
 }
 
-func (self *SeriesFloat64) Repeat(x any, repeats int) *Series {
+func (self *SeriesFloat64) Repeat(x any, repeats int) Series {
 	a := AnyToFloat64(x)
-	//data := avx2.Repeat(a, repeats)
-	data := Repeat(a, repeats)
+	data := avx2.Repeat(a, repeats)
+	//data := Repeat(a, repeats)
 	var d Series
 	d = NewSeriesFloat64(self.name, data)
-	return &d
+	return d
 }
 
 // Empty returns an empty Series of the same type
@@ -185,10 +185,15 @@ func (self *SeriesFloat64) Records() []string {
 	return ret
 }
 
-func (self *SeriesFloat64) Subset(start, end int) *Series {
+func (self *SeriesFloat64) Copy() Series {
+	vlen := self.Len()
+	return self.Subset(0, vlen)
+}
+
+func (self *SeriesFloat64) Subset(start, end int, opt ...any) Series {
 	var d Series
 	d = NewSeriesFloat64(self.name, self.Data[start:end])
-	return &d
+	return d
 }
 
 // Rolling creates new RollingWindow

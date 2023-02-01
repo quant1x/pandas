@@ -1,22 +1,21 @@
 package pandas
 
 import (
-	"github.com/huandu/go-clone"
 	"reflect"
 )
 
 type SeriesBool struct {
-	SeriesFrame
+	NDFrame
 	Data []bool
 }
 
 // NewSeriesBool creates a new series with the underlying type as bool.
 func NewSeriesBool(name string, vals ...interface{}) *SeriesBool {
 	series := SeriesBool{
-		SeriesFrame: SeriesFrame{
-			name:         name,
-			nilCount:     0,
-			valFormatter: DefaultValueFormatter,
+		NDFrame: NDFrame{
+			name:      name,
+			nilCount:  0,
+			formatter: DefaultFormatter,
 		},
 		Data: []bool{},
 	}
@@ -119,23 +118,28 @@ func (self *SeriesBool) Records() []string {
 	return ret
 }
 
-func (self *SeriesBool) Subset(start, end int) *Series {
-	var d Series
-	d = NewSeriesBool(self.name, self.Data[start:end])
-	return &d
+func (self *SeriesBool) Copy() Series {
+	vlen := self.Len()
+	return self.Subset(0, vlen)
 }
 
-func (self *SeriesBool) Repeat(x any, repeats int) *Series {
+func (self *SeriesBool) Subset(start, end int, opt ...any) Series {
+	var d Series
+	d = NewSeriesBool(self.name, self.Data[start:end])
+	return d
+}
+
+func (self *SeriesBool) Repeat(x any, repeats int) Series {
 	a := AnyToFloat64(x)
 	data := Repeat(a, repeats)
 	var d Series
 	d = NewSeriesBool(self.name, data)
-	return &d
+	return d
 }
 
-func (self *SeriesBool) Shift(periods int) *Series {
+func (self *SeriesBool) Shift(periods int) Series {
 	var d Series
-	d = clone.Clone(self).(Series)
+	d = clone(self).(Series)
 	return Shift[bool](&d, periods, func() bool {
 		return BoolNaN
 	})

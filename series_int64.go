@@ -1,23 +1,22 @@
 package pandas
 
 import (
-	"github.com/huandu/go-clone"
 	"gonum.org/v1/gonum/stat"
 	"reflect"
 )
 
 type SeriesInt64 struct {
-	SeriesFrame
+	NDFrame
 	Data []int64
 }
 
 // NewSeriesInt64 creates a new series with the underlying type as int64.
 func NewSeriesInt64(name string, vals ...interface{}) *SeriesInt64 {
 	series := SeriesInt64{
-		SeriesFrame: SeriesFrame{
-			name:         name,
-			nilCount:     0,
-			valFormatter: DefaultValueFormatter,
+		NDFrame: NDFrame{
+			name:      name,
+			nilCount:  0,
+			formatter: DefaultFormatter,
 		},
 		Data: []int64{},
 	}
@@ -100,9 +99,9 @@ func (self *SeriesInt64) Type() Type {
 	return SERIES_TYPE_INT
 }
 
-func (self *SeriesInt64) Shift(periods int) *Series {
+func (self *SeriesInt64) Shift(periods int) Series {
 	var d Series
-	d = clone.Clone(self).(Series)
+	d = clone(self).(Series)
 	return Shift[int64](&d, periods, func() int64 {
 		return IntNaN
 	})
@@ -118,17 +117,12 @@ func (self *SeriesInt64) Values() any {
 	return self.Data
 }
 
-func (self *SeriesInt64) Repeat(x any, repeats int) *Series {
+func (self *SeriesInt64) Repeat(x any, repeats int) Series {
 	a := AnyToFloat64(x)
 	data := Repeat(a, repeats)
 	var d Series
 	d = NewSeriesInt64(self.name, data)
-	return &d
-}
-
-func (self *SeriesInt64) Rolling(window int) RollingWindow {
-	//TODO implement me
-	panic("implement me")
+	return d
 }
 
 func (self *SeriesInt64) Empty() Series {
@@ -145,10 +139,20 @@ func (self *SeriesInt64) Records() []string {
 	return ret
 }
 
-func (self *SeriesInt64) Subset(start, end int) *Series {
+func (self *SeriesInt64) Copy() Series {
+	vlen := self.Len()
+	return self.Subset(0, vlen)
+}
+
+func (self *SeriesInt64) Subset(start, end int, opt ...any) Series {
 	var d Series
 	d = NewSeriesInt64(self.name, self.Data[start:end])
-	return &d
+	return d
+}
+
+func (self *SeriesInt64) Rolling(window int) RollingWindow {
+	//TODO implement me
+	panic("implement me")
 }
 
 func (self *SeriesInt64) Mean() float64 {

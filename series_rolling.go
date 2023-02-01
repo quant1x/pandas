@@ -15,7 +15,7 @@ func (r RollingWindow) getBlocks() (blocks []Series) {
 
 		start := i - r.window
 		end := i
-		blocks = append(blocks, *r.series.Subset(start, end))
+		blocks = append(blocks, r.series.Subset(start, end))
 	}
 
 	return
