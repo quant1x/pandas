@@ -17,6 +17,8 @@ func TestDataFrameT0(t *testing.T) {
 	s2 := s1.Shift(-2)
 	df := NewDataFrame(s1, s2)
 	fmt.Println(df)
+	df.FillNa(0.00, true)
+	fmt.Println(df)
 
 	_ = s2
 }
