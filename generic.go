@@ -42,7 +42,7 @@ func NewNDFrame[E GenericType](name string, rows ...E) *NDFrame {
 		type_:     SERIES_TYPE_INVAILD,
 		nilCount:  0,
 		rows:      0,
-		//values:       []E,
+		values:    []E{},
 	}
 	// TODO: 不知道rows是否存在全部为空的情况, 只能先创建一个空的slice
 	frame.values = make([]E, 0) // Warning: filled with 0.0 (not NaN)
@@ -67,7 +67,7 @@ func assign[T GenericType](frame *NDFrame, idx, size int, v T) {
 	_vv := reflect.ValueOf(v)
 	_vi := _vv.Interface()
 	// float和string类型有可能是NaN, 对nil和NaN进行计数
-	if frame.Type() == SERIES_TYPE_FLOAT && IsNaN(_vi.(float64)) {
+	if frame.Type() == SERIES_TYPE_FLOAT && Float64IsNaN(_vi.(float64)) {
 		frame.nilCount++
 	} else if frame.Type() == SERIES_TYPE_STRING && StringIsNaN(_vi.(string)) {
 		frame.nilCount++
@@ -366,13 +366,13 @@ func (self *NDFrame) FillNa(v any, inplace bool) {
 		}
 	case []int64:
 		for idx, iv := range rows {
-			if IsNaN(float64(iv)) && inplace {
+			if Float64IsNaN(float64(iv)) && inplace {
 				rows[idx] = AnyToInt64(v)
 			}
 		}
 	case []float64:
 		for idx, iv := range rows {
-			if IsNaN(iv) && inplace {
+			if Float64IsNaN(iv) && inplace {
 				rows[idx] = AnyToFloat64(v)
 			}
 		}
@@ -428,6 +428,70 @@ func (self *NDFrame) Max() any {
 		}
 		if i > 0 {
 			return max
+		}
+		return Nil2Float64
+	}
+	return Nil2Float64
+}
+
+func (self *NDFrame) Min() any {
+	values := self.Values()
+	switch rows := values.(type) {
+	case []string:
+		min := ""
+		i := 0
+		for idx, iv := range rows {
+			if StringIsNaN(iv) {
+				continue
+			} else if i < 1 {
+				min = iv
+				i += 1
+			}
+			if iv < min {
+				min = iv
+				i += 1
+			}
+			_ = idx
+		}
+		if i > 0 {
+			return min
+		}
+		return StringNaN
+	case []int64:
+		min := int64(0)
+		i := 0
+		for idx, iv := range rows {
+			if Float64IsNaN(float64(iv)) {
+				continue
+			} else if i < 1 {
+				min = iv
+				i += 1
+			}
+			if iv < min {
+				min = iv
+				i += 1
+			}
+			_ = idx
+		}
+		return min
+	case []float64:
+		min := float64(0)
+		i := 0
+		for idx, iv := range rows {
+			if Float64IsNaN(iv) {
+				continue
+			} else if i < 1 {
+				min = iv
+				i += 1
+			}
+			if iv < min {
+				min = iv
+				i += 1
+			}
+			_ = idx
+		}
+		if i > 0 {
+			return min
 		}
 		return Nil2Float64
 	}

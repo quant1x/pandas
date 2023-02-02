@@ -13,6 +13,11 @@ const (
 	False2String = "false" // false转string
 )
 
+var (
+	// PossibleNaOfString 有可能出现的NaN字符串的全部选项
+	PossibleNaOfString = []string{"NA", "NaN", "nan", "<nil>"}
+)
+
 // AnyToString any转string
 func AnyToString(v any) string {
 	switch val := v.(type) {

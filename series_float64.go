@@ -77,7 +77,7 @@ func NewSeriesFloat64(name string, vals ...interface{}) *SeriesFloat64 {
 }
 
 func (self *SeriesFloat64) assign(idx, size int, f float64) {
-	if IsNaN(f) {
+	if Float64IsNaN(f) {
 		self.nilCount++
 	}
 	if idx < size {
@@ -226,7 +226,7 @@ func (self *SeriesFloat64) FillNa(v any, inplace bool) {
 	switch rows := values.(type) {
 	case []float64:
 		for idx, iv := range rows {
-			if IsNaN(iv) && inplace {
+			if Float64IsNaN(iv) && inplace {
 				rows[idx] = AnyToFloat64(v)
 			}
 		}

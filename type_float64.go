@@ -19,7 +19,7 @@ const (
 
 // Float64IsNaN 判断float64是否NaN
 func Float64IsNaN(f float64) bool {
-	return IsNaN(f)
+	return math.IsNaN(f) || math.IsInf(f, 0)
 }
 
 // ParseFloat64 字符串转float64
@@ -62,6 +62,6 @@ func AnyToFloat64(v any) float64 {
 	if isPoint(v) {
 		return point_to_number[float64](v, Nil2Float64, boolToFloat64, ParseFloat64)
 	}
-	f := value_to_number[float64](v, boolToFloat64, ParseFloat64)
+	f := value_to_number[float64](v, Nil2Float64, boolToFloat64, ParseFloat64)
 	return f
 }

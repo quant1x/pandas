@@ -9,15 +9,23 @@ import (
 
 // Type is a convenience alias that can be used for a more type safe way of
 // reason and use Series types.
-type Type = string
+type Type = reflect.Kind
 
 // Supported Series Types
+//const (
+//	SERIES_TYPE_INVAILD = "unknown" // 未知类型
+//	SERIES_TYPE_BOOL    = "bool"    // 布尔类型
+//	SERIES_TYPE_INT     = "int"     // int64
+//	SERIES_TYPE_FLOAT   = "float"   // float64
+//	SERIES_TYPE_STRING  = "string"  // string
+//)
+
 const (
-	SERIES_TYPE_INVAILD = "unknown" // 未知类型
-	SERIES_TYPE_BOOL    = "bool"    // 布尔类型
-	SERIES_TYPE_INT     = "int"     // int64
-	SERIES_TYPE_FLOAT   = "float"   // float64
-	SERIES_TYPE_STRING  = "string"  // string
+	SERIES_TYPE_INVAILD = reflect.Invalid // 无效类型
+	SERIES_TYPE_BOOL    = reflect.Bool    // 布尔类型
+	SERIES_TYPE_INT     = reflect.Int64   // int64
+	SERIES_TYPE_FLOAT   = reflect.Float64 // float64
+	SERIES_TYPE_STRING  = reflect.String  // string
 )
 
 // StringFormatter is used to convert a value
@@ -29,20 +37,20 @@ type Series interface {
 	// Name 取得series名称
 	Name() string
 	// Rename renames the series.
-	Rename(n string)
+	Rename(name string)
 	// Type returns the type of data the series holds.
-	// 返回类型的字符串
+	// 返回series的数据类型
 	Type() Type
-	// NRows 获得行数
+	// Len 获得行数
 	Len() int
 	// Values 获得全部数据集
 	Values() any
 	// Empty returns an empty Series of the same type
 	Empty() Series
-	// Records returns the elements of a Series as a []string
-	Records() []string
 	// Copy 复制
 	Copy() Series
+	// Records returns the elements of a Series as a []string
+	Records() []string
 	// Subset 获取子集
 	Subset(start, end int, opt ...any) Series
 	// Repeat elements of an array.
@@ -60,6 +68,8 @@ type Series interface {
 	FillNa(v any, inplace bool)
 	// Max 找出最大值
 	Max() any
+	// Min 找出最小值
+	Min() any
 }
 
 // NewSeries 指定类型创建序列
@@ -212,7 +222,7 @@ func FillNa[T GenericType](s *NDFrame, v T, inplace bool) *NDFrame {
 		}
 	case []float64:
 		for idx, iv := range rows {
-			if IsNaN(iv) && inplace {
+			if Float64IsNaN(iv) && inplace {
 				rows[idx] = AnyToFloat64(v)
 			}
 		}

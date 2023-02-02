@@ -133,7 +133,7 @@ func int2Bool[T ~int | ~int32 | int64](n T) bool {
 }
 
 func float2Bool[T ~float32 | float64](f T) bool {
-	if IsNaN(float64(f)) || f == 0 {
+	if Float64IsNaN(float64(f)) || f == 0 {
 		return false
 	}
 	return true

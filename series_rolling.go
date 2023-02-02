@@ -66,3 +66,27 @@ func (r RollingWindow) Max() any {
 		return fs
 	}
 }
+
+func (r RollingWindow) Min() any {
+	var fs []float64
+	var is []int64
+	var ss []string
+	for _, block := range r.getBlocks() {
+		v := block.Min()
+		switch val := v.(type) {
+		case float64:
+			fs = append(fs, val)
+		case int64:
+			is = append(is, val)
+		case string:
+			ss = append(ss, val)
+		}
+	}
+	if len(ss) > 0 {
+		return ss
+	} else if len(is) > 0 {
+		return is
+	} else {
+		return fs
+	}
+}

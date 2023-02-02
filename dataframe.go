@@ -256,7 +256,7 @@ func checkColumnsDimensions(se ...Series) (nrows, ncols int, err error) {
 func (df DataFrame) Types() []string {
 	coltypes := make([]string, df.ncols)
 	for i, s := range df.columns {
-		coltypes[i] = s.Type()
+		coltypes[i] = s.Type().String()
 	}
 	return coltypes
 }
@@ -487,5 +487,5 @@ func parseType(s string) (Type, error) {
 	case "bool":
 		return SERIES_TYPE_BOOL, nil
 	}
-	return "", fmt.Errorf("type (%s) is not supported", s)
+	return SERIES_TYPE_INVAILD, fmt.Errorf("type (%s) is not supported", s)
 }

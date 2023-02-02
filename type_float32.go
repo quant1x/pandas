@@ -15,7 +15,7 @@ const (
 
 // Float32IsNaN 判断float32是否NaN
 func Float32IsNaN(f float32) bool {
-	return IsNaN(float64(f))
+	return Float64IsNaN(float64(f))
 }
 
 // ParseFloat32 字符串转float32
@@ -60,6 +60,6 @@ func AnyToFloat32(v any) float32 {
 	if isPoint(v) {
 		return point_to_number[float32](v, Nil2Float32, boolToFloat32, ParseFloat32)
 	}
-	f := value_to_number[float32](v, boolToFloat32, ParseFloat32)
+	f := value_to_number[float32](v, Nil2Float32, boolToFloat32, ParseFloat32)
 	return f
 }

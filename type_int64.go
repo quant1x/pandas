@@ -62,6 +62,6 @@ func AnyToInt64(v any) int64 {
 	if isPoint(v) {
 		return point_to_number[int64](v, Nil2Int64, boolToInt64, ParseInt64)
 	}
-	f := value_to_number[int64](v, boolToInt64, ParseInt64)
+	f := value_to_number[int64](v, Nil2Int64, boolToInt64, ParseInt64)
 	return f
 }

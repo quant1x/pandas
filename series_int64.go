@@ -185,7 +185,7 @@ func (self *SeriesInt64) FillNa(v any, inplace bool) {
 	switch rows := values.(type) {
 	case []int64:
 		for idx, iv := range rows {
-			if IsNaN(float64(iv)) && inplace {
+			if Float64IsNaN(float64(iv)) && inplace {
 				rows[idx] = AnyToInt64(v)
 			}
 		}

@@ -124,7 +124,7 @@ func (ExponentialMovingWindow) adjustedMean(data Series, alpha DType, ignoreNA b
 
 		w := alpha*weight + 1
 		x := values[t]
-		if IsNaN(x) {
+		if Float64IsNaN(x) {
 			if ignoreNA {
 				weight = w
 			}
@@ -145,14 +145,14 @@ func (ExponentialMovingWindow) notadjustedMean(data Series, alpha DType, ignoreN
 		beta   = 1 - alpha
 		last   = values[0]
 	)
-	if IsNaN(last) {
+	if Float64IsNaN(last) {
 		last = 0
 		values[0] = last
 	}
 	for t := 1; t < len(values); t++ {
 		x := values[t]
 
-		if IsNaN(x) {
+		if Float64IsNaN(x) {
 			values[t] = last
 			continue
 		}

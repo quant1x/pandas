@@ -207,7 +207,7 @@ func Test_point_to_float32(t *testing.T) {
 			//		t.Errorf("point_to_float32() = %v, want %v", got, tt.want)
 			//	}
 			//}
-			if got := AnyToFloat32(tt.args.v); got != tt.want && !(IsNaN(float64(tt.want)) && IsNaN(float64(got))) {
+			if got := AnyToFloat32(tt.args.v); got != tt.want && !(Float64IsNaN(float64(tt.want)) && Float64IsNaN(float64(got))) {
 				t.Errorf("AnyToFloat32() = %v, want %v", got, tt.want)
 			}
 		})
@@ -373,7 +373,7 @@ func Test_value_to_float32(t *testing.T) {
 			//		t.Errorf("value_to_float32() = %v, want %v", got, tt.want)
 			//	}
 			//}
-			if got := AnyToFloat32(tt.args.v); !(got == tt.want || (IsNaN(float64(tt.want)) && IsNaN(float64(got)))) {
+			if got := AnyToFloat32(tt.args.v); !(got == tt.want || (Float64IsNaN(float64(tt.want)) && Float64IsNaN(float64(got)))) {
 				t.Errorf("AnyToFloat32() = %v, want %v", got, tt.want)
 			}
 		})

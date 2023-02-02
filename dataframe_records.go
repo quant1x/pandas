@@ -2,7 +2,6 @@ package pandas
 
 import (
 	"fmt"
-	"strconv"
 )
 
 // LoadRecords creates a new DataFrame based on the given records.
@@ -12,7 +11,7 @@ func LoadRecords(records [][]string, options ...LoadOption) DataFrame {
 		defaultType: SERIES_TYPE_STRING,
 		detectTypes: true,
 		hasHeader:   true,
-		nanValues:   []string{"NA", "NaN", "<nil>"},
+		nanValues:   PossibleNaOfString,
 	}
 
 	// Set any custom load options
@@ -49,6 +48,7 @@ func LoadRecords(records [][]string, options ...LoadOption) DataFrame {
 		rawcol := make([]string, len(records))
 		for j := 0; j < len(records); j++ {
 			rawcol[j] = records[j][i]
+			// 收敛NaN的情况, 统一替换为NaN
 			if findInStringSlice(rawcol[j], cfg.nanValues) != -1 {
 				rawcol[j] = "NaN"
 			}
@@ -59,7 +59,7 @@ func LoadRecords(records [][]string, options ...LoadOption) DataFrame {
 		if !ok {
 			t = cfg.defaultType
 			if cfg.detectTypes {
-				if l, err := findType(rawcol); err == nil {
+				if l, err := findTypeByString(rawcol); err == nil {
 					t = l
 				}
 			}
@@ -92,39 +92,4 @@ func LoadRecords(records [][]string, options ...LoadOption) DataFrame {
 		df.columns[i].Rename(colname)
 	}
 	return df
-}
-
-func findType(arr []string) (Type, error) {
-	var hasFloats, hasInts, hasBools, hasStrings bool
-	for _, str := range arr {
-		if str == "" || str == "NaN" {
-			continue
-		}
-		if _, err := strconv.Atoi(str); err == nil {
-			hasInts = true
-			continue
-		}
-		if _, err := strconv.ParseFloat(str, 64); err == nil {
-			hasFloats = true
-			continue
-		}
-		if str == "true" || str == "false" {
-			hasBools = true
-			continue
-		}
-		hasStrings = true
-	}
-
-	switch {
-	case hasStrings:
-		return SERIES_TYPE_STRING, nil
-	case hasBools:
-		return SERIES_TYPE_BOOL, nil
-	case hasFloats:
-		return SERIES_TYPE_FLOAT, nil
-	case hasInts:
-		return SERIES_TYPE_INT, nil
-	default:
-		return SERIES_TYPE_STRING, fmt.Errorf("couldn't detect type")
-	}
 }
