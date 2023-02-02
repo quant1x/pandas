@@ -61,6 +61,8 @@ func TestNDFrameNew(t *testing.T) {
 	fmt.Println(nd1.Records())
 	nd11 := nd1.Subset(1, 2, true)
 	fmt.Println(nd11.Records())
+	fmt.Println(nd1.Max())
+	fmt.Println(nd1.Rolling(5).Max())
 
 	nd12 := nd1.Rolling(5).Mean()
 	d12 := nd12.Values()
@@ -74,6 +76,9 @@ func TestNDFrameNew(t *testing.T) {
 	// string
 	d2 := []string{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "nan", "12"}
 	nd2 := NewNDFrame[string]("x", d2...)
+	fmt.Println(nd2)
+	nd21 := nd2.Rolling(5).Max()
+	fmt.Println(nd21)
 	nd2.FillNa(0, true)
 	fmt.Println(nd2)
 	fmt.Println(nd2.Records())

@@ -58,6 +58,8 @@ type Series interface {
 	StdDev() float64
 	// FillNa Fill NA/NaN values using the specified method.
 	FillNa(v any, inplace bool)
+	// Max 找出最大值
+	Max() any
 }
 
 // NewSeries 指定类型创建序列
@@ -89,7 +91,7 @@ func GenericSeries[T GenericType](name string, values ...T) *Series {
 		vk := vv.Kind()
 		switch vk {
 		//case reflect.Invalid: // {interface} nil
-		//	series.assign(idx, size, Nil2Float)
+		//	series.assign(idx, size, Nil2Float64)
 		//case reflect.Slice: // 切片, 不定长
 		//	for i := 0; i < vv.Len(); i++ {
 		//		tv := vv.Index(i).Interface()

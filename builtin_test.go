@@ -1,6 +1,9 @@
 package pandas
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestIsEmpty(t *testing.T) {
 	type args struct {
@@ -68,4 +71,16 @@ func TestIsEmpty(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestPoint(t *testing.T) {
+	var p1 *int
+	fmt.Printf("*int = nil, result=%v\n", isPoint(p1))
+	a := 1
+	p1 = &a
+	fmt.Printf("*int = nil, result=%v\n", isPoint(p1))
+
+	var p2 *BigFloat
+	fmt.Printf("*BigFloat = nil, result=%v\n", isPoint(p2))
+
 }

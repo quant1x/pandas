@@ -3,6 +3,7 @@ package avx2
 import "github.com/viterin/vek"
 
 // 初始化 avx2
+// 可以参考另一个实现库 gonum.org/v1/gonum/stat
 func init() {
 	// 开启加速选项
 	vek.SetAcceleration(true)
@@ -27,9 +28,10 @@ func Round(x []float64) { vek.Round_Inplace(x) }
 func Ceil(x []float64)  { vek.Ceil_Inplace(x) }
 func Floor(x []float64) { vek.Floor_Inplace(x) }
 
-func Min(x []float64) float64  { return vek.Min(x) }
-func Max(x []float64) float64  { return vek.Max(x) }
-func Mean(x []float64) float64 { return vek.Mean(x) }
+func Min(x []float64) float64    { return vek.Min(x) }
+func Max(x []float64) float64    { return vek.Max(x) }
+func Mean(x []float64) float64   { return vek.Mean(x) }
+func Median(x []float64) float64 { return vek.Median(x) }
 
 func Dot(x []float64, y []float64) float64 { return vek.Dot(x, y) }
 

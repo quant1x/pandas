@@ -3,6 +3,7 @@ package pandas
 import (
 	gc "github.com/huandu/go-clone"
 	"math"
+	"reflect"
 	"strings"
 )
 
@@ -11,12 +12,16 @@ import (
 // 全局变量定义
 
 var (
-	// Nil2Float nil指针转换float64
-	Nil2Float = float64(0)
+	// Nil2Float64 nil指针转换float64
+	Nil2Float64 = float64(0)
+	// Nil2Float32 nil指针转换float32
+	Nil2Float32 = float32(0)
 )
 
 func init() {
-	Nil2Float = math.NaN()
+	Nil2Float64 = math.NaN()
+	// 这个转换是对的, NaN对float32也有效
+	Nil2Float32 = float32(Nil2Float64)
 }
 
 // NaN returns an IEEE 754 “not-a-number” value.
@@ -24,7 +29,7 @@ func NaN() float64 {
 	return math.NaN()
 }
 
-// IsNan float64是否NaN
+// IsNaN float64是否NaN
 func IsNaN(f float64) bool {
 	return math.IsNaN(f) || math.IsInf(f, 0)
 }
@@ -41,4 +46,9 @@ func IsEmpty(s string) bool {
 // Clone 克隆一个any
 func clone(v any) any {
 	return gc.Clone(v)
+}
+
+func isPoint(v any) bool {
+	kind := reflect.ValueOf(v).Kind()
+	return reflect.Pointer == kind
 }

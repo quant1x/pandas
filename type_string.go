@@ -44,37 +44,37 @@ func AnyToString(v any) string {
 		if val == nil {
 			return Nil2String
 		}
-		return []string{strconv.FormatFloat(*val, 'G', -1, 64)}[0]
+		return strconv.FormatFloat(*val, 'G', -1, 64)
 	case float64:
-		return []string{strconv.FormatFloat(val, 'G', -1, 64)}[0]
+		return strconv.FormatFloat(val, 'G', -1, 64)
 	case *float32:
 		if val == nil {
 			return Nil2String
 		}
-		return []string{strconv.FormatFloat(float64(*val), 'G', -1, 64)}[0]
+		return strconv.FormatFloat(float64(*val), 'G', -1, 64)
 	case float32:
-		return []string{strconv.FormatFloat(float64(val), 'G', -1, 64)}[0]
+		return strconv.FormatFloat(float64(val), 'G', -1, 64)
 	case *int64:
 		if val == nil {
 			return Nil2String
 		}
-		return []string{strconv.FormatInt(*val, 10)}[0]
+		return strconv.FormatInt(*val, 10)
 	case int64:
-		return []string{strconv.FormatInt(val, 10)}[0]
+		return strconv.FormatInt(val, 10)
 	case *int:
 		if val == nil {
 			return Nil2String
 		}
-		return []string{strconv.Itoa(*val)}[0]
+		return strconv.Itoa(*val)
 	case int:
-		return []string{strconv.Itoa(val)}[0]
+		return strconv.Itoa(val)
 	case *int32:
 		if val == nil {
 			return Nil2String
 		}
-		return []string{strconv.FormatInt(int64(*val), 10)}[0]
+		return strconv.FormatInt(int64(*val), 10)
 	case int32:
-		return []string{strconv.FormatInt(int64(val), 10)}[0]
+		return strconv.FormatInt(int64(val), 10)
 	default:
 		logger.Errorf("%s, error=The type is not recognized\n", v)
 		_ = v.(string) // Intentionally panic

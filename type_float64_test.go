@@ -90,9 +90,9 @@ func TestParseFloat2Nan(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			//if got := ParseFloat(tt.args.s, tt.args.v); got != tt.want {
-			if got := ParseFloat(tt.args.s, tt.args.v); !math.IsNaN(got) {
-				t.Errorf("ParseFloat() = %v, want %v", got, tt.want)
+			//if got := ParseFloat64(tt.args.s, tt.args.v); got != tt.want {
+			if got := ParseFloat64(tt.args.s, tt.args.v); !math.IsNaN(got) {
+				t.Errorf("ParseFloat64() = %v, want %v", got, tt.want)
 			}
 		})
 	}

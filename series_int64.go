@@ -134,7 +134,7 @@ func (self *SeriesInt64) Records() []string {
 	ret := make([]string, self.Len())
 	for i := 0; i < self.Len(); i++ {
 		e := self.Data[i]
-		ret[i] = int2String(e)
+		ret[i] = int64ToString(e)
 	}
 	return ret
 }

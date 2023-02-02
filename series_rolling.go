@@ -41,3 +41,28 @@ func (r RollingWindow) StdDev() (s Series) {
 
 	return
 }
+
+func (r RollingWindow) Max() any {
+	var fs []float64
+	var is []int64
+	var ss []string
+	for _, block := range r.getBlocks() {
+		//d = append(d, block.Max())
+		v := block.Max()
+		switch val := v.(type) {
+		case float64:
+			fs = append(fs, val)
+		case int64:
+			is = append(is, val)
+		case string:
+			ss = append(ss, val)
+		}
+	}
+	if len(ss) > 0 {
+		return ss
+	} else if len(is) > 0 {
+		return is
+	} else {
+		return fs
+	}
+}

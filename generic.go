@@ -183,7 +183,7 @@ func (self *NDFrame) apply(f func(idx int, v any)) {
 	vk := vv.Kind()
 	switch vk {
 	case reflect.Invalid: // {interface} nil
-		//series.assign(idx, size, Nil2Float)
+		//series.assign(idx, size, Nil2Float64)
 	case reflect.Slice: // 切片, 不定长
 		for i := 0; i < vv.Len(); i++ {
 			tv := vv.Index(i).Interface()
@@ -300,7 +300,7 @@ func (self *NDFrame) Shift(periods int) Series {
 	var d Series
 	d = clone(self).(Series)
 	//return Shift[float64](&d, periods, func() float64 {
-	//	return Nil2Float
+	//	return Nil2Float64
 	//})
 	switch values := self.values.(type) {
 	case []bool:
@@ -314,11 +314,11 @@ func (self *NDFrame) Shift(periods int) Series {
 		})
 	case []int64:
 		return Shift[int64](&d, periods, func() int64 {
-			return Nil2Int
+			return Nil2Int64
 		})
 	default: //case []float64:
 		return Shift[float64](&d, periods, func() float64 {
-			return Nil2Float
+			return Nil2Float64
 		})
 	}
 }
@@ -377,4 +377,59 @@ func (self *NDFrame) FillNa(v any, inplace bool) {
 			}
 		}
 	}
+}
+
+func (self *NDFrame) Max() any {
+	values := self.Values()
+	switch rows := values.(type) {
+	case []string:
+		max := ""
+		i := 0
+		for idx, iv := range rows {
+			if StringIsNaN(iv) {
+				continue
+			}
+			if iv > max {
+				max = iv
+				i += 1
+			}
+			_ = idx
+		}
+		if i > 0 {
+			return max
+		}
+		return StringNaN
+	case []int64:
+		max := int64(0)
+		//i := 0
+		for idx, iv := range rows {
+			if Float64IsNaN(float64(iv)) {
+				continue
+			}
+			if iv > max {
+				max = iv
+				//i = idx
+			}
+			_ = idx
+		}
+		return max
+	case []float64:
+		max := float64(0)
+		i := 0
+		for idx, iv := range rows {
+			if Float64IsNaN(iv) {
+				continue
+			}
+			if iv > max {
+				max = iv
+				i += 1
+			}
+			_ = idx
+		}
+		if i > 0 {
+			return max
+		}
+		return Nil2Float64
+	}
+	return Nil2Float64
 }

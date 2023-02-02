@@ -6,13 +6,16 @@ import (
 )
 
 const (
-	Nil2Bool         = false // 空指针转int64
-	BoolNaN          = false // int64 无效值
-	True2Bool        = true  // true转int64
-	False2Bool       = false // false 转int64
-	StringBad2Bool   = false // 字符串解析int64异常
-	StringTrue2Bool  = true  // 字符串true转int64
-	StringFalse2Bool = false // 字符串false转int64
+	Nil2Bool              = false      // 空指针转bool
+	BoolNaN               = false      // bool 无效值
+	True2Bool             = true       // true转bool
+	False2Bool            = false      // false 转bool
+	True2Float32  float32 = float32(1) // true转float32
+	False2Float32 float32 = float32(0) // false转float32
+
+	StringBad2Bool   = false // 字符串解析bool异常
+	StringTrue2Bool  = true  // 字符串true转bool
+	StringFalse2Bool = false // 字符串false转bool
 )
 
 // AnyToBool any转换bool
@@ -134,4 +137,27 @@ func float2Bool[T ~float32 | float64](f T) bool {
 		return false
 	}
 	return true
+}
+
+// bool转float32
+func boolToFloat32(b bool) float32 {
+	if b {
+		return True2Float32
+	}
+	return False2Float32
+}
+
+// bool转float32
+func boolToFloat64(b bool) float64 {
+	if b {
+		return True2Float64
+	}
+	return False2Float64
+}
+
+func boolToInt64(b bool) int64 {
+	if b {
+		return True2Int64
+	}
+	return False2Int64
 }

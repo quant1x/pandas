@@ -1,10 +1,9 @@
 package pandas
 
 import (
-	"gitee.com/quant1x/pandas/algorithms"
 	"gitee.com/quant1x/pandas/algorithms/avx2"
-	//"github.com/huandu/go-clone"
 	"gonum.org/v1/gonum/stat"
+	"math"
 	"reflect"
 )
 
@@ -38,7 +37,7 @@ func NewSeriesFloat64(name string, vals ...interface{}) *SeriesFloat64 {
 			vk := vv.Kind()
 			switch vk {
 			case reflect.Invalid: // {interface} nil
-				series.assign(idx, size, Nil2Float)
+				series.assign(idx, size, Nil2Float64)
 			case reflect.Slice: // 切片, 不定长
 				for i := 0; i < vv.Len(); i++ {
 					tv := vv.Index(i).Interface()
@@ -113,7 +112,7 @@ func (self *SeriesFloat64) Shift(periods int) Series {
 	var d Series
 	d = clone(self).(Series)
 	return Shift[float64](&d, periods, func() float64 {
-		return Nil2Float
+		return Nil2Float64
 	})
 }
 
@@ -133,7 +132,7 @@ func (self *SeriesFloat64) oldShift(periods int) *Series {
 		src    []float64
 	)
 
-	if shlen := int(algorithms.Abs(float64(periods))); shlen < len(values) {
+	if shlen := int(math.Abs(float64(periods))); shlen < len(values) {
 		if periods > 0 {
 			naVals = values[:shlen]
 			dst = values[shlen:]
@@ -180,7 +179,7 @@ func (self *SeriesFloat64) Records() []string {
 	for i := 0; i < self.Len(); i++ {
 		//e := self.elements.Elem(i)
 		e := self.Data[i]
-		ret[i] = float2String(e)
+		ret[i] = float64ToString(e)
 	}
 	return ret
 }

@@ -1,7 +1,6 @@
 package pandas
 
 import (
-	"gitee.com/quant1x/pandas/algorithms"
 	"math"
 )
 
@@ -98,7 +97,7 @@ func (w ExponentialMovingWindow) Mean() Series {
 		if w.param <= 0 {
 			panic("halflife param must be > 0")
 		}
-		alpha = 1 - algorithms.Exp(-math.Ln2/w.param)
+		alpha = 1 - math.Exp(-math.Ln2/w.param)
 	}
 
 	return w.applyMean(w.data, alpha)
