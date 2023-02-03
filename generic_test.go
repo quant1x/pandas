@@ -31,6 +31,11 @@ func TestNDFrameNew(t *testing.T) {
 	d1 := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
 	nd1 := NewNDFrame[float64]("x", d1...)
 	fmt.Println(nd1)
+
+	r := RangeFinite(-1)
+	ndr1 := nd1.Select(r)
+	fmt.Println(ndr1.Values())
+
 	fmt.Println(nd1.Records())
 	nd11 := nd1.Subset(1, 2, true)
 	fmt.Println(nd11.Records())

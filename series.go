@@ -69,6 +69,8 @@ type Series interface {
 	Max() any
 	// Min 找出最小值
 	Min() any
+	// Select 选取一段记录
+	Select(r Range) Series
 }
 
 // NewSeries 指定类型创建序列

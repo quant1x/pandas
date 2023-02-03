@@ -4,12 +4,19 @@ import (
 	"reflect"
 )
 
+// 初始化全局的私有变量
 var (
-	typeBool    = reflect.TypeOf([]bool{})
-	typeInt64   = reflect.TypeOf([]int64{})
-	typeFloat32 = reflect.TypeOf([]float32{})
-	typeFloat64 = reflect.TypeOf([]float64{})
-	typeString  = reflect.TypeOf([]string{})
+	rawBool     bool    = true
+	typeBool            = reflect.TypeOf([]bool{})
+	rawInt32    int32   = int32(0)
+	typeInt32           = reflect.TypeOf([]int32{})
+	rawInt64    int64   = int64(0)
+	typeInt64           = reflect.TypeOf([]int64{})
+	rawFloat32  float32 = float32(0)
+	typeFloat32         = reflect.TypeOf([]float32{})
+	rawFloat64  float64 = float64(0)
+	typeFloat64         = reflect.TypeOf([]float64{})
+	typeString          = reflect.TypeOf([]string{})
 )
 
 func CreateSeries(t Type, name string, v ...any) Series {

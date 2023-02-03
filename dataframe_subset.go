@@ -21,3 +21,13 @@ func (df DataFrame) Subset(start, end int) DataFrame {
 		nrows:   nrows,
 	}
 }
+
+// 选择一段记录
+func (df DataFrame) Select(p Range) DataFrame {
+	serieses := []Series{}
+	for i := range df.columns {
+		serieses = append(serieses, df.columns[i].Select(p))
+	}
+	newDF := DataFrame{columns: serieses}
+	return newDF
+}
