@@ -25,7 +25,7 @@ func findTypeByString(arr []string) (Type, error) {
 		}
 		hasStrings = true
 	}
-
+	// 类型优先级, string > bool > float > int, string 为默认类型
 	switch {
 	case hasStrings:
 		return SERIES_TYPE_STRING, nil
