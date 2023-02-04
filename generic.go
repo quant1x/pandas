@@ -12,7 +12,7 @@ type GenericType interface {
 	~bool | ~int64 | ~float64 | ~string
 }
 
-// NDFrame 这里本意是想做一个父类
+// NDFrame 这里本意是想做一个父类, 实际的效果是一个抽象类
 type NDFrame struct {
 	lock      sync.RWMutex    // 读写锁
 	formatter StringFormatter // 字符串格式化工具
