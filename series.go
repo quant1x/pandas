@@ -73,6 +73,8 @@ type Series interface {
 	Min() any
 	// Select 选取一段记录
 	Select(r Range) Series
+	// Append 增加一批记录
+	Append(values ...interface{})
 }
 
 // NewSeries 指定类型创建序列

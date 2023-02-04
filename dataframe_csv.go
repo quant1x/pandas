@@ -77,7 +77,7 @@ func WriteHeader(b bool) WriteOption {
 
 // WriteCSV writes the DataFrame to the given io.Writer as a CSV file.
 // 支持文件名和io两种方式写入数据
-func (df DataFrame) WriteCSV(out any, options ...WriteOption) error {
+func (self DataFrame) WriteCSV(out any, options ...WriteOption) error {
 	var (
 		writer   io.Writer
 		filename string
@@ -111,7 +111,7 @@ func (df DataFrame) WriteCSV(out any, options ...WriteOption) error {
 		option(&cfg)
 	}
 
-	records := df.Records()
+	records := self.Records()
 	if !cfg.writeHeader {
 		records = records[1:]
 	}

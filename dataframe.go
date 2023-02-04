@@ -55,23 +55,23 @@ func NewDataFrame(se ...Series) DataFrame {
 }
 
 // Dims retrieves the dimensions of a DataFrame.
-func (df DataFrame) Dims() (int, int) {
-	return df.Nrow(), df.Ncol()
+func (self DataFrame) Dims() (int, int) {
+	return self.Nrow(), self.Ncol()
 }
 
 // Nrow returns the number of rows on a DataFrame.
-func (df DataFrame) Nrow() int {
-	return df.nrows
+func (self DataFrame) Nrow() int {
+	return self.nrows
 }
 
 // Ncol returns the number of columns on a DataFrame.
-func (df DataFrame) Ncol() int {
-	return df.ncols
+func (self DataFrame) Ncol() int {
+	return self.ncols
 }
 
 // Returns error or nil if no error occured
-func (df *DataFrame) Error() error {
-	return df.Err
+func (self DataFrame) Error() error {
+	return self.Err
 }
 
 // 检查列的尺寸
@@ -100,23 +100,23 @@ func checkColumnsDimensions(se ...Series) (nrows, ncols int, err error) {
 }
 
 // Types returns the types of the columns on a DataFrame.
-func (df DataFrame) Types() []string {
-	coltypes := make([]string, df.ncols)
-	for i, s := range df.columns {
+func (self DataFrame) Types() []string {
+	coltypes := make([]string, self.ncols)
+	for i, s := range self.columns {
 		coltypes[i] = s.Type().String()
 	}
 	return coltypes
 }
 
 // Records return the string record representation of a DataFrame.
-func (df DataFrame) Records() [][]string {
+func (self DataFrame) Records() [][]string {
 	var records [][]string
-	records = append(records, df.Names())
-	if df.ncols == 0 || df.nrows == 0 {
+	records = append(records, self.Names())
+	if self.ncols == 0 || self.nrows == 0 {
 		return records
 	}
 	var tRecords [][]string
-	for _, col := range df.columns {
+	for _, col := range self.columns {
 		tRecords = append(tRecords, col.Records())
 	}
 	records = append(records, transposeRecords(tRecords)...)
@@ -127,9 +127,9 @@ func (df DataFrame) Records() [][]string {
 // ====================================
 
 // Names returns the name of the columns on a DataFrame.
-func (df DataFrame) Names() []string {
-	colnames := make([]string, df.ncols)
-	for i, s := range df.columns {
+func (self DataFrame) Names() []string {
+	colnames := make([]string, self.ncols)
+	for i, s := range self.columns {
 		colnames[i] = s.Name()
 	}
 	return colnames

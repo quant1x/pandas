@@ -8,11 +8,11 @@ import (
 )
 
 // String implements the Stringer interface for DataFrame
-func (df DataFrame) String() (str string) {
-	return df.print(true, true, true, true, 10, 70, "DataFrame")
+func (self DataFrame) String() (str string) {
+	return self.print(true, true, true, true, 10, 70, "DataFrame")
 }
 
-func (df DataFrame) print(
+func (self DataFrame) print(
 	shortRows, shortCols, showDims, showTypes bool,
 	maxRows int,
 	maxCharsTotal int,
@@ -32,11 +32,11 @@ func (df DataFrame) print(
 		return s
 	}
 
-	if df.Err != nil {
-		str = fmt.Sprintf("%s error: %v", class, df.Err)
+	if self.Err != nil {
+		str = fmt.Sprintf("%s error: %v", class, self.Err)
 		return
 	}
-	nrows, ncols := df.Dims()
+	nrows, ncols := self.Dims()
 	if nrows == 0 || ncols == 0 {
 		str = fmt.Sprintf("Empty %s", class)
 		return
@@ -49,10 +49,10 @@ func (df DataFrame) print(
 	shortening := false
 	if shortRows && nrows > maxRows {
 		shortening = true
-		df = df.Subset(0, maxRows)
-		records = df.Records()
+		self = self.Subset(0, maxRows)
+		records = self.Records()
 	} else {
-		records = df.Records()
+		records = self.Records()
 	}
 
 	if showDims {
@@ -60,7 +60,7 @@ func (df DataFrame) print(
 	}
 
 	// Add the row numbers
-	for i := 0; i < df.nrows+1; i++ {
+	for i := 0; i < self.nrows+1; i++ {
 		add := ""
 		if i != 0 {
 			add = strconv.Itoa(i-1) + ":"
@@ -74,7 +74,7 @@ func (df DataFrame) print(
 		}
 		records = append(records, dots)
 	}
-	types := df.Types()
+	types := self.Types()
 	typesrow := make([]string, ncols)
 	for i := 0; i < ncols; i++ {
 		typesrow[i] = fmt.Sprintf("<%v>", types[i])
@@ -85,9 +85,9 @@ func (df DataFrame) print(
 		records = append(records, typesrow)
 	}
 
-	maxChars := make([]int, df.ncols+1)
+	maxChars := make([]int, self.ncols+1)
 	for i := 0; i < len(records); i++ {
-		for j := 0; j < df.ncols+1; j++ {
+		for j := 0; j < self.ncols+1; j++ {
 			// Escape special characters
 			records[i][j] = strconv.Quote(records[i][j])
 			records[i][j] = records[i][j][1 : len(records[i][j])-1]
@@ -119,7 +119,7 @@ func (df DataFrame) print(
 	for i := 0; i < len(records); i++ {
 		// Add right padding to all elements
 		records[i][0] = addLeftPadding(records[i][0], maxChars[0]+1)
-		for j := 1; j < df.ncols; j++ {
+		for j := 1; j < self.ncols; j++ {
 			records[i][j] = addRightPadding(records[i][j], maxChars[j])
 		}
 		records[i] = records[i][0:maxCols]
