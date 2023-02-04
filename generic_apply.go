@@ -2,7 +2,7 @@ package pandas
 
 import "reflect"
 
-func (self *NDFrame) apply(f func(idx int, v any)) {
+func (self *NDFrame) Apply(f func(idx int, v any)) {
 	vv := reflect.ValueOf(self.values)
 	vk := vv.Kind()
 	switch vk {
