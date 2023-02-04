@@ -65,3 +65,22 @@ func TestNDFrameNew(t *testing.T) {
 	fmt.Println(nd2.Records())
 	fmt.Println(nd2.Empty())
 }
+
+func TestRolling2(t *testing.T) {
+	d1 := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
+	s1 := NewNDFrame[float64]("x", d1...)
+	df := NewDataFrame(s1)
+	fmt.Println(df)
+	fmt.Println("------------------------------------------------------------")
+
+	N := 5
+	fmt.Println("固定的参数, N =", N)
+	r1 := df.Col("x").Rolling2(5).Mean().Values()
+	fmt.Println("序列化结果:", r1)
+	fmt.Println("------------------------------------------------------------")
+	d2 := []float64{1, 2, 3, 4, 3, 3, 2, 1, Nil2Float64, Nil2Float64, Nil2Float64, Nil2Float64}
+	s2 := NewSeries(SERIES_TYPE_FLOAT, "x", d2)
+	fmt.Printf("序列化参数: %+v\n", s2.Values())
+	r2 := df.Col("x").Rolling2(s2).Mean().Values()
+	fmt.Println("序列化结果:", r2)
+}

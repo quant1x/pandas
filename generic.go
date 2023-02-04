@@ -231,13 +231,6 @@ func (self *NDFrame) Shift(periods int) Series {
 	}
 }
 
-func (self *NDFrame) Rolling(window int) RollingWindow {
-	return RollingWindow{
-		window: window,
-		series: self,
-	}
-}
-
 func (self *NDFrame) Mean() float64 {
 	if self.Len() < 1 {
 		return NaN()

@@ -25,13 +25,13 @@ func NewDataFrame(se ...Series) DataFrame {
 	for i, s := range se {
 		var d Series
 		if s.Type() == SERIES_TYPE_INT {
-			d = NewSeriesInt64(s.Name(), s.Values())
+			d = NewSeries(SERIES_TYPE_INT, s.Name(), s.Values())
 		} else if s.Type() == SERIES_TYPE_BOOL {
-			d = NewSeriesBool(s.Name(), s.Values())
+			d = NewSeries(SERIES_TYPE_BOOL, s.Name(), s.Values())
 		} else if s.Type() == SERIES_TYPE_STRING {
-			d = NewSeriesString(s.Name(), s.Values())
+			d = NewSeries(SERIES_TYPE_STRING, s.Name(), s.Values())
 		} else {
-			d = NewSeriesFloat64(s.Name(), s.Values())
+			d = NewSeries(SERIES_TYPE_FLOAT, s.Name(), s.Values())
 		}
 		columns[i] = d
 	}

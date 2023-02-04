@@ -26,12 +26,13 @@ func (self *NDFrame) Subset(start, end int, opt ...any) Series {
 	vk := vv.Kind()
 	switch vk {
 	case reflect.Slice, reflect.Array: // 切片和数组同样的处理逻辑
-		vs = vv.Slice(start, end).Interface()
+		vvs := vv.Slice(start, end)
+		vs = vvs.Interface()
 		rows = vv.Len()
 		if __optCopy && rows > 0 {
 			vs = gc.Clone(vs)
 		}
-		rows = vv.Len()
+		rows = vvs.Len()
 		frame := NDFrame{
 			formatter: self.formatter,
 			name:      self.name,

@@ -30,13 +30,13 @@ func Where[T StatType](condition []T, x, y []T) []T {
 	defaultValue := typeDefault(T(0))
 	// 对齐所有长度
 	if clen < maxLength {
-		condition = align(condition, defaultValue, maxLength)
+		condition = Align(condition, defaultValue, maxLength)
 	}
 	if xlen < maxLength {
-		x = align(x, defaultValue, maxLength)
+		x = Align(x, defaultValue, maxLength)
 	}
 	if ylen < maxLength {
-		y = align(y, defaultValue, maxLength)
+		y = Align(y, defaultValue, maxLength)
 	}
 	// 初始化返回值
 	d := make([]T, maxLength)

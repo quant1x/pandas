@@ -59,6 +59,8 @@ type Series interface {
 	Shift(periods int) Series
 	// Rolling creates new RollingWindow
 	Rolling(window int) RollingWindow
+	// Rolling2 序列化版本
+	Rolling2(param any) RollingAndExpandingMixin
 	// Mean calculates the average value of a series
 	Mean() float64
 	// StdDev calculates the standard deviation of a series

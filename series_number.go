@@ -159,3 +159,13 @@ func point_to_number[T Number](v any, nil2t T, bool2t func(b bool) T, string2t f
 	}
 	return T(0)
 }
+
+//func anyToNumber(v any) int {
+//	switch val := v.(type) {
+//	case nil, int8, uint8, int16, uint16, int32, uint32, int64, uint64, int, uint, float32, float64, bool, string:
+//		// 基础类型
+//		series_append(&frame, idx, size, val)
+//	default:
+//	}
+//	return 0
+//}

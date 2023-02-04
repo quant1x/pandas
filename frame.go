@@ -16,7 +16,7 @@ type Frame[T GenericType] interface {
 	// Len 获得行数
 	Len() int
 	// Values 获得全部数据集
-	Values() []T
+	Values() []T // 如果确定类型, 后面可能无法自动调整
 }
 
 type GenericFrame[T GenericType] struct {

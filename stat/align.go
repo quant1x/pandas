@@ -1,11 +1,12 @@
 package stat
 
-// Data alignment
-func align[T StatType](x []T, a T, dLen int) []T {
+// Align Data alignment
+func Align[T StatType](x []T, a T, dLen int) []T {
 	d := []T{}
 	xLen := len(x)
 	if xLen >= dLen {
 		// 截断
+		d = make([]T, dLen)
 		copy(d, x[0:dLen])
 	} else {
 		// 扩展内存

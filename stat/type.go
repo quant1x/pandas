@@ -5,6 +5,10 @@ import (
 	"reflect"
 )
 
+type Float interface {
+	~float32 | ~float64
+}
+
 type StatType interface {
 	~int32 | ~int64 | ~float32 | ~float64
 }
