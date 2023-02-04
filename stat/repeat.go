@@ -9,10 +9,10 @@ import (
 // Repeat repeat
 func Repeat[T Float](f T, n int) []T {
 	var d any
-	bitsize := unsafe.Sizeof(f)
-	if bitsize == 4 {
+	bitSize := unsafe.Sizeof(f)
+	if bitSize == 4 {
 		d = vek32.Repeat(float32(f), n)
-	} else if bitsize == 8 {
+	} else if bitSize == 8 {
 		d = vek.Repeat(float64(f), n)
 	} else {
 		// 应该不会走到这里

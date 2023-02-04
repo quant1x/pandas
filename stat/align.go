@@ -1,7 +1,7 @@
 package stat
 
 // Align Data alignment
-func Align[T StatType](x []T, a T, dLen int) []T {
+func Align[T MoveType](x []T, a T, dLen int) []T {
 	d := []T{}
 	xLen := len(x)
 	if xLen >= dLen {

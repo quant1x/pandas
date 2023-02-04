@@ -13,6 +13,10 @@ type StatType interface {
 	~int32 | ~int64 | ~float32 | ~float64
 }
 
+type MoveType interface {
+	StatType | ~bool | ~string
+}
+
 // 随便输入一个什么值
 func typeDefault[T StatType](x T) T {
 	xv := reflect.ValueOf(x)
