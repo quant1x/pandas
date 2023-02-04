@@ -75,6 +75,8 @@ type Series interface {
 	Select(r Range) Series
 	// Append 增加一批记录
 	Append(values ...interface{})
+	// Apply 接受一个回调函数
+	Apply(f func(idx int, v any))
 }
 
 // NewSeries 指定类型创建序列

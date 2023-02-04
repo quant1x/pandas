@@ -180,7 +180,7 @@ func (self *NDFrame) Empty() Series {
 
 func (self *NDFrame) Records() []string {
 	ret := make([]string, self.Len())
-	self.apply(func(idx int, v any) {
+	self.Apply(func(idx int, v any) {
 		ret[idx] = AnyToString(v)
 	})
 	return ret
@@ -236,7 +236,7 @@ func (self *NDFrame) Mean() float64 {
 		return NaN()
 	}
 	fs := make([]float64, 0)
-	self.apply(func(idx int, v any) {
+	self.Apply(func(idx int, v any) {
 		f := AnyToFloat64(v)
 		fs = append(fs, f)
 	})
@@ -249,7 +249,7 @@ func (self *NDFrame) StdDev() float64 {
 		return NaN()
 	}
 	values := make([]float64, self.Len())
-	self.apply(func(idx int, v any) {
+	self.Apply(func(idx int, v any) {
 		values[idx] = AnyToFloat64(v)
 	})
 	stdDev := stat.StdDev(values, nil)
