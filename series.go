@@ -74,7 +74,22 @@ type Series interface {
 }
 
 // NewSeries 指定类型创建序列
-func NewSeries(t Type, name string, vals ...interface{}) *Series {
+func NewSeries(t Type, name string, vals any) Series {
+	var series Series
+	if t == SERIES_TYPE_BOOL {
+		series = NewSeriesWithType(SERIES_TYPE_BOOL, name, vals)
+	} else if t == SERIES_TYPE_INT {
+		series = NewSeriesWithType(SERIES_TYPE_INT, name, vals)
+	} else if t == SERIES_TYPE_STRING {
+		series = NewSeriesWithType(SERIES_TYPE_STRING, name, vals)
+	} else {
+		// 默认全部强制转换成float64
+		series = NewSeriesWithType(SERIES_TYPE_FLOAT, name, vals)
+	}
+	return series
+}
+
+func NewSeries_old(t Type, name string, vals ...interface{}) *Series {
 	var series Series
 	if t == SERIES_TYPE_BOOL {
 		series = NewSeriesBool(name, vals...)
@@ -89,8 +104,8 @@ func NewSeries(t Type, name string, vals ...interface{}) *Series {
 	return &series
 }
 
-// 泛型方法, 构造序列, 比其它方式对类型的统一性要求更严格
-func GenericSeries[T GenericType](name string, values ...T) *Series {
+// GenericSeries 泛型方法, 构造序列, 比其它方式对类型的统一性要求更严格
+func GenericSeries[T GenericType](name string, values ...T) Series {
 	// 第一遍, 确定类型, 找到第一个非nil的值
 	var _type Type = SERIES_TYPE_STRING
 	for _, v := range values {

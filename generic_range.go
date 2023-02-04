@@ -5,6 +5,7 @@ import (
 	"reflect"
 )
 
+// Copy 复制一个副本
 func (self *NDFrame) Copy() Series {
 	vlen := self.Len()
 	return self.Subset(0, vlen, true)
@@ -112,7 +113,7 @@ func (self *NDFrame) oldSubset(start, end int, opt ...any) Series {
 	return s
 }
 
-// 选取一段记录
+// Select 选取一段记录
 func (self *NDFrame) Select(r Range) Series {
 	start, end, err := r.Limits(self.Len())
 	if err != nil {

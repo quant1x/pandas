@@ -58,6 +58,14 @@ func float32ToString(v float32) string {
 
 func AnyToFloat32(v any) float32 {
 	if isPoint(v) {
+		//vv := reflect.ValueOf(v)
+		//if vv.Kind() == reflect.Pointer {
+		//	if vv.IsNil() {
+		//		return Nil2Float32
+		//	}
+		//	v = vv.Elem()
+		//	vv.Float()
+		//}
 		return point_to_number[float32](v, Nil2Float32, boolToFloat32, ParseFloat32)
 	}
 	f := value_to_number[float32](v, Nil2Float32, boolToFloat32, ParseFloat32)

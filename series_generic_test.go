@@ -7,10 +7,10 @@ import (
 
 func TestCreateSeries(t *testing.T) {
 	t0 := []any{1, true, "abc", 3.45, NaN()}
-	df0 := NewSeries2("x", t0...)
+	df0 := NewSeriesWithoutType("x", t0...)
 	fmt.Printf("%+v\n", df0)
 
-	s1 := NewSeries2("sales", nil, 50.3, 23.4, 56.2)
+	s1 := NewSeriesWithoutType("sales", nil, 50.3, 23.4, 56.2)
 	fmt.Println(s1)
 
 	var values any

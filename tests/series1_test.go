@@ -29,7 +29,7 @@ Spain,2012-02-01,66,555.42,00241
 	_ = df.WriteCSV(buf)
 	df = pandas.ReadCSV(filename)
 	fmt.Println(df)
-	//df.SetNames("a", "b", "c", "d", "e")
+	df.SetNames("a", "b", "c", "d", "e")
 	//s1 := df.Col("d")
 	//fmt.Println(s1)
 	//
@@ -37,6 +37,8 @@ Spain,2012-02-01,66,555.42,00241
 	//ma5 := closes.Rolling(5).Mean()
 	//dframe.NewSeries(closes, dframe.Float, "")
 	//fmt.Println(ma5)
+	d := df.Col("d")
+	fmt.Println(d)
 	_ = csvStr
 
 }

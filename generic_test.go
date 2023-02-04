@@ -16,12 +16,14 @@ func TestSeriesFrame(t *testing.T) {
 	fmt.Printf("%+v\n", s2)
 
 	var s3 Series
-	s3 = NewSeriesBool("x", data)
+	// s3 = NewSeriesBool("x", data)
+	s3 = NewSeries(SERIES_TYPE_BOOL, "x", data)
 	fmt.Printf("%+v\n", s3.Values())
 
 	var s4 Series
 	ts4 := GenericSeries[float64]("x", data...)
-	s4 = *ts4
+	ts4 = NewSeries(SERIES_TYPE_FLOAT, "x", data)
+	s4 = ts4
 	fmt.Printf("%+v\n", s4.Values())
 }
 

@@ -5,6 +5,7 @@ import (
 )
 
 // LoadRecords creates a new DataFrame based on the given records.
+// 这个方法是从本地缓存文件读取数据的第二步, 数据从形式上只能是字符串
 func LoadRecords(records [][]string, options ...LoadOption) DataFrame {
 	// Set the default load options
 	cfg := loadOptions{
@@ -71,10 +72,11 @@ func LoadRecords(records [][]string, options ...LoadOption) DataFrame {
 	for i, colname := range headers {
 		cols := rawcols[i]
 		col := NewSeries(types[i], colname, cols)
+		//col := NewSeriesWithType(types[i], colname, cols)
 		//if col.Err != nil {
 		//	return DataFrame{Err: col.Err}
 		//}
-		columns[i] = *col
+		columns[i] = col
 	}
 	nrows, ncols, err := checkColumnsDimensions(columns...)
 	if err != nil {
