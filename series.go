@@ -77,6 +77,8 @@ type Series interface {
 	Append(values ...interface{})
 	// Apply 接受一个回调函数
 	Apply(f func(idx int, v any))
+	// Diff 元素的第一个离散差
+	Diff(param any) (s Series)
 }
 
 // NewSeries 指定类型创建序列
