@@ -137,26 +137,3 @@ func GenericSeries[T GenericType](name string, values ...T) Series {
 	}
 	return NewSeries(_type, name, values)
 }
-
-func detectTypes[T GenericType](v T) (Type, any) {
-	var _type = SERIES_TYPE_STRING
-	vv := reflect.ValueOf(v)
-	vk := vv.Kind()
-	switch vk {
-	case reflect.Invalid:
-		_type = SERIES_TYPE_INVAILD
-	case reflect.Bool:
-		_type = SERIES_TYPE_BOOL
-	case reflect.Int64:
-		_type = SERIES_TYPE_INT64
-	case reflect.Float32:
-		_type = SERIES_TYPE_FLOAT32
-	case reflect.Float64:
-		_type = SERIES_TYPE_FLOAT64
-	case reflect.String:
-		_type = SERIES_TYPE_STRING
-	default:
-		panic(fmt.Errorf("unknown type, %+v", v))
-	}
-	return _type, vv.Interface()
-}
