@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"github.com/mymmsc/gox/logger"
 	"github.com/mymmsc/gox/util/homedir"
-	"github.com/tealeg/xlsx"
+	xlsv1 "github.com/tealeg/xlsx"
+	xlsv3 "github.com/tealeg/xlsx/v3"
+	"strings"
 )
 
 // 读取excel文件
@@ -19,7 +21,7 @@ func ReadExcel(filename string, options ...LoadOption) DataFrame {
 		return DataFrame{Err: err}
 	}
 	//filename := "test.xlsx"
-	xlFile, err := xlsx.OpenFile(filepath)
+	xlFile, err := xlsv1.OpenFile(filepath)
 	if err != nil {
 		return DataFrame{Err: err}
 	}
@@ -29,6 +31,12 @@ func ReadExcel(filename string, options ...LoadOption) DataFrame {
 		for _, row := range sheet.Rows {
 			col := make([]string, 0)
 			for _, cell := range row.Cells {
+				//cell.SetStringFormula("%s")
+				if cell.IsTime() {
+					cell.SetFormat("yyyy-mm-dd")
+				} else if strings.HasPrefix(cell.Value, "0") {
+					cell.SetFormat("")
+				}
 				text := cell.String()
 				col = append(col, text)
 			}
@@ -47,7 +55,7 @@ func (self DataFrame) WriteExcel(filename string, options ...WriteOption) error 
 	if err != nil {
 		return err
 	}
-	xlFile := xlsx.NewFile()
+	xlFile := xlsv3.NewFile()
 	sheet, err := xlFile.AddSheet("Sheet(pandas)")
 	if err != nil {
 		return err

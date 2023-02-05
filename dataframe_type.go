@@ -3,14 +3,29 @@ package pandas
 import (
 	"fmt"
 	"strconv"
+	"strings"
 )
 
 func findTypeByString(arr []string) (Type, error) {
 	var hasFloats, hasInts, hasBools, hasStrings bool
+	var stringLengthEqual = -1
+	var stringLenth = -1
 	for _, str := range arr {
 		if str == "" || str == "NaN" {
 			continue
 		}
+		tLen := len(str)
+		if strings.HasPrefix(str, "0") {
+			stringLengthEqual = 0
+		}
+		if stringLenth < 1 {
+			if stringLengthEqual == -1 {
+				stringLenth = tLen
+			}
+		} else if stringLengthEqual >= 0 && tLen != stringLenth {
+			stringLengthEqual += 1
+		}
+
 		if _, err := strconv.Atoi(str); err == nil {
 			hasInts = true
 			continue
@@ -23,6 +38,9 @@ func findTypeByString(arr []string) (Type, error) {
 			hasBools = true
 			continue
 		}
+		hasStrings = true
+	}
+	if stringLengthEqual == 0 {
 		hasStrings = true
 	}
 	// 类型优先级, string > bool > float > int, string 为默认类型
