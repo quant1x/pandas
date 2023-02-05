@@ -16,4 +16,4 @@ assembly/version.properties
 coverage.txt
 
 # test
-tutorials.csv
+test-*-w*

@@ -8,6 +8,10 @@ import (
 )
 
 // 收敛统一初始化
+const (
+	quant1xPath = "~/.quant1x"         // quant1x默认
+	tmpDir      = quant1xPath + "/tmp" // 临时路径
+)
 
 // 全局变量定义
 

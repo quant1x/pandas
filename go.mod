@@ -6,6 +6,7 @@ require (
 	github.com/google/go-cmp v0.5.8
 	github.com/huandu/go-clone v1.4.1
 	github.com/mymmsc/gox v1.3.1
+	github.com/tealeg/xlsx v1.0.5
 	github.com/viterin/vek v0.4.0
 	gonum.org/v1/gonum v0.12.0
 )

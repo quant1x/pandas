@@ -23,7 +23,7 @@ Spain,2012-02-01,66,555.42,00241
 `
 	df := pandas.ReadCSV(strings.NewReader(csvStr))
 	fmt.Println(df)
-	filename := "tutorials.csv"
+	filename := "test-tutorials-w01.csv"
 	_ = df.WriteCSV(filename)
 	buf := new(bytes.Buffer)
 	_ = df.WriteCSV(buf)

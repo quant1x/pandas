@@ -60,21 +60,6 @@ func ReadCSV(in any, options ...LoadOption) DataFrame {
 	return LoadRecords(records, options...)
 }
 
-// WriteOption is the type used to configure the writing of elements
-type WriteOption func(*writeOptions)
-
-type writeOptions struct {
-	// Specifies whether the header is also written
-	writeHeader bool
-}
-
-// WriteHeader sets the writeHeader option for writeOptions.
-func WriteHeader(b bool) WriteOption {
-	return func(c *writeOptions) {
-		c.writeHeader = b
-	}
-}
-
 // WriteCSV writes the DataFrame to the given io.Writer as a CSV file.
 // 支持文件名和io两种方式写入数据
 func (self DataFrame) WriteCSV(out any, options ...WriteOption) error {
@@ -117,19 +102,4 @@ func (self DataFrame) WriteCSV(out any, options ...WriteOption) error {
 	}
 
 	return csv.NewWriter(writer).WriteAll(records)
-}
-
-// ToCSV 写csv格式文件
-func (self DataFrame) oldToCSV(filename string, options ...WriteOption) error {
-	filepath, err := homedir.Expand(filename)
-	if err != nil {
-		return err
-	}
-	csvFile, err := os.Create(filepath)
-	if err != nil {
-		return err
-	}
-	defer api.CloseQuietly(csvFile)
-	err = self.WriteCSV(csvFile, options...)
-	return err
 }
