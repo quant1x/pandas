@@ -27,11 +27,13 @@ func (self DataFrame) align(ss ...Series) []Series {
 		var ns any
 		if vt == SERIES_TYPE_BOOL {
 			ns = stat.Align(vs.([]bool), Nil2Bool, int(maxLength))
-		} else if vt == SERIES_TYPE_INT {
+		} else if vt == SERIES_TYPE_INT64 {
 			ns = stat.Align(vs.([]int64), Nil2Int64, int(maxLength))
 		} else if vt == SERIES_TYPE_STRING {
 			ns = stat.Align(vs.([]string), Nil2String, int(maxLength))
-		} else if vt == SERIES_TYPE_FLOAT {
+		} else if vt == SERIES_TYPE_FLOAT32 {
+			ns = stat.Align(vs.([]float32), Nil2Float32, int(maxLength))
+		} else if vt == SERIES_TYPE_FLOAT64 {
 			ns = stat.Align(vs.([]float64), Nil2Float64, int(maxLength))
 		}
 		cols[i] = NewSeries(vt, vn, ns)

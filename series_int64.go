@@ -36,7 +36,7 @@ func NewSeriesInt64(name string, vals ...interface{}) *SeriesInt64 {
 			vk := vv.Kind()
 			switch vk {
 			case reflect.Invalid: // {interface} nil
-				series.assign(idx, size, IntNaN)
+				series.assign(idx, size, Int64NaN)
 			case reflect.Slice: // 切片, 不定长
 				for i := 0; i < vv.Len(); i++ {
 					tv := vv.Index(i).Interface()
@@ -96,14 +96,14 @@ func (self *SeriesInt64) Rename(n string) {
 }
 
 func (self *SeriesInt64) Type() Type {
-	return SERIES_TYPE_INT
+	return SERIES_TYPE_INT64
 }
 
 func (self *SeriesInt64) Shift(periods int) Series {
 	var d Series
 	d = clone(self).(Series)
 	return Shift[int64](&d, periods, func() int64 {
-		return IntNaN
+		return Int64NaN
 	})
 }
 

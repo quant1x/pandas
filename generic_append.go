@@ -7,10 +7,13 @@ func (self *NDFrame) insert(idx, size int, v any) {
 	if self.type_ == SERIES_TYPE_BOOL {
 		val := AnyToBool(v)
 		assign[bool](self, idx, size, val)
-	} else if self.type_ == SERIES_TYPE_INT {
+	} else if self.type_ == SERIES_TYPE_INT64 {
 		val := AnyToInt64(v)
 		assign[int64](self, idx, size, val)
-	} else if self.type_ == SERIES_TYPE_FLOAT {
+	} else if self.type_ == SERIES_TYPE_FLOAT32 {
+		val := AnyToFloat32(v)
+		assign[float32](self, idx, size, val)
+	} else if self.type_ == SERIES_TYPE_FLOAT64 {
 		val := AnyToFloat64(v)
 		assign[float64](self, idx, size, val)
 	} else {

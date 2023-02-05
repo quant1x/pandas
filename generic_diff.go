@@ -5,25 +5,12 @@ import (
 	"reflect"
 )
 
-//func (self *NDFrame) Diff_() float64 {
-//	if self.Len() < 1 {
-//		return NaN()
-//	}
-//	fs := make([]float64, 0)
-//	self.Apply(func(idx int, v any) {
-//		f := AnyToFloat64(v)
-//		fs = append(fs, f)
-//	})
-//	stdDev := avx2.Mean(fs)
-//	return stdDev
-//}
-
 // Diff 元素的第一个离散差
 // First discrete difference of element.
 // Calculates the difference of a {klass} element compared with another
 // element in the {klass} (default is element in previous row).
 func (self *NDFrame) Diff(param any) (s Series) {
-	if !(self.type_ == SERIES_TYPE_INT || self.type_ == SERIES_TYPE_FLOAT) {
+	if !(self.type_ == SERIES_TYPE_INT64 || self.type_ == SERIES_TYPE_FLOAT32 || self.type_ == SERIES_TYPE_FLOAT64) {
 		return NewSeries(SERIES_TYPE_INVAILD, "", "")
 	}
 	var N []float32
@@ -32,7 +19,7 @@ func (self *NDFrame) Diff(param any) (s Series) {
 		N = stat.Repeat[float32](float32(v), self.Len())
 	case Series:
 		vs := v.Values()
-		N = sliceToFloat32(vs)
+		N = SliceToFloat32(vs)
 		N = stat.Align(N, Nil2Float32, self.Len())
 	default:
 		//periods = 1
@@ -64,6 +51,6 @@ func (self *NDFrame) Diff(param any) (s Series) {
 		d = append(d, diff)
 		front = cf
 	}
-	s = NewSeries(SERIES_TYPE_FLOAT, r.series.Name(), d)
+	s = NewSeries(SERIES_TYPE_FLOAT64, r.series.Name(), d)
 	return
 }

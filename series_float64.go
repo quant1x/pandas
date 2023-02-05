@@ -99,7 +99,7 @@ func (self *SeriesFloat64) Rename(n string) {
 
 // Type returns the type of data the series holds.
 func (self *SeriesFloat64) Type() Type {
-	return SERIES_TYPE_FLOAT
+	return SERIES_TYPE_FLOAT64
 }
 
 func (self *SeriesFloat64) Len() int {

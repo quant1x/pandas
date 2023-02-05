@@ -24,14 +24,16 @@ func NewDataFrame(se ...Series) DataFrame {
 	columns := make([]Series, len(se))
 	for i, s := range se {
 		var d Series
-		if s.Type() == SERIES_TYPE_INT {
-			d = NewSeries(SERIES_TYPE_INT, s.Name(), s.Values())
+		if s.Type() == SERIES_TYPE_INT64 {
+			d = NewSeries(SERIES_TYPE_INT64, s.Name(), s.Values())
 		} else if s.Type() == SERIES_TYPE_BOOL {
 			d = NewSeries(SERIES_TYPE_BOOL, s.Name(), s.Values())
 		} else if s.Type() == SERIES_TYPE_STRING {
 			d = NewSeries(SERIES_TYPE_STRING, s.Name(), s.Values())
+		} else if s.Type() == SERIES_TYPE_FLOAT32 {
+			d = NewSeries(SERIES_TYPE_FLOAT32, s.Name(), s.Values())
 		} else {
-			d = NewSeries(SERIES_TYPE_FLOAT, s.Name(), s.Values())
+			d = NewSeries(SERIES_TYPE_FLOAT64, s.Name(), s.Values())
 		}
 		columns[i] = d
 	}
@@ -228,17 +230,3 @@ func findInStringSlice(str string, s []string) int {
 
 // LoadOption is the type used to configure the load of elements
 type LoadOption func(*loadOptions)
-
-func parseType(s string) (Type, error) {
-	switch s {
-	case "float", "float64", "float32":
-		return SERIES_TYPE_FLOAT, nil
-	case "int", "int64", "int32", "int16", "int8":
-		return SERIES_TYPE_INT, nil
-	case "string":
-		return SERIES_TYPE_STRING, nil
-	case "bool":
-		return SERIES_TYPE_BOOL, nil
-	}
-	return SERIES_TYPE_INVAILD, fmt.Errorf("type (%s) is not supported", s)
-}

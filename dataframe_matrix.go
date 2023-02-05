@@ -12,7 +12,7 @@ func LoadMatrix(mat mat.Matrix) DataFrame {
 		for j := 0; j < nrows; j++ {
 			floats[j] = mat.At(j, i)
 		}
-		columns[i] = NewSeries(SERIES_TYPE_FLOAT, "", floats)
+		columns[i] = NewSeries(SERIES_TYPE_FLOAT64, "", floats)
 	}
 	nrows, ncols, err := checkColumnsDimensions(columns...)
 	if err != nil {

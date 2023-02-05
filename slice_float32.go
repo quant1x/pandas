@@ -13,8 +13,8 @@ func slice_any_to_float32[T Number](s []T) []float32 {
 	return d
 }
 
-// any输入只能是一维slice或者数组
-func sliceToFloat32(v any) []float32 {
+// SliceToFloat32 any输入只能是一维slice或者数组
+func SliceToFloat32(v any) []float32 {
 	var vs []float32
 	switch values := v.(type) {
 	case []int8:

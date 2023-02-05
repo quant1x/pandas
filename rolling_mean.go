@@ -6,6 +6,6 @@ func (r RollingAndExpandingMixin) Mean() (s Series) {
 	for _, block := range r.getBlocks() {
 		d = append(d, block.Mean())
 	}
-	s = NewSeries(SERIES_TYPE_FLOAT, r.series.Name(), d)
+	s = NewSeries(SERIES_TYPE_FLOAT64, r.series.Name(), d)
 	return
 }

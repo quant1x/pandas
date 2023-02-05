@@ -7,9 +7,9 @@ func (self *GenericFrame[T]) assign(idx, size int, val any) {
 	var v any
 	if self.type_ == SERIES_TYPE_BOOL {
 		v = AnyToBool(val)
-	} else if self.type_ == SERIES_TYPE_INT {
+	} else if self.type_ == SERIES_TYPE_INT64 {
 		v = AnyToInt64(val)
-	} else if self.type_ == SERIES_TYPE_FLOAT {
+	} else if self.type_ == SERIES_TYPE_FLOAT64 {
 		v = AnyToFloat64(val)
 	} else {
 		v = AnyToString(val)
@@ -24,7 +24,7 @@ func (self *GenericFrame[T]) assign(idx, size int, val any) {
 	_vv := reflect.ValueOf(v)
 	_vi := _vv.Interface()
 	// float和string类型有可能是NaN, 对nil和NaN进行计数
-	if self.type_ == SERIES_TYPE_FLOAT && Float64IsNaN(_vi.(float64)) {
+	if self.type_ == SERIES_TYPE_FLOAT64 && Float64IsNaN(_vi.(float64)) {
 		self.nilCount++
 	} else if self.type_ == SERIES_TYPE_STRING && StringIsNaN(_vi.(string)) {
 		self.nilCount++

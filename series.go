@@ -2,7 +2,6 @@ package pandas
 
 import (
 	"fmt"
-	"math"
 	"reflect"
 )
 
@@ -11,19 +10,12 @@ import (
 type Type = reflect.Kind
 
 // Supported Series Types
-//const (
-//	SERIES_TYPE_INVAILD = "unknown" // 未知类型
-//	SERIES_TYPE_BOOL    = "bool"    // 布尔类型
-//	SERIES_TYPE_INT     = "int"     // int64
-//	SERIES_TYPE_FLOAT   = "float"   // float64
-//	SERIES_TYPE_STRING  = "string"  // string
-//)
-
 const (
 	SERIES_TYPE_INVAILD = reflect.Invalid // 无效类型
 	SERIES_TYPE_BOOL    = reflect.Bool    // 布尔类型
-	SERIES_TYPE_INT     = reflect.Int64   // int64
-	SERIES_TYPE_FLOAT   = reflect.Float64 // float64
+	SERIES_TYPE_INT64   = reflect.Int64   // int64
+	SERIES_TYPE_FLOAT32 = reflect.Float32 // float32
+	SERIES_TYPE_FLOAT64 = reflect.Float64 // float64
 	SERIES_TYPE_STRING  = reflect.String  // string
 )
 
@@ -79,6 +71,8 @@ type Series interface {
 	Apply(f func(idx int, v any))
 	// Diff 元素的第一个离散差
 	Diff(param any) (s Series)
+	// 引用其它周期的数据
+	Ref(param any) (s Series)
 }
 
 // NewSeries 指定类型创建序列
@@ -86,31 +80,33 @@ func NewSeries(t Type, name string, vals any) Series {
 	var series Series
 	if t == SERIES_TYPE_BOOL {
 		series = NewSeriesWithType(SERIES_TYPE_BOOL, name, vals)
-	} else if t == SERIES_TYPE_INT {
-		series = NewSeriesWithType(SERIES_TYPE_INT, name, vals)
+	} else if t == SERIES_TYPE_INT64 {
+		series = NewSeriesWithType(SERIES_TYPE_INT64, name, vals)
 	} else if t == SERIES_TYPE_STRING {
 		series = NewSeriesWithType(SERIES_TYPE_STRING, name, vals)
+	} else if t == SERIES_TYPE_FLOAT64 {
+		series = NewSeriesWithType(SERIES_TYPE_FLOAT64, name, vals)
 	} else {
-		// 默认全部强制转换成float64
-		series = NewSeriesWithType(SERIES_TYPE_FLOAT, name, vals)
+		// 默认全部强制转换成float32
+		series = NewSeriesWithType(SERIES_TYPE_FLOAT32, name, vals)
 	}
 	return series
 }
 
-func NewSeries_old(t Type, name string, vals ...interface{}) *Series {
-	var series Series
-	if t == SERIES_TYPE_BOOL {
-		series = NewSeriesBool(name, vals...)
-	} else if t == SERIES_TYPE_INT {
-		series = NewSeriesInt64(name, vals...)
-	} else if t == SERIES_TYPE_STRING {
-		series = NewSeriesString(name, vals...)
-	} else {
-		// 默认全部强制转换成float64
-		series = NewSeriesFloat64(name, vals...)
-	}
-	return &series
-}
+//func NewSeries_old(t Type, name string, vals ...interface{}) *Series {
+//	var series Series
+//	if t == SERIES_TYPE_BOOL {
+//		series = NewSeriesBool(name, vals...)
+//	} else if t == SERIES_TYPE_INT64 {
+//		series = NewSeriesInt64(name, vals...)
+//	} else if t == SERIES_TYPE_STRING {
+//		series = NewSeriesString(name, vals...)
+//	} else {
+//		// 默认全部强制转换成float64
+//		series = NewSeriesFloat64(name, vals...)
+//	}
+//	return &series
+//}
 
 // GenericSeries 泛型方法, 构造序列, 比其它方式对类型的统一性要求更严格
 func GenericSeries[T GenericType](name string, values ...T) Series {
@@ -124,31 +120,14 @@ func GenericSeries[T GenericType](name string, values ...T) Series {
 		vv := reflect.ValueOf(v)
 		vk := vv.Kind()
 		switch vk {
-		//case reflect.Invalid: // {interface} nil
-		//	series.assign(idx, size, Nil2Float64)
-		//case reflect.Slice: // 切片, 不定长
-		//	for i := 0; i < vv.Len(); i++ {
-		//		tv := vv.Index(i).Interface()
-		//		str := AnyToFloat64(tv)
-		//		series.assign(idx, size, str)
-		//	}
-		//case reflect.Array: // 数组, 定长
-		//	for i := 0; i < vv.Len(); i++ {
-		//		tv := vv.Index(i).Interface()
-		//		av := AnyToFloat64(tv)
-		//		series.assign(idx, size, av)
-		//	}
-		//case reflect.Struct: // 忽略结构体
-		//	continue
-		//default:
-		//	vv := AnyToFloat64(val)
-		//	series.assign(idx, size, vv)
 		case reflect.Bool:
 			_type = SERIES_TYPE_BOOL
 		case reflect.Int64:
-			_type = SERIES_TYPE_INT
+			_type = SERIES_TYPE_INT64
+		case reflect.Float32:
+			_type = SERIES_TYPE_FLOAT32
 		case reflect.Float64:
-			_type = SERIES_TYPE_FLOAT
+			_type = SERIES_TYPE_FLOAT64
 		case reflect.String:
 			_type = SERIES_TYPE_STRING
 		default:
@@ -169,52 +148,17 @@ func detectTypes[T GenericType](v T) (Type, any) {
 	case reflect.Bool:
 		_type = SERIES_TYPE_BOOL
 	case reflect.Int64:
-		_type = SERIES_TYPE_INT
+		_type = SERIES_TYPE_INT64
+	case reflect.Float32:
+		_type = SERIES_TYPE_FLOAT32
 	case reflect.Float64:
-		_type = SERIES_TYPE_FLOAT
+		_type = SERIES_TYPE_FLOAT64
 	case reflect.String:
 		_type = SERIES_TYPE_STRING
 	default:
 		panic(fmt.Errorf("unknown type, %+v", v))
 	}
 	return _type, vv.Interface()
-}
-
-// Shift series切片, 使用可选的时间频率按所需的周期数移动索引
-func Shift[T GenericType](s *Series, periods int, cbNan func() T) Series {
-	var d Series
-	d = clone(*s).(Series)
-	if periods == 0 {
-		return d
-	}
-
-	values := d.Values().([]T)
-
-	var (
-		naVals []T
-		dst    []T
-		src    []T
-	)
-
-	if shlen := int(math.Abs(float64(periods))); shlen < len(values) {
-		if periods > 0 {
-			naVals = values[:shlen]
-			dst = values[shlen:]
-			src = values
-		} else {
-			naVals = values[len(values)-shlen:]
-			dst = values[:len(values)-shlen]
-			src = values[shlen:]
-		}
-		copy(dst, src)
-	} else {
-		naVals = values
-	}
-	for i := range naVals {
-		naVals[i] = cbNan()
-	}
-	_ = naVals
-	return d
 }
 
 // FillNa 填充NaN的元素为v

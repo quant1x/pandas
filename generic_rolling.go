@@ -25,9 +25,11 @@ func (self *NDFrame) Rolling2(param any) RollingAndExpandingMixin {
 	switch v := param.(type) {
 	case int:
 		N = stat.Repeat[float32](float32(v), self.Len())
+	case []float32:
+		N = stat.Align(v, Nil2Float32, self.Len())
 	case Series:
 		vs := v.Values()
-		N = sliceToFloat32(vs)
+		N = SliceToFloat32(vs)
 		N = stat.Align(N, Nil2Float32, self.Len())
 	default:
 		panic(exception.New(1, "error window"))

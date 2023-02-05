@@ -6,8 +6,20 @@ import (
 	"strings"
 )
 
+const (
+	MAX_FLOAT32_PRICE = float32(9999.9999) // float32的价最大阀值触发扩展到float64
+)
+
+func mustFloat64(f float32) bool {
+	if f > MAX_FLOAT32_PRICE {
+		return true
+	}
+	return false
+}
+
 func findTypeByString(arr []string) (Type, error) {
 	var hasFloats, hasInts, hasBools, hasStrings bool
+	var useFloat32, useFloat64 bool
 	var stringLengthEqual = -1
 	var stringLenth = -1
 	for _, str := range arr {
@@ -30,8 +42,15 @@ func findTypeByString(arr []string) (Type, error) {
 			hasInts = true
 			continue
 		}
-		if _, err := strconv.ParseFloat(str, 64); err == nil {
+		if f, err := strconv.ParseFloat(str, 64); err == nil {
 			hasFloats = true
+			if f < MaxFloat32 {
+				if mustFloat64(float32(f)) {
+					useFloat64 = true
+				} else {
+					useFloat32 = true
+				}
+			}
 			continue
 		}
 		if str == "true" || str == "false" {
@@ -49,25 +68,31 @@ func findTypeByString(arr []string) (Type, error) {
 		return SERIES_TYPE_STRING, nil
 	case hasBools:
 		return SERIES_TYPE_BOOL, nil
+	case useFloat32 && !useFloat64:
+		return SERIES_TYPE_FLOAT32, nil
 	case hasFloats:
-		return SERIES_TYPE_FLOAT, nil
+		return SERIES_TYPE_FLOAT64, nil
 	case hasInts:
-		return SERIES_TYPE_INT, nil
+		return SERIES_TYPE_INT64, nil
 	default:
 		return SERIES_TYPE_STRING, fmt.Errorf("couldn't detect type")
 	}
+
 }
 
 // 检测类型
 func detectTypeBySlice(arr []any) (Type, error) {
-	var hasFloats, hasInts, hasBools, hasStrings bool
+	var hasFloat32s, hasFloat64s, hasInts, hasBools, hasStrings bool
 	for _, v := range arr {
 		switch value := v.(type) {
 		case string:
 			hasStrings = true
 			continue
-		case float32, float64:
-			hasFloats = true
+		case float32:
+			hasFloat32s = true
+			continue
+		case float64:
+			hasFloat64s = true
 			continue
 		case int, int32, int64:
 			hasInts = true
@@ -85,11 +110,29 @@ func detectTypeBySlice(arr []any) (Type, error) {
 		return SERIES_TYPE_STRING, nil
 	case hasBools:
 		return SERIES_TYPE_BOOL, nil
-	case hasFloats:
-		return SERIES_TYPE_FLOAT, nil
+	case hasFloat32s:
+		return SERIES_TYPE_FLOAT32, nil
+	case hasFloat64s:
+		return SERIES_TYPE_FLOAT64, nil
 	case hasInts:
-		return SERIES_TYPE_INT, nil
+		return SERIES_TYPE_INT64, nil
 	default:
 		return SERIES_TYPE_STRING, fmt.Errorf("couldn't detect type")
 	}
+}
+
+func parseType(s string) (Type, error) {
+	switch s {
+	case "float", "float32":
+		return SERIES_TYPE_FLOAT32, nil
+	case "float64":
+		return SERIES_TYPE_FLOAT64, nil
+	case "int", "int64", "int32", "int16", "int8":
+		return SERIES_TYPE_INT64, nil
+	case "string":
+		return SERIES_TYPE_STRING, nil
+	case "bool":
+		return SERIES_TYPE_BOOL, nil
+	}
+	return SERIES_TYPE_INVAILD, fmt.Errorf("type (%s) is not supported", s)
 }

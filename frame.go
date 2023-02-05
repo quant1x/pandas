@@ -47,10 +47,13 @@ func NewFrame[T GenericType](name string, values ...any) Frame[T] {
 	if frame.type_ == SERIES_TYPE_BOOL {
 		// bool
 		frame.values = reflect.MakeSlice(typeBool, 0, 0).Interface().([]T)
-	} else if frame.type_ == SERIES_TYPE_INT {
+	} else if frame.type_ == SERIES_TYPE_INT64 {
 		// int64
 		frame.values = reflect.MakeSlice(typeInt64, 0, 0).Interface().([]T)
-	} else if frame.type_ == SERIES_TYPE_FLOAT {
+	} else if frame.type_ == SERIES_TYPE_FLOAT32 {
+		// float32
+		frame.values = reflect.MakeSlice(typeFloat32, 0, 0).Interface().([]T)
+	} else if frame.type_ == SERIES_TYPE_FLOAT64 {
 		// float64
 		frame.values = reflect.MakeSlice(typeFloat64, 0, 0).Interface().([]T)
 	} else {

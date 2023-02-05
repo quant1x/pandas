@@ -9,7 +9,7 @@ import (
 
 // GenericType Series支持的所有类型
 type GenericType interface {
-	~bool | ~int64 | ~float64 | ~string
+	~bool | ~int64 | ~float32 | ~float64 | ~string
 }
 
 // NDFrame 这里本意是想做一个父类, 实际的效果是一个抽象类
@@ -67,7 +67,9 @@ func assign[T GenericType](frame *NDFrame, idx, size int, v T) {
 	_vv := reflect.ValueOf(v)
 	_vi := _vv.Interface()
 	// float和string类型有可能是NaN, 对nil和NaN进行计数
-	if frame.Type() == SERIES_TYPE_FLOAT && Float64IsNaN(_vi.(float64)) {
+	if frame.Type() == SERIES_TYPE_FLOAT32 && Float32IsNaN(_vi.(float32)) {
+		frame.nilCount++
+	} else if frame.Type() == SERIES_TYPE_FLOAT64 && Float64IsNaN(_vi.(float64)) {
 		frame.nilCount++
 	} else if frame.Type() == SERIES_TYPE_STRING && StringIsNaN(_vi.(string)) {
 		frame.nilCount++
@@ -154,7 +156,7 @@ func (self *NDFrame) Empty() Series {
 			rows:      0,
 			values:    []bool{},
 		}
-	} else if self.type_ == SERIES_TYPE_INT {
+	} else if self.type_ == SERIES_TYPE_INT64 {
 		frame = NDFrame{
 			formatter: self.formatter,
 			name:      self.name,
@@ -163,7 +165,16 @@ func (self *NDFrame) Empty() Series {
 			rows:      0,
 			values:    []int64{},
 		}
-	} else if self.type_ == SERIES_TYPE_FLOAT {
+	} else if self.type_ == SERIES_TYPE_FLOAT32 {
+		frame = NDFrame{
+			formatter: self.formatter,
+			name:      self.name,
+			type_:     self.type_,
+			nilCount:  0,
+			rows:      0,
+			values:    []float32{},
+		}
+	} else if self.type_ == SERIES_TYPE_FLOAT64 {
 		frame = NDFrame{
 			formatter: self.formatter,
 			name:      self.name,
@@ -198,6 +209,9 @@ func (self *NDFrame) Repeat(x any, repeats int) Series {
 	case []int64:
 		vs := Repeat(AnyToInt64(x), repeats)
 		return NewNDFrame(self.name, vs...)
+	case []float32:
+		vs := Repeat(AnyToFloat32(x), repeats)
+		return NewNDFrame(self.name, vs...)
 	default: //case []float64:
 		vs := Repeat(AnyToFloat64(x), repeats)
 		return NewNDFrame(self.name, vs...)
@@ -223,6 +237,10 @@ func (self *NDFrame) Shift(periods int) Series {
 	case []int64:
 		return Shift[int64](&d, periods, func() int64 {
 			return Nil2Int64
+		})
+	case []float32:
+		return Shift[float32](&d, periods, func() float32 {
+			return Nil2Float32
 		})
 	default: //case []float64:
 		return Shift[float64](&d, periods, func() float64 {
@@ -269,6 +287,12 @@ func (self *NDFrame) FillNa(v any, inplace bool) {
 		for idx, iv := range rows {
 			if Float64IsNaN(float64(iv)) && inplace {
 				rows[idx] = AnyToInt64(v)
+			}
+		}
+	case []float32:
+		for idx, iv := range rows {
+			if Float32IsNaN(iv) && inplace {
+				rows[idx] = AnyToFloat32(v)
 			}
 		}
 	case []float64:
