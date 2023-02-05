@@ -19,18 +19,6 @@ var (
 	typeString          = reflect.TypeOf([]string{})
 )
 
-func CreateSeries(t Type, name string, v ...any) Series {
-	frame := NDFrame{
-		formatter: DefaultFormatter,
-		name:      name,
-		type_:     SERIES_TYPE_INVAILD,
-		nilCount:  0,
-		rows:      0,
-		//values:    []E{},
-	}
-	return &frame
-}
-
 // NewSeriesWithoutType 不带类型创新一个新series
 func NewSeriesWithoutType(name string, values ...interface{}) Series {
 	_type, err := detectTypeBySlice(values)
