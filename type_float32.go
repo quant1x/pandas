@@ -8,9 +8,10 @@ import (
 )
 
 const (
-	MaxFloat32                  = math.MaxFloat32 // float32最大值
-	StringTrue2Float32  float32 = float32(1)      // 字符串true转float32
-	StringFalse2Float32 float32 = float32(0)      // 字符串false转float32
+	MaxFloat32                  = float32(math.MaxFloat32)             // float32最大值
+	MinFloat32                  = float32(math.SmallestNonzeroFloat32) // float32最小值
+	StringTrue2Float32  float32 = float32(1)                           // 字符串true转float32
+	StringFalse2Float32 float32 = float32(0)                           // 字符串false转float32
 )
 
 // Float32IsNaN 判断float32是否NaN

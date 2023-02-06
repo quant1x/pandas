@@ -3,10 +3,13 @@ package pandas
 import (
 	"fmt"
 	"github.com/mymmsc/gox/logger"
+	"math"
 	"strconv"
 )
 
 const (
+	MaxInt64          = int64(math.MaxInt64)
+	MinInt64          = int64(math.MinInt64)
 	Nil2Int64         = int64(0) // 空指针转int64
 	Int64NaN          = int64(0) // int64 无效值
 	True2Int64        = int64(1) // true转int64

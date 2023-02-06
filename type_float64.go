@@ -8,13 +8,14 @@ import (
 )
 
 const (
-	MaxFloat64          float64 = math.MaxFloat64 // float64最大值
-	True2Float64        float64 = float64(1)      // true转float64
-	False2Float64       float64 = float64(0)      // false转float64
-	StringNil2Float     float64 = float64(0)      // deprecated: 字符串空指针转float64
-	StringBad2Float     float64 = float64(0)      // deprecated: 字符串解析float64异常
-	StringTrue2Float64  float64 = float64(1)      // 字符串true转float64
-	StringFalse2Float64 float64 = float64(0)      // 字符串false转float64
+	MaxFloat64          float64 = float64(math.MaxFloat64)             // float64最大值
+	MinFloat64          float64 = float64(math.SmallestNonzeroFloat64) // float64最小值
+	True2Float64        float64 = float64(1)                           // true转float64
+	False2Float64       float64 = float64(0)                           // false转float64
+	StringNil2Float     float64 = float64(0)                           // deprecated: 字符串空指针转float64
+	StringBad2Float     float64 = float64(0)                           // deprecated: 字符串解析float64异常
+	StringTrue2Float64  float64 = float64(1)                           // 字符串true转float64
+	StringFalse2Float64 float64 = float64(0)                           // 字符串false转float64
 )
 
 // Float64IsNaN 判断float64是否NaN

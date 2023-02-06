@@ -1,7 +1,5 @@
 package pandas
 
-import "gitee.com/quant1x/pandas/stat"
-
 func (self *NDFrame) Min() any {
 	values := self.Values()
 	switch rows := values.(type) {
@@ -21,10 +19,12 @@ func (self *NDFrame) Min() any {
 		return false
 	case []string:
 		min := ""
+		hasNaN := false
 		i := 0
 		for idx, iv := range rows {
 			if StringIsNaN(iv) {
-				continue
+				hasNaN = true
+				break
 			} else if i < 1 {
 				min = iv
 				i += 1
@@ -35,12 +35,14 @@ func (self *NDFrame) Min() any {
 			}
 			_ = idx
 		}
-		if i > 0 {
+		if hasNaN {
+			return StringNaN
+		} else if i > 0 {
 			return min
 		}
 		return StringNaN
 	case []int64:
-		min := int64(0)
+		min := MaxInt64
 		i := 0
 		for idx, iv := range rows {
 			if Float64IsNaN(float64(iv)) {
@@ -57,15 +59,59 @@ func (self *NDFrame) Min() any {
 		}
 		return min
 	case []float32:
-		if self.Len() == 0 {
+		min := MaxFloat32
+		hasNan := false
+		i := 0
+		for idx, iv := range rows {
+			if Float32IsNaN(iv) {
+				hasNan = true
+				break
+			}
+			if iv < min {
+				min = iv
+				i += 1
+			}
+			_ = idx
+		}
+		if hasNan {
 			return Nil2Float32
+		} else if i > 0 {
+			return min
 		}
-		return stat.Min(rows)
+		return Nil2Float32
+	//case []float32:
+	//	if self.Len() == 0 {
+	//		return Nil2Float32
+	//	}
+	//	return stat.Min(rows)
 	case []float64:
-		if self.Len() == 0 {
-			return Nil2Float64
+		min := MaxFloat64
+		hasNaN := false
+		i := 0
+		for idx, iv := range rows {
+			if Float64IsNaN(iv) {
+				hasNaN = true
+				break
+			}
+			if iv < min {
+				min = iv
+				i += 1
+			}
+			_ = idx
 		}
-		return stat.Min(rows)
+		if hasNaN {
+			return Nil2Float64
+		} else if i > 0 {
+			return min
+		}
+		return Nil2Float64
+	//case []float64:
+	//	if self.Len() == 0 {
+	//		return Nil2Float64
+	//	}
+	//	return stat.Min(rows)
+	default:
+		panic(ErrUnsupportedType)
 	}
 	return Nil2Float64
 }

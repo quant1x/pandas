@@ -1,7 +1,5 @@
 package pandas
 
-import "gitee.com/quant1x/pandas/stat"
-
 func (self *NDFrame) Max() any {
 	values := self.Values()
 	switch rows := values.(type) {
@@ -21,10 +19,12 @@ func (self *NDFrame) Max() any {
 		return false
 	case []string:
 		max := ""
+		hasNaN := false
 		i := 0
 		for idx, iv := range rows {
 			if StringIsNaN(iv) {
-				continue
+				hasNaN = true
+				break
 			}
 			if iv > max {
 				max = iv
@@ -32,12 +32,14 @@ func (self *NDFrame) Max() any {
 			}
 			_ = idx
 		}
-		if i > 0 {
+		if hasNaN {
+			return StringNaN
+		} else if i > 0 {
 			return max
 		}
 		return StringNaN
 	case []int64:
-		max := int64(0)
+		max := MinInt64
 		//i := 0
 		for idx, iv := range rows {
 			if Float64IsNaN(float64(iv)) {
@@ -50,50 +52,58 @@ func (self *NDFrame) Max() any {
 			_ = idx
 		}
 		return max
-	//case []float32:
-	//	max := float32(0)
-	//	i := 0
-	//	for idx, iv := range rows {
-	//		if Float32IsNaN(iv) {
-	//			continue
-	//		}
-	//		if iv > max {
-	//			max = iv
-	//			i += 1
-	//		}
-	//		_ = idx
-	//	}
-	//	if i > 0 {
-	//		return max
-	//	}
-	//	return Nil2Float32
 	case []float32:
-		if self.Len() == 0 {
+		max := MinFloat32
+		hasNan := false
+		i := 0
+		for idx, iv := range rows {
+			if Float32IsNaN(iv) {
+				hasNan = true
+				break
+			}
+			if iv > max {
+				max = iv
+				i += 1
+			}
+			_ = idx
+		}
+		if hasNan {
 			return Nil2Float32
+		} else if i > 0 {
+			return max
 		}
-		return stat.Max(rows)
-	//case []float64:
-	//	max := float64(0)
-	//	i := 0
-	//	for idx, iv := range rows {
-	//		if Float64IsNaN(iv) {
-	//			continue
-	//		}
-	//		if iv > max {
-	//			max = iv
-	//			i += 1
-	//		}
-	//		_ = idx
+		return Nil2Float32
+	//case []float32:
+	//	if self.Len() == 0 {
+	//		return Nil2Float32
 	//	}
-	//	if i > 0 {
-	//		return max
-	//	}
-	//	return Nil2Float64
+	//	return stat.Max(rows)
 	case []float64:
-		if self.Len() == 0 {
-			return Nil2Float64
+		max := MinFloat64
+		hasNaN := false
+		i := 0
+		for idx, iv := range rows {
+			if Float64IsNaN(iv) {
+				hasNaN = true
+				break
+			}
+			if iv > max {
+				max = iv
+				i += 1
+			}
+			_ = idx
 		}
-		return stat.Max(rows)
+		if hasNaN {
+			return Nil2Float64
+		} else if i > 0 {
+			return max
+		}
+		return Nil2Float64
+	//case []float64:
+	//	if self.Len() == 0 {
+	//		return Nil2Float64
+	//	}
+	//	return stat.Max(rows)
 	default:
 		panic(ErrUnsupportedType)
 	}

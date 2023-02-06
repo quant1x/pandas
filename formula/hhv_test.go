@@ -30,7 +30,7 @@ func TestHHV(t *testing.T) {
 	C := df2.Col("c")
 	D := df2.Col("d")
 
-	r2 := HHV(D, 2)
+	r2 := HHV(D, 4)
 	fmt.Println(r2)
 
 	r2 = HHV(A, 2)
