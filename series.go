@@ -37,7 +37,8 @@ type Series interface {
 
 	// NaN 输出默认的NaN
 	NaN() any
-
+	// Float 强制转成[]float32
+	Float() []float32
 	// sort.Interface
 
 	// Len 获得行数, 实现sort.Interface接口的获取元素数量方法

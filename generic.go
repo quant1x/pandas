@@ -151,6 +151,10 @@ func (self *NDFrame) NaN() any {
 	}
 }
 
+func (self *NDFrame) Float() []float32 {
+	return ToFloat32(self)
+}
+
 func (self *NDFrame) Empty() Series {
 	var frame NDFrame
 	if self.type_ == SERIES_TYPE_STRING {
