@@ -68,6 +68,9 @@ func (self *NDFrame) Max() any {
 	//	}
 	//	return Nil2Float32
 	case []float32:
+		if self.Len() == 0 {
+			return Nil2Float32
+		}
 		return stat.Max(rows)
 	//case []float64:
 	//	max := float64(0)
@@ -87,6 +90,9 @@ func (self *NDFrame) Max() any {
 	//	}
 	//	return Nil2Float64
 	case []float64:
+		if self.Len() == 0 {
+			return Nil2Float64
+		}
 		return stat.Max(rows)
 	default:
 		panic(ErrUnsupportedType)

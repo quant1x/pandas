@@ -1,6 +1,6 @@
 package pandas
 
-func (r RollingAndExpandingMixin) Max() (s Series) {
+func (r RollingAndExpandingMixin) Min() (s Series) {
 	s = r.series.Empty()
 	for _, block := range r.getBlocks() {
 		//// 1. 排序处理方式
@@ -9,11 +9,11 @@ func (r RollingAndExpandingMixin) Max() (s Series) {
 		//	continue
 		//}
 		//sort.Sort(block)
-		//r := RangeFinite(-1)
+		//r := RangeFinite(0, 1)
 		//_s := block.Select(r)
 		//s.Append(_s.Values())
 		// 2. Series.Max方法
-		s.Append(block.Max())
+		s.Append(block.Min())
 	}
 	return
 }
