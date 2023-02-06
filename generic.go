@@ -18,6 +18,7 @@ type NDFrame struct {
 	formatter StringFormatter // 字符串格式化工具
 	name      string          // 帧名称
 	type_     Type            // values元素类型
+	copy_     bool            // 是否副本
 	nilCount  int             // nil和nan的元素有多少, 这种统计在bool和int64类型中不会大于0, 只对float64及string有效
 	rows      int             // 行数
 	values    any             // 只能是一个一维slice, 在所有的运算中, values强制转换成float64切片
@@ -128,12 +129,26 @@ func (self *NDFrame) Type() Type {
 	return self.type_
 }
 
-func (self *NDFrame) Len() int {
-	return self.rows
-}
-
 func (self *NDFrame) Values() any {
 	return self.values
+}
+
+// NaN 输出默认的NaN
+func (self *NDFrame) NaN() any {
+	switch self.values.(type) {
+	case []bool:
+		return BoolNaN
+	case []string:
+		return StringNaN
+	case []int64:
+		return Nil2Int64
+	case []float32:
+		return Nil2Float32
+	case []float64:
+		return Nil2Float64
+	default:
+		panic(ErrUnsupportedType)
+	}
 }
 
 func (self *NDFrame) Empty() Series {
@@ -184,7 +199,7 @@ func (self *NDFrame) Empty() Series {
 			values:    []float64{},
 		}
 	} else {
-		panic("无法识别的类型")
+		panic(ErrUnsupportedType)
 	}
 	return &frame
 }

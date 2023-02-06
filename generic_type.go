@@ -2,6 +2,7 @@ package pandas
 
 import (
 	"fmt"
+	"gitee.com/quant1x/pandas/exception"
 	"reflect"
 	"strconv"
 	"strings"
@@ -9,6 +10,10 @@ import (
 
 const (
 	MAX_FLOAT32_PRICE = float32(9999.9999) // float32的价最大阀值触发扩展到float64
+)
+
+var (
+	ErrUnsupportedType = exception.New(0, "Unsupported type")
 )
 
 func mustFloat64(f float32) bool {

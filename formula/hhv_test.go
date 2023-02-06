@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestREF(t *testing.T) {
+func TestHHV(t *testing.T) {
 	type testStruct struct {
 		A string
 		B int
@@ -30,8 +30,16 @@ func TestREF(t *testing.T) {
 	C := df2.Col("c")
 	D := df2.Col("d")
 
-	// 2日前的D值
-	r2 := REF(D, 2)
+	r2 := HHV(D, 2)
+	fmt.Println(r2)
+
+	r2 = HHV(A, 2)
+	fmt.Println(r2)
+
+	r2 = HHV(df2.Col("X0"), 2)
+	fmt.Println(r2)
+
+	r2 = HHV(C, 2)
 	fmt.Println(r2)
 
 	_ = A

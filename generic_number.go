@@ -20,16 +20,69 @@ type Number32 interface {
 }
 
 type Number64 interface {
-	~int64 | ~uint64 | float64
+	~int64 | ~uint64 | float64 | int | uint
 }
 
-type Float interface {
-	~float32 | ~float64
+// NumberOfCPUBits The number of CPU bits is related
+type NumberOfCPUBitsRelated interface {
+	~int | ~uint | ~uintptr
+}
+
+type Integer interface {
+	Number8 | Number16 | Number32 | Number64
 }
 
 // Number int和uint的长度取决于CPU是多少位
 type Number interface {
-	Number8 | Number16 | Number32 | Number64 | Float | int | uint
+	Integer | Float
+}
+
+//type Number interface {
+//	constraints.Float | constraints.Integer
+//}
+
+// Signed is a constraint that permits any signed integer type.
+// If future releases of Go add new predeclared signed integer types,
+// this constraint will be modified to include them.
+type Signed interface {
+	~int | ~int8 | ~int16 | ~int32 | ~int64
+}
+
+// Unsigned is a constraint that permits any unsigned integer type.
+// If future releases of Go add new predeclared unsigned integer types,
+// this constraint will be modified to include them.
+// TODO:~uintptr应该是没有应用场景
+type Unsigned interface {
+	~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 | ~uintptr
+}
+
+// Integer_old Integer is a constraint that permits any integer type.
+// If future releases of Go add new predeclared integer types,
+// this constraint will be modified to include them.
+type Integer_old interface {
+	Signed | Unsigned
+}
+
+// Float is a constraint that permits any floating-point type.
+// If future releases of Go add new predeclared floating-point types,
+// this constraint will be modified to include them.
+type Float interface {
+	~float32 | ~float64
+}
+
+// Complex is a constraint that permits any complex numeric type.
+// If future releases of Go add new predeclared complex numeric types,
+// this constraint will be modified to include them.
+type Complex interface {
+	~complex64 | ~complex128
+}
+
+// Ordered is a constraint that permits any ordered type: any type
+// that supports the operators < <= >= >.
+// If future releases of Go add new ordered types,
+// this constraint will be modified to include them.
+type Ordered interface {
+	Integer | Float | ~string
 }
 
 //const (

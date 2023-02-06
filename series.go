@@ -32,10 +32,21 @@ type Series interface {
 	// Type returns the type of data the series holds.
 	// 返回series的数据类型
 	Type() Type
-	// Len 获得行数
-	Len() int
 	// Values 获得全部数据集
 	Values() any
+
+	// NaN 输出默认的NaN
+	NaN() any
+
+	// sort.Interface
+
+	// Len 获得行数, 实现sort.Interface接口的获取元素数量方法
+	Len() int
+	// Less 实现sort.Interface接口的比较元素方法
+	Less(i, j int) bool
+	// Swap 实现sort.Interface接口的交换元素方法
+	Swap(i, j int)
+
 	// Empty returns an empty Series of the same type
 	Empty() Series
 	// Copy 复制

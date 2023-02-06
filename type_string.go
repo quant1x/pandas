@@ -95,3 +95,21 @@ func StringIsNaN(s string) bool {
 	}
 	return false
 }
+
+// Arraystring 将[]string定义为Arraystring类型
+type Arraystring []string
+
+// Len 实现sort.Interface接口的获取元素数量方法
+func (m Arraystring) Len() int {
+	return len(m)
+}
+
+// Less 实现sort.Interface接口的比较元素方法
+func (m Arraystring) Less(i, j int) bool {
+	return m[i] < m[j]
+}
+
+// Swap 实现sort.Interface接口的交换元素方法
+func (m Arraystring) Swap(i, j int) {
+	m[i], m[j] = m[j], m[i]
+}

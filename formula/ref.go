@@ -6,6 +6,7 @@ import (
 	"gitee.com/quant1x/pandas/stat"
 )
 
+// REF 引用前N的序列
 func REF(S pandas.Series, N any) any {
 	var X []float32
 	switch v := N.(type) {

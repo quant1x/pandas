@@ -1,7 +1,9 @@
 package pandas
 
 import (
+	"fmt"
 	"math"
+	"sort"
 	"testing"
 )
 
@@ -43,4 +45,31 @@ func TestAnyToString(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestStringListSort(t *testing.T) {
+	// 准备一个内容被打乱顺序的字符串切片
+	names := []string{
+		"3. Triple Kill",
+		"5. Penta Kill",
+		"2. Double Kill",
+		"4. Quadra Kill",
+		"1. First Blood",
+	}
+	sa := Arraystring(names)
+	// 使用sort包进行排序
+	sort.Sort(sa)
+	// 遍历打印结果
+	for _, v := range names {
+		fmt.Printf("%s\n", v)
+	}
+	n1 := sort.StringSlice{
+		"3. Triple Kill",
+		"5. Penta Kill",
+		"2. Double Kill",
+		"4. Quadra Kill",
+		"1. First Blood",
+	}
+	sort.Sort(n1)
+	fmt.Println(n1)
 }
