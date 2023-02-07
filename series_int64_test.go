@@ -21,6 +21,6 @@ func TestNewSeriesInt64(t *testing.T) {
 	fmt.Println(s3.Values())
 
 	s4 := NewSeriesInt64("x", []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
-	d4 := s4.Rolling(5).Mean()
+	d4 := s4.RollingV1(5).Mean()
 	fmt.Printf("d4 = %+v\n", d4.Values())
 }

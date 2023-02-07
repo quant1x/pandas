@@ -1,12 +1,12 @@
 package pandas
 
-// RollingWindow is used for rolling window calculations.
-type RollingWindow struct {
+// RollingWindowV1 is used for rolling window calculations.
+type RollingWindowV1 struct {
 	window int
 	series Series
 }
 
-func (r RollingWindow) getBlocks() (blocks []Series) {
+func (r RollingWindowV1) getBlocks() (blocks []Series) {
 	for i := 1; i <= r.series.Len(); i++ {
 		if i < r.window {
 			blocks = append(blocks, r.series.Empty())
@@ -22,7 +22,7 @@ func (r RollingWindow) getBlocks() (blocks []Series) {
 }
 
 // Mean returns the rolling mean.
-func (r RollingWindow) Mean() (s Series) {
+func (r RollingWindowV1) Mean() (s Series) {
 	var d []float64
 	for _, block := range r.getBlocks() {
 		d = append(d, block.Mean())
@@ -32,7 +32,7 @@ func (r RollingWindow) Mean() (s Series) {
 }
 
 // StdDev returns the rolling mean.
-func (r RollingWindow) StdDev() (s Series) {
+func (r RollingWindowV1) StdDev() (s Series) {
 	var d []float64
 	for _, block := range r.getBlocks() {
 		d = append(d, block.StdDev())
@@ -42,7 +42,7 @@ func (r RollingWindow) StdDev() (s Series) {
 	return
 }
 
-func (r RollingWindow) Max() any {
+func (r RollingWindowV1) Max() any {
 	var fs []float64
 	var is []int64
 	var ss []string
@@ -67,7 +67,7 @@ func (r RollingWindow) Max() any {
 	}
 }
 
-func (r RollingWindow) Min() any {
+func (r RollingWindowV1) Min() any {
 	var fs []float64
 	var is []int64
 	var ss []string

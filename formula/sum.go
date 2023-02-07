@@ -6,9 +6,10 @@ import (
 	"gitee.com/quant1x/pandas/stat"
 )
 
-// MA 计算移动均线
-// 求序列的N日简单移动平均值, 返回序列
-func MA(S pandas.Series, N any) any {
+// SUM 求累和
+// 如果N=0, 则从第一个有效值累加到当前
+// 下一步再统一返回值
+func SUM(S pandas.Series, N any) any {
 	var X []float32
 	switch v := N.(type) {
 	case int:
@@ -20,5 +21,5 @@ func MA(S pandas.Series, N any) any {
 	default:
 		panic(exception.New(1, "error window"))
 	}
-	return S.Rolling(X).Mean().Values()
+	return S.Rolling(X).Sum().Values()
 }

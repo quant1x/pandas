@@ -195,9 +195,9 @@ func (self *SeriesFloat64) Subset(start, end int, opt ...any) Series {
 	return d
 }
 
-// Rolling creates new RollingWindow
-func (self *SeriesFloat64) Rolling(window int) RollingWindow {
-	return RollingWindow{
+// Rolling creates new RollingWindowV1
+func (self *SeriesFloat64) RollingV1(window int) RollingWindowV1 {
+	return RollingWindowV1{
 		window: window,
 		series: self,
 	}

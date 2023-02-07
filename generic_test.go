@@ -42,23 +42,23 @@ func TestNDFrameNew(t *testing.T) {
 	nd11 := nd1.Subset(1, 2, true)
 	fmt.Println(nd11.Records())
 	fmt.Println(nd1.Max())
-	fmt.Println(nd1.Rolling(5).Max())
-	fmt.Println(nd1.Rolling(5).Min())
+	fmt.Println(nd1.RollingV1(5).Max())
+	fmt.Println(nd1.RollingV1(5).Min())
 
-	nd12 := nd1.Rolling(5).Mean()
+	nd12 := nd1.RollingV1(5).Mean()
 	d12 := nd12.Values()
 	fmt.Println(d12)
 
 	nd13 := nd1.Shift(3)
 	fmt.Println(nd13.Values())
-	nd14 := nd1.Rolling(5).StdDev()
+	nd14 := nd1.RollingV1(5).StdDev()
 	fmt.Println(nd14.Values())
 
 	// string
 	d2 := []string{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "nan", "12"}
 	nd2 := NewNDFrame[string]("x", d2...)
 	fmt.Println(nd2)
-	nd21 := nd2.Rolling(5).Max()
+	nd21 := nd2.RollingV1(5).Max()
 	fmt.Println(nd21)
 	nd2.FillNa(0, true)
 	fmt.Println(nd2)
@@ -75,12 +75,12 @@ func TestRolling2(t *testing.T) {
 
 	N := 5
 	fmt.Println("固定的参数, N =", N)
-	r1 := df.Col("x").Rolling2(5).Mean().Values()
+	r1 := df.Col("x").Rolling(5).Mean().Values()
 	fmt.Println("序列化结果:", r1)
 	fmt.Println("------------------------------------------------------------")
 	d2 := []float64{1, 2, 3, 4, 3, 3, 2, 1, Nil2Float64, Nil2Float64, Nil2Float64, Nil2Float64}
 	s2 := NewSeries(SERIES_TYPE_FLOAT64, "x", d2)
 	fmt.Printf("序列化参数: %+v\n", s2.Values())
-	r2 := df.Col("x").Rolling2(s2).Mean().Values()
+	r2 := df.Col("x").Rolling(s2).Mean().Values()
 	fmt.Println("序列化结果:", r2)
 }

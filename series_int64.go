@@ -150,8 +150,8 @@ func (self *SeriesInt64) Subset(start, end int, opt ...any) Series {
 	return d
 }
 
-func (self *SeriesInt64) Rolling(window int) RollingWindow {
-	return RollingWindow{
+func (self *SeriesInt64) RollingV1(window int) RollingWindowV1 {
+	return RollingWindowV1{
 		window: window,
 		series: self,
 	}

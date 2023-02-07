@@ -62,10 +62,10 @@ type Series interface {
 	// Shift index by desired number of periods with an optional time freq.
 	// 使用可选的时间频率按所需的周期数移动索引.
 	Shift(periods int) Series
-	// Rolling creates new RollingWindow
-	Rolling(window int) RollingWindow
-	// Rolling2 序列化版本
-	Rolling2(param any) RollingAndExpandingMixin
+	// RollingV1 creates new RollingWindowV1
+	RollingV1(window int) RollingWindowV1
+	// Rolling 序列化版本
+	Rolling(param any) RollingAndExpandingMixin
 	// Mean calculates the average value of a series
 	Mean() float64
 	// StdDev calculates the standard deviation of a series
@@ -88,6 +88,8 @@ type Series interface {
 	Ref(param any) (s Series)
 	// Std 计算标准差
 	Std() float64
+	// Sum 计算累和
+	Sum() float64
 }
 
 // NewSeries 指定类型创建序列

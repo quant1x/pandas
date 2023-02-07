@@ -145,7 +145,7 @@ func (self *SeriesBool) Shift(periods int) Series {
 	})
 }
 
-func (self *SeriesBool) Rolling(window int) RollingWindow {
+func (self *SeriesBool) RollingV1(window int) RollingWindowV1 {
 	//TODO implement me
 	panic("implement me")
 }

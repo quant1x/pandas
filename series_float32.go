@@ -59,7 +59,7 @@ func (self *SeriesFloat32) Shift(periods int) Series {
 	panic("implement me")
 }
 
-func (self *SeriesFloat32) Rolling(window int) RollingWindow {
+func (self *SeriesFloat32) RollingV1(window int) RollingWindowV1 {
 	//TODO implement me
 	panic("implement me")
 }

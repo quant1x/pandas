@@ -33,7 +33,7 @@ Spain,2012-02-01,66,555.42,00241,1.23
 	//fmt.Println(s1)
 	//
 	//closes := df.Col("d")
-	//ma5 := closes.Rolling(5).Mean()
+	//ma5 := closes.RollingV1(5).Mean()
 	//dframe.NewSeries(closes, dframe.Float, "")
 	//fmt.Println(ma5)
 	d := df.Col("d")
@@ -72,7 +72,7 @@ func TestEwm(t *testing.T) {
 	//df = dframe.NewFrame(s1)
 	//fmt.Println(df)
 	//xs := df.Col("x")
-	//r1 := xs.Rolling(5).Mean()
+	//r1 := xs.RollingV1(5).Mean()
 	//fmt.Println(r1)
 	//
 	//e1 := xs.EWM(dframe.Alpha{Span: 5, At: dframe.AlphaSpan}, false, false).Mean()

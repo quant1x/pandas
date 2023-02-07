@@ -5,9 +5,9 @@ import (
 	"gitee.com/quant1x/pandas/stat"
 )
 
-// Rolling 滑动窗口
-func (self *NDFrame) Rolling(window int) RollingWindow {
-	return RollingWindow{
+// RollingV1 滑动窗口
+func (self *NDFrame) RollingV1(window int) RollingWindowV1 {
+	return RollingWindowV1{
 		window: window,
 		series: self,
 	}
@@ -19,8 +19,8 @@ type RollingAndExpandingMixin struct {
 	series Series
 }
 
-// Rolling2 RollingAndExpandingMixin
-func (self *NDFrame) Rolling2(param any) RollingAndExpandingMixin {
+// Rolling RollingAndExpandingMixin
+func (self *NDFrame) Rolling(param any) RollingAndExpandingMixin {
 	var N []float32
 	switch v := param.(type) {
 	case int:
