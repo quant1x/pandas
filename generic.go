@@ -2,7 +2,8 @@ package pandas
 
 import (
 	"gitee.com/quant1x/pandas/algorithms/avx2"
-	"gonum.org/v1/gonum/stat"
+	"gitee.com/quant1x/pandas/stat"
+	gs "gonum.org/v1/gonum/stat"
 	"reflect"
 	"sync"
 )
@@ -289,7 +290,19 @@ func (self *NDFrame) StdDev() float64 {
 	self.Apply(func(idx int, v any) {
 		values[idx] = AnyToFloat64(v)
 	})
-	stdDev := stat.StdDev(values, nil)
+	stdDev := gs.StdDev(values, nil)
+	return stdDev
+}
+
+func (self *NDFrame) Std() float64 {
+	if self.Len() < 1 {
+		return NaN()
+	}
+	values := make([]float64, self.Len())
+	self.Apply(func(idx int, v any) {
+		values[idx] = AnyToFloat64(v)
+	})
+	stdDev := stat.Std(values)
 	return stdDev
 }
 

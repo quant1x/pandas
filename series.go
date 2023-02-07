@@ -39,6 +39,7 @@ type Series interface {
 	NaN() any
 	// Float 强制转成[]float32
 	Float() []float32
+
 	// sort.Interface
 
 	// Len 获得行数, 实现sort.Interface接口的获取元素数量方法
@@ -83,8 +84,10 @@ type Series interface {
 	Apply(f func(idx int, v any))
 	// Diff 元素的第一个离散差
 	Diff(param any) (s Series)
-	// 引用其它周期的数据
+	// Ref 引用其它周期的数据
 	Ref(param any) (s Series)
+	// Std 计算标准差
+	Std() float64
 }
 
 // NewSeries 指定类型创建序列

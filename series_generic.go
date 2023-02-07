@@ -21,7 +21,7 @@ var (
 
 // NewSeriesWithoutType 不带类型创新一个新series
 func NewSeriesWithoutType(name string, values ...interface{}) Series {
-	_type, err := detectTypeBySlice(values)
+	_type, err := detectTypeBySlice(values...)
 	if err != nil {
 		return nil
 	}

@@ -87,7 +87,7 @@ func findTypeByString(arr []string) (Type, error) {
 }
 
 // 检测类型
-func detectTypeBySlice(arr []any) (Type, error) {
+func detectTypeBySlice(arr ...any) (Type, error) {
 	var hasFloat32s, hasFloat64s, hasInts, hasBools, hasStrings bool
 	for _, v := range arr {
 		switch value := v.(type) {
@@ -107,6 +107,21 @@ func detectTypeBySlice(arr []any) (Type, error) {
 			hasBools = true
 			continue
 		default:
+			vv := reflect.ValueOf(v)
+			vk := vv.Kind()
+			switch vk {
+			case reflect.Slice, reflect.Array: // 切片或数组
+				for i := 0; i < vv.Len(); i++ {
+					tv := vv.Index(i).Interface()
+					t_, err := detectTypeBySlice(tv)
+					if err == nil {
+						return t_, nil
+					}
+				}
+			case reflect.Struct: // 忽略结构体
+				continue
+			default:
+			}
 			_ = value
 		}
 	}
