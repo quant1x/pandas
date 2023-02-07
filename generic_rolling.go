@@ -5,14 +5,6 @@ import (
 	"gitee.com/quant1x/pandas/stat"
 )
 
-// RollingV1 滑动窗口
-func (self *NDFrame) RollingV1(window int) RollingWindowV1 {
-	return RollingWindowV1{
-		window: window,
-		series: self,
-	}
-}
-
 // RollingAndExpandingMixin 滚动和扩展静态横切
 type RollingAndExpandingMixin struct {
 	window []float32
@@ -54,5 +46,15 @@ func (r RollingAndExpandingMixin) getBlocks() (blocks []Series) {
 		blocks = append(blocks, r.series.Subset(start, end, true))
 	}
 
+	return
+}
+
+// Apply 接受一个回调
+func (r RollingAndExpandingMixin) Apply(f func(S Series, N float32) float32) (s Series) {
+	s = r.series.Empty()
+	for i, block := range r.getBlocks() {
+		v := f(block, r.window[i])
+		s.Append(v)
+	}
 	return
 }

@@ -6,6 +6,14 @@ type RollingWindowV1 struct {
 	series Series
 }
 
+// RollingV1 滑动窗口
+func (self *NDFrame) RollingV1(window int) RollingWindowV1 {
+	return RollingWindowV1{
+		window: window,
+		series: self,
+	}
+}
+
 func (r RollingWindowV1) getBlocks() (blocks []Series) {
 	for i := 1; i <= r.series.Len(); i++ {
 		if i < r.window {
