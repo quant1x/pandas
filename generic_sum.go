@@ -2,7 +2,7 @@ package pandas
 
 import "gitee.com/quant1x/pandas/stat"
 
-func (self *NDFrame) Sum() float64 {
-	fs := ToFloat64(self)
+func (self *NDFrame) Sum() stat.DType {
+	fs := self.DTypes()
 	return stat.Sum(fs)
 }

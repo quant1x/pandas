@@ -1,10 +1,9 @@
 package pandas
 
 import (
+	"gitee.com/quant1x/pandas/stat"
 	"math"
 )
-
-type DType = float64
 
 type AlphaType int
 
@@ -22,25 +21,25 @@ const (
 
 // EW (Factor) 指数加权(EW)计算Alpha 结构属性非0即为有效启动同名算法
 type EW struct {
-	Com      float64 // 根据质心指定衰减
-	Span     float64 // 根据跨度指定衰减
-	Halflife float64 // 根据半衰期指定衰减
-	Alpha    float64 // 直接指定的平滑因子α
-	Adjust   bool    // 除以期初的衰减调整系数以核算 相对权重的不平衡（将 EWMA 视为移动平均线）
-	IgnoreNA bool    // 计算权重时忽略缺失值
-	Callback func(idx int) DType
+	Com      stat.DType // 根据质心指定衰减
+	Span     stat.DType // 根据跨度指定衰减
+	Halflife stat.DType // 根据半衰期指定衰减
+	Alpha    stat.DType // 直接指定的平滑因子α
+	Adjust   bool       // 除以期初的衰减调整系数以核算 相对权重的不平衡（将 EWMA 视为移动平均线）
+	IgnoreNA bool       // 计算权重时忽略缺失值
+	Callback func(idx int) stat.DType
 }
 
 // ExponentialMovingWindow 加权移动窗口
 type ExponentialMovingWindow struct {
-	data       Series    // 序列
-	atype      AlphaType // 计算方式: com/span/halflefe/alpha
-	param      DType     // 参数类型为浮点
-	adjust     bool      // 默认为真, 是否调整, 默认真时, 计算序列的EW移动平均线, 为假时, 计算指数加权递归
-	ignoreNA   bool      // 默认为假, 计算权重时是否忽略缺失值NaN
-	minPeriods int       // 默认为0, 窗口中具有值所需的最小观测值数,否则结果为NaN
-	axis       int       // {0,1}, 默认为0, 0跨行计算, 1跨列计算
-	cb         func(idx int) DType
+	data       Series     // 序列
+	atype      AlphaType  // 计算方式: com/span/halflefe/alpha
+	param      stat.DType // 参数类型为浮点
+	adjust     bool       // 默认为真, 是否调整, 默认真时, 计算序列的EW移动平均线, 为假时, 计算指数加权递归
+	ignoreNA   bool       // 默认为假, 计算权重时是否忽略缺失值NaN
+	minPeriods int        // 默认为0, 窗口中具有值所需的最小观测值数,否则结果为NaN
+	axis       int        // {0,1}, 默认为0, 0跨行计算, 1跨列计算
+	cb         func(idx int) stat.DType
 }
 
 // EWM provides exponential weighted calculations.
@@ -75,7 +74,7 @@ func (s *NDFrame) EWM(alpha EW) ExponentialMovingWindow {
 }
 
 func (w ExponentialMovingWindow) Mean() Series {
-	var alpha DType
+	var alpha stat.DType
 
 	switch w.atype {
 	case AlphaNil:
@@ -106,7 +105,7 @@ func (w ExponentialMovingWindow) Mean() Series {
 	return w.applyMean(w.data, alpha)
 }
 
-func (w ExponentialMovingWindow) applyMean(data Series, alpha DType) Series {
+func (w ExponentialMovingWindow) applyMean(data Series, alpha stat.DType) Series {
 	if w.adjust {
 		w.adjustedMean(data, alpha, w.ignoreNA)
 	} else {
@@ -115,11 +114,11 @@ func (w ExponentialMovingWindow) applyMean(data Series, alpha DType) Series {
 	return data
 }
 
-func (w ExponentialMovingWindow) adjustedMean(data Series, alpha DType, ignoreNA bool) {
+func (w ExponentialMovingWindow) adjustedMean(data Series, alpha stat.DType, ignoreNA bool) {
 	var (
-		values       = data.Values().([]float64)
-		weight DType = 1
-		last         = values[0]
+		values            = data.Values().([]stat.DType)
+		weight stat.DType = 1
+		last              = values[0]
 	)
 
 	alpha = 1 - alpha
@@ -127,7 +126,7 @@ func (w ExponentialMovingWindow) adjustedMean(data Series, alpha DType, ignoreNA
 
 		w := alpha*weight + 1
 		x := values[t]
-		if Float64IsNaN(x) {
+		if stat.DTypeIsNaN(x) {
 			if ignoreNA {
 				weight = w
 			}
@@ -141,15 +140,15 @@ func (w ExponentialMovingWindow) adjustedMean(data Series, alpha DType, ignoreNA
 	}
 }
 
-func (w ExponentialMovingWindow) notadjustedMean(data Series, alpha DType, ignoreNA bool) {
+func (w ExponentialMovingWindow) notadjustedMean(data Series, alpha stat.DType, ignoreNA bool) {
 	hasCallback := false
-	if Float64IsNaN(alpha) {
+	if stat.DTypeIsNaN(alpha) {
 		hasCallback = true
 		alpha = w.cb(0)
 	}
 	var (
 		count  int
-		values = data.Values().([]float64)
+		values = data.Values().([]stat.DType)
 		beta   = 1 - alpha
 		last   = values[0]
 	)
@@ -160,7 +159,7 @@ func (w ExponentialMovingWindow) notadjustedMean(data Series, alpha DType, ignor
 	for t := 1; t < len(values); t++ {
 		x := values[t]
 
-		if Float64IsNaN(x) {
+		if stat.DTypeIsNaN(x) {
 			values[t] = last
 			continue
 		}
@@ -170,7 +169,7 @@ func (w ExponentialMovingWindow) notadjustedMean(data Series, alpha DType, ignor
 		}
 		// yt = (1−α)*y(t−1) + α*x(t)
 		last = (beta * last) + (alpha * x)
-		if Float64IsNaN(last) {
+		if stat.DTypeIsNaN(last) {
 			last = values[t-1]
 		}
 		values[t] = last

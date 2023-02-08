@@ -23,7 +23,7 @@ func (self *NDFrame) insert(idx, size int, v any) {
 }
 
 // Append 批量增加记录
-func (self *NDFrame) Append(values ...interface{}) {
+func (self *NDFrame) Append(values ...any) {
 	size := 0
 	for idx, v := range values {
 		switch val := v.(type) {

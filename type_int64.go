@@ -63,8 +63,8 @@ func int64ToString(v int64) string {
 // AnyToInt64 any转换int64
 func AnyToInt64(v any) int64 {
 	if isPoint(v) {
-		return point_to_number[int64](v, Nil2Int64, boolToInt64, ParseInt64)
+		return pointToNumber[int64](v, Nil2Int64, boolToInt64, ParseInt64)
 	}
-	f := value_to_number[int64](v, Nil2Int64, boolToInt64, ParseInt64)
+	f := valueToNumber[int64](v, Nil2Int64, boolToInt64, ParseInt64)
 	return f
 }

@@ -156,6 +156,11 @@ func (self *NDFrame) Float() []float32 {
 	return ToFloat32(self)
 }
 
+// DType 计算以这个函数为主
+func (self *NDFrame) DTypes() []stat.DType {
+	return stat.Slice2DType(self.Values())
+}
+
 func (self *NDFrame) Empty() Series {
 	var frame NDFrame
 	if self.type_ == SERIES_TYPE_STRING {
@@ -269,38 +274,38 @@ func (self *NDFrame) Shift(periods int) Series {
 	}
 }
 
-func (self *NDFrame) Mean() float64 {
+func (self *NDFrame) Mean() stat.DType {
 	if self.Len() < 1 {
 		return NaN()
 	}
-	fs := make([]float64, 0)
+	fs := make([]stat.DType, 0)
 	self.Apply(func(idx int, v any) {
-		f := AnyToFloat64(v)
+		f := stat.Any2DType(v)
 		fs = append(fs, f)
 	})
 	stdDev := avx2.Mean(fs)
 	return stdDev
 }
 
-func (self *NDFrame) StdDev() float64 {
+func (self *NDFrame) StdDev() stat.DType {
 	if self.Len() < 1 {
 		return NaN()
 	}
-	values := make([]float64, self.Len())
+	values := make([]stat.DType, self.Len())
 	self.Apply(func(idx int, v any) {
-		values[idx] = AnyToFloat64(v)
+		values[idx] = stat.Any2DType(v)
 	})
 	stdDev := gs.StdDev(values, nil)
 	return stdDev
 }
 
-func (self *NDFrame) Std() float64 {
+func (self *NDFrame) Std() stat.DType {
 	if self.Len() < 1 {
 		return NaN()
 	}
-	values := make([]float64, self.Len())
+	values := make([]stat.DType, self.Len())
 	self.Apply(func(idx int, v any) {
-		values[idx] = AnyToFloat64(v)
+		values[idx] = stat.Any2DType(v)
 	})
 	stdDev := stat.Std(values)
 	return stdDev

@@ -67,8 +67,8 @@ func AnyToFloat32(v any) float32 {
 		//	v = vv.Elem()
 		//	vv.Float()
 		//}
-		return point_to_number[float32](v, Nil2Float32, boolToFloat32, ParseFloat32)
+		return pointToNumber[float32](v, Nil2Float32, boolToFloat32, ParseFloat32)
 	}
-	f := value_to_number[float32](v, Nil2Float32, boolToFloat32, ParseFloat32)
+	f := valueToNumber[float32](v, Nil2Float32, boolToFloat32, ParseFloat32)
 	return f
 }

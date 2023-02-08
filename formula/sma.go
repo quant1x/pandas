@@ -43,7 +43,7 @@ func SMA_v5(S pandas.Series, N any, M int) any {
 		panic(exception.New(1, "error window"))
 	}
 	k := X[0]
-	x := S.EWM(pandas.EW{Alpha: pandas.Nil2Float64, Callback: func(idx int) pandas.DType {
+	x := S.EWM(pandas.EW{Alpha: pandas.Nil2Float64, Callback: func(idx int) stat.DType {
 		j := X[idx]
 		if j == 0 {
 			j = 1
@@ -77,12 +77,12 @@ func SMA_v3(S pandas.Series, N any, M int) any {
 	if M == 0 {
 		M = 1
 	}
-	x := S.Rolling(N).Apply(func(S pandas.Series, N float32) float32 {
+	x := S.Rolling(N).Apply(func(S pandas.Series, N stat.DType) stat.DType {
 		r := S.EWM(pandas.EW{Alpha: float64(M) / float64(N), Adjust: false}).Mean().Values().([]float64)
 		if len(r) == 0 {
-			return stat.Nil2Float32
+			return stat.DTypeNaN
 		}
-		return float32(r[len(r)-1])
+		return stat.DType(r[len(r)-1])
 	}).Values()
 	return x
 }

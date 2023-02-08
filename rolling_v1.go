@@ -1,12 +1,14 @@
 package pandas
 
 // RollingWindowV1 is used for rolling window calculations.
+// Deprecated: 使用RollingAndExpandingMixin
 type RollingWindowV1 struct {
 	window int
 	series Series
 }
 
 // RollingV1 滑动窗口
+// Deprecated: 使用RollingAndExpandingMixin
 func (self *NDFrame) RollingV1(window int) RollingWindowV1 {
 	return RollingWindowV1{
 		window: window,

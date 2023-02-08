@@ -34,7 +34,7 @@ formula
 | 1   | EVERY         | EVERY(CLOSE>O,5),最近N天是否都是True                      | EVERY(CLOSE>LOW,5)                | [X]  | [X]  |
 | 1   | EXIST         | EXIST(CLOSE>O,5),最近N天是否都是True                      | EXIST(CLOSE>LOW,5)                | [X]  | [X]  |
 | 1   | FILTER        | FILTER函数，S满足条件后，将其后N周期内的数据置为0                      | FILTER(CLOSE>LOW,5)               | [X]  | [X]  |
-| 1   | BARSLAST      | 上一次条件成立到当前的周期数                                     | BARSLAST(X)                       | [X]  | [X]  |
+| 1   | BARSLAST      | 上一次条件成立到当前的周期数                                     | BARSLAST(X)                       | [√]  | [√]  |
 | 1   | BARSLASTCOUNT | 统计连续满足S条件的周期数                                      | BARSLASTCOUNT(X)                  | [X]  | [X]  |
 | 1   | BARSSINCEN    | N周期内第一次S条件成立到现在的周期数                                | BARSSINCEN(S,N)                   | [X]  | [X]  |
 | 1   | CROSS         | 判断向上金叉穿越,两个序列互换就是判断向下死叉穿越                          | CROSS(MA(C,5),MA(C,10))           | [X]  | [X]  |

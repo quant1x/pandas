@@ -2,6 +2,7 @@ package pandas
 
 import (
 	"fmt"
+	"gitee.com/quant1x/pandas/stat"
 	"reflect"
 )
 
@@ -16,7 +17,8 @@ const (
 	SERIES_TYPE_INT64   = reflect.Int64   // int64
 	SERIES_TYPE_FLOAT32 = reflect.Float32 // float32
 	SERIES_TYPE_FLOAT64 = reflect.Float64 // float64
-	SERIES_TYPE_STRING  = reflect.String  // string
+	SERIES_TYPE_DTYPE   = SERIES_TYPE_FLOAT64
+	SERIES_TYPE_STRING  = reflect.String // string
 )
 
 // StringFormatter is used to convert a value
@@ -39,6 +41,8 @@ type Series interface {
 	NaN() any
 	// Float 强制转成[]float32
 	Float() []float32
+	// DTypes 强制转[]stat.DType
+	DTypes() []stat.DType
 
 	// sort.Interface
 
@@ -63,13 +67,14 @@ type Series interface {
 	// 使用可选的时间频率按所需的周期数移动索引.
 	Shift(periods int) Series
 	// RollingV1 creates new RollingWindowV1
+	// Deprecated: 使用RollingAndExpandingMixin
 	RollingV1(window int) RollingWindowV1
 	// Rolling 序列化版本
 	Rolling(param any) RollingAndExpandingMixin
 	// Mean calculates the average value of a series
-	Mean() float64
+	Mean() stat.DType
 	// StdDev calculates the standard deviation of a series
-	StdDev() float64
+	StdDev() stat.DType
 	// FillNa Fill NA/NaN values using the specified method.
 	FillNa(v any, inplace bool)
 	// Max 找出最大值
@@ -79,7 +84,7 @@ type Series interface {
 	// Select 选取一段记录
 	Select(r Range) Series
 	// Append 增加一批记录
-	Append(values ...interface{})
+	Append(values ...any)
 	// Apply 接受一个回调函数
 	Apply(f func(idx int, v any))
 	// Diff 元素的第一个离散差
@@ -87,9 +92,9 @@ type Series interface {
 	// Ref 引用其它周期的数据
 	Ref(param any) (s Series)
 	// Std 计算标准差
-	Std() float64
+	Std() stat.DType
 	// Sum 计算累和
-	Sum() float64
+	Sum() stat.DType
 	// EWM Provide exponentially weighted (EW) calculations.
 	//
 	//    Exactly one of ``com``, ``span``, ``halflife``, or ``alpha`` must be

@@ -6,7 +6,7 @@ import (
 )
 
 func ABS(S pandas.Series) pandas.Series {
-	s := S.Float()
+	s := S.DTypes()
 	d := stat.Abs(s)
-	return pandas.NewSeries(pandas.SERIES_TYPE_FLOAT32, "", d)
+	return pandas.NewSeries(pandas.SERIES_TYPE_DTYPE, "", d)
 }

@@ -61,8 +61,8 @@ func float64ToString(v float64) string {
 
 func AnyToFloat64(v any) float64 {
 	if isPoint(v) {
-		return point_to_number[float64](v, Nil2Float64, boolToFloat64, ParseFloat64)
+		return pointToNumber[float64](v, Nil2Float64, boolToFloat64, ParseFloat64)
 	}
-	f := value_to_number[float64](v, Nil2Float64, boolToFloat64, ParseFloat64)
+	f := valueToNumber[float64](v, Nil2Float64, boolToFloat64, ParseFloat64)
 	return f
 }

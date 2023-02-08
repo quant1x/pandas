@@ -7,22 +7,21 @@ import (
 
 // RollingAndExpandingMixin 滚动和扩展静态横切
 type RollingAndExpandingMixin struct {
-	window []float32
+	window []stat.DType
 	series Series
 }
 
 // Rolling RollingAndExpandingMixin
 func (self *NDFrame) Rolling(param any) RollingAndExpandingMixin {
-	var N []float32
+	var N []stat.DType
 	switch v := param.(type) {
 	case int:
-		N = stat.Repeat[float32](float32(v), self.Len())
-	case []float32:
-		N = stat.Align(v, Nil2Float32, self.Len())
+		N = stat.Repeat[stat.DType](stat.DType(v), self.Len())
+	case []stat.DType:
+		N = stat.Align(v, stat.DTypeNaN, self.Len())
 	case Series:
-		vs := v.Values()
-		N = SliceToFloat32(vs)
-		N = stat.Align(N, Nil2Float32, self.Len())
+		vs := v.DTypes()
+		N = stat.Align(vs, stat.DTypeNaN, self.Len())
 	default:
 		panic(exception.New(1, "error window"))
 	}
@@ -36,7 +35,7 @@ func (self *NDFrame) Rolling(param any) RollingAndExpandingMixin {
 func (r RollingAndExpandingMixin) getBlocks() (blocks []Series) {
 	for i := 0; i < r.series.Len(); i++ {
 		N := r.window[i]
-		if Float32IsNaN(N) || int(N) > i+1 {
+		if stat.DTypeIsNaN(N) || int(N) > i+1 {
 			blocks = append(blocks, r.series.Empty())
 			continue
 		}
@@ -50,11 +49,11 @@ func (r RollingAndExpandingMixin) getBlocks() (blocks []Series) {
 }
 
 // Apply 接受一个回调
-func (r RollingAndExpandingMixin) Apply(f func(S Series, N float32) float32) (s Series) {
+func (r RollingAndExpandingMixin) Apply(f func(S Series, N stat.DType) stat.DType) (s Series) {
 	s = r.series.Empty()
 	for i, block := range r.getBlocks() {
 		if block.Len() == 0 {
-			s.Append(Nil2Float32)
+			s.Append(stat.DTypeNaN)
 			continue
 		}
 		v := f(block, r.window[i])

@@ -23,7 +23,7 @@ type Number64 interface {
 	~int64 | ~uint64 | float64 | int | uint
 }
 
-// NumberOfCPUBits The number of CPU bits is related
+// NumberOfCPUBitsRelated The number of CPU bits is related
 type NumberOfCPUBitsRelated interface {
 	~int | ~uint | ~uintptr
 }
@@ -100,7 +100,7 @@ func Mean[T Number](x []T) float64 {
 }
 
 // any转number
-func value_to_number[T Number](v any, nil2t T, bool2t func(b bool) T, string2t func(s string, v any) T) T {
+func valueToNumber[T Number](v any, nil2t T, bool2t func(b bool) T, string2t func(s string, v any) T) T {
 	switch val := v.(type) {
 	case nil: // 这个地方判断nil值
 		return nil2t
@@ -137,7 +137,7 @@ func value_to_number[T Number](v any, nil2t T, bool2t func(b bool) T, string2t f
 }
 
 // 指针转number
-func point_to_number[T Number](v any, nil2t T, bool2t func(b bool) T, string2t func(s string, v any) T) T {
+func pointToNumber[T Number](v any, nil2t T, bool2t func(b bool) T, string2t func(s string, v any) T) T {
 	switch val := v.(type) {
 	case *int8:
 		if val == nil {
