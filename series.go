@@ -90,6 +90,12 @@ type Series interface {
 	Std() float64
 	// Sum 计算累和
 	Sum() float64
+	// EWM Provide exponentially weighted (EW) calculations.
+	//
+	//    Exactly one of ``com``, ``span``, ``halflife``, or ``alpha`` must be
+	//    provided if ``times`` is not provided. If ``times`` is provided,
+	//    ``halflife`` and one of ``com``, ``span`` or ``alpha`` may be provided.
+	EWM(alpha EW) ExponentialMovingWindow
 }
 
 // NewSeries 指定类型创建序列

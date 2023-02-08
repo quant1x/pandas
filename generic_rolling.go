@@ -53,6 +53,10 @@ func (r RollingAndExpandingMixin) getBlocks() (blocks []Series) {
 func (r RollingAndExpandingMixin) Apply(f func(S Series, N float32) float32) (s Series) {
 	s = r.series.Empty()
 	for i, block := range r.getBlocks() {
+		if block.Len() == 0 {
+			s.Append(Nil2Float32)
+			continue
+		}
 		v := f(block, r.window[i])
 		s.Append(v)
 	}

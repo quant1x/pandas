@@ -10,13 +10,13 @@ type AlphaType int
 
 // https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.ewm.html
 const (
-	// Specify smoothing factor α directly, 0<α≤1.
+	// AlphaNil Specify smoothing factor α directly, 0<α≤1.
 	AlphaNil AlphaType = iota
-	// Specify decay in terms of center of mass, α=1/(1+com), for com ≥ 0.
+	// AlphaCom Specify decay in terms of center of mass, α=1/(1+com), for com ≥ 0.
 	AlphaCom
-	// Specify decay in terms of span, α=2/(span+1), for span ≥ 1.
+	// AlphaSpan Specify decay in terms of span, α=2/(span+1), for span ≥ 1.
 	AlphaSpan
-	// Specify decay in terms of half-life, α=1−exp(−ln(2)/halflife), for halflife > 0.
+	// AlphaHalflife Specify decay in terms of half-life, α=1−exp(−ln(2)/halflife), for halflife > 0.
 	AlphaHalflife
 )
 
@@ -28,6 +28,7 @@ type EW struct {
 	Alpha    float64 // 直接指定的平滑因子α
 	Adjust   bool    // 除以期初的衰减调整系数以核算 相对权重的不平衡（将 EWMA 视为移动平均线）
 	IgnoreNA bool    // 计算权重时忽略缺失值
+	Callback func(idx int) DType
 }
 
 // ExponentialMovingWindow 加权移动窗口
@@ -39,10 +40,11 @@ type ExponentialMovingWindow struct {
 	ignoreNA   bool      // 默认为假, 计算权重时是否忽略缺失值NaN
 	minPeriods int       // 默认为0, 窗口中具有值所需的最小观测值数,否则结果为NaN
 	axis       int       // {0,1}, 默认为0, 0跨行计算, 1跨列计算
+	cb         func(idx int) DType
 }
 
 // EWM provides exponential weighted calculations.
-func (s *SeriesFloat64) EWM(alpha EW) ExponentialMovingWindow {
+func (s *NDFrame) EWM(alpha EW) ExponentialMovingWindow {
 	atype := AlphaNil
 	param := 0.00
 	adjust := alpha.Adjust
@@ -61,13 +63,14 @@ func (s *SeriesFloat64) EWM(alpha EW) ExponentialMovingWindow {
 		param = alpha.Alpha
 	}
 
-	dest := NewSeriesFloat64(s.name, s.Values())
+	dest := NewSeries(SERIES_TYPE_FLOAT64, s.name, s.Values())
 	return ExponentialMovingWindow{
 		data:     dest,
 		atype:    atype,
 		param:    param,
 		adjust:   adjust,
 		ignoreNA: ignoreNA,
+		cb:       alpha.Callback,
 	}
 }
 
@@ -112,7 +115,7 @@ func (w ExponentialMovingWindow) applyMean(data Series, alpha DType) Series {
 	return data
 }
 
-func (ExponentialMovingWindow) adjustedMean(data Series, alpha DType, ignoreNA bool) {
+func (w ExponentialMovingWindow) adjustedMean(data Series, alpha DType, ignoreNA bool) {
 	var (
 		values       = data.Values().([]float64)
 		weight DType = 1
@@ -138,7 +141,12 @@ func (ExponentialMovingWindow) adjustedMean(data Series, alpha DType, ignoreNA b
 	}
 }
 
-func (ExponentialMovingWindow) notadjustedMean(data Series, alpha DType, ignoreNA bool) {
+func (w ExponentialMovingWindow) notadjustedMean(data Series, alpha DType, ignoreNA bool) {
+	hasCallback := false
+	if Float64IsNaN(alpha) {
+		hasCallback = true
+		alpha = w.cb(0)
+	}
 	var (
 		count  int
 		values = data.Values().([]float64)
@@ -156,9 +164,15 @@ func (ExponentialMovingWindow) notadjustedMean(data Series, alpha DType, ignoreN
 			values[t] = last
 			continue
 		}
-
+		if hasCallback {
+			alpha = w.cb(t)
+			beta = 1 - alpha
+		}
 		// yt = (1−α)*y(t−1) + α*x(t)
 		last = (beta * last) + (alpha * x)
+		if Float64IsNaN(last) {
+			last = values[t-1]
+		}
 		values[t] = last
 
 		count++

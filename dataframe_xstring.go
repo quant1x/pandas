@@ -36,23 +36,35 @@ func (self DataFrame) print(
 		str = fmt.Sprintf("%s error: %v", class, self.Err)
 		return
 	}
+	nMinRows := int(maxRows / 2)
+	nTotal := 0
 	nrows, ncols := self.Dims()
 	if nrows == 0 || ncols == 0 {
 		str = fmt.Sprintf("Empty %s", class)
 		return
 	}
-	//idx := make([]int, maxRows)
-	//for i := 0; i < len(idx); i++ {
-	//	idx[i] = i
-	//}
 	var records [][]string
 	shortening := false
 	if shortRows && nrows > maxRows {
 		shortening = true
-		self = self.Subset(0, maxRows)
-		records = self.Records()
+		dfHead := self.Subset(0, nMinRows)
+		records = dfHead.Records()
+		nTotal += dfHead.Nrow()
+		if shortening {
+			dots := make([]string, ncols)
+			for i := 0; i < ncols; i++ {
+				dots[i] = "..."
+			}
+			records = append(records, dots)
+		}
+		nTotal += 1
+		dfTail := self.Subset(nrows-nMinRows, nrows)
+		tails := dfTail.Records()
+		nTotal += dfTail.Nrow()
+		records = append(records, tails[1:]...)
 	} else {
 		records = self.Records()
+		nTotal += self.Nrow()
 	}
 
 	if showDims {
@@ -60,20 +72,25 @@ func (self DataFrame) print(
 	}
 
 	// Add the row numbers
-	for i := 0; i < self.nrows+1; i++ {
+	for i := 0; i < nTotal+1; /*self.nrows+1*/ i++ {
 		add := ""
-		if i != 0 {
+		if i == 0 || (i == nMinRows+1 && shortening) {
+			// 跳过
+		} else if i < nMinRows+1 {
 			add = strconv.Itoa(i-1) + ":"
+		} else {
+			add = strconv.Itoa(nrows-maxRows+i-1) + ":"
 		}
+		//fmt.Println(i)
 		records[i] = append([]string{add}, records[i]...)
 	}
-	if shortening {
-		dots := make([]string, ncols+1)
-		for i := 1; i < ncols+1; i++ {
-			dots[i] = "..."
-		}
-		records = append(records, dots)
-	}
+	//if shortening {
+	//	dots := make([]string, ncols+1)
+	//	for i := 1; i < ncols+1; i++ {
+	//		dots[i] = "..."
+	//	}
+	//	records = append(records, dots)
+	//}
 	types := self.Types()
 	typesrow := make([]string, ncols)
 	for i := 0; i < ncols; i++ {
@@ -130,6 +147,7 @@ func (self DataFrame) print(
 		str += strings.Join(records[i], " ")
 		str += "\n"
 	}
+	// 没有显示字段处理逻辑
 	if shortCols && len(notShowing) != 0 {
 		var notShown string
 		var notShownArr [][]string
