@@ -1,6 +1,11 @@
 package stat
 
+import (
+	"github.com/viterin/vek"
+)
+
 type DType = float64
+type Int = int32
 
 // DTypeIsNaN 判断DType是否NaN
 func DTypeIsNaN(d DType) bool {
@@ -15,4 +20,9 @@ func Slice2DType(v any) []DType {
 // Any2DType any转DType
 func Any2DType(v any) DType {
 	return AnyToFloat64(v)
+}
+
+// DType切片转int32切片
+func DType2Int(d []DType) []Int {
+	return vek.ToInt32(d)
 }

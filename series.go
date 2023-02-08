@@ -43,6 +43,8 @@ type Series interface {
 	Float() []float32
 	// DTypes 强制转[]stat.DType
 	DTypes() []stat.DType
+	// 强制转换成整型
+	AsInt() []stat.Int
 
 	// sort.Interface
 
@@ -76,7 +78,7 @@ type Series interface {
 	// StdDev calculates the standard deviation of a series
 	StdDev() stat.DType
 	// FillNa Fill NA/NaN values using the specified method.
-	FillNa(v any, inplace bool)
+	FillNa(v any, inplace bool) Series
 	// Max 找出最大值
 	Max() any
 	// Min 找出最小值
@@ -87,6 +89,8 @@ type Series interface {
 	Append(values ...any)
 	// Apply 接受一个回调函数
 	Apply(f func(idx int, v any))
+	// Logic 逻辑处理
+	Logic(f func(idx int, v any) bool) []bool
 	// Diff 元素的第一个离散差
 	Diff(param any) (s Series)
 	// Ref 引用其它周期的数据

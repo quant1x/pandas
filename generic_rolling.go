@@ -48,8 +48,7 @@ func (r RollingAndExpandingMixin) getBlocks() (blocks []Series) {
 	return
 }
 
-// Apply 接受一个回调
-func (r RollingAndExpandingMixin) Apply(f func(S Series, N stat.DType) stat.DType) (s Series) {
+func (r RollingAndExpandingMixin) Apply_v1(f func(S Series, N stat.DType) stat.DType) (s Series) {
 	s = r.series.Empty()
 	for i, block := range r.getBlocks() {
 		if block.Len() == 0 {
@@ -59,5 +58,20 @@ func (r RollingAndExpandingMixin) Apply(f func(S Series, N stat.DType) stat.DTyp
 		v := f(block, r.window[i])
 		s.Append(v)
 	}
+	return
+}
+
+// Apply 接受一个回调
+func (r RollingAndExpandingMixin) Apply(f func(S Series, N stat.DType) stat.DType) (s Series) {
+	values := make([]stat.DType, r.series.Len())
+	for i, block := range r.getBlocks() {
+		if block.Len() == 0 {
+			values[i] = stat.DTypeNaN
+			continue
+		}
+		v := f(block, r.window[i])
+		values[i] = v
+	}
+	s = NewSeries(SERIES_TYPE_DTYPE, r.series.Name(), values)
 	return
 }

@@ -165,7 +165,7 @@ func (self *SeriesString) StdDev() float64 {
 	panic("implement me")
 }
 
-func (self *SeriesString) FillNa(v any, inplace bool) {
+func (self *SeriesString) FillNa(v any, inplace bool) Series {
 	values := self.Values()
 	switch rows := values.(type) {
 	case []string:
@@ -175,4 +175,6 @@ func (self *SeriesString) FillNa(v any, inplace bool) {
 			}
 		}
 	}
+
+	return self
 }

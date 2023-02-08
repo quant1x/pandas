@@ -221,7 +221,7 @@ func (self *SeriesFloat64) StdDev() float64 {
 	return stdDev
 }
 
-func (self *SeriesFloat64) FillNa(v any, inplace bool) {
+func (self *SeriesFloat64) FillNa(v any, inplace bool) Series {
 	values := self.Values()
 	switch rows := values.(type) {
 	case []float64:
@@ -231,4 +231,5 @@ func (self *SeriesFloat64) FillNa(v any, inplace bool) {
 			}
 		}
 	}
+	return self
 }

@@ -161,6 +161,12 @@ func (self *NDFrame) DTypes() []stat.DType {
 	return stat.Slice2DType(self.Values())
 }
 
+// AsInt 强制转换成整型
+func (self *NDFrame) AsInt() []stat.Int {
+	values := self.DTypes()
+	return stat.DType2Int(values)
+}
+
 func (self *NDFrame) Empty() Series {
 	var frame NDFrame
 	if self.type_ == SERIES_TYPE_STRING {
@@ -311,7 +317,7 @@ func (self *NDFrame) Std() stat.DType {
 	return stdDev
 }
 
-func (self *NDFrame) FillNa(v any, inplace bool) {
+func (self *NDFrame) FillNa(v any, inplace bool) Series {
 	values := self.Values()
 	switch rows := values.(type) {
 	case []string:
@@ -339,4 +345,5 @@ func (self *NDFrame) FillNa(v any, inplace bool) {
 			}
 		}
 	}
+	return self
 }
