@@ -149,8 +149,9 @@ func (w ExponentialMovingWindow) notadjustedMean(data Series, alpha stat.DType, 
 	var (
 		count  int
 		values = data.Values().([]stat.DType)
-		beta   = 1 - alpha
-		last   = values[0]
+		//values = data.DTypes() // Dtypes有复制功能
+		beta = 1 - alpha
+		last = values[0]
 	)
 	if Float64IsNaN(last) {
 		last = 0

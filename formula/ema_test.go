@@ -3,42 +3,43 @@ package formula
 import (
 	"fmt"
 	"gitee.com/quant1x/pandas"
+	"gitee.com/quant1x/pandas/stat"
 	"github.com/viterin/vek/vek32"
 	"testing"
 )
 
-func TestSMA(t *testing.T) {
-	f0 := []float64{1, 2, 3, 4}
+func TestEMA(t *testing.T) {
+	f0 := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9}
 	s0 := pandas.NewSeriesWithoutType("f0", f0)
-	fmt.Println(SMA(s0, 4, 1))
+	fmt.Println(EMA(s0, 7))
 	csv := "~/.quant1x/data/cn/002528.csv"
 	df := pandas.ReadCSV(csv)
 	df.SetNames("data", "open", "close", "high", "low", "volume", "amount", "zf", "zdf", "zde", "hsl")
 	fmt.Println(df)
-	fmt.Println(df.Names())
-	df.SetName("收盘", "close")
+	//df.SetName("收盘", "close")
 	CLOSE := df.Col("close")
+
 	cs := CLOSE.Values().([]float32)
 	REF10 := REF(CLOSE, 10).([]float32)
 	v1 := vek32.Div(cs, REF10)
-	//as := stat.Repeat[float32](1, CLOSE.Len())
-	//bs := stat.Repeat[float32](0, CLOSE.Len())
 	df01 := pandas.NewSeries(pandas.SERIES_TYPE_FLOAT32, "x", v1)
-	x := make([]float32, CLOSE.Len())
+	x0 := make([]stat.DType, CLOSE.Len())
 	df01.Apply(func(idx int, v any) {
 		f := v.(float32)
-		t := float32(0)
+		t := stat.DType(0)
 		if f >= 1.05 {
-			t = float32(1)
+			t = stat.DType(1)
 		}
-		x[idx] = t
+		x0[idx] = t
 	})
 	//x := stat.Where(v2, as, bs)
-	n := BARSLAST(pandas.NewSeries(pandas.SERIES_TYPE_FLOAT32, "", x))
+	n := BARSLAST(pandas.NewSeries(pandas.SERIES_TYPE_FLOAT32, "", x0))
 	fmt.Println(n[len(n)-10:])
-	//r1 := SMA(CLOSE, pandas.NewSeries(pandas.SERIES_TYPE_FLOAT32, "", n), 1)
-	r1 := SMA(CLOSE, 7, 1)
-	s2 := pandas.NewSeries(pandas.SERIES_TYPE_FLOAT32, "sma", r1)
-	df2 := pandas.NewDataFrame(s2)
-	fmt.Println(df2)
+	x := EMA(CLOSE, pandas.NewSeries(pandas.SERIES_TYPE_DTYPE, "", n))
+
+	//x := EMA(CLOSE, 7)
+	sx := pandas.NewSeries(pandas.SERIES_TYPE_DTYPE, "x", x)
+	df = pandas.NewDataFrame(CLOSE, sx)
+	fmt.Println(df)
+
 }

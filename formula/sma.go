@@ -56,7 +56,7 @@ func SMA_v5(S pandas.Series, N any, M int) any {
 	return x
 }
 
-// 听说SMA(S, N, 1) 其实就是MA(S,N), 试验后发现是骗子
+// SMA_v4 听说SMA(S, N, 1) 其实就是MA(S,N), 试验后发现是骗子
 func SMA_v4(S pandas.Series, N any, M int) any {
 	var X []float32
 	switch v := N.(type) {
@@ -72,7 +72,7 @@ func SMA_v4(S pandas.Series, N any, M int) any {
 	return S.Rolling(X).Mean().Values()
 }
 
-// 使用滑动窗口
+// SMA_v3 使用滑动窗口
 func SMA_v3(S pandas.Series, N any, M int) any {
 	if M == 0 {
 		M = 1
@@ -87,7 +87,7 @@ func SMA_v3(S pandas.Series, N any, M int) any {
 	return x
 }
 
-// 最原始的python写法
+// SMA_v1 最原始的python写法
 func SMA_v1(S pandas.Series, N int, M int) any {
 	if M == 0 {
 		M = 1
