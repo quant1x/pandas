@@ -19,7 +19,7 @@ formula
 | 0   | MAX           | 计算AB最大值                                            | MAX(CLOSE,HIGH)                   | [√]  | [√]  |
 | 0   | MIN           | 计算AB最小值                                            | MIN(CLOSE,HIGH)                   | [√]  | [√]  |
 | 0   | MA            | 计算N周期的移动平均值, 简称均线                                  | MA(CLOSE,5)                       | [√]  | [√]  |
-| 0   | DMA           | S序列的动态移动平均, A作为平滑因子                                | DMA(CLOSE,5)                      | [X]  | [X]  |
+| 0   | DMA           | S序列的动态移动平均, A作为平滑因子                                | DMA(CLOSE,5)                      | [√]  | [√]  |
 | 0   | EMA           | S序列N周期的指数移动平均, α=/(1+com)                          | EMA(CLOSE,5)                      | [√]  | [√]  |
 | 0   | SMA           | 计算N周期的简单移动平均值                                      | SMA(CLOSE,5, 1)                   | [√]  | [√]  |
 | 0   | WMA           | S序列的N周期的加权移动平均值                                    | WMA(CLOSE,5)                      | [√]  | [√]  |
