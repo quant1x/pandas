@@ -16,6 +16,7 @@ formula
 | 0   | HHVBARS       | 求N周期内S最高值到当前周期数, 返回序列                              | HHVBARS(HIGH,5)                   | [x]  | [x]  |
 | 0   | LLV           | 计算N周期内最低                                           | LLV(HLOW,5)                       | [√]  | [√]  |
 | 0   | LLVBARS       | 求N周期内S最低值到当前周期数, 返回序列                              | LLVBARS(HLOW,5)                   | [x]  | [x]  |
+| 0   | SQRT          | 计算S的平方根                                            | SQRT(CLOSE)                       | [√]  | [√]  |
 | 0   | MAX           | 计算AB最大值                                            | MAX(CLOSE,HIGH)                   | [√]  | [√]  |
 | 0   | MIN           | 计算AB最小值                                            | MIN(CLOSE,HIGH)                   | [√]  | [√]  |
 | 0   | MA            | 计算N周期的移动平均值, 简称均线                                  | MA(CLOSE,5)                       | [√]  | [√]  |
