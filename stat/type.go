@@ -6,6 +6,11 @@ import (
 	"reflect"
 )
 
+// GenericType Series支持的所有类型
+type GenericType interface {
+	~bool | ~int32 | ~int64 | ~int | ~float32 | ~float64 | ~string
+}
+
 type Float interface {
 	~float32 | ~float64
 }

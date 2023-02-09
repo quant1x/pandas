@@ -9,21 +9,21 @@ type AlphaType int
 
 // https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.ewm.html
 const (
-	// AlphaNil Specify smoothing factor α directly, 0<α≤1.
-	AlphaNil AlphaType = iota
+	// AlphaAlpha Specify smoothing factor α directly, 0<α≤1.
+	AlphaAlpha AlphaType = iota
 	// AlphaCom Specify decay in terms of center of mass, α=1/(1+com), for com ≥ 0.
 	AlphaCom
 	// AlphaSpan Specify decay in terms of span, α=2/(span+1), for span ≥ 1.
 	AlphaSpan
-	// AlphaHalflife Specify decay in terms of half-life, α=1−exp(−ln(2)/halflife), for halflife > 0.
-	AlphaHalflife
+	// AlphaHalfLife Specify decay in terms of half-life, α=1−exp(−ln(2)/halflife), for halflife > 0.
+	AlphaHalfLife
 )
 
 // EW (Factor) 指数加权(EW)计算Alpha 结构属性非0即为有效启动同名算法
 type EW struct {
 	Com      stat.DType // 根据质心指定衰减
 	Span     stat.DType // 根据跨度指定衰减
-	Halflife stat.DType // 根据半衰期指定衰减
+	HalfLife stat.DType // 根据半衰期指定衰减
 	Alpha    stat.DType // 直接指定的平滑因子α
 	Adjust   bool       // 除以期初的衰减调整系数以核算 相对权重的不平衡（将 EWMA 视为移动平均线）
 	IgnoreNA bool       // 计算权重时忽略缺失值
@@ -44,7 +44,7 @@ type ExponentialMovingWindow struct {
 
 // EWM provides exponential weighted calculations.
 func (s *NDFrame) EWM(alpha EW) ExponentialMovingWindow {
-	atype := AlphaNil
+	atype := AlphaAlpha
 	param := 0.00
 	adjust := alpha.Adjust
 	ignoreNA := alpha.IgnoreNA
@@ -54,11 +54,11 @@ func (s *NDFrame) EWM(alpha EW) ExponentialMovingWindow {
 	} else if alpha.Span != 0 {
 		atype = AlphaSpan
 		param = alpha.Span
-	} else if alpha.Halflife != 0 {
-		atype = AlphaHalflife
-		param = alpha.Halflife
+	} else if alpha.HalfLife != 0 {
+		atype = AlphaHalfLife
+		param = alpha.HalfLife
 	} else {
-		atype = AlphaNil
+		atype = AlphaAlpha
 		param = alpha.Alpha
 	}
 
@@ -77,7 +77,7 @@ func (w ExponentialMovingWindow) Mean() Series {
 	var alpha stat.DType
 
 	switch w.atype {
-	case AlphaNil:
+	case AlphaAlpha:
 		if w.param <= 0 {
 			panic("alpha param must be > 0")
 		}
@@ -95,7 +95,7 @@ func (w ExponentialMovingWindow) Mean() Series {
 		}
 		alpha = 2 / (w.param + 1)
 
-	case AlphaHalflife:
+	case AlphaHalfLife:
 		if w.param <= 0 {
 			panic("halflife param must be > 0")
 		}

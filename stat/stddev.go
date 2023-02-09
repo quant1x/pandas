@@ -6,7 +6,6 @@ import (
 	"golang.org/x/exp/slices"
 	"gonum.org/v1/gonum/stat"
 	"math"
-	"unsafe"
 )
 
 // Std_TODO StdDev 这个版本有bug, gonum计算的std不对
@@ -18,14 +17,15 @@ func Std_TODO[T Float](f []T) T {
 	var d any
 	var s any
 	s = f
-	bitSize := unsafe.Sizeof(f[0])
-	if bitSize == 4 {
-		d = vek32.Max(s.([]float32))
-	} else if bitSize == 8 {
-		d = stat.StdDev(s.([]float64), nil)
-	} else {
+	switch fs := s.(type) {
+	case []float32:
+		d = f32_std(fs)
+	case []float64:
+		// 这里计算不对
+		d = stat.StdDev(fs, nil)
+	default:
 		// 应该不会走到这里
-		d = T(0)
+		panic(ErrUnsupportedType)
 	}
 
 	return d.(T)
@@ -39,14 +39,14 @@ func Std[T Float](f []T) T {
 	var d any
 	var s any
 	s = f
-	bitSize := unsafe.Sizeof(f[0])
-	if bitSize == 4 {
-		d = f32_std(s.([]float32))
-	} else if bitSize == 8 {
-		d = f64_std(s.([]float64))
-	} else {
+	switch fs := s.(type) {
+	case []float32:
+		d = f32_std(fs)
+	case []float64:
+		d = f64_std(fs)
+	default:
 		// 应该不会走到这里
-		d = T(0)
+		panic(ErrUnsupportedType)
 	}
 
 	return d.(T)

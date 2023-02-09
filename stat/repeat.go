@@ -3,18 +3,18 @@ package stat
 import (
 	"github.com/viterin/vek"
 	"github.com/viterin/vek/vek32"
-	"unsafe"
 )
 
 // Repeat repeat
 func Repeat[T StatType](f T, n int) []T {
 	var d any
-	bitSize := unsafe.Sizeof(f)
-	if bitSize == 4 {
-		d = vek32.Repeat(float32(f), n)
-	} else if bitSize == 8 {
-		d = vek.Repeat(float64(f), n)
-	} else {
+	var s any = f
+	switch fs := s.(type) {
+	case float32:
+		d = vek32.Repeat(fs, n)
+	case float64:
+		d = vek.Repeat(fs, n)
+	default:
 		// 应该不会走到这里
 		d = []T{}
 		// 剩下的就是int32和int64, 循环吧
