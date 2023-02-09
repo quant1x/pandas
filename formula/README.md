@@ -38,7 +38,7 @@ formula
 | 1   | BARSLAST      | 上一次条件成立到当前的周期数                                     | BARSLAST(X)                       | [√]  | [√]  |
 | 1   | BARSLASTCOUNT | 统计连续满足S条件的周期数                                      | BARSLASTCOUNT(X)                  | [√]  | [ ]  |
 | 1   | BARSSINCEN    | N周期内第一次S条件成立到现在的周期数                                | BARSSINCEN(S,N)                   | [√]  | [√]  |
-| 1   | CROSS         | 判断向上金叉穿越,两个序列互换就是判断向下死叉穿越                          | CROSS(MA(C,5),MA(C,10))           | [X]  | [X]  |
+| 1   | CROSS         | 判断向上金叉穿越,两个序列互换就是判断向下死叉穿越                          | CROSS(MA(C,5),MA(C,10))           | [√]  | [ ]  |
 | 1   | LONGCROSS     | 两条线维持一定周期后交叉,S1在N周期内都小于S2,本周期从S1下方向上穿过S2时返回1,否则返回0 | LONGCROSS(MA(C,5),MA(C,10),5)     | [X]  | [X]  |
 | 1   | VALUEWHEN     | 当S条件成立时,取X的当前值,否则取VALUEWHEN的上个成立时的X值               | VALUEWHEN(S,X)                    | [X]  | [X]  |
 | 1   | BETWEEN       | S处于A和B之间时为真。 包括 A<S<B 或 A>S>B                      | BETWEEN(S,A,B)                    | [X]  | [X]  |
