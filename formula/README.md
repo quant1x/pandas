@@ -31,7 +31,7 @@ formula
 | 0   | SLOPE         | S序列N周期回线性回归斜率                                      | SLOPE(CLOSE,5)                    | [X]  | [X]  |
 | 0   | FORCAST       | S序列N周期回线性回归后的预测值                                   | FORCAST(CLOSE,5)                  | [X]  | [X]  |
 | 0   | LAST          | 从前A日到前B日一直满足S条件,要求A>B & A>0 & B>=0                 | LAST(CLOSE>REF(CLOSE,1),LOW,HIGH) | [X]  | [X]  |
-| 1   | COUNT         | COUNT(CLOSE>O,N),最近N天满足S的天数True的天数                 | COUNT(CLOSE>LOW,5)                | [X]  | [X]  |
+| 1   | COUNT         | COUNT(CLOSE>O,N),最近N天满足S的天数True的天数                 | COUNT(CLOSE>LOW,5)                | [√]  | [√]  |
 | 1   | EVERY         | EVERY(CLOSE>O,5),最近N天是否都是True                      | EVERY(CLOSE>LOW,5)                | [X]  | [X]  |
 | 1   | EXIST         | EXIST(CLOSE>O,5),最近N天是否都是True                      | EXIST(CLOSE>LOW,5)                | [X]  | [X]  |
 | 1   | FILTER        | FILTER函数，S满足条件后，将其后N周期内的数据置为0                      | FILTER(CLOSE>LOW,5)               | [X]  | [X]  |

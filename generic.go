@@ -156,7 +156,7 @@ func (self *NDFrame) Float() []float32 {
 	return ToFloat32(self)
 }
 
-// DType 计算以这个函数为主
+// DTypes 计算以这个函数为主
 func (self *NDFrame) DTypes() []stat.DType {
 	return stat.Slice2DType(self.Values())
 }
@@ -164,7 +164,9 @@ func (self *NDFrame) DTypes() []stat.DType {
 // AsInt 强制转换成整型
 func (self *NDFrame) AsInt() []stat.Int {
 	values := self.DTypes()
-	return stat.DType2Int(values)
+	fs := stat.Fill[stat.DType](values, stat.DType(0))
+	ns := stat.DType2Int(fs)
+	return ns
 }
 
 func (self *NDFrame) Empty() Series {
