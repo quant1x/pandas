@@ -19,13 +19,16 @@ func Sum[T StatType](f []T) T {
 	case []float64:
 		d = vek.Sum(fs)
 	default:
-		// 剩下的就是int32和int64, 循环吧
-		m := T(0)
-		for _, v := range f {
-			m += v
-		}
-		d = m
+		d = __sum(fs.([]T))
 	}
 
 	return d.(T)
+}
+
+func __sum[T StatType](x []T) T {
+	sum := T(0)
+	for i := 0; i < len(x); i++ {
+		sum += x[i]
+	}
+	return sum
 }
