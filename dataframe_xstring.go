@@ -9,7 +9,7 @@ import (
 
 // String implements the Stringer interface for DataFrame
 func (self DataFrame) String() (str string) {
-	return self.print(true, true, true, true, 10, 70, "DataFrame")
+	return self.print(true, false, true, true, 10, 70, "DataFrame")
 }
 
 func (self DataFrame) print(
