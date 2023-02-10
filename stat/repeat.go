@@ -26,3 +26,13 @@ func Repeat[T StatType](f T, n int) []T {
 	}
 	return d.([]T)
 }
+
+// Sequence 产生从0到n-1的数组
+func Sequence[T StatType](n int) []T {
+	d := make([]T, n)
+	for i := 0; i < n; i++ {
+		d[i] = T(i)
+	}
+
+	return d
+}
