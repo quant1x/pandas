@@ -1,7 +1,7 @@
 package pandas
 
 import (
-	"gitee.com/quant1x/pandas/algorithms/avx2"
+	"gitee.com/quant1x/pandas/stat"
 	"math/big"
 )
 
@@ -95,7 +95,7 @@ type Ordered interface {
 // Mean gonum.org/v1/gonum/stat不支持整型, 每次都要转换有点难受啊
 func Mean[T Number](x []T) float64 {
 	d := numberToFloat64(x)
-	s := avx2.Mean(d)
+	s := stat.Mean(d)
 	return float64(s)
 }
 

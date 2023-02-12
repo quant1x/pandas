@@ -6,7 +6,8 @@ import (
 )
 
 // PolyFit
-// Least squares polynomial fit.
+//
+//	Least squares polynomial fit.
 //
 //	.. note::
 //		This forms part of the old polynomial API. Since version 1.4, the

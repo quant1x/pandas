@@ -153,7 +153,7 @@ func (w ExponentialMovingWindow) notadjustedMean(data Series, alpha stat.DType, 
 		beta = 1 - alpha
 		last = values[0]
 	)
-	if Float64IsNaN(last) {
+	if stat.Float64IsNaN(last) {
 		last = 0
 		values[0] = last
 	}

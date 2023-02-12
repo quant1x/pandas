@@ -1,23 +1,26 @@
 package pandas
 
-import "reflect"
+import (
+	"gitee.com/quant1x/pandas/stat"
+	"reflect"
+)
 
 // 插入一条记录
 func (self *NDFrame) insert(idx, size int, v any) {
 	if self.type_ == SERIES_TYPE_BOOL {
-		val := AnyToBool(v)
+		val := stat.AnyToBool(v)
 		assign[bool](self, idx, size, val)
 	} else if self.type_ == SERIES_TYPE_INT64 {
-		val := AnyToInt64(v)
+		val := stat.AnyToInt64(v)
 		assign[int64](self, idx, size, val)
 	} else if self.type_ == SERIES_TYPE_FLOAT32 {
-		val := AnyToFloat32(v)
+		val := stat.AnyToFloat32(v)
 		assign[float32](self, idx, size, val)
 	} else if self.type_ == SERIES_TYPE_FLOAT64 {
-		val := AnyToFloat64(v)
+		val := stat.AnyToFloat64(v)
 		assign[float64](self, idx, size, val)
 	} else {
-		val := AnyToString(v)
+		val := stat.AnyToString(v)
 		assign[string](self, idx, size, val)
 	}
 }

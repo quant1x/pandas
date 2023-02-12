@@ -6,20 +6,10 @@ import (
 )
 
 // Mean 求均值
-func Mean[T StatType](x []T) T {
-	var d any
-	var s any = x
-	switch vs := s.(type) {
-	case []float32:
-		d = vek32.Mean(vs)
-	case []float64:
-		d = vek.Mean(vs)
-	default:
-		d = __mean(x)
-	}
-	return d.(T)
+func Mean[T Number](x []T) T {
+	return unaryOperations1[T](x, vek32.Mean, vek.Mean, __mean_go[T])
 }
 
-func __mean[T StatType](x []T) T {
+func __mean_go[T Number](x []T) T {
 	return __sum(x) / T(len(x))
 }

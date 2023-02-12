@@ -1,7 +1,8 @@
 package stat
 
 // Align Data alignment
-func Align[T MoveType](x []T, a T, dLen int) []T {
+// a 通常是默认值
+func Align[T BaseType](x []T, a T, dLen int) []T {
 	d := []T{}
 	xLen := len(x)
 	if xLen >= dLen {

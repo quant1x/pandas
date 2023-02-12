@@ -7,6 +7,6 @@ const (
 )
 
 var (
-	// 不支持的类型
+	// ErrUnsupportedType 不支持的类型
 	ErrUnsupportedType = exception.New(errorTypeBase+0, "Unsupported type")
 )

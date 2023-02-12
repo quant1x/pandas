@@ -115,7 +115,7 @@ func (self *NDFrame) oldSubset(start, end int, opt ...any) Series {
 }
 
 // Select 选取一段记录
-func (self *NDFrame) Select(r Range) Series {
+func (self *NDFrame) Select(r ScopeLimit) Series {
 	start, end, err := r.Limits(self.Len())
 	if err != nil {
 		return nil

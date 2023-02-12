@@ -3,6 +3,7 @@ package pandas
 import (
 	"fmt"
 	"gitee.com/quant1x/pandas/exception"
+	"gitee.com/quant1x/pandas/stat"
 	"reflect"
 	"strconv"
 	"strings"
@@ -50,7 +51,7 @@ func findTypeByString(arr []string) (Type, error) {
 		}
 		if f, err := strconv.ParseFloat(str, 64); err == nil {
 			hasFloats = true
-			if float32(f) < MaxFloat32 {
+			if float32(f) < stat.MaxFloat32 {
 				if mustFloat64(float32(f)) {
 					useFloat64 = true
 				} else {

@@ -1,17 +1,5 @@
 package stat
 
-import (
-	"gitee.com/quant1x/pandas/algorithms/avx2"
-)
-
-//func Where[T int64 | float64](condition any, params ...any) []T {
-//	c1, c2, err := detectParam[float64](condition)
-//	if err != nil {
-//		return []T{}
-//	}
-//
-//}
-
 // Where 返回根据“条件”从“x”或“y”中选择的元素
 // 这里先实现一个简单的, 留给于总重构
 // params只支持两个默认值x和y, 如果condition为true返回x, 否则返回y
@@ -24,10 +12,10 @@ func Where[T StatType](condition []T, x, y []T) []T {
 	ylen := len(y)
 	// 第二步, 找出最大长度
 	c := []float64{float64(clen), float64(xlen), float64(ylen)}
-	maxLength := int(avx2.Max(c))
+	maxLength := int(Max(c))
 
 	// 处理默认值
-	defaultValue := typeDefault(T(0))
+	defaultValue := typeDefault[T]()
 	// 对齐所有长度
 	if clen < maxLength {
 		condition = Align(condition, defaultValue, maxLength)

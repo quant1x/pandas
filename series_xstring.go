@@ -1,6 +1,7 @@
 package pandas
 
 import (
+	"gitee.com/quant1x/pandas/stat"
 	"reflect"
 )
 
@@ -16,7 +17,7 @@ func NewSeriesString(name string, vals ...interface{}) *SeriesString {
 		NDFrame: NDFrame{
 			name:      name,
 			nilCount:  0,
-			formatter: DefaultFormatter,
+			formatter: stat.DefaultFormatter,
 		},
 		Data: []string{},
 	}
@@ -36,23 +37,23 @@ func NewSeriesString(name string, vals ...interface{}) *SeriesString {
 			vk := vv.Kind()
 			switch vk {
 			case reflect.Invalid: // {interface} nil
-				series.assign(idx, size, StringNaN)
+				series.assign(idx, size, stat.StringNaN)
 			case reflect.Slice: // 切片, 不定长
 				for i := 0; i < vv.Len(); i++ {
 					tv := vv.Index(i).Interface()
-					str := AnyToString(tv)
+					str := stat.AnyToString(tv)
 					series.assign(idx, size, str)
 				}
 			case reflect.Array: // 数组, 定长
 				for i := 0; i < vv.Len(); i++ {
 					tv := vv.Index(i).Interface()
-					str := AnyToString(tv)
+					str := stat.AnyToString(tv)
 					series.assign(idx, size, str)
 				}
 			case reflect.Struct: // 忽略结构体
 				continue
 			default:
-				vv := AnyToString(val)
+				vv := stat.AnyToString(val)
 				series.assign(idx, size, vv)
 			}
 		}
@@ -77,8 +78,8 @@ func NewSeriesString(name string, vals ...interface{}) *SeriesString {
 
 func (self *SeriesString) assign(idx, size int, s string) {
 	//val := AnyToString(s)
-	if StringIsNaN(s) {
-		s = StringNaN
+	if stat.StringIsNaN(s) {
+		s = stat.StringNaN
 		self.nilCount++
 	}
 	if idx < size {
@@ -135,7 +136,7 @@ func (self *SeriesString) Subset(start, end int, opt ...any) Series {
 }
 
 func (self *SeriesString) Repeat(x any, repeats int) Series {
-	a := AnyToFloat64(x)
+	a := stat.AnyToFloat64(x)
 	data := Repeat(a, repeats)
 	var d Series
 	d = NewSeriesString(self.name, data)
@@ -146,7 +147,7 @@ func (self *SeriesString) Shift(periods int) Series {
 	var d Series
 	d = clone(self).(Series)
 	return Shift[string](&d, periods, func() string {
-		return Nil2String
+		return stat.Nil2String
 	})
 }
 
@@ -170,8 +171,8 @@ func (self *SeriesString) FillNa(v any, inplace bool) Series {
 	switch rows := values.(type) {
 	case []string:
 		for idx, iv := range rows {
-			if StringIsNaN(iv) && inplace {
-				rows[idx] = AnyToString(v)
+			if stat.StringIsNaN(iv) && inplace {
+				rows[idx] = stat.AnyToString(v)
 			}
 		}
 	}

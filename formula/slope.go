@@ -11,7 +11,7 @@ import (
 func SLOPE(S pandas.Series, N any) any {
 	return S.Rolling(N).Apply(func(X pandas.Series, W stat.DType) stat.DType {
 		x := X.DTypes()
-		w := stat.Sequence[stat.DType](len(x))
+		w := stat.Range[stat.DType](len(x))
 		c := stat.PolyFit(w, x, 1)
 		return c[0]
 	}).Values()

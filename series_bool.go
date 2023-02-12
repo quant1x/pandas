@@ -1,6 +1,7 @@
 package pandas
 
 import (
+	"gitee.com/quant1x/pandas/stat"
 	"reflect"
 )
 
@@ -15,7 +16,7 @@ func NewSeriesBool(name string, vals ...interface{}) *SeriesBool {
 		NDFrame: NDFrame{
 			name:      name,
 			nilCount:  0,
-			formatter: DefaultFormatter,
+			formatter: stat.DefaultFormatter,
 		},
 		Data: []bool{},
 	}
@@ -35,23 +36,23 @@ func NewSeriesBool(name string, vals ...interface{}) *SeriesBool {
 			vk := vv.Kind()
 			switch vk {
 			case reflect.Invalid: // {interface} nil
-				series.assign(idx, size, BoolNaN)
+				series.assign(idx, size, stat.BoolNaN)
 			case reflect.Slice: // 切片, 不定长
 				for i := 0; i < vv.Len(); i++ {
 					tv := vv.Index(i).Interface()
-					str := AnyToBool(tv)
+					str := stat.AnyToBool(tv)
 					series.assign(idx, size, str)
 				}
 			case reflect.Array: // 数组, 定长
 				for i := 0; i < vv.Len(); i++ {
 					tv := vv.Index(i).Interface()
-					str := AnyToBool(tv)
+					str := stat.AnyToBool(tv)
 					series.assign(idx, size, str)
 				}
 			case reflect.Struct: // 忽略结构体
 				continue
 			default:
-				vv := AnyToBool(val)
+				vv := stat.AnyToBool(val)
 				series.assign(idx, size, vv)
 
 			}
@@ -130,7 +131,7 @@ func (self *SeriesBool) Subset(start, end int, opt ...any) Series {
 }
 
 func (self *SeriesBool) Repeat(x any, repeats int) Series {
-	a := AnyToFloat64(x)
+	a := stat.AnyToFloat64(x)
 	data := Repeat(a, repeats)
 	var d Series
 	d = NewSeriesBool(self.name, data)
@@ -141,7 +142,7 @@ func (self *SeriesBool) Shift(periods int) Series {
 	var d Series
 	d = clone(self).(Series)
 	return Shift[bool](&d, periods, func() bool {
-		return BoolNaN
+		return stat.BoolNaN
 	})
 }
 

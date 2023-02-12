@@ -1,6 +1,9 @@
 package pandas
 
-import "math"
+import (
+	"gitee.com/quant1x/pandas/stat"
+	"math"
+)
 
 // Shift series切片, 使用可选的时间频率按所需的周期数移动索引
 func Shift[T GenericType](s *Series, periods int, cbNan func() T) Series {
@@ -50,7 +53,7 @@ func Shift2[T GenericType](s *Series, N []float32, cbNan func() T) Series {
 	values := d.Values().([]T)
 	for i, _ := range S {
 		x := N[i]
-		if Float32IsNaN(x) || int(x) > i {
+		if stat.Float32IsNaN(x) || int(x) > i {
 			values[i] = cbNan()
 			continue
 		}

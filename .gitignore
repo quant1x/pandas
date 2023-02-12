@@ -14,6 +14,7 @@ assembly/version.properties
 
 # go.test.sh
 coverage.txt
+coverage.out
 
 # test
 test-*-w*

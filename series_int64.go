@@ -1,7 +1,8 @@
 package pandas
 
 import (
-	"gonum.org/v1/gonum/stat"
+	"gitee.com/quant1x/pandas/stat"
+	gs "gonum.org/v1/gonum/stat"
 	"reflect"
 )
 
@@ -16,7 +17,7 @@ func NewSeriesInt64(name string, vals ...interface{}) *SeriesInt64 {
 		NDFrame: NDFrame{
 			name:      name,
 			nilCount:  0,
-			formatter: DefaultFormatter,
+			formatter: stat.DefaultFormatter,
 		},
 		Data: []int64{},
 	}
@@ -36,23 +37,23 @@ func NewSeriesInt64(name string, vals ...interface{}) *SeriesInt64 {
 			vk := vv.Kind()
 			switch vk {
 			case reflect.Invalid: // {interface} nil
-				series.assign(idx, size, Int64NaN)
+				series.assign(idx, size, stat.Int64NaN)
 			case reflect.Slice: // 切片, 不定长
 				for i := 0; i < vv.Len(); i++ {
 					tv := vv.Index(i).Interface()
-					str := AnyToInt64(tv)
+					str := stat.AnyToInt64(tv)
 					series.assign(idx, size, str)
 				}
 			case reflect.Array: // 数组, 定长
 				for i := 0; i < vv.Len(); i++ {
 					tv := vv.Index(i).Interface()
-					str := AnyToInt64(tv)
+					str := stat.AnyToInt64(tv)
 					series.assign(idx, size, str)
 				}
 			case reflect.Struct: // 忽略结构体
 				continue
 			default:
-				vv := AnyToInt64(val)
+				vv := stat.AnyToInt64(val)
 				series.assign(idx, size, vv)
 			}
 		}
@@ -103,7 +104,7 @@ func (self *SeriesInt64) Shift(periods int) Series {
 	var d Series
 	d = clone(self).(Series)
 	return Shift[int64](&d, periods, func() int64 {
-		return Int64NaN
+		return stat.Int64NaN
 	})
 }
 
@@ -118,7 +119,7 @@ func (self *SeriesInt64) Values() any {
 }
 
 func (self *SeriesInt64) Repeat(x any, repeats int) Series {
-	a := AnyToFloat64(x)
+	a := stat.AnyToFloat64(x)
 	data := Repeat(a, repeats)
 	var d Series
 	d = NewSeriesInt64(self.name, data)
@@ -175,7 +176,7 @@ func (self *SeriesInt64) StdDev() float64 {
 		d[i] = float64(self.Data[i])
 	}
 	//values := self.Values().([]int64)
-	stdDev := stat.StdDev(d, nil)
+	stdDev := gs.StdDev(d, nil)
 	return stdDev
 }
 
@@ -185,8 +186,8 @@ func (self *SeriesInt64) FillNa(v any, inplace bool) Series {
 	switch rows := values.(type) {
 	case []int64:
 		for idx, iv := range rows {
-			if Float64IsNaN(float64(iv)) && inplace {
-				rows[idx] = AnyToInt64(v)
+			if stat.Float64IsNaN(float64(iv)) && inplace {
+				rows[idx] = stat.AnyToInt64(v)
 			}
 		}
 	}

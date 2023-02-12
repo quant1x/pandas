@@ -84,7 +84,7 @@ type Series interface {
 	// Min 找出最小值
 	Min() any
 	// Select 选取一段记录
-	Select(r Range) Series
+	Select(r ScopeLimit) Series
 	// Append 增加一批记录
 	Append(values ...any)
 	// Apply 接受一个回调函数

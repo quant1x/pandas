@@ -26,11 +26,11 @@ func (self DataFrame) align(ss ...Series) []Series {
 		// 切片数据不能直接对齐, 需要根据类型指定Nil和NaN默认值
 		var ns any
 		if vt == SERIES_TYPE_BOOL {
-			ns = stat.Align(vs.([]bool), Nil2Bool, int(maxLength))
+			ns = stat.Align(vs.([]bool), stat.Nil2Bool, int(maxLength))
 		} else if vt == SERIES_TYPE_INT64 {
-			ns = stat.Align(vs.([]int64), Nil2Int64, int(maxLength))
+			ns = stat.Align(vs.([]int64), stat.Nil2Int64, int(maxLength))
 		} else if vt == SERIES_TYPE_STRING {
-			ns = stat.Align(vs.([]string), Nil2String, int(maxLength))
+			ns = stat.Align(vs.([]string), stat.Nil2String, int(maxLength))
 		} else if vt == SERIES_TYPE_FLOAT32 {
 			ns = stat.Align(vs.([]float32), Nil2Float32, int(maxLength))
 		} else if vt == SERIES_TYPE_FLOAT64 {

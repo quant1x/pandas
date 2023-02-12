@@ -1,5 +1,7 @@
 package pandas
 
+import "gitee.com/quant1x/pandas/stat"
+
 func slice_any_to_float64[T Number](s []T) []float64 {
 	count := len(s)
 	if count == 0 {
@@ -31,7 +33,7 @@ func numberToFloat64(v any) []float64 {
 		}
 		vs = make([]float64, count)
 		for idx, iv := range values {
-			vs[idx] = AnyToFloat64(iv)
+			vs[idx] = stat.AnyToFloat64(iv)
 		}
 	case []string:
 		count := len(values)
@@ -40,7 +42,7 @@ func numberToFloat64(v any) []float64 {
 		}
 		vs = make([]float64, count)
 		for idx, iv := range values {
-			vs[idx] = AnyToFloat64(iv)
+			vs[idx] = stat.AnyToFloat64(iv)
 		}
 	}
 	return vs

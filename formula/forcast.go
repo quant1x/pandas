@@ -9,9 +9,9 @@ import (
 func FORCAST(S pandas.Series, N any) any {
 	return S.Rolling(N).Apply(func(X pandas.Series, W stat.DType) stat.DType {
 		x := X.DTypes()
-		ws := stat.Sequence[float64](int(W))
+		ws := stat.Range[float64](int(W))
 		c := stat.PolyFit(ws, x, 1)
-		w1 := stat.Repeat[float64](float64(W-1), int(W))
+		w1 := stat.Repeat[float64](W-1, int(W))
 		vs := stat.PolyVal(c, w1)
 
 		if W > 1 {

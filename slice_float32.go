@@ -1,5 +1,7 @@
 package pandas
 
+import "gitee.com/quant1x/pandas/stat"
+
 func slice_any_to_float32[T Number](s []T) []float32 {
 	count := len(s)
 	if count == 0 {
@@ -58,7 +60,7 @@ func SliceToFloat32(v any) []float32 {
 		}
 		vs = make([]float32, count)
 		for idx, iv := range values {
-			vs[idx] = float32(AnyToFloat64(iv))
+			vs[idx] = float32(stat.AnyToFloat64(iv))
 		}
 	}
 	return []float32{}

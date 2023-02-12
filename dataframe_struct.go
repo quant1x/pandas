@@ -2,6 +2,7 @@ package pandas
 
 import (
 	"fmt"
+	"gitee.com/quant1x/pandas/stat"
 	"reflect"
 	"strings"
 )
@@ -48,7 +49,7 @@ func LoadStructs(i interface{}, options ...LoadOption) DataFrame {
 		defaultType: SERIES_TYPE_STRING,
 		detectTypes: true,
 		hasHeader:   true,
-		nanValues:   PossibleNaOfString,
+		nanValues:   stat.PossibleNaOfString,
 	}
 
 	// Set any custom load options

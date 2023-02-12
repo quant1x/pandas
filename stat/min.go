@@ -5,22 +5,17 @@ import (
 	"github.com/viterin/vek/vek32"
 )
 
-// Min 计算最小值
-func Min[T Float](f []T) T {
-	if len(f) == 0 {
-		return T(0)
+// Min 纵向计算x最小值
+func Min[T Number](x []T) T {
+	return unaryOperations1[T](x, vek32.Min, vek.Min, __min_go[T])
+}
+
+func __min_go[T Number](x []T) T {
+	min := x[0]
+	for _, v := range x[1:] {
+		if v < min {
+			min = v
+		}
 	}
-	var d any
-	var s any
-	s = f
-	switch fs := s.(type) {
-	case []float32:
-		d = vek32.Min(fs)
-	case []float64:
-		d = vek.Min(fs)
-	default:
-		// 应该不会走到这里
-		panic(ErrUnsupportedType)
-	}
-	return d.(T)
+	return min
 }

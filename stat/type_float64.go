@@ -24,6 +24,11 @@ const (
 	StringFalse2Float64 float64 = float64(0)                           // 字符串false转float64
 )
 
+// NaN returns an IEEE 754 “not-a-number” value.
+func NaN() float64 {
+	return math.NaN()
+}
+
 // Float64IsNaN 判断float64是否NaN
 func Float64IsNaN(f float64) bool {
 	return math.IsNaN(f) || math.IsInf(f, 0)

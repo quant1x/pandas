@@ -21,3 +21,17 @@ func REF(S pandas.Series, N any) any {
 	}
 	return S.Ref(X).Values()
 }
+
+func REF2[T stat.GenericType](S []T, N any) []T {
+	sLen := len(S)
+	var X []stat.DType
+	switch v := N.(type) {
+	case int:
+		X = stat.Repeat[stat.DType](stat.DType(v), sLen)
+	case []stat.DType:
+		X = stat.Align(X, stat.Nil2Float64, sLen)
+	default:
+		panic(exception.New(1, "error window"))
+	}
+	return stat.Shift2[T](S, X)
+}

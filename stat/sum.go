@@ -6,7 +6,7 @@ import (
 )
 
 // Sum 求和
-func Sum[T StatType](f []T) T {
+func Sum[T Number](f []T) T {
 	if len(f) == 0 {
 		return T(0)
 	}
@@ -25,7 +25,7 @@ func Sum[T StatType](f []T) T {
 	return d.(T)
 }
 
-func __sum[T StatType](x []T) T {
+func __sum[T Number](x []T) T {
 	sum := T(0)
 	for i := 0; i < len(x); i++ {
 		sum += x[i]

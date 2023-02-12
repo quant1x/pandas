@@ -29,15 +29,15 @@ func (self *NDFrame) Ref(param any) (s Series) {
 	case []bool:
 		_ = values
 		return Shift2[bool](&d, N, func() bool {
-			return BoolNaN
+			return stat.BoolNaN
 		})
 	case []string:
 		return Shift2[string](&d, N, func() string {
-			return StringNaN
+			return stat.StringNaN
 		})
 	case []int64:
 		return Shift2[int64](&d, N, func() int64 {
-			return Nil2Int64
+			return stat.Nil2Int64
 		})
 	case []float32:
 		return Shift2[float32](&d, N, func() float32 {

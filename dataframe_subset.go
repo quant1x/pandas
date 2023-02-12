@@ -23,7 +23,7 @@ func (self DataFrame) Subset(start, end int) DataFrame {
 }
 
 // Select 选择一段记录
-func (self DataFrame) SelectRows(p Range) DataFrame {
+func (self DataFrame) SelectRows(p ScopeLimit) DataFrame {
 	columns := []Series{}
 	for i := range self.columns {
 		columns = append(columns, self.columns[i].Select(p))

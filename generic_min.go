@@ -1,5 +1,7 @@
 package pandas
 
+import "gitee.com/quant1x/pandas/stat"
+
 func (self *NDFrame) Min() any {
 	values := self.Values()
 	switch rows := values.(type) {
@@ -22,7 +24,7 @@ func (self *NDFrame) Min() any {
 		hasNaN := false
 		i := 0
 		for idx, iv := range rows {
-			if StringIsNaN(iv) {
+			if stat.StringIsNaN(iv) {
 				hasNaN = true
 				break
 			} else if i < 1 {
@@ -36,16 +38,16 @@ func (self *NDFrame) Min() any {
 			_ = idx
 		}
 		if hasNaN {
-			return StringNaN
+			return stat.StringNaN
 		} else if i > 0 {
 			return min
 		}
-		return StringNaN
+		return stat.StringNaN
 	case []int64:
-		min := MaxInt64
+		min := stat.MaxInt64
 		i := 0
 		for idx, iv := range rows {
-			if Float64IsNaN(float64(iv)) {
+			if stat.Float64IsNaN(float64(iv)) {
 				continue
 			} else if i < 1 {
 				min = iv
@@ -59,11 +61,11 @@ func (self *NDFrame) Min() any {
 		}
 		return min
 	case []float32:
-		min := MaxFloat32
+		min := stat.MaxFloat32
 		hasNan := false
 		i := 0
 		for idx, iv := range rows {
-			if Float32IsNaN(iv) {
+			if stat.Float32IsNaN(iv) {
 				hasNan = true
 				break
 			}
@@ -74,22 +76,22 @@ func (self *NDFrame) Min() any {
 			_ = idx
 		}
 		if hasNan {
-			return Nil2Float32
+			return stat.Nil2Float32
 		} else if i > 0 {
 			return min
 		}
-		return Nil2Float32
+		return stat.Nil2Float32
 	//case []float32:
 	//	if self.Len() == 0 {
 	//		return Nil2Float32
 	//	}
 	//	return stat.Min(rows)
 	case []float64:
-		min := MaxFloat64
+		min := stat.MaxFloat64
 		hasNaN := false
 		i := 0
 		for idx, iv := range rows {
-			if Float64IsNaN(iv) {
+			if stat.Float64IsNaN(iv) {
 				hasNaN = true
 				break
 			}
@@ -100,11 +102,11 @@ func (self *NDFrame) Min() any {
 			_ = idx
 		}
 		if hasNaN {
-			return Nil2Float64
+			return stat.Nil2Float64
 		} else if i > 0 {
 			return min
 		}
-		return Nil2Float64
+		return stat.Nil2Float64
 	//case []float64:
 	//	if self.Len() == 0 {
 	//		return Nil2Float64
@@ -113,5 +115,5 @@ func (self *NDFrame) Min() any {
 	default:
 		panic(ErrUnsupportedType)
 	}
-	return Nil2Float64
+	return stat.Nil2Float64
 }

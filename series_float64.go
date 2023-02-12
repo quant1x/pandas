@@ -1,8 +1,8 @@
 package pandas
 
 import (
-	"gitee.com/quant1x/pandas/algorithms/avx2"
-	"gonum.org/v1/gonum/stat"
+	"gitee.com/quant1x/pandas/stat"
+	gs "gonum.org/v1/gonum/stat"
 	"math"
 	"reflect"
 )
@@ -17,7 +17,7 @@ func NewSeriesFloat64(name string, vals ...interface{}) *SeriesFloat64 {
 		NDFrame: NDFrame{
 			name:      name,
 			nilCount:  0,
-			formatter: DefaultFormatter,
+			formatter: stat.DefaultFormatter,
 		},
 		Data: []float64{},
 	}
@@ -41,19 +41,19 @@ func NewSeriesFloat64(name string, vals ...interface{}) *SeriesFloat64 {
 			case reflect.Slice: // 切片, 不定长
 				for i := 0; i < vv.Len(); i++ {
 					tv := vv.Index(i).Interface()
-					str := AnyToFloat64(tv)
+					str := stat.AnyToFloat64(tv)
 					series.assign(idx, size, str)
 				}
 			case reflect.Array: // 数组, 定长
 				for i := 0; i < vv.Len(); i++ {
 					tv := vv.Index(i).Interface()
-					av := AnyToFloat64(tv)
+					av := stat.AnyToFloat64(tv)
 					series.assign(idx, size, av)
 				}
 			case reflect.Struct: // 忽略结构体
 				continue
 			default:
-				vv := AnyToFloat64(val)
+				vv := stat.AnyToFloat64(val)
 				series.assign(idx, size, vv)
 			}
 		}
@@ -77,7 +77,7 @@ func NewSeriesFloat64(name string, vals ...interface{}) *SeriesFloat64 {
 }
 
 func (self *SeriesFloat64) assign(idx, size int, f float64) {
-	if Float64IsNaN(f) {
+	if stat.Float64IsNaN(f) {
 		self.nilCount++
 	}
 	if idx < size {
@@ -160,8 +160,8 @@ func (self *SeriesFloat64) Values() any {
 }
 
 func (self *SeriesFloat64) Repeat(x any, repeats int) Series {
-	a := AnyToFloat64(x)
-	data := avx2.Repeat(a, repeats)
+	a := stat.AnyToFloat64(x)
+	data := stat.Repeat(a, repeats)
 	//data := Repeat(a, repeats)
 	var d Series
 	d = NewSeriesFloat64(self.name, data)
@@ -208,7 +208,7 @@ func (self *SeriesFloat64) Mean() float64 {
 	if self.Len() < 1 {
 		return NaN()
 	}
-	stdDev := avx2.Mean(self.Data)
+	stdDev := stat.Mean(self.Data)
 	return stdDev
 }
 
@@ -217,7 +217,7 @@ func (self *SeriesFloat64) StdDev() float64 {
 		return NaN()
 	}
 	values := self.Values().([]float64)
-	stdDev := stat.StdDev(values, nil)
+	stdDev := gs.StdDev(values, nil)
 	return stdDev
 }
 
@@ -226,8 +226,8 @@ func (self *SeriesFloat64) FillNa(v any, inplace bool) Series {
 	switch rows := values.(type) {
 	case []float64:
 		for idx, iv := range rows {
-			if Float64IsNaN(iv) && inplace {
-				rows[idx] = AnyToFloat64(v)
+			if stat.Float64IsNaN(iv) && inplace {
+				rows[idx] = stat.AnyToFloat64(v)
 			}
 		}
 	}

@@ -1,7 +1,7 @@
 package pandas
 
 // Remove 删除一段范围内的记录
-func (self DataFrame) Remove(p Range) DataFrame {
+func (self DataFrame) Remove(p ScopeLimit) DataFrame {
 	rowLen := self.Nrow()
 	start, end, err := p.Limits(rowLen)
 	if err != nil {

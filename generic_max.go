@@ -1,5 +1,7 @@
 package pandas
 
+import "gitee.com/quant1x/pandas/stat"
+
 func (self *NDFrame) Max() any {
 	values := self.Values()
 	switch rows := values.(type) {
@@ -22,7 +24,7 @@ func (self *NDFrame) Max() any {
 		hasNaN := false
 		i := 0
 		for idx, iv := range rows {
-			if StringIsNaN(iv) {
+			if stat.StringIsNaN(iv) {
 				hasNaN = true
 				break
 			}
@@ -33,16 +35,16 @@ func (self *NDFrame) Max() any {
 			_ = idx
 		}
 		if hasNaN {
-			return StringNaN
+			return stat.StringNaN
 		} else if i > 0 {
 			return max
 		}
-		return StringNaN
+		return stat.StringNaN
 	case []int64:
-		max := MinInt64
+		max := stat.MinInt64
 		//i := 0
 		for idx, iv := range rows {
-			if Float64IsNaN(float64(iv)) {
+			if stat.Float64IsNaN(float64(iv)) {
 				continue
 			}
 			if iv > max {
@@ -53,11 +55,11 @@ func (self *NDFrame) Max() any {
 		}
 		return max
 	case []float32:
-		max := MinFloat32
+		max := stat.MinFloat32
 		hasNan := false
 		i := 0
 		for idx, iv := range rows {
-			if Float32IsNaN(iv) {
+			if stat.Float32IsNaN(iv) {
 				hasNan = true
 				break
 			}
@@ -79,11 +81,11 @@ func (self *NDFrame) Max() any {
 	//	}
 	//	return stat.Max(rows)
 	case []float64:
-		max := MinFloat64
+		max := stat.MinFloat64
 		hasNaN := false
 		i := 0
 		for idx, iv := range rows {
-			if Float64IsNaN(iv) {
+			if stat.Float64IsNaN(iv) {
 				hasNaN = true
 				break
 			}

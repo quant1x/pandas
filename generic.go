@@ -1,7 +1,6 @@
 package pandas
 
 import (
-	"gitee.com/quant1x/pandas/algorithms/avx2"
 	"gitee.com/quant1x/pandas/stat"
 	gs "gonum.org/v1/gonum/stat"
 	"reflect"
@@ -39,7 +38,7 @@ type NDFrame struct {
 
 func NewNDFrame[E GenericType](name string, rows ...E) *NDFrame {
 	frame := NDFrame{
-		formatter: DefaultFormatter,
+		formatter: stat.DefaultFormatter,
 		name:      name,
 		type_:     SERIES_TYPE_INVAILD,
 		nilCount:  0,
@@ -69,11 +68,11 @@ func assign[T GenericType](frame *NDFrame, idx, size int, v T) {
 	_vv := reflect.ValueOf(v)
 	_vi := _vv.Interface()
 	// float和string类型有可能是NaN, 对nil和NaN进行计数
-	if frame.Type() == SERIES_TYPE_FLOAT32 && Float32IsNaN(_vi.(float32)) {
+	if frame.Type() == SERIES_TYPE_FLOAT32 && stat.Float32IsNaN(_vi.(float32)) {
 		frame.nilCount++
-	} else if frame.Type() == SERIES_TYPE_FLOAT64 && Float64IsNaN(_vi.(float64)) {
+	} else if frame.Type() == SERIES_TYPE_FLOAT64 && stat.Float64IsNaN(_vi.(float64)) {
 		frame.nilCount++
-	} else if frame.Type() == SERIES_TYPE_STRING && StringIsNaN(_vi.(string)) {
+	} else if frame.Type() == SERIES_TYPE_STRING && stat.StringIsNaN(_vi.(string)) {
 		frame.nilCount++
 		// 以下修正string的NaN值, 统一为"NaN"
 		//_rv := reflect.ValueOf(StringNaN)
@@ -87,7 +86,7 @@ func assign[T GenericType](frame *NDFrame, idx, size int, v T) {
 		// 判断_vv是否能被修改
 		if _vv.CanSet() {
 			// 修改v的值为新值
-			_vv.SetString(StringNaN)
+			_vv.SetString(stat.StringNaN)
 			// 执行之后, 通过debug可以看到assign入参的v已经变成了"NaN"
 		}
 	}
@@ -138,15 +137,15 @@ func (self *NDFrame) Values() any {
 func (self *NDFrame) NaN() any {
 	switch self.values.(type) {
 	case []bool:
-		return BoolNaN
+		return stat.BoolNaN
 	case []string:
-		return StringNaN
+		return stat.StringNaN
 	case []int64:
-		return Nil2Int64
+		return stat.Nil2Int64
 	case []float32:
-		return Nil2Float32
+		return stat.Nil2Float32
 	case []float64:
-		return Nil2Float64
+		return stat.Nil2Float64
 	default:
 		panic(ErrUnsupportedType)
 	}
@@ -171,7 +170,7 @@ func (self *NDFrame) AsInt() []stat.Int {
 
 func (self *NDFrame) Empty() Series {
 	var frame NDFrame
-	if self.type_ == SERIES_TYPE_STRING {
+	if self.type_ == stat.SERIES_TYPE_STRING {
 		frame = NDFrame{
 			formatter: self.formatter,
 			name:      self.name,
@@ -180,7 +179,7 @@ func (self *NDFrame) Empty() Series {
 			rows:      0,
 			values:    []string{},
 		}
-	} else if self.type_ == SERIES_TYPE_BOOL {
+	} else if self.type_ == stat.SERIES_TYPE_BOOL {
 		frame = NDFrame{
 			formatter: self.formatter,
 			name:      self.name,
@@ -189,7 +188,7 @@ func (self *NDFrame) Empty() Series {
 			rows:      0,
 			values:    []bool{},
 		}
-	} else if self.type_ == SERIES_TYPE_INT64 {
+	} else if self.type_ == stat.SERIES_TYPE_INT64 {
 		frame = NDFrame{
 			formatter: self.formatter,
 			name:      self.name,
@@ -198,7 +197,7 @@ func (self *NDFrame) Empty() Series {
 			rows:      0,
 			values:    []int64{},
 		}
-	} else if self.type_ == SERIES_TYPE_FLOAT32 {
+	} else if self.type_ == stat.SERIES_TYPE_FLOAT32 {
 		frame = NDFrame{
 			formatter: self.formatter,
 			name:      self.name,
@@ -207,7 +206,7 @@ func (self *NDFrame) Empty() Series {
 			rows:      0,
 			values:    []float32{},
 		}
-	} else if self.type_ == SERIES_TYPE_FLOAT64 {
+	} else if self.type_ == stat.SERIES_TYPE_FLOAT64 {
 		frame = NDFrame{
 			formatter: self.formatter,
 			name:      self.name,
@@ -225,7 +224,7 @@ func (self *NDFrame) Empty() Series {
 func (self *NDFrame) Records() []string {
 	ret := make([]string, self.Len())
 	self.Apply(func(idx int, v any) {
-		ret[idx] = AnyToString(v)
+		ret[idx] = stat.AnyToString(v)
 	})
 	return ret
 }
@@ -234,19 +233,19 @@ func (self *NDFrame) Repeat(x any, repeats int) Series {
 	switch values := self.values.(type) {
 	case []bool:
 		_ = values
-		vs := Repeat(AnyToBool(x), repeats)
+		vs := Repeat(stat.AnyToBool(x), repeats)
 		return NewNDFrame(self.name, vs...)
 	case []string:
-		vs := Repeat(AnyToString(x), repeats)
+		vs := Repeat(stat.AnyToString(x), repeats)
 		return NewNDFrame(self.name, vs...)
 	case []int64:
-		vs := Repeat(AnyToInt64(x), repeats)
+		vs := Repeat(stat.AnyToInt64(x), repeats)
 		return NewNDFrame(self.name, vs...)
 	case []float32:
-		vs := Repeat(AnyToFloat32(x), repeats)
+		vs := Repeat(stat.AnyToFloat32(x), repeats)
 		return NewNDFrame(self.name, vs...)
 	default: //case []float64:
-		vs := Repeat(AnyToFloat64(x), repeats)
+		vs := Repeat(stat.AnyToFloat64(x), repeats)
 		return NewNDFrame(self.name, vs...)
 	}
 }
@@ -261,15 +260,15 @@ func (self *NDFrame) Shift(periods int) Series {
 	case []bool:
 		_ = values
 		return Shift[bool](&d, periods, func() bool {
-			return BoolNaN
+			return stat.BoolNaN
 		})
 	case []string:
 		return Shift[string](&d, periods, func() string {
-			return StringNaN
+			return stat.StringNaN
 		})
 	case []int64:
 		return Shift[int64](&d, periods, func() int64 {
-			return Nil2Int64
+			return stat.Nil2Int64
 		})
 	case []float32:
 		return Shift[float32](&d, periods, func() float32 {
@@ -291,7 +290,7 @@ func (self *NDFrame) Mean() stat.DType {
 		f := stat.Any2DType(v)
 		fs = append(fs, f)
 	})
-	stdDev := avx2.Mean(fs)
+	stdDev := stat.Mean(fs)
 	return stdDev
 }
 
@@ -324,26 +323,26 @@ func (self *NDFrame) FillNa(v any, inplace bool) Series {
 	switch rows := values.(type) {
 	case []string:
 		for idx, iv := range rows {
-			if StringIsNaN(iv) && inplace {
-				rows[idx] = AnyToString(v)
+			if stat.StringIsNaN(iv) && inplace {
+				rows[idx] = stat.AnyToString(v)
 			}
 		}
 	case []int64:
 		for idx, iv := range rows {
-			if Float64IsNaN(float64(iv)) && inplace {
-				rows[idx] = AnyToInt64(v)
+			if stat.Float64IsNaN(float64(iv)) && inplace {
+				rows[idx] = stat.AnyToInt64(v)
 			}
 		}
 	case []float32:
 		for idx, iv := range rows {
-			if Float32IsNaN(iv) && inplace {
-				rows[idx] = AnyToFloat32(v)
+			if stat.Float32IsNaN(iv) && inplace {
+				rows[idx] = stat.AnyToFloat32(v)
 			}
 		}
 	case []float64:
 		for idx, iv := range rows {
-			if Float64IsNaN(iv) && inplace {
-				rows[idx] = AnyToFloat64(v)
+			if stat.Float64IsNaN(iv) && inplace {
+				rows[idx] = stat.AnyToFloat64(v)
 			}
 		}
 	}

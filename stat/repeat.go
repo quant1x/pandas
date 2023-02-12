@@ -5,8 +5,8 @@ import (
 	"github.com/viterin/vek/vek32"
 )
 
-// Repeat repeat
-func Repeat[T StatType](f T, n int) []T {
+// Repeat 构造n长度的f的泛型切片
+func Repeat[T BaseType](f T, n int) []T {
 	var d any
 	var s any = f
 	switch fs := s.(type) {
@@ -15,9 +15,8 @@ func Repeat[T StatType](f T, n int) []T {
 	case float64:
 		d = vek.Repeat(fs, n)
 	default:
-		// 应该不会走到这里
+		// 剩下非float32和float64, 循环吧
 		d = []T{}
-		// 剩下的就是int32和int64, 循环吧
 		m := make([]T, n)
 		for i := 0; i < n; i++ {
 			m[i] = f
@@ -27,12 +26,25 @@ func Repeat[T StatType](f T, n int) []T {
 	return d.([]T)
 }
 
-// Sequence 产生从0到n-1的数组
-func Sequence[T StatType](n int) []T {
-	d := make([]T, n)
-	for i := 0; i < n; i++ {
-		d[i] = T(i)
-	}
+// Range 产生从0到n-1的数组
+func Range[T Number](n int) []T {
+	var dest any
 
-	return d
+	var start T = 0
+	var v any = start
+	switch a := v.(type) {
+	case float32:
+		dest = vek32.Range(a, a+float32(n))
+	case float64:
+		dest = vek.Range(a, a+float64(n))
+	default:
+		// 其它类型
+		d := make([]T, n)
+		for i := 0; i < n; i++ {
+			d[i] = start
+			start += 1
+		}
+		dest = d
+	}
+	return dest.([]T)
 }

@@ -1,5 +1,11 @@
 package stat
 
+import (
+	"fmt"
+	"github.com/mymmsc/gox/logger"
+	"strconv"
+)
+
 const (
 	Nil2Bool              = false      // 空指针转bool
 	BoolNaN               = false      // bool 无效值
@@ -50,4 +56,94 @@ func boolToFloat64(b bool) float64 {
 		return True2Float64
 	}
 	return False2Float64
+}
+
+// ParseBool 字符串转bool
+// 任意组合的nan字符串都会被解析成NaN
+func ParseBool(s string, v any) bool {
+	defer func() {
+		// 解析失败以后输出日志, 以备检查
+		if err := recover(); err != nil {
+			logger.Errorf("ParseBool %+v, error=%+v\n", v, err)
+		}
+	}()
+	f, err := strconv.ParseBool(s)
+	if err != nil {
+		if IgnoreParseExceptions {
+			f = Nil2Bool
+		} else {
+			_ = v.(float64) // Intentionally panic
+		}
+	}
+	return f
+}
+
+// AnyToBool any转换bool
+func AnyToBool(v any) bool {
+	switch val := v.(type) {
+	case nil:
+		return Nil2Bool
+	case *bool:
+		if val == nil {
+			return Nil2Bool
+		}
+		if *val == true {
+			return True2Bool
+		}
+		return False2Bool
+	case bool:
+		if val == true {
+			return True2Bool
+		}
+		return False2Bool
+	case *int:
+		if val == nil {
+			return Nil2Bool
+		}
+		return integer2Bool[int](*val)
+	case int:
+		return integer2Bool[int](val)
+	case *int64:
+		if val == nil {
+			return Nil2Bool
+		}
+		return integer2Bool[int64](*val)
+	case int64:
+		return integer2Bool[int64](val)
+	case *float64:
+		if val == nil {
+			return Nil2Bool
+		}
+		return integer2Bool[float64](*val)
+	case float64:
+		return integer2Bool[float64](val)
+	case *string:
+		if val == nil {
+			return Nil2Bool
+		}
+		if IsEmpty(*val) {
+			return Nil2Bool
+		}
+		if isTrue(*val) {
+			return StringTrue2Bool
+		} else if isFalse(*val) {
+			return StringFalse2Bool
+		}
+		f := ParseBool(*val, v)
+		return f
+	case string:
+		if IsEmpty(val) {
+			return Nil2Bool
+		}
+		if isTrue(val) {
+			return StringTrue2Bool
+		} else if isFalse(val) {
+			return StringFalse2Bool
+		}
+		f := ParseBool(val, v)
+		return f
+	default:
+		f := ParseBool(fmt.Sprintf("%v", v), v)
+		return f
+	}
 }

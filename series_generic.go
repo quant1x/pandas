@@ -1,6 +1,7 @@
 package pandas
 
 import (
+	"gitee.com/quant1x/pandas/stat"
 	"reflect"
 )
 
@@ -31,7 +32,7 @@ func NewSeriesWithoutType(name string, values ...interface{}) Series {
 // NewSeriesWithType 通过类型创新一个新series
 func NewSeriesWithType(_type Type, name string, values ...interface{}) Series {
 	frame := NDFrame{
-		formatter: DefaultFormatter,
+		formatter: stat.DefaultFormatter,
 		name:      name,
 		type_:     SERIES_TYPE_INVAILD,
 		nilCount:  0,

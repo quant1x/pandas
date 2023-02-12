@@ -1,20 +1,67 @@
 package stat
 
 import (
-	"math"
 	"math/big"
-	"reflect"
 )
+
+// Signed is a constraint that permits any signed integer type.
+// If future releases of Go add new predeclared signed integer types,
+// this constraint will be modified to include them.
+type Signed interface {
+	~int | ~int8 | ~int16 | ~int32 | ~int64
+}
+
+// Unsigned is a constraint that permits any unsigned integer type.
+// If future releases of Go add new predeclared unsigned integer types,
+// this constraint will be modified to include them.
+type Unsigned interface {
+	~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 | ~uintptr
+}
+
+// Integer is a constraint that permits any integer type.
+// If future releases of Go add new predeclared integer types,
+// this constraint will be modified to include them.
+type Integer interface {
+	Signed | Unsigned
+}
+
+// Float is a constraint that permits any floating-point type.
+// If future releases of Go add new predeclared floating-point types,
+// this constraint will be modified to include them.
+type Float interface {
+	~float32 | ~float64
+}
+
+// Complex is a constraint that permits any complex numeric type.
+// If future releases of Go add new predeclared complex numeric types,
+// this constraint will be modified to include them.
+type Complex interface {
+	~complex64 | ~complex128
+}
+
+// Ordered is a constraint that permits any ordered type: any type
+// that supports the operators < <= >= >.
+// If future releases of Go add new ordered types,
+// this constraint will be modified to include them.
+type Ordered interface {
+	Integer | Float | ~string
+}
+
+// /*nil, */ int8, uint8, int16, uint16, int32, uint32, int64, uint64, int, uint, float32, float64 , bool, string
+// ~int8 | ~uint8 | ~int16 | ~uint16 | ~int32 | ~uint32 | ~int64 | ~uint64 | ~int | ~uint | ~float32 | ~float64 | ~bool | ~string
+// uintptr
+
+// BaseType 基础类型
+type BaseType interface {
+	Integer | Float | ~string | ~bool
+}
 
 // GenericType Series支持的所有类型
 type GenericType interface {
 	~bool | ~int32 | ~int64 | ~int | ~float32 | ~float64 | ~string
 }
 
-type Float interface {
-	~float32 | ~float64
-}
-
+// StatType 可以统计的类型
 type StatType interface {
 	~int32 | ~int64 | ~float32 | ~float64
 }
@@ -41,26 +88,32 @@ type MoveType interface {
 	StatType | ~bool | ~string
 }
 
-type Integer interface {
-	Number8 | Number16 | Number32 | Number64
-}
-
 // Number int和uint的长度取决于CPU是多少位
 type Number interface {
 	Integer | Float
 }
 
-// 随便输入一个什么值
-func typeDefault[T StatType](x T) T {
-	xv := reflect.ValueOf(x)
-	xk := xv.Kind()
-	switch xk {
-	case reflect.Int32, reflect.Int64:
-		return T(0)
-	case reflect.Float32, reflect.Float64:
-		return T(math.NaN())
+// 设定泛型默认值, 0或者NaN
+func typeDefault[T BaseType]() T {
+	var d any
+	var t T
+	var v any = t
+	switch v.(type) {
+	case int8, uint8, int16, uint16, int32, uint32, int64, uint64, int, uint, uintptr:
+		d = t
+	case float32:
+		d = Nil2Float32
+	case float64:
+		d = Nil2Float64
+	case bool:
+		d = false
+	case string:
+		d = StringNaN
+	default:
+		d = t
 	}
-	return T(0)
+
+	return d.(T)
 }
 
 // any转number
@@ -88,6 +141,8 @@ func valueToNumber[T Number](v any, nil2t T, bool2t func(b bool) T, string2t fun
 		return T(val)
 	case uint:
 		return T(val)
+	case uintptr:
+		return T(val)
 	case float32:
 		return T(val)
 	case float64:
@@ -96,6 +151,8 @@ func valueToNumber[T Number](v any, nil2t T, bool2t func(b bool) T, string2t fun
 		return bool2t(val)
 	case string:
 		return string2t(val, v)
+	default:
+		panic(ErrUnsupportedType)
 	}
 	return T(0)
 }

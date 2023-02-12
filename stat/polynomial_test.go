@@ -16,7 +16,7 @@ func Test_PolyVal(t *testing.T) {
 	fmt.Println(z1)
 
 	W := 5
-	A2 := PolyFit(y, Sequence[float64](W), 1)
+	A2 := PolyFit(y, Range[float64](W), 1)
 	x2 := Repeat[float64](float64(W), W)
 	z2 := PolyVal(A2, x2)
 	fmt.Println(z2)
