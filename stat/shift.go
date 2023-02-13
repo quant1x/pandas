@@ -34,7 +34,6 @@ func Shift[T GenericType](S []T, periods int) []T {
 		naVals = values
 	}
 	for i := range naVals {
-		//naVals[i] = cbNan()
 		naVals[i] = typeDefault[T]()
 	}
 	_ = naVals
@@ -52,7 +51,6 @@ func Shift2[T GenericType](S []T, N []DType) []T {
 	for i, _ := range S {
 		x := N[i]
 		if DTypeIsNaN(x) || int(x) > i {
-			//values[i] = cbNan()
 			values[i] = typeDefault[T]()
 			continue
 		}

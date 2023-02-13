@@ -7,11 +7,16 @@ import (
 	"gitee.com/quant1x/pandas/data/cache"
 	"gitee.com/quant1x/pandas/data/category"
 	"gitee.com/quant1x/pandas/data/security"
+	"gitee.com/quant1x/pandas/stat"
+	"github.com/mymmsc/gox/logger"
 	"github.com/mymmsc/gox/util/treemap"
 	termTable "github.com/olekukonko/tablewriter"
-	"github.com/schollz/progressbar/v3"
+
+	"github.com/qianlnk/pgbar"
 	"os"
+	"runtime"
 	"sync"
+	"time"
 )
 
 // Strategy 策略/公式指标(features)接口
@@ -26,11 +31,15 @@ type Strategy interface {
 
 func main() {
 	var (
-		path     string
-		strategy int
+		path     string // 数据路径
+		strategy int    // 策略编号
+		avx2     bool   // AVX2加速状态
+		cpuNum   int    // cpu数量
 	)
 	flag.StringVar(&path, "path", category.DATA_ROOT_PATH, "stock history data path")
 	flag.IntVar(&strategy, "strategy", 1, "strategy serial number")
+	flag.BoolVar(&avx2, "avx2", false, "Avx2 acceleration")
+	flag.IntVar(&cpuNum, "cpu", runtime.NumCPU()/2, "sets the maximum number of CPUs")
 	flag.Parse()
 	cache.Init(path)
 	var api Strategy
@@ -40,35 +49,19 @@ func main() {
 	default:
 		api = new(FormulaNo1)
 	}
+	stat.SetAvx2Enabled(avx2)
 	//numCPU := runtime.NumCPU() / 2
-	//runtime.GOMAXPROCS(numCPU)
+	runtime.GOMAXPROCS(cpuNum)
 	// 获取全部证券代码
 	ss := data.GetCodeList()
 	count := len(ss)
-	//var wg = sync.WaitGroup{}
-	//doneCh := make(chan struct{})
-	bar := progressbar.NewOptions(count,
-		progressbar.OptionEnableColorCodes(true),
-		progressbar.OptionShowBytes(true),
-		progressbar.OptionSetWidth(80),
-		progressbar.OptionSetDescription("[cyan][1/3][reset]执行["+api.Name()+"]..."),
-		progressbar.OptionSetTheme(progressbar.Theme{
-			Saucer:        "[red]=[reset]",
-			SaucerHead:    "[red]>[reset]",
-			SaucerPadding: " ",
-			BarStart:      "[",
-			BarEnd:        "]",
-			//SaucerPadding: "[white]•",
-			//BarStart:      "[blue]|[reset]",
-			//BarEnd:        "[blue]|[reset]",
-		}),
-		//progressbar.OptionOnCompletion(func() {
-		//	doneCh <- struct{}{}
-		//}),
-	)
-	//fmt.Printf("计划买入, 信号日期, 委托价格, 目标价位\n")
+	var wg = sync.WaitGroup{}
+	fmt.Println("Quant1X 预警系统")
+	fmt.Printf("CPU: %d, AVX2: %t\n", cpuNum, stat.GetAvx2Enabled())
+	bar := pgbar.NewBar(0, "执行["+api.Name()+"]", count)
 	var mapStock *treemap.Map
 	mapStock = treemap.NewWithStringComparator()
+	mainStart := time.Now()
 	for i, v := range ss {
 		fullCode := v
 		basicInfo, err := security.GetBasicInfo(fullCode)
@@ -82,15 +75,16 @@ func main() {
 			bar.Add(1)
 			continue
 		}
-		//go evaluate(bar, api, &wg, fullCode, basicInfo, mapStock)
-		evaluate(bar, api, nil, fullCode, basicInfo, mapStock)
+		bar.Add(1)
+		go evaluate(api, &wg, fullCode, basicInfo, mapStock)
 		_ = i
 
 	}
-	// got notified that progress bar is complete.
-	//<-doneCh
-	//wg.Wait()
+	wg.Wait()
 	fmt.Println("\n ======= [" + api.Name() + "] progress bar completed ==========\n")
+	elapsedTime := time.Since(mainStart) / time.Millisecond
+	fmt.Printf("CPU: %d, AVX2: %t, 总耗时: %.3fs, 总记录: %d, 平均: %.3f/s\n", cpuNum, stat.GetAvx2Enabled(), float64(elapsedTime)/1000, count, float64(count)/(float64(elapsedTime)/1000))
+	logger.Infof("CPU: %d, AVX2: %t, 总耗时: %.3fs, 总记录: %d, 平均: %.3f/s", cpuNum, stat.GetAvx2Enabled(), float64(elapsedTime)/1000, count, float64(count)/(float64(elapsedTime)/1000))
 	table := termTable.NewWriter(os.Stdout)
 	var row ResultInfo
 	table.SetHeader(row.Headers())
@@ -102,10 +96,8 @@ func main() {
 	table.Render() // Send output
 }
 
-func evaluate(bar *progressbar.ProgressBar, api Strategy, wg *sync.WaitGroup, code string, info *security.StaticBasic, result *treemap.Map) {
-	//defer wg.Done()
-	defer bar.Add(1)
-
-	//wg.Add(1)
+func evaluate(api Strategy, wg *sync.WaitGroup, code string, info *security.StaticBasic, result *treemap.Map) {
+	defer wg.Done()
+	wg.Add(1)
 	api.Evaluate(code, info, result)
 }

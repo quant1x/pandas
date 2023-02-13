@@ -1,7 +1,8 @@
 package stat
 
 // Align Data alignment
-// a 通常是默认值
+//
+//	a 通常是默认值
 func Align[T BaseType](x []T, a T, dLen int) []T {
 	d := []T{}
 	xLen := len(x)

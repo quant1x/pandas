@@ -11,7 +11,7 @@ func TestNDFrame_Diff(t *testing.T) {
 	df := NewDataFrame(s1)
 	fmt.Println(df)
 	fmt.Println("------------------------------------------------------------")
-	N := 2
+	N := 1
 	fmt.Println("固定的参数, N =", N)
 	r1 := df.Col("x").Diff(N).Values()
 	fmt.Println("序列化结果:", r1)

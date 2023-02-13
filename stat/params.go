@@ -1,20 +1,9 @@
 package stat
 
-//func detectParam[T StatType](v any) (T, []T, error) {
-//	var base T
-//	var slice []T
-//	switch val := v.(type) {
-//	case []T:
-//		slice = val
-//	case T:
-//		base = val
-//	}
-//	return base, slice, nil
-//}
-
 // AnyToSlice any转切片
-// 如果a是基础类型, 就是repeat
-// 如果a是切片, 就做对齐处理
+//
+//	如果a是基础类型, 就是repeat
+//	如果a是切片, 就做对齐处理
 func AnyToSlice[T BaseType](A any, n int) []T {
 	var d any
 	switch v := A.(type) {

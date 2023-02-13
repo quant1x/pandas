@@ -2,7 +2,6 @@ package stat
 
 import (
 	"gitee.com/quant1x/pandas/exception"
-	"golang.org/x/exp/slices"
 )
 
 // Rolling returns an array with elements that roll beyond the last position are re-introduced at the first.
@@ -36,7 +35,7 @@ func Rolling[T Number | bool](S []T, N any) [][]T {
 		}
 		start := i + 1 - shift
 		end := i + 1
-		subSet := slices.Clone(S[start:end])
+		subSet := S[start:end]
 		blocks[i] = subSet
 	}
 	return blocks

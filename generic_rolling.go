@@ -42,7 +42,7 @@ func (r RollingAndExpandingMixin) getBlocks() (blocks []Series) {
 		window := int(N)
 		start := i + 1 - window
 		end := i + 1
-		blocks = append(blocks, r.series.Subset(start, end, true))
+		blocks = append(blocks, r.series.Subset(start, end, false))
 	}
 
 	return
