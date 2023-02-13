@@ -7,11 +7,11 @@ import (
 )
 
 // Sub arithmetics 减法
-func Sub[T StatType](x []T, y any) []T {
-	return binaryOperations(x, y, vek32.Sub, vek.Sub, __sub[T])
+func Sub[T Number](x []T, y any) []T {
+	return binaryOperations(x, y, vek32.Sub, vek.Sub, __sub_go[T])
 }
 
-func __sub[T StatType](x, y []T) []T {
+func __sub_go[T Number](x, y []T) []T {
 	x = slices.Clone(x)
 	for i := 0; i < len(x); i++ {
 		x[i] -= y[i]
