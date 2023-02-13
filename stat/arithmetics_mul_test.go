@@ -15,4 +15,5 @@ func TestMul(t *testing.T) {
 	fmt.Println(Mul(d2, float64(1)))
 	fmt.Println(Mul(d3, int32(2)))
 	fmt.Println(Mul(d4, int64(3)))
+	fmt.Println(Mul(d4, int64(3)))
 }
