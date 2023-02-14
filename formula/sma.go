@@ -17,7 +17,7 @@ func SMA(S pandas.Series, N any, M int) any {
 		X = float32(v)
 	case pandas.Series:
 		vs := v.Values()
-		fs := pandas.SliceToFloat32(vs)
+		fs := stat.SliceToFloat32(vs)
 		X = fs[len(fs)-1]
 	default:
 		panic(exception.New(1, "error window"))
@@ -37,7 +37,7 @@ func SMA_v5(S pandas.Series, N any, M int) any {
 		X = stat.Repeat[float32](float32(v), S.Len())
 	case pandas.Series:
 		vs := v.Values()
-		X = pandas.SliceToFloat32(vs)
+		X = stat.SliceToFloat32(vs)
 		X = stat.Align(X, pandas.Nil2Float32, S.Len())
 	default:
 		panic(exception.New(1, "error window"))
@@ -64,7 +64,7 @@ func SMA_v4(S pandas.Series, N any, M int) any {
 		X = stat.Repeat[float32](float32(v), S.Len())
 	case pandas.Series:
 		vs := v.Values()
-		X = pandas.SliceToFloat32(vs)
+		X = stat.SliceToFloat32(vs)
 		X = stat.Align(X, pandas.Nil2Float32, S.Len())
 	default:
 		panic(exception.New(1, "error window"))

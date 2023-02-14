@@ -39,7 +39,7 @@ import "golang.org/x/exp/slices"
 //	Returns
 //	-------
 //	[]T or None
-func Fill[T Number | ~string](v []T, d T, args ...any) (rows []T) {
+func Fill[T BaseType](v []T, d T, args ...any) (rows []T) {
 	// 默认不替换
 	var __optInplace = false
 	if len(args) > 0 {
@@ -84,7 +84,7 @@ func Fill[T Number | ~string](v []T, d T, args ...any) (rows []T) {
 }
 
 // FillNa NaN填充默认值
-func FillNa[T Number | ~string](v []T, args ...any) []T {
+func FillNa[T BaseType](x []T, v any, args ...any) []T {
 	// 默认不copy
 	var __optInplace = false
 	if len(args) > 0 {
@@ -95,9 +95,9 @@ func FillNa[T Number | ~string](v []T, args ...any) []T {
 	}
 	var dest []T
 	if __optInplace {
-		dest = v
+		dest = x
 	} else {
-		dest = slices.Clone(v)
+		dest = slices.Clone(x)
 	}
 	var values any = dest
 	switch rows := values.(type) {

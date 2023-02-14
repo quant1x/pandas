@@ -6,7 +6,7 @@ import (
 )
 
 // Abs 泛型绝对值
-func Abs[T Number](x []T) []T {
+func Abs[T BaseType](x []T) []T {
 	var d any
 	var v any = x
 	switch xv := v.(type) {
@@ -24,8 +24,8 @@ func Abs[T Number](x []T) []T {
 		d = __abs_go(xv)
 	case []int64:
 		d = __abs_go(xv)
-	//case []uint, []uint8, []uint16, []uint32, []uint64, []uintptr:
-	//	d = xv
+	case []uint, []uint8, []uint16, []uint32, []uint64, []uintptr:
+		d = xv
 	default:
 		// 其它类型原样返回
 		d = xv

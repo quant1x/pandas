@@ -106,11 +106,15 @@ func checkoutRawType(frame any) reflect.Kind {
 	if pos < 0 {
 		return reflect.Invalid
 	}
-	strType = strings.TrimSpace(strType[:pos])
-	if len(strType) < 1 {
-		return reflect.Invalid
+	rawType := strings.TrimSpace(strType[:pos])
+	// 如果是0, 这个应该是个slice
+	if len(rawType) < 1 {
+		rawType = strings.TrimSpace(strType[pos+1:])
+		if len(rawType) < 1 {
+			return reflect.Invalid
+		}
 	}
-	if t, ok := mapKind[strType]; ok {
+	if t, ok := mapKind[rawType]; ok {
 		return t
 	}
 	return reflect.Invalid

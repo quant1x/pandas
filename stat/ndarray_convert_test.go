@@ -1,4 +1,4 @@
-package pandas
+package stat
 
 import (
 	"testing"

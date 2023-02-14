@@ -35,6 +35,20 @@ func isFalse(s string) bool {
 	}
 }
 
+func bool2Int(b bool) int8 {
+	if b {
+		return int8(1)
+	}
+	return int8(0)
+}
+
+func boolToInt32(b bool) int32 {
+	if b {
+		return True2Int32
+	}
+	return False2Int32
+}
+
 func boolToInt64(b bool) int64 {
 	if b {
 		return True2Int64

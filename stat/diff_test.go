@@ -19,3 +19,9 @@ func TestDiff(t *testing.T) {
 	r2 := Diff(d1, s1)
 	fmt.Println("序列化结果:", r2)
 }
+
+func TestDiff2(t *testing.T) {
+	d1 := []float64{1, 2, 3, 4, 5}
+	r1 := Diff2(d1, 1)
+	fmt.Println(r1)
+}

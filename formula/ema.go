@@ -43,7 +43,7 @@ func EMA_v2(S pandas.Series, N any) any {
 		X = float32(v)
 	case pandas.Series:
 		vs := v.Values()
-		fs := pandas.SliceToFloat32(vs)
+		fs := stat.SliceToFloat32(vs)
 		X = fs[len(fs)-1]
 	default:
 		panic(exception.New(1, "error window"))
@@ -60,7 +60,7 @@ func EMA_v0(S pandas.Series, N any) any {
 		X = float32(v)
 	case pandas.Series:
 		vs := v.Values()
-		fs := pandas.SliceToFloat32(vs)
+		fs := stat.SliceToFloat32(vs)
 		X = fs[len(fs)-1]
 	default:
 		panic(exception.New(1, "error window"))

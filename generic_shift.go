@@ -6,7 +6,7 @@ import (
 )
 
 // Shift series切片, 使用可选的时间频率按所需的周期数移动索引
-func Shift[T GenericType](s *Series, periods int, cbNan func() T) Series {
+func Shift[T stat.GenericType](s *Series, periods int, cbNan func() T) Series {
 	var d Series
 	d = clone(*s).(Series)
 	if periods == 0 {
@@ -43,7 +43,7 @@ func Shift[T GenericType](s *Series, periods int, cbNan func() T) Series {
 }
 
 // Shift2 series切片, 使用可选的时间频率按所需的周期数移动索引
-func Shift2[T GenericType](s *Series, N []float32, cbNan func() T) Series {
+func Shift2[T stat.GenericType](s *Series, N []float32, cbNan func() T) Series {
 	var d Series
 	d = clone(*s).(Series)
 	if len(N) == 0 {

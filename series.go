@@ -21,11 +21,6 @@ const (
 	SERIES_TYPE_STRING  = reflect.String // string
 )
 
-// StringFormatter is used to convert a value
-// into a string. Val can be nil or the concrete
-// type stored by the series.
-type StringFormatter func(val interface{}) string
-
 type Series interface {
 	// Name 取得series名称
 	Name() string
@@ -84,7 +79,7 @@ type Series interface {
 	// Min 找出最小值
 	Min() any
 	// Select 选取一段记录
-	Select(r ScopeLimit) Series
+	Select(r stat.ScopeLimit) Series
 	// Append 增加一批记录
 	Append(values ...any)
 	// Apply 接受一个回调函数
@@ -141,7 +136,7 @@ func NewSeries(t Type, name string, vals any) Series {
 //}
 
 // GenericSeries 泛型方法, 构造序列, 比其它方式对类型的统一性要求更严格
-func GenericSeries[T GenericType](name string, values ...T) Series {
+func GenericSeries[T stat.GenericType](name string, values ...T) Series {
 	// 第一遍, 确定类型, 找到第一个非nil的值
 	var _type Type = SERIES_TYPE_STRING
 	for _, v := range values {

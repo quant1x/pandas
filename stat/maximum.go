@@ -7,7 +7,8 @@ import (
 )
 
 // Maximum AVX2版本, 两个序列横向比较最大值
-// TODO:print(np.maximum(1.4, np.nan)) 输出nan
+//
+//	TODO:print(np.maximum(1.4, np.nan)) 输出nan
 func Maximum[T Number](f1, f2 []T) []T {
 	xlen := len(f1)
 	ylen := len(f2)

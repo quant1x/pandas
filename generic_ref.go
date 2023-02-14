@@ -14,7 +14,7 @@ func (self *NDFrame) Ref(param any) (s Series) {
 		N = stat.Align(v, Nil2Float32, self.Len())
 	case Series:
 		vs := v.Values()
-		N = SliceToFloat32(vs)
+		N = stat.SliceToFloat32(vs)
 		N = stat.Align(N, Nil2Float32, self.Len())
 	default:
 		panic(exception.New(1, "error window"))

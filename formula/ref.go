@@ -14,7 +14,7 @@ func REF(S pandas.Series, N any) any {
 		X = stat.Repeat[float32](float32(v), S.Len())
 	case pandas.Series:
 		vs := v.Values()
-		X = pandas.SliceToFloat32(vs)
+		X = stat.SliceToFloat32(vs)
 		X = stat.Align(X, pandas.Nil2Float32, S.Len())
 	default:
 		panic(exception.New(1, "error window"))

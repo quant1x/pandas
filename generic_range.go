@@ -1,6 +1,7 @@
 package pandas
 
 import (
+	"gitee.com/quant1x/pandas/stat"
 	gc "github.com/huandu/go-clone"
 	"reflect"
 )
@@ -115,7 +116,7 @@ func (self *NDFrame) oldSubset(start, end int, opt ...any) Series {
 }
 
 // Select 选取一段记录
-func (self *NDFrame) Select(r ScopeLimit) Series {
+func (self *NDFrame) Select(r stat.ScopeLimit) Series {
 	start, end, err := r.Limits(self.Len())
 	if err != nil {
 		return nil

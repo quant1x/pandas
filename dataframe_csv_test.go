@@ -34,7 +34,7 @@ Spain,2012-02-01,66,555.42,00241,1.23
 	//
 	//closes := df.Col("d")
 	//ma5 := closes.RollingV1(5).Mean()
-	//dframe.NewSeries(closes, dframe.Float, "")
+	//dframe.NewSeries(closes, dframe.Floats, "")
 	//fmt.Println(ma5)
 	d := df.Col("d")
 	fmt.Println(d)

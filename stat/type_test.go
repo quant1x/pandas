@@ -23,3 +23,16 @@ func Test_typeDefault(t *testing.T) {
 	fmt.Println(typeDefault[int]())
 	fmt.Println(typeDefault[uint]())
 }
+
+func Test_Number(t *testing.T) {
+
+}
+
+func Test_anyToGeneric(t *testing.T) {
+	fmt.Println(anyToGeneric[int](true))
+	fmt.Println(anyToGeneric[int]("true"))
+	fmt.Println(anyToGeneric[int]("false"))
+	fmt.Println(anyToGeneric[int]("aa"))
+	fmt.Println(anyToGeneric[int]("tt"))
+	fmt.Println(anyToGeneric[int](3.00))
+}

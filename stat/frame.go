@@ -1,107 +1,82 @@
 package stat
 
-import (
-	"reflect"
-	"sync"
-)
-
-type Frame[T GenericType] interface {
+type Frame interface {
 	// Name 取得series名称
 	Name() string
-	// ReName renames the series.
-	ReName(name string)
+	// Rename renames the series.
+	Rename(name string)
+
 	// Type returns the type of data the series holds.
 	// 返回series的数据类型
 	Type() Type
-	// Len 获得行数
-	Len() int
 	// Values 获得全部数据集
-	Values() []T // 如果确定类型, 后面可能无法自动调整
-}
+	Values() any
 
-type GenericFrame[T GenericType] struct {
-	lock      sync.RWMutex    // 读写锁
-	formatter StringFormatter // 字符串格式化工具
-	name      string          // 帧名称
-	type_     Type            // values元素类型
-	nilCount  int             // nil和nan的元素有多少, 这种统计在bool和int64类型中不会大于0, 只对float64及string有效
-	rows      int             // 行数
-	values    []T             // 只能是一个一维slice, 在所有的运算中, values强制转换成float64切片
-}
+	// NaN 输出默认的NaN
+	NaN() any
+	// Floats 强制转成[]float32
+	Floats() []float32
+	// DTypes 强制转[]stat.DType
+	DTypes() []DType
+	// Ints 强制转换成整型
+	Ints() []Int
 
-func NewFrame[T GenericType](name string, values ...any) Frame[T] {
-	frame := GenericFrame[T]{
-		formatter: DefaultFormatter,
-		name:      name,
-		type_:     reflect.Invalid,
-		nilCount:  0,
-		rows:      0,
-		values:    nil,
-	}
-	// 确定泛型的具体类型, 以便后面创建slice
-	kind := checkoutRawType(&frame)
-	if kind == reflect.Invalid {
-		return &frame
-	}
-	frame.type_ = kind
-	if frame.type_ == SERIES_TYPE_BOOL {
-		// bool
-		frame.values = reflect.MakeSlice(typeBool, 0, 0).Interface().([]T)
-	} else if frame.type_ == SERIES_TYPE_INT64 {
-		// int64
-		frame.values = reflect.MakeSlice(typeInt64, 0, 0).Interface().([]T)
-	} else if frame.type_ == SERIES_TYPE_FLOAT32 {
-		// float32
-		frame.values = reflect.MakeSlice(typeFloat32, 0, 0).Interface().([]T)
-	} else if frame.type_ == SERIES_TYPE_FLOAT64 {
-		// float64
-		frame.values = reflect.MakeSlice(typeFloat64, 0, 0).Interface().([]T)
-	} else {
-		// string, 字符串最后容错使用
-		frame.values = reflect.MakeSlice(typeString, 0, 0).Interface().([]T)
-	}
-	size := 0
-	for idx, v := range values {
-		vv := reflect.ValueOf(v)
-		vk := vv.Kind()
-		switch vk {
-		case reflect.Invalid: // {interface} nil
-			frame.assign(idx, size, nil)
-		case reflect.Slice, reflect.Array: // 切片或者数组
-			for i := 0; i < vv.Len(); i++ {
-				tv := vv.Index(i).Interface()
-				frame.assign(idx, size, tv)
-			}
-		default:
-			// 默认为基础数据类型
-			tv := vv.Interface()
-			frame.assign(idx, size, tv)
-		}
-	}
-	return &frame
-}
+	// sort.Interface
 
-func (self *GenericFrame[T]) Name() string {
-	//TODO implement me
-	panic("implement me")
-}
+	// Len 获得行数, 实现sort.Interface接口的获取元素数量方法
+	Len() int
+	// Less 实现sort.Interface接口的比较元素方法
+	Less(i, j int) bool
+	// Swap 实现sort.Interface接口的交换元素方法
+	Swap(i, j int)
 
-func (self *GenericFrame[T]) ReName(name string) {
-	//TODO implement me
-	panic("implement me")
-}
+	// Empty returns an empty Series of the same type
+	Empty() Frame
+	// Copy 复制
+	Copy() Frame
+	// Records returns the elements of a Series as a []string
+	Records() []string
+	// Subset 获取子集
+	Subset(start, end int, opt ...any) Frame
+	// Repeat elements of an array.
+	Repeat(x any, repeats int) Frame
+	// Shift index by desired number of periods with an optional time freq.
+	// 使用可选的时间频率按所需的周期数移动索引.
+	Shift(periods int) Frame
+	// Rolling 序列化版本
+	//Rolling(param any) RollingAndExpandingMixin
 
-func (self *GenericFrame[T]) Type() Type {
-	//TODO implement me
-	panic("implement me")
-}
+	// Mean calculates the average value of a series
+	Mean() DType
+	// StdDev calculates the standard deviation of a series
+	StdDev() DType
+	// FillNa Fill NA/NaN values using the specified method.
+	FillNa(v any, inplace bool) Frame
+	// Max 找出最大值
+	Max() any
+	// Min 找出最小值
+	Min() any
+	// Select 选取一段记录
+	Select(r ScopeLimit) Frame
+	// Append 增加一批记录
+	Append(values ...any) Frame
+	// Apply 接受一个回调函数
+	Apply(f func(idx int, v any))
+	// Logic 逻辑处理
+	Logic(f func(idx int, v any) bool) []bool
+	// Diff 元素的第一个离散差
+	Diff(param any) Frame
+	// Ref 引用其它周期的数据
+	Ref(param any) Frame
+	// Std 计算标准差
+	Std() DType
+	// Sum 计算累和
+	Sum() DType
+	// EWM Provide exponentially weighted (EW) calculations.
+	//
+	//    Exactly one of ``com``, ``span``, ``halflife``, or ``alpha`` must be
+	//    provided if ``times`` is not provided. If ``times`` is provided,
+	//    ``halflife`` and one of ``com``, ``span`` or ``alpha`` may be provided.
+	//EWM(alpha EW) ExponentialMovingWindow
 
-func (self *GenericFrame[T]) Len() int {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (self *GenericFrame[T]) Values() []T {
-	//TODO implement me
-	panic("implement me")
 }

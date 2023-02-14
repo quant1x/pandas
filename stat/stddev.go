@@ -32,9 +32,9 @@ func Std_TODO[T Float](f []T) T {
 }
 
 // Std 计算标准差
-func Std[T Float](f []T) T {
+func Std[T BaseType](f []T) T {
 	if len(f) == 0 {
-		return T(0)
+		return typeDefault[T]()
 	}
 	var d any
 	var s any

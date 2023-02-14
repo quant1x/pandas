@@ -2,6 +2,7 @@ package pandas
 
 import (
 	"fmt"
+	"gitee.com/quant1x/pandas/stat"
 	"testing"
 )
 
@@ -80,7 +81,7 @@ func TestPoint(t *testing.T) {
 	p1 = &a
 	fmt.Printf("*int = nil, result=%v\n", isPoint(p1))
 
-	var p2 *BigFloat
+	var p2 *stat.BigFloat
 	fmt.Printf("*BigFloat = nil, result=%v\n", isPoint(p2))
 
 }

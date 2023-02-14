@@ -30,3 +30,30 @@ func Diff[T Number](s []T, param any) []T {
 
 	return d
 }
+
+func Diff2[T BaseType](s []T, param any) []T {
+	var d any
+	switch vs := any(s).(type) {
+	case []float32:
+		d = Diff(vs, param)
+	case []float64:
+		d = Diff(vs, param)
+	case []int:
+		d = Diff(vs, param)
+	case []int8:
+		d = Diff(vs, param)
+	case []int16:
+		d = Diff(vs, param)
+	case []int32:
+		d = Diff(vs, param)
+	case []int64:
+		d = Diff(vs, param)
+	//case []uint, []uint8, []uint16, []uint32, []uint64, []uintptr:
+	//	d = xv
+	default:
+		// 其它类型原样返回
+		panic(Throw(any(s)))
+	}
+
+	return d.([]T)
+}

@@ -45,7 +45,7 @@ func parseSelectIndexes(l int, indexes SelectIndexes, colnames []string) ([]int,
 	//	//}
 	//	switch s.Type() {
 	//	case SERIES_TYPE_INT64:
-	//		return s.AsInt()
+	//		return s.Ints()
 	//	case series.Bool:
 	//		bools, err := s.Bool()
 	//		if err != nil {

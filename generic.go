@@ -7,21 +7,16 @@ import (
 	"sync"
 )
 
-// GenericType Series支持的所有类型
-type GenericType interface {
-	~bool | ~int64 | ~float32 | ~float64 | ~string
-}
-
 // NDFrame 这里本意是想做一个父类, 实际的效果是一个抽象类
 type NDFrame struct {
-	lock      sync.RWMutex    // 读写锁
-	formatter StringFormatter // 字符串格式化工具
-	name      string          // 帧名称
-	type_     Type            // values元素类型
-	copy_     bool            // 是否副本
-	nilCount  int             // nil和nan的元素有多少, 这种统计在bool和int64类型中不会大于0, 只对float64及string有效
-	rows      int             // 行数
-	values    any             // 只能是一个一维slice, 在所有的运算中, values强制转换成float64切片
+	lock      sync.RWMutex         // 读写锁
+	formatter stat.StringFormatter // 字符串格式化工具
+	name      string               // 帧名称
+	type_     Type                 // values元素类型
+	copy_     bool                 // 是否副本
+	nilCount  int                  // nil和nan的元素有多少, 这种统计在bool和int64类型中不会大于0, 只对float64及string有效
+	rows      int                  // 行数
+	values    any                  // 只能是一个一维slice, 在所有的运算中, values强制转换成float64切片
 
 }
 
@@ -36,7 +31,7 @@ type NDFrame struct {
 //copy : bool, default False
 //"""
 
-func NewNDFrame[E GenericType](name string, rows ...E) *NDFrame {
+func NewNDFrame[E stat.GenericType](name string, rows ...E) *NDFrame {
 	frame := NDFrame{
 		formatter: stat.DefaultFormatter,
 		name:      name,
@@ -57,7 +52,7 @@ func NewNDFrame[E GenericType](name string, rows ...E) *NDFrame {
 }
 
 // 赋值
-func assign[T GenericType](frame *NDFrame, idx, size int, v T) {
+func assign[T stat.GenericType](frame *NDFrame, idx, size int, v T) {
 	// 检测类型
 	if frame.type_ == SERIES_TYPE_INVAILD {
 		_type, _ := detectTypes(v)
@@ -101,7 +96,7 @@ func assign[T GenericType](frame *NDFrame, idx, size int, v T) {
 }
 
 // Repeat 重复生成a
-func Repeat[T GenericType](a T, n int) []T {
+func Repeat[T stat.GenericType](a T, n int) []T {
 	dst := make([]T, n)
 	for i := 0; i < n; i++ {
 		dst[i] = a
@@ -110,7 +105,7 @@ func Repeat[T GenericType](a T, n int) []T {
 }
 
 // Repeat2 重复生成a
-func Repeat2[T GenericType](dst []T, a T, n int) []T {
+func Repeat2[T stat.GenericType](dst []T, a T, n int) []T {
 	for i := 0; i < n; i++ {
 		dst[i] = a
 	}
@@ -152,7 +147,7 @@ func (self *NDFrame) NaN() any {
 }
 
 func (self *NDFrame) Float() []float32 {
-	return ToFloat32(self)
+	return stat.SliceToFloat32(self.values)
 }
 
 // DTypes 计算以这个函数为主

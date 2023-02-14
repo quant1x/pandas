@@ -162,8 +162,8 @@ func (self *SeriesInt64) Mean() float64 {
 	if self.Len() < 1 {
 		return NaN()
 	}
-	stdDev := Mean(self.Data)
-	return stdDev
+	stdDev := stat.Mean(self.Data)
+	return float64(stdDev)
 }
 
 func (self *SeriesInt64) StdDev() float64 {

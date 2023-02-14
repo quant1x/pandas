@@ -159,7 +159,7 @@ func parseType(s string) (Type, error) {
 	return SERIES_TYPE_INVAILD, fmt.Errorf("type (%s) is not supported", s)
 }
 
-func detectTypes[T GenericType](v T) (Type, any) {
+func detectTypes[T stat.GenericType](v T) (Type, any) {
 	var _type = SERIES_TYPE_STRING
 	vv := reflect.ValueOf(v)
 	vk := vv.Kind()

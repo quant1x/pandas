@@ -1,5 +1,7 @@
 package pandas
 
+import "gitee.com/quant1x/pandas/stat"
+
 // Subset returns a subset of the rows of the original DataFrame based on the
 // Series subsetting indexes.
 func (self DataFrame) Subset(start, end int) DataFrame {
@@ -23,7 +25,7 @@ func (self DataFrame) Subset(start, end int) DataFrame {
 }
 
 // Select 选择一段记录
-func (self DataFrame) SelectRows(p ScopeLimit) DataFrame {
+func (self DataFrame) SelectRows(p stat.ScopeLimit) DataFrame {
 	columns := []Series{}
 	for i := range self.columns {
 		columns = append(columns, self.columns[i].Select(p))
