@@ -1,17 +1,20 @@
 package pandas
 
-import "fmt"
+import (
+	"fmt"
+	"gitee.com/quant1x/pandas/stat"
+)
 
 // Col returns a copy of the Series with the given column name contained in the DataFrame.
 // 选取一列
-func (self DataFrame) Col(colname string) Series {
+func (self DataFrame) Col(colname string) stat.Series {
 	if self.Err != nil {
-		return NewSeriesWithType(SERIES_TYPE_INVAILD, "")
+		return NewSeriesWithType(stat.SERIES_TYPE_INVAILD, "")
 	}
 	// Check that colname exist on dataframe
 	idx := findInStringSlice(colname, self.Names())
 	if idx < 0 {
-		return NewSeriesWithType(SERIES_TYPE_INVAILD, "")
+		return NewSeriesWithType(stat.SERIES_TYPE_INVAILD, "")
 	}
 	return self.columns[idx].Copy()
 }

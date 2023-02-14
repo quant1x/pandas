@@ -6,8 +6,8 @@ import (
 )
 
 // MIN 两个序列横向对比
-func MIN(S1, S2 pandas.Series) pandas.Series {
-	d := stat.Minimum(S1.Float(), S2.Float())
-	return pandas.NewSeries(pandas.SERIES_TYPE_FLOAT32, "", d)
+func MIN(S1, S2 stat.Series) stat.Series {
+	d := stat.Minimum(S1.Floats(), S2.Floats())
+	return pandas.NewSeries(stat.SERIES_TYPE_FLOAT32, "", d)
 
 }

@@ -3,7 +3,7 @@ package stat
 import "reflect"
 
 // 赋值
-func assign[T BaseType](type_ Type, array Frame, idx, size int, v T) Frame {
+func assign[T BaseType](type_ Type, array Series, idx, size int, v T) Series {
 	_vv := reflect.ValueOf(v)
 	_vi := _vv.Interface()
 	// float和string类型有可能是NaN, 对nil和NaN进行计数
@@ -68,7 +68,7 @@ func (self NDArray[T]) insert(idx, size int, v any) NDArray[T] {
 	return self
 }
 
-func (self NDArray[T]) Append(values ...any) Frame {
+func (self NDArray[T]) Append(values ...any) Series {
 	size := 0
 	for idx, v := range values {
 		switch val := v.(type) {

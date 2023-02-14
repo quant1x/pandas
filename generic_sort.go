@@ -1,5 +1,7 @@
 package pandas
 
+import "gitee.com/quant1x/pandas/stat"
+
 // Len 获得行数, 实现sort.Interface接口的获取元素数量方法
 func (self *NDFrame) Len() int {
 	return self.rows
@@ -7,7 +9,7 @@ func (self *NDFrame) Len() int {
 
 // Less 实现sort.Interface接口的比较元素方法
 func (self *NDFrame) Less(i, j int) bool {
-	if self.type_ == SERIES_TYPE_BOOL {
+	if self.type_ == stat.SERIES_TYPE_BOOL {
 		values := self.Values().([]bool)
 		var (
 			a = int(0)
@@ -20,16 +22,16 @@ func (self *NDFrame) Less(i, j int) bool {
 			b = 1
 		}
 		return a < b
-	} else if self.type_ == SERIES_TYPE_INT64 {
+	} else if self.type_ == stat.SERIES_TYPE_INT64 {
 		values := self.Values().([]int64)
 		return values[i] < values[j]
-	} else if self.type_ == SERIES_TYPE_FLOAT32 {
+	} else if self.type_ == stat.SERIES_TYPE_FLOAT32 {
 		values := self.Values().([]float32)
 		return values[i] < values[j]
-	} else if self.type_ == SERIES_TYPE_FLOAT64 {
+	} else if self.type_ == stat.SERIES_TYPE_FLOAT64 {
 		values := self.Values().([]float64)
 		return values[i] < values[j]
-	} else if self.type_ == SERIES_TYPE_STRING {
+	} else if self.type_ == stat.SERIES_TYPE_STRING {
 		values := self.Values().([]string)
 		return values[i] < values[j]
 	} else {
@@ -43,19 +45,19 @@ func (self *NDFrame) Less(i, j int) bool {
 
 // Swap 实现sort.Interface接口的交换元素方法
 func (self *NDFrame) Swap(i, j int) {
-	if self.type_ == SERIES_TYPE_BOOL {
+	if self.type_ == stat.SERIES_TYPE_BOOL {
 		values := self.Values().([]bool)
 		values[i], values[j] = values[j], values[i]
-	} else if self.type_ == SERIES_TYPE_INT64 {
+	} else if self.type_ == stat.SERIES_TYPE_INT64 {
 		values := self.Values().([]int64)
 		values[i], values[j] = values[j], values[i]
-	} else if self.type_ == SERIES_TYPE_FLOAT32 {
+	} else if self.type_ == stat.SERIES_TYPE_FLOAT32 {
 		values := self.Values().([]float32)
 		values[i], values[j] = values[j], values[i]
-	} else if self.type_ == SERIES_TYPE_FLOAT64 {
+	} else if self.type_ == stat.SERIES_TYPE_FLOAT64 {
 		values := self.Values().([]float64)
 		values[i], values[j] = values[j], values[i]
-	} else if self.type_ == SERIES_TYPE_STRING {
+	} else if self.type_ == stat.SERIES_TYPE_STRING {
 		values := self.Values().([]string)
 		values[i], values[j] = values[j], values[i]
 	} else {

@@ -1,8 +1,10 @@
 package pandas
 
+import "gitee.com/quant1x/pandas/stat"
+
 type loadOptions struct {
 	// Specifies which is the default type in case detectTypes is disabled.
-	defaultType Type
+	defaultType stat.Type
 
 	// If set, the type of each column will be automatically detected unless
 	// otherwise specified.
@@ -28,11 +30,11 @@ type loadOptions struct {
 	comment rune
 
 	// The types of specific columns can be specified via column name.
-	types map[string]Type
+	types map[string]stat.Type
 }
 
 // DefaultType sets the defaultType option for loadOptions.
-func DefaultType(t Type) LoadOption {
+func DefaultType(t stat.Type) LoadOption {
 	return func(c *loadOptions) {
 		c.defaultType = t
 	}
@@ -67,7 +69,7 @@ func NaNValues(nanValues []string) LoadOption {
 }
 
 // WithTypes sets the types option for loadOptions.
-func WithTypes(coltypes map[string]Type) LoadOption {
+func WithTypes(coltypes map[string]stat.Type) LoadOption {
 	return func(c *loadOptions) {
 		c.types = coltypes
 	}

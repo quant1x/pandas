@@ -1,6 +1,9 @@
 package pandas
 
-import "fmt"
+import (
+	"fmt"
+	"gitee.com/quant1x/pandas/stat"
+)
 
 func parseSelectIndexes(l int, indexes SelectIndexes, colnames []string) ([]int, error) {
 	var idx []int
@@ -85,7 +88,7 @@ func (df DataFrame) Select(indexes SelectIndexes) DataFrame {
 	if err != nil {
 		return DataFrame{Err: fmt.Errorf("can't select columns: %v", err)}
 	}
-	columns := make([]Series, len(idx))
+	columns := make([]stat.Series, len(idx))
 	for k, i := range idx {
 		if i < 0 || i >= df.ncols {
 			return DataFrame{Err: fmt.Errorf("can't select columns: index out of range")}

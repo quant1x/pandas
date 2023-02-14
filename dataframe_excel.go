@@ -2,6 +2,7 @@ package pandas
 
 import (
 	"fmt"
+	"gitee.com/quant1x/pandas/stat"
 	"github.com/mymmsc/gox/logger"
 	"github.com/mymmsc/gox/util/homedir"
 	xlsv1 "github.com/tealeg/xlsx"
@@ -9,9 +10,9 @@ import (
 	"strings"
 )
 
-// 读取excel文件
+// ReadExcel 读取excel文件
 func ReadExcel(filename string, options ...LoadOption) DataFrame {
-	if IsEmpty(filename) {
+	if stat.IsEmpty(filename) {
 		return DataFrame{Err: fmt.Errorf("filaname is empty")}
 	}
 

@@ -9,7 +9,7 @@ func (self DataFrame) Remove(p stat.ScopeLimit) DataFrame {
 	if err != nil {
 		return self
 	}
-	columns := []Series{}
+	columns := []stat.Series{}
 	for i := range self.columns {
 		ht := self.columns[i].Subset(0, start, true)
 		tail := self.columns[i].Subset(end+1, rowLen).Values()

@@ -9,28 +9,28 @@ import (
 // First discrete difference of element.
 // Calculates the difference of a {klass} element compared with another
 // element in the {klass} (default is element in previous row).
-func (self *NDFrame) Diff(param any) (s Series) {
-	if !(self.type_ == SERIES_TYPE_INT64 || self.type_ == SERIES_TYPE_FLOAT32 || self.type_ == SERIES_TYPE_FLOAT64) {
-		return NewSeries(SERIES_TYPE_INVAILD, "", "")
+func (self *NDFrame) Diff(param any) (s stat.Series) {
+	if !(self.type_ == stat.SERIES_TYPE_INT64 || self.type_ == stat.SERIES_TYPE_FLOAT32 || self.type_ == stat.SERIES_TYPE_FLOAT64) {
+		return NewSeries(stat.SERIES_TYPE_INVAILD, "", "")
 	}
 	var N []stat.DType
 	switch v := param.(type) {
 	case int:
 		N = stat.Repeat[stat.DType](stat.DType(v), self.Len())
-	case Series:
+	case stat.Series:
 		vs := v.DTypes()
 		N = stat.Align(vs, stat.DTypeNaN, self.Len())
 	default:
 		//periods = 1
 		N = stat.Repeat[stat.DType](stat.DType(1), self.Len())
 	}
-	r := RollingAndExpandingMixin{
-		window: N,
-		series: self,
+	r := stat.RollingAndExpandingMixin{
+		Window: N,
+		Series: self,
 	}
 	var d []stat.DType
 	var front = stat.DTypeNaN
-	for _, block := range r.getBlocks() {
+	for _, block := range r.GetBlocks() {
 		vs := reflect.ValueOf(block.Values())
 		vl := vs.Len()
 		if vl == 0 {
@@ -50,6 +50,6 @@ func (self *NDFrame) Diff(param any) (s Series) {
 		d = append(d, diff)
 		front = cf
 	}
-	s = NewSeries(SERIES_TYPE_DTYPE, r.series.Name(), d)
+	s = NewSeries(stat.SERIES_TYPE_DTYPE, r.Series.Name(), d)
 	return
 }

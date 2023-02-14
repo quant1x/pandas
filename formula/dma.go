@@ -1,7 +1,6 @@
 package formula
 
 import (
-	"gitee.com/quant1x/pandas"
 	"gitee.com/quant1x/pandas/stat"
 )
 
@@ -13,10 +12,10 @@ import (
 //	算法:Y=A*X+(1-A)*Y',其中Y'表示上一周期Y值,A必须大于0且小于1.A支持变量
 //	例如:
 //	DMA(CLOSE,VOL/CAPITAL)表示求以换手率作平滑因子的平均价
-func DMA(S pandas.Series, A any) []stat.DType {
+func DMA(S stat.Series, A any) []stat.DType {
 	switch N := A.(type) {
 	case /*nil, */ int8, uint8, int16, uint16, int32, uint32, int64, uint64, int, uint, float32, float64 /*, bool, string*/ :
-		x := S.EWM(pandas.EW{Alpha: 1 / stat.Any2DType(N), Adjust: false}).Mean().DTypes()
+		x := S.EWM(stat.EW{Alpha: 1 / stat.Any2DType(N), Adjust: false}).Mean().DTypes()
 		return x
 	case []stat.DType:
 		s := S.DTypes()
@@ -31,7 +30,7 @@ func DMA(S pandas.Series, A any) []stat.DType {
 			Y[i] = a*s[i] + (1-a)*Y[i-1]
 		}
 		return Y
-	case pandas.Series:
+	case stat.Series:
 		s := S.DTypes()
 		M := N.DTypes()
 		stat.Fill(M, 1.0, true)

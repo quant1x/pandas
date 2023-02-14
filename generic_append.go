@@ -7,16 +7,16 @@ import (
 
 // 插入一条记录
 func (self *NDFrame) insert(idx, size int, v any) {
-	if self.type_ == SERIES_TYPE_BOOL {
+	if self.type_ == stat.SERIES_TYPE_BOOL {
 		val := stat.AnyToBool(v)
 		assign[bool](self, idx, size, val)
-	} else if self.type_ == SERIES_TYPE_INT64 {
+	} else if self.type_ == stat.SERIES_TYPE_INT64 {
 		val := stat.AnyToInt64(v)
 		assign[int64](self, idx, size, val)
-	} else if self.type_ == SERIES_TYPE_FLOAT32 {
+	} else if self.type_ == stat.SERIES_TYPE_FLOAT32 {
 		val := stat.AnyToFloat32(v)
 		assign[float32](self, idx, size, val)
-	} else if self.type_ == SERIES_TYPE_FLOAT64 {
+	} else if self.type_ == stat.SERIES_TYPE_FLOAT64 {
 		val := stat.AnyToFloat64(v)
 		assign[float64](self, idx, size, val)
 	} else {
@@ -26,7 +26,7 @@ func (self *NDFrame) insert(idx, size int, v any) {
 }
 
 // Append 批量增加记录
-func (self *NDFrame) Append(values ...any) {
+func (self *NDFrame) Append(values ...any) stat.Series {
 	size := 0
 	for idx, v := range values {
 		switch val := v.(type) {
@@ -51,4 +51,5 @@ func (self *NDFrame) Append(values ...any) {
 			}
 		}
 	}
+	return self
 }

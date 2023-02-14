@@ -1,7 +1,6 @@
 package formula
 
 import (
-	"gitee.com/quant1x/pandas"
 	"gitee.com/quant1x/pandas/stat"
 )
 
@@ -12,8 +11,8 @@ import (
 //	LAST(CLOSE>OPEN,10,5)
 //	表示从前10日到前5日内一直阳线
 //	若A为0,表示从第一天开始,B为0,表示到最后日止
-func LAST(X pandas.Series, A, B int) pandas.Series {
-	s := X.Rolling(A + 1).Apply(func(S pandas.Series, N stat.DType) stat.DType {
+func LAST(X stat.Series, A, B int) stat.Series {
+	s := X.Rolling(A + 1).Apply(func(S stat.Series, N stat.DType) stat.DType {
 		s := S.DTypes()
 		s = stat.Reverse(s)
 		T := s[B:]

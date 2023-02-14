@@ -81,16 +81,16 @@ var (
 // 初始化全局的私有变量
 var (
 	rawBool     bool    = true
-	typeBool            = reflect.TypeOf([]bool{})
+	TypeBool            = reflect.TypeOf([]bool{})
 	rawInt32    int32   = int32(0)
 	typeInt32           = reflect.TypeOf([]int32{})
 	rawInt64    int64   = int64(0)
-	typeInt64           = reflect.TypeOf([]int64{})
+	TypeInt64           = reflect.TypeOf([]int64{})
 	rawFloat32  float32 = float32(0)
-	typeFloat32         = reflect.TypeOf([]float32{})
+	TypeFloat32         = reflect.TypeOf([]float32{})
 	rawFloat64  float64 = float64(0)
-	typeFloat64         = reflect.TypeOf([]float64{})
-	typeString          = reflect.TypeOf([]string{})
+	TypeFloat64         = reflect.TypeOf([]float64{})
+	TypeString          = reflect.TypeOf([]string{})
 )
 
 // 从泛型检测出类型

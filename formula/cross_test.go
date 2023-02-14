@@ -13,5 +13,6 @@ func TestCROSS(t *testing.T) {
 	s1 := pandas.NewSeriesWithoutType("d1", d1)
 	s2 := pandas.NewSeriesWithoutType("d2", d2)
 
-	fmt.Println(CROSS(s1, s2))
+	fmt.Println(CROSS(d1, d2))
+	fmt.Println(CROSS1(s1, s2))
 }

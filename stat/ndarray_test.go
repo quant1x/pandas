@@ -24,7 +24,7 @@ func TestNDArrayAll(t *testing.T) {
 	d := []float32{1, 2, 3, 4, 5}
 	sh1 := (*reflect.SliceHeader)(unsafe.Pointer(&d))
 	fmt.Printf("s : %#v\n", sh1)
-	var s Frame
+	var s Series
 	s = NDArray[float32](d)
 	//s3 := []float32(s)
 	//fmt.Println(s3)
@@ -53,4 +53,15 @@ func TestNDArrayAll(t *testing.T) {
 	s = s.Append(10, 11)
 	fmt.Println(s)
 	_ = s4
+}
+
+func TestNDArray_Rolling(t *testing.T) {
+	d1 := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
+	s := NewSeries(d1...)
+	r1 := s.Rolling(5).Mean()
+	fmt.Println(r1)
+
+	d2 := []float64{1, 2, 3, 4, 3, 3, 2, 1, Nil2Float64, Nil2Float64, Nil2Float64, Nil2Float64}
+	r2 := s.Rolling(d2).Mean()
+	fmt.Println(r2)
 }

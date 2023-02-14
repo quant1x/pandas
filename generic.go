@@ -12,12 +12,11 @@ type NDFrame struct {
 	lock      sync.RWMutex         // 读写锁
 	formatter stat.StringFormatter // 字符串格式化工具
 	name      string               // 帧名称
-	type_     Type                 // values元素类型
+	type_     stat.Type            // values元素类型
 	copy_     bool                 // 是否副本
 	nilCount  int                  // nil和nan的元素有多少, 这种统计在bool和int64类型中不会大于0, 只对float64及string有效
 	rows      int                  // 行数
 	values    any                  // 只能是一个一维slice, 在所有的运算中, values强制转换成float64切片
-
 }
 
 //"""
@@ -35,7 +34,7 @@ func NewNDFrame[E stat.GenericType](name string, rows ...E) *NDFrame {
 	frame := NDFrame{
 		formatter: stat.DefaultFormatter,
 		name:      name,
-		type_:     SERIES_TYPE_INVAILD,
+		type_:     stat.SERIES_TYPE_INVAILD,
 		nilCount:  0,
 		rows:      0,
 		values:    []E{},
@@ -54,20 +53,20 @@ func NewNDFrame[E stat.GenericType](name string, rows ...E) *NDFrame {
 // 赋值
 func assign[T stat.GenericType](frame *NDFrame, idx, size int, v T) {
 	// 检测类型
-	if frame.type_ == SERIES_TYPE_INVAILD {
+	if frame.type_ == stat.SERIES_TYPE_INVAILD {
 		_type, _ := detectTypes(v)
-		if _type != SERIES_TYPE_INVAILD {
+		if _type != stat.SERIES_TYPE_INVAILD {
 			frame.type_ = _type
 		}
 	}
 	_vv := reflect.ValueOf(v)
 	_vi := _vv.Interface()
 	// float和string类型有可能是NaN, 对nil和NaN进行计数
-	if frame.Type() == SERIES_TYPE_FLOAT32 && stat.Float32IsNaN(_vi.(float32)) {
+	if frame.Type() == stat.SERIES_TYPE_FLOAT32 && stat.Float32IsNaN(_vi.(float32)) {
 		frame.nilCount++
-	} else if frame.Type() == SERIES_TYPE_FLOAT64 && stat.Float64IsNaN(_vi.(float64)) {
+	} else if frame.Type() == stat.SERIES_TYPE_FLOAT64 && stat.Float64IsNaN(_vi.(float64)) {
 		frame.nilCount++
-	} else if frame.Type() == SERIES_TYPE_STRING && stat.StringIsNaN(_vi.(string)) {
+	} else if frame.Type() == stat.SERIES_TYPE_STRING && stat.StringIsNaN(_vi.(string)) {
 		frame.nilCount++
 		// 以下修正string的NaN值, 统一为"NaN"
 		//_rv := reflect.ValueOf(StringNaN)
@@ -120,7 +119,7 @@ func (self *NDFrame) Rename(n string) {
 	self.name = n
 }
 
-func (self *NDFrame) Type() Type {
+func (self *NDFrame) Type() stat.Type {
 	return self.type_
 }
 
@@ -146,7 +145,7 @@ func (self *NDFrame) NaN() any {
 	}
 }
 
-func (self *NDFrame) Float() []float32 {
+func (self *NDFrame) Floats() []float32 {
 	return stat.SliceToFloat32(self.values)
 }
 
@@ -156,14 +155,17 @@ func (self *NDFrame) DTypes() []stat.DType {
 }
 
 // AsInt 强制转换成整型
-func (self *NDFrame) AsInt() []stat.Int {
+func (self *NDFrame) Ints() []stat.Int {
 	values := self.DTypes()
 	fs := stat.Fill[stat.DType](values, stat.DType(0))
 	ns := stat.DType2Int(fs)
 	return ns
 }
 
-func (self *NDFrame) Empty() Series {
+func (self *NDFrame) Empty(t ...stat.Type) stat.Series {
+	if len(t) > 0 {
+		self.type_ = t[0]
+	}
 	var frame NDFrame
 	if self.type_ == stat.SERIES_TYPE_STRING {
 		frame = NDFrame{
@@ -224,7 +226,7 @@ func (self *NDFrame) Records() []string {
 	return ret
 }
 
-func (self *NDFrame) Repeat(x any, repeats int) Series {
+func (self *NDFrame) Repeat(x any, repeats int) stat.Series {
 	switch values := self.values.(type) {
 	case []bool:
 		_ = values
@@ -245,9 +247,9 @@ func (self *NDFrame) Repeat(x any, repeats int) Series {
 	}
 }
 
-func (self *NDFrame) Shift(periods int) Series {
-	var d Series
-	d = clone(self).(Series)
+func (self *NDFrame) Shift(periods int) stat.Series {
+	var d stat.Series
+	d = stat.Clone(self).(stat.Series)
 	//return Shift[float64](&d, periods, func() float64 {
 	//	return Nil2Float64
 	//})
@@ -267,18 +269,18 @@ func (self *NDFrame) Shift(periods int) Series {
 		})
 	case []float32:
 		return Shift[float32](&d, periods, func() float32 {
-			return Nil2Float32
+			return stat.Nil2Float32
 		})
 	default: //case []float64:
 		return Shift[float64](&d, periods, func() float64 {
-			return Nil2Float64
+			return stat.Nil2Float64
 		})
 	}
 }
 
 func (self *NDFrame) Mean() stat.DType {
 	if self.Len() < 1 {
-		return NaN()
+		return stat.NaN()
 	}
 	fs := make([]stat.DType, 0)
 	self.Apply(func(idx int, v any) {
@@ -291,7 +293,7 @@ func (self *NDFrame) Mean() stat.DType {
 
 func (self *NDFrame) StdDev() stat.DType {
 	if self.Len() < 1 {
-		return NaN()
+		return stat.NaN()
 	}
 	values := make([]stat.DType, self.Len())
 	self.Apply(func(idx int, v any) {
@@ -303,7 +305,7 @@ func (self *NDFrame) StdDev() stat.DType {
 
 func (self *NDFrame) Std() stat.DType {
 	if self.Len() < 1 {
-		return NaN()
+		return stat.NaN()
 	}
 	values := make([]stat.DType, self.Len())
 	self.Apply(func(idx int, v any) {
@@ -313,7 +315,7 @@ func (self *NDFrame) Std() stat.DType {
 	return stdDev
 }
 
-func (self *NDFrame) FillNa(v any, inplace bool) Series {
+func (self *NDFrame) FillNa(v any, inplace bool) stat.Series {
 	values := self.Values()
 	switch rows := values.(type) {
 	case []string:

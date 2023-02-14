@@ -5,23 +5,23 @@ import (
 	"gitee.com/quant1x/pandas/stat"
 )
 
-func (self *NDFrame) Ref(param any) (s Series) {
+func (self *NDFrame) Ref(param any) (s stat.Series) {
 	var N []float32
 	switch v := param.(type) {
 	case int:
 		N = stat.Repeat[float32](float32(v), self.Len())
 	case []float32:
-		N = stat.Align(v, Nil2Float32, self.Len())
-	case Series:
+		N = stat.Align(v, stat.Nil2Float32, self.Len())
+	case stat.Series:
 		vs := v.Values()
 		N = stat.SliceToFloat32(vs)
-		N = stat.Align(N, Nil2Float32, self.Len())
+		N = stat.Align(N, stat.Nil2Float32, self.Len())
 	default:
 		panic(exception.New(1, "error window"))
 	}
 
-	var d Series
-	d = clone(self).(Series)
+	var d stat.Series
+	d = stat.Clone(self).(stat.Series)
 	//return Shift[float64](&d, periods, func() float64 {
 	//	return Nil2Float64
 	//})
@@ -41,11 +41,11 @@ func (self *NDFrame) Ref(param any) (s Series) {
 		})
 	case []float32:
 		return Shift2[float32](&d, N, func() float32 {
-			return Nil2Float32
+			return stat.Nil2Float32
 		})
 	default: //case []float64:
 		return Shift2[float64](&d, N, func() float64 {
-			return Nil2Float64
+			return stat.Nil2Float64
 		})
 	}
 

@@ -21,8 +21,8 @@ func TestEMA(t *testing.T) {
 
 	cs := CLOSE.Values().([]float32)
 	REF10 := REF(CLOSE, 10).([]float32)
-	v1 := vek32.Div(cs, REF10)
-	df01 := pandas.NewSeries(pandas.SERIES_TYPE_FLOAT32, "x", v1)
+	d1 := vek32.Div(cs, REF10)
+	df01 := pandas.NewSeries(stat.SERIES_TYPE_FLOAT32, "x", d1)
 	x0 := make([]stat.DType, CLOSE.Len())
 	df01.Apply(func(idx int, v any) {
 		f := v.(float32)
@@ -33,12 +33,12 @@ func TestEMA(t *testing.T) {
 		x0[idx] = t
 	})
 	//x := stat.Where(v2, as, bs)
-	n := BARSLAST(pandas.NewSeries(pandas.SERIES_TYPE_FLOAT32, "", x0))
+	n := BARSLAST(pandas.NewSeries(stat.SERIES_TYPE_FLOAT32, "", x0))
 	fmt.Println(n[len(n)-10:])
-	x := EMA(CLOSE, pandas.NewSeries(pandas.SERIES_TYPE_DTYPE, "", n))
+	x := EMA(CLOSE, pandas.NewSeries(stat.SERIES_TYPE_DTYPE, "", n))
 
 	//x := EMA(CLOSE, 7)
-	sx := pandas.NewSeries(pandas.SERIES_TYPE_DTYPE, "x", x)
+	sx := pandas.NewSeries(stat.SERIES_TYPE_DTYPE, "x", x)
 	df = pandas.NewDataFrame(CLOSE, sx)
 	fmt.Println(df)
 

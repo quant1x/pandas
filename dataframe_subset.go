@@ -8,7 +8,7 @@ func (self DataFrame) Subset(start, end int) DataFrame {
 	if self.Err != nil {
 		return self
 	}
-	columns := make([]Series, self.ncols)
+	columns := make([]stat.Series, self.ncols)
 	for i, column := range self.columns {
 		s := column.Subset(start, end)
 		columns[i] = s
@@ -26,7 +26,7 @@ func (self DataFrame) Subset(start, end int) DataFrame {
 
 // Select 选择一段记录
 func (self DataFrame) SelectRows(p stat.ScopeLimit) DataFrame {
-	columns := []Series{}
+	columns := []stat.Series{}
 	for i := range self.columns {
 		columns = append(columns, self.columns[i].Select(p))
 	}

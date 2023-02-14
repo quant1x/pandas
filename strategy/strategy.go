@@ -10,9 +10,8 @@ import (
 	"gitee.com/quant1x/pandas/stat"
 	"github.com/mymmsc/gox/logger"
 	"github.com/mymmsc/gox/util/treemap"
-	termTable "github.com/olekukonko/tablewriter"
-
-	"github.com/qianlnk/pgbar"
+	tableView "github.com/olekukonko/tablewriter"
+	progressbar "github.com/qianlnk/pgbar"
 	"os"
 	"runtime"
 	"sync"
@@ -58,7 +57,7 @@ func main() {
 	var wg = sync.WaitGroup{}
 	fmt.Println("Quant1X 预警系统")
 	fmt.Printf("CPU: %d, AVX2: %t\n", cpuNum, stat.GetAvx2Enabled())
-	bar := pgbar.NewBar(0, "执行["+api.Name()+"]", count)
+	bar := progressbar.NewBar(0, "执行["+api.Name()+"]", count)
 	var mapStock *treemap.Map
 	mapStock = treemap.NewWithStringComparator()
 	mainStart := time.Now()
@@ -85,7 +84,7 @@ func main() {
 	elapsedTime := time.Since(mainStart) / time.Millisecond
 	fmt.Printf("CPU: %d, AVX2: %t, 总耗时: %.3fs, 总记录: %d, 平均: %.3f/s\n", cpuNum, stat.GetAvx2Enabled(), float64(elapsedTime)/1000, count, float64(count)/(float64(elapsedTime)/1000))
 	logger.Infof("CPU: %d, AVX2: %t, 总耗时: %.3fs, 总记录: %d, 平均: %.3f/s", cpuNum, stat.GetAvx2Enabled(), float64(elapsedTime)/1000, count, float64(count)/(float64(elapsedTime)/1000))
-	table := termTable.NewWriter(os.Stdout)
+	table := tableView.NewWriter(os.Stdout)
 	var row ResultInfo
 	table.SetHeader(row.Headers())
 

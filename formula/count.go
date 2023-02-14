@@ -1,15 +1,11 @@
 package formula
 
 import (
-	"gitee.com/quant1x/pandas"
 	"gitee.com/quant1x/pandas/stat"
 )
 
 // COUNT 统计S为真的天数
-func COUNT(S pandas.Series, N any) pandas.Series {
-	return S.Rolling(N).Count()
-}
-func COUNT2(S []bool, N int) []int {
+func COUNT(S []bool, N int) []int {
 	xLen := len(S)
 	x := stat.Rolling(S, N)
 	ret := make([]int, xLen)
@@ -25,10 +21,14 @@ func COUNT2(S []bool, N int) []int {
 	return ret
 }
 
+func COUNT_V2(S stat.Series, N any) stat.Series {
+	return S.Rolling(N).Count()
+}
+
 // COUNT_v1 一般性比较
-func COUNT_v1(S pandas.Series, N any) []stat.Int {
+func COUNT_v1(S stat.Series, N any) []stat.Int {
 	//values := S.DTypes()
-	return S.Rolling(N).Apply(func(X pandas.Series, W stat.DType) stat.DType {
+	return S.Rolling(N).Apply(func(X stat.Series, W stat.DType) stat.DType {
 		x := X.DTypes()
 		n := 0
 		for _, v := range x {
@@ -37,5 +37,5 @@ func COUNT_v1(S pandas.Series, N any) []stat.Int {
 			}
 		}
 		return stat.DType(n)
-	}).AsInt()
+	}).Ints()
 }

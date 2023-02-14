@@ -10,7 +10,7 @@ import (
 func LoadRecords(records [][]string, options ...LoadOption) DataFrame {
 	// Set the default load options
 	cfg := loadOptions{
-		defaultType: SERIES_TYPE_STRING,
+		defaultType: stat.SERIES_TYPE_STRING,
 		detectTypes: true,
 		hasHeader:   true,
 		nanValues:   stat.PossibleNaOfString,
@@ -44,7 +44,7 @@ func LoadRecords(records [][]string, options ...LoadOption) DataFrame {
 		headers = cfg.names
 	}
 
-	types := make([]Type, len(headers))
+	types := make([]stat.Type, len(headers))
 	rawcols := make([][]string, len(headers))
 	for i, colname := range headers {
 		rawcol := make([]string, len(records))
@@ -69,7 +69,7 @@ func LoadRecords(records [][]string, options ...LoadOption) DataFrame {
 		types[i] = t
 	}
 
-	columns := make([]Series, len(headers))
+	columns := make([]stat.Series, len(headers))
 	for i, colname := range headers {
 		cols := rawcols[i]
 		col := NewSeries(types[i], colname, cols)

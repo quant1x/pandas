@@ -1,6 +1,7 @@
 package stat
 
 import (
+	gc "github.com/huandu/go-clone"
 	"github.com/viterin/vek"
 	"math"
 	"reflect"
@@ -68,4 +69,9 @@ func IsEmpty(s string) bool {
 	} else {
 		return false
 	}
+}
+
+// Clone 克隆一个any
+func Clone(v any) any {
+	return gc.Clone(v)
 }

@@ -1,14 +1,13 @@
 package formula
 
 import (
-	"gitee.com/quant1x/pandas"
 	"gitee.com/quant1x/pandas/exception"
 	"gitee.com/quant1x/pandas/stat"
 	"github.com/viterin/vek"
 )
 
-func AND(a, b []bool) []bool {
-	return vek.And(a, b)
+func AND[T stat.Number | ~bool](a, b []T) []bool {
+	return stat.And(a, b)
 }
 
 func OR(a, b []bool) []bool {
@@ -51,7 +50,7 @@ func __compare(v []stat.DType, x any, comparator func(x, y []float64) []bool) []
 			vlen = xlen
 		}
 		X = stat.Align[stat.DType](vx, defaultValue, vlen)
-	case pandas.Series:
+	case stat.Series:
 		vs := vx.DTypes()
 		xlen := len(vs)
 		if vlen < xlen {

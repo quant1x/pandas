@@ -7,7 +7,7 @@ import (
 )
 
 // 这里做数组统一转换
-func convert[T GenericType](s Frame, v T) {
+func convert[T GenericType](s Series, v T) {
 	values := s.Values()
 	rawType := checkoutRawType(values)
 	values, ok := values.([]T)
@@ -15,7 +15,7 @@ func convert[T GenericType](s Frame, v T) {
 	_ = ok
 }
 
-func ToFloat32(s Frame) []float32 {
+func ToFloat32(s Series) []float32 {
 	length := s.Len()
 	defaultSlice := vek32.Repeat(Nil2Float32, length)
 	values := s.Values()
@@ -37,7 +37,7 @@ func ToFloat32(s Frame) []float32 {
 	}
 }
 
-func ToFloat64(s Frame) []float64 {
+func ToFloat64(s Series) []float64 {
 	length := s.Len()
 	defaultSlice := vek.Repeat(Nil2Float64, length)
 	values := s.Values()
@@ -59,7 +59,7 @@ func ToFloat64(s Frame) []float64 {
 	}
 }
 
-func ToBool(s Frame) []bool {
+func ToBool(s Series) []bool {
 	length := s.Len()
 	defaultSlice := make([]bool, length)
 	values := s.Values()

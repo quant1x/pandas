@@ -2,6 +2,7 @@ package pandas
 
 import (
 	"encoding/csv"
+	"gitee.com/quant1x/pandas/stat"
 	"github.com/mymmsc/gox/api"
 	"github.com/mymmsc/gox/logger"
 	"github.com/mymmsc/gox/util/homedir"
@@ -24,7 +25,7 @@ func ReadCSV(in any, options ...LoadOption) DataFrame {
 		filename = param
 	}
 
-	if !IsEmpty(filename) {
+	if !stat.IsEmpty(filename) {
 		filepath, err := homedir.Expand(filename)
 		if err != nil {
 			logger.Errorf("%s, error=%+v\n", filename, err)
@@ -74,7 +75,7 @@ func (self DataFrame) WriteCSV(out any, options ...WriteOption) error {
 		filename = param
 	}
 
-	if !IsEmpty(filename) {
+	if !stat.IsEmpty(filename) {
 		filepath, err := homedir.Expand(filename)
 		if err != nil {
 			return err

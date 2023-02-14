@@ -70,11 +70,11 @@ func (self *NDFrame) Max() any {
 			_ = idx
 		}
 		if hasNan {
-			return Nil2Float32
+			return stat.Nil2Float32
 		} else if i > 0 {
 			return max
 		}
-		return Nil2Float32
+		return stat.Nil2Float32
 	//case []float32:
 	//	if self.Len() == 0 {
 	//		return Nil2Float32
@@ -96,11 +96,11 @@ func (self *NDFrame) Max() any {
 			_ = idx
 		}
 		if hasNaN {
-			return Nil2Float64
+			return stat.Nil2Float64
 		} else if i > 0 {
 			return max
 		}
-		return Nil2Float64
+		return stat.Nil2Float64
 	//case []float64:
 	//	if self.Len() == 0 {
 	//		return Nil2Float64

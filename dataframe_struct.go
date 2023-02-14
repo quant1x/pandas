@@ -46,7 +46,7 @@ func LoadStructs(i interface{}, options ...LoadOption) DataFrame {
 
 	// Set the default load options
 	cfg := loadOptions{
-		defaultType: SERIES_TYPE_STRING,
+		defaultType: stat.SERIES_TYPE_STRING,
 		detectTypes: true,
 		hasHeader:   true,
 		nanValues:   stat.PossibleNaOfString,
@@ -69,7 +69,7 @@ func LoadStructs(i interface{}, options ...LoadOption) DataFrame {
 		}
 
 		numFields := val.Index(0).Type().NumField()
-		var columns []Series
+		var columns []stat.Series
 		for j := 0; j < numFields; j++ {
 			// Extract field metadata
 			if !val.Index(0).Field(j).CanInterface() {
@@ -100,7 +100,7 @@ func LoadStructs(i interface{}, options ...LoadOption) DataFrame {
 			}
 
 			// Handle `types` option
-			var t Type
+			var t stat.Type
 			if cfgtype, ok := cfg.types[fieldName]; ok {
 				t = cfgtype
 			} else {
@@ -136,17 +136,17 @@ func LoadStructs(i interface{}, options ...LoadOption) DataFrame {
 				elements = append(tmp, elements...)
 				fieldName = ""
 			}
-			if t == SERIES_TYPE_STRING {
-				columns = append(columns, NewSeries(SERIES_TYPE_STRING, fieldName, elements))
-			} else if t == SERIES_TYPE_BOOL {
-				columns = append(columns, NewSeries(SERIES_TYPE_BOOL, fieldName, elements))
-			} else if t == SERIES_TYPE_INT64 {
-				columns = append(columns, NewSeries(SERIES_TYPE_INT64, fieldName, elements))
-			} else if t == SERIES_TYPE_FLOAT32 {
-				columns = append(columns, NewSeries(SERIES_TYPE_FLOAT32, fieldName, elements))
+			if t == stat.SERIES_TYPE_STRING {
+				columns = append(columns, NewSeries(stat.SERIES_TYPE_STRING, fieldName, elements))
+			} else if t == stat.SERIES_TYPE_BOOL {
+				columns = append(columns, NewSeries(stat.SERIES_TYPE_BOOL, fieldName, elements))
+			} else if t == stat.SERIES_TYPE_INT64 {
+				columns = append(columns, NewSeries(stat.SERIES_TYPE_INT64, fieldName, elements))
+			} else if t == stat.SERIES_TYPE_FLOAT32 {
+				columns = append(columns, NewSeries(stat.SERIES_TYPE_FLOAT32, fieldName, elements))
 			} else {
 				// 默认float
-				columns = append(columns, NewSeries(SERIES_TYPE_FLOAT64, fieldName, elements))
+				columns = append(columns, NewSeries(stat.SERIES_TYPE_FLOAT64, fieldName, elements))
 			}
 		}
 		return NewDataFrame(columns...)

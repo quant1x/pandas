@@ -1,18 +1,21 @@
 package pandas
 
-import "gonum.org/v1/gonum/mat"
+import (
+	"gitee.com/quant1x/pandas/stat"
+	"gonum.org/v1/gonum/mat"
+)
 
 // LoadMatrix loads the given Matrix as a DataFrame
 // TODO: Add Loadoptions
 func LoadMatrix(mat mat.Matrix) DataFrame {
 	nrows, ncols := mat.Dims()
-	columns := make([]Series, ncols)
+	columns := make([]stat.Series, ncols)
 	for i := 0; i < ncols; i++ {
 		floats := make([]float64, nrows)
 		for j := 0; j < nrows; j++ {
 			floats[j] = mat.At(j, i)
 		}
-		columns[i] = NewSeries(SERIES_TYPE_FLOAT64, "", floats)
+		columns[i] = NewSeries(stat.SERIES_TYPE_FLOAT64, "", floats)
 	}
 	nrows, ncols, err := checkColumnsDimensions(columns...)
 	if err != nil {

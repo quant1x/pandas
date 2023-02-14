@@ -36,8 +36,4 @@ func TestRolling(t *testing.T) {
 		t.Errorf("Got %v, want %v", output, expected)
 	}
 
-	//output = Rolling(testSliceFloat, []int8{3, 3, 3, 3, 3, 3})
-	//if reflect.DeepEqual(expected, output) != true {
-	//	t.Errorf("Got %v, want %v", output, expected)
-	//}
 }

@@ -1,21 +1,20 @@
 package formula
 
 import (
-	"gitee.com/quant1x/pandas"
 	"gitee.com/quant1x/pandas/exception"
 	"gitee.com/quant1x/pandas/stat"
 )
 
 // REF 引用前N的序列
-func REF(S pandas.Series, N any) any {
+func REF(S stat.Series, N any) any {
 	var X []float32
 	switch v := N.(type) {
 	case int:
 		X = stat.Repeat[float32](float32(v), S.Len())
-	case pandas.Series:
+	case stat.Series:
 		vs := v.Values()
 		X = stat.SliceToFloat32(vs)
-		X = stat.Align(X, pandas.Nil2Float32, S.Len())
+		X = stat.Align(X, stat.Nil2Float32, S.Len())
 	default:
 		panic(exception.New(1, "error window"))
 	}

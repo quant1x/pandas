@@ -7,12 +7,12 @@ import (
 )
 
 // Copy 复制一个副本
-func (self *NDFrame) Copy() Series {
+func (self *NDFrame) Copy() stat.Series {
 	vlen := self.Len()
 	return self.Subset(0, vlen, true)
 }
 
-func (self *NDFrame) Subset(start, end int, opt ...any) Series {
+func (self *NDFrame) Subset(start, end int, opt ...any) stat.Series {
 	// 默认不copy
 	var __optCopy bool = false
 	if len(opt) > 0 {
@@ -46,10 +46,10 @@ func (self *NDFrame) Subset(start, end int, opt ...any) Series {
 	default:
 		// 其它类型忽略
 	}
-	return self.Empty()
+	return self.Empty(0)
 }
 
-func (self *NDFrame) oldSubset(start, end int, opt ...any) Series {
+func (self *NDFrame) oldSubset(start, end int, opt ...any) stat.Series {
 	// 默认不copy
 	var __optCopy bool = false
 	if len(opt) > 0 {
@@ -110,13 +110,13 @@ func (self *NDFrame) oldSubset(start, end int, opt ...any) Series {
 		rows:      rows,
 		values:    vs,
 	}
-	var s Series
+	var s stat.Series
 	s = &frame
 	return s
 }
 
 // Select 选取一段记录
-func (self *NDFrame) Select(r stat.ScopeLimit) Series {
+func (self *NDFrame) Select(r stat.ScopeLimit) stat.Series {
 	start, end, err := r.Limits(self.Len())
 	if err != nil {
 		return nil
