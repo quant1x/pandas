@@ -12,6 +12,8 @@ import (
 	"github.com/mymmsc/gox/util/treemap"
 	tableView "github.com/olekukonko/tablewriter"
 	progressbar "github.com/qianlnk/pgbar"
+	"github.com/shirou/gopsutil/v3/cpu"
+	"github.com/shirou/gopsutil/v3/mem"
 	"os"
 	"runtime"
 	"sync"
@@ -56,7 +58,10 @@ func main() {
 	count := len(ss)
 	var wg = sync.WaitGroup{}
 	fmt.Println("Quant1X 预警系统")
-	fmt.Printf("CPU: %d, AVX2: %t\n", cpuNum, stat.GetAvx2Enabled())
+	infos, _ := cpu.Info()
+	cpuInfo := infos[0]
+	mem, _ := mem.VirtualMemory()
+	fmt.Printf("CPU: %s %dCores, AVX2: %t, Mem: total %dGB, free %dGB\n", cpuInfo.ModelName, cpuInfo.Cores, stat.GetAvx2Enabled(), mem.Total/(1024*1024*1024), mem.Free/(1024*1024*1024))
 	bar := progressbar.NewBar(0, "执行["+api.Name()+"]", count)
 	var mapStock *treemap.Map
 	mapStock = treemap.NewWithStringComparator()
