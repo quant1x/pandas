@@ -117,3 +117,7 @@ func (self *NDFrame) Min() any {
 	}
 	return stat.Nil2Float64
 }
+
+func (self *NDFrame) ArgMin() int {
+	return stat.ArgMin2(self.DTypes())
+}

@@ -111,3 +111,7 @@ func (self *NDFrame) Max() any {
 	}
 	//return Nil2Float64
 }
+
+func (self *NDFrame) ArgMax() int {
+	return stat.ArgMax2(self.DTypes())
+}

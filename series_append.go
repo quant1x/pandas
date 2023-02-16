@@ -5,6 +5,28 @@ import (
 	"reflect"
 )
 
+func (self *NDFrame) Reverse() stat.Series {
+	s := self.Empty()
+
+	if self.type_ == stat.SERIES_TYPE_BOOL {
+		values := stat.Reverse(self.values.([]bool))
+		s = s.Append(values)
+	} else if self.type_ == stat.SERIES_TYPE_INT64 {
+		values := stat.Reverse(self.values.([]int64))
+		s = s.Append(values)
+	} else if self.type_ == stat.SERIES_TYPE_FLOAT32 {
+		values := stat.Reverse(self.values.([]float32))
+		s = s.Append(values)
+	} else if self.type_ == stat.SERIES_TYPE_FLOAT64 {
+		values := stat.Reverse(self.values.([]float64))
+		s = s.Append(values)
+	} else {
+		values := stat.Reverse(self.values.([]string))
+		s = s.Append(values)
+	}
+	return s
+}
+
 // 插入一条记录
 func (self *NDFrame) insert(idx, size int, v any) {
 	if self.type_ == stat.SERIES_TYPE_BOOL {

@@ -13,24 +13,65 @@ func ArgMin[T Number](x []T) int {
 	return ret
 }
 
-//func ArgMin[T Number](v []T) int {
-//	var vv any = v
-//	switch values := vv.(type) {
-//	case []float32:
-//		return vek32.ArgMin(values)
-//	case []float64:
-//		return vek.ArgMin(values)
-//	default:
-//		return __arg_min(v)
-//	}
-//}
+func ArgMin2[T BaseType](x []T) int {
+	var d int
+	switch vs := any(x).(type) {
+	case []float32:
+		d = ArgMin(vs)
+	case []float64:
+		d = ArgMin(vs)
+	case []int:
+		d = ArgMin(vs)
+	case []int8:
+		d = ArgMin(vs)
+	case []int16:
+		d = ArgMin(vs)
+	case []int32:
+		d = ArgMin(vs)
+	case []int64:
+		d = ArgMin(vs)
+	case []uint:
+		d = ArgMin(vs)
+	case []uint8:
+		d = ArgMin(vs)
+	case []uint16:
+		d = ArgMin(vs)
+	case []uint32:
+		d = ArgMin(vs)
+	case []uint64:
+		d = ArgMin(vs)
+	case []uintptr:
+		d = ArgMin(vs)
+	case []string:
+		d = __arg_min_go(vs)
+	case []bool:
+		d = __arg_min_go_bool(vs)
+	default:
+		// 其它类型原样返回
+		panic(Throw(any(x)))
+	}
 
-func __arg_min_go[T Number](x []T) int {
+	return d
+}
+
+func __arg_min_go[T Ordered](x []T) int {
 	min := x[0]
 	idx := 0
 	for i, v := range x[1:] {
 		if v < min {
 			min = v
+			idx = 1 + i
+		}
+	}
+	return idx
+}
+
+func __arg_min_go_bool(x []bool) int {
+	min := bool2Int(x[0])
+	idx := 0
+	for i, v := range x[1:] {
+		if bool2Int(v) < min {
+			min = bool2Int(v)
 			idx = 1 + i
 		}
 	}

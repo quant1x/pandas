@@ -8,22 +8,6 @@ import (
 
 type NDArray[T BaseType] []T
 
-func (self NDArray[T]) Name() string {
-	return "x"
-}
-
-func (self NDArray[T]) Rename(name string) {
-
-}
-
-func (self NDArray[T]) Type() Type {
-	return checkoutRawType(self)
-}
-
-func (self NDArray[T]) Values() any {
-	return []T(self)
-}
-
 func (self NDArray[T]) NaN() any {
 	switch any(self).(type) {
 	case []bool:
@@ -153,7 +137,7 @@ func (self NDArray[T]) FillNa(v any, inplace bool) Series {
 }
 
 func (self NDArray[T]) Max() any {
-	d := Min2(self)
+	d := Max2(self)
 	return d
 }
 

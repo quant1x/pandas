@@ -16,6 +16,9 @@ type Series interface {
 	// Values 获得全部数据集
 	Values() any
 
+	// Reverse 序列反转
+	Reverse() Series
+
 	// NaN 输出默认的NaN
 	NaN() any
 	// Floats 强制转成[]float32
@@ -57,8 +60,12 @@ type Series interface {
 	FillNa(v any, inplace bool) Series
 	// Max 找出最大值
 	Max() any
+	// ArgMax Returns the indices of the maximum values along an axis
+	ArgMax() int
 	// Min 找出最小值
 	Min() any
+	// ArgMin Returns the indices of the minimum values along an axis
+	ArgMin() int
 	// Select 选取一段记录
 	Select(r ScopeLimit) Series
 	// Append 增加一批记录

@@ -208,7 +208,6 @@ func __anyToNumber[T Number](v any) T {
 		vt := ParseFloat64(val, v)
 		if Float64IsNaN(vt) {
 			td := T(0)
-			//rawType :=checkoutRawType(td)
 			if !reflect.ValueOf(td).CanFloat() {
 				return td
 			}
