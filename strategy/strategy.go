@@ -60,8 +60,8 @@ func main() {
 	fmt.Println("Quant1X 预警系统")
 	infos, _ := cpu.Info()
 	cpuInfo := infos[0]
-	mem, _ := mem.VirtualMemory()
-	fmt.Printf("CPU: %s %dCores, AVX2: %t, Mem: total %dGB, free %dGB\n", cpuInfo.ModelName, cpuInfo.Cores, stat.GetAvx2Enabled(), mem.Total/(1024*1024*1024), mem.Free/(1024*1024*1024))
+	memory, _ := mem.VirtualMemory()
+	fmt.Printf("CPU: %s %dCores, AVX2: %t, Mem: total %dGB, free %dGB\n", cpuInfo.ModelName, cpuInfo.Cores, stat.GetAvx2Enabled(), memory.Total/(1024*1024*1024), memory.Free/(1024*1024*1024))
 	bar := progressbar.NewBar(0, "执行["+api.Name()+"]", count)
 	var mapStock *treemap.Map
 	mapStock = treemap.NewWithStringComparator()
