@@ -13,9 +13,9 @@ formula
 | 0   | IFF           | 逻辑判断                                               | IFF(CLOSE>10,1,2)                 | [√]  | [√]  |
 | 0   | IFN           | 逻辑判断                                               | IFN(CLOSE>10,1,2)                 | [√]  | [√]  |
 | 0   | HHV           | 计算N周期内最高                                           | HHV(HIGH,5)                       | [√]  | [√]  |
-| 0   | HHVBARS       | 求N周期内S最高值到当前周期数, 返回序列                              | HHVBARS(HIGH,5)                   | [x]  | [x]  |
+| 0   | HHVBARS       | 求N周期内S最高值到当前周期数, 返回序列                              | HHVBARS(HIGH,5)                   | [√]  | [√]  |
 | 0   | LLV           | 计算N周期内最低                                           | LLV(HLOW,5)                       | [√]  | [√]  |
-| 0   | LLVBARS       | 求N周期内S最低值到当前周期数, 返回序列                              | LLVBARS(HLOW,5)                   | [x]  | [x]  |
+| 0   | LLVBARS       | 求N周期内S最低值到当前周期数, 返回序列                              | LLVBARS(HLOW,5)                   | [√]  | [√]  |
 | 0   | SQRT          | 计算S的平方根                                            | SQRT(CLOSE)                       | [√]  | [√]  |
 | 0   | MAX           | 计算AB最大值                                            | MAX(CLOSE,HIGH)                   | [√]  | [√]  |
 | 0   | MIN           | 计算AB最小值                                            | MIN(CLOSE,HIGH)                   | [√]  | [√]  |
@@ -34,7 +34,7 @@ formula
 | 1   | COUNT         | COUNT(CLOSE>O,N),最近N天满足S的天数True的天数                 | COUNT(CLOSE>LOW,5)                | [√]  | [√]  |
 | 1   | EVERY         | EVERY(CLOSE>O,5),最近N天是否都是True                      | EVERY(CLOSE>LOW,5)                | [X]  | [X]  |
 | 1   | EXIST         | EXIST(CLOSE>O,5),最近N天是否都是True                      | EXIST(CLOSE>LOW,5)                | [X]  | [X]  |
-| 1   | FILTER        | FILTER函数，S满足条件后，将其后N周期内的数据置为0                      | FILTER(CLOSE>LOW,5)               | [X]  | [X]  |
+| 1   | FILTER        | FILTER函数，S满足条件后，将其后N周期内的数据置为0                      | FILTER(CLOSE>LOW,5)               | [√]  | [√]  |
 | 1   | BARSLAST      | 上一次条件成立到当前的周期数                                     | BARSLAST(X)                       | [√]  | [√]  |
 | 1   | BARSLASTCOUNT | 统计连续满足S条件的周期数                                      | BARSLASTCOUNT(X)                  | [√]  | [ ]  |
 | 1   | BARSSINCEN    | N周期内第一次S条件成立到现在的周期数                                | BARSSINCEN(S,N)                   | [√]  | [√]  |

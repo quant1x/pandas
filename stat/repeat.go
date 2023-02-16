@@ -26,6 +26,22 @@ func Repeat[T BaseType](f T, n int) []T {
 	return d.([]T)
 }
 
+// RepeatInto 替换n长度的f的泛型切片
+func RepeatInto[T BaseType](s []T, f T, n int) []T {
+	switch fs := any(s).(type) {
+	case []float32:
+		vek32.Repeat_Into(fs, any(f).(float32), n)
+	case []float64:
+		vek.Repeat_Into(fs, any(f).(float64), n)
+	default:
+		// 剩下非float32和float64, 循环吧
+		for i := 0; i < n; i++ {
+			s[i] = f
+		}
+	}
+	return s[:n]
+}
+
 // Range 产生从0到n-1的数组
 func Range[T Number](n int) []T {
 	var dest any
