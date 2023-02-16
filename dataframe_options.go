@@ -2,6 +2,12 @@ package pandas
 
 import "gitee.com/quant1x/pandas/stat"
 
+// Read/Write Methods
+// =================
+
+// LoadOption is the type used to configure the load of elements
+type LoadOption func(*loadOptions)
+
 type loadOptions struct {
 	// Specifies which is the default type in case detectTypes is disabled.
 	defaultType stat.Type

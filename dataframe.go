@@ -225,9 +225,3 @@ func findInStringSlice(str string, s []string) int {
 	}
 	return -1
 }
-
-// Read/Write Methods
-// =================
-
-// LoadOption is the type used to configure the load of elements
-type LoadOption func(*loadOptions)
