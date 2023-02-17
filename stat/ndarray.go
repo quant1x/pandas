@@ -192,7 +192,7 @@ func (self NDArray[T]) Sum() DType {
 	if self.Len() < 1 {
 		return NaN()
 	}
-	values := Slice2DType(self)
+	values := Slice2DType(self.Values())
 	d := Sum(values)
 	return Any2DType(d)
 }
