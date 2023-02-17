@@ -6,7 +6,7 @@ import (
 )
 
 // SMA 中国式的SMA,至少需要120周期才精确 (雪球180周期)    alpha=1/(1+com)
-func SMA(S stat.Series, N any, M int) any {
+func SMA(S stat.Series, N any, M int) stat.Series {
 	if M == 0 {
 		M = 1
 	}
@@ -21,7 +21,8 @@ func SMA(S stat.Series, N any, M int) any {
 	default:
 		panic(exception.New(1, "error window"))
 	}
-	x := S.EWM(stat.EW{Alpha: float64(M) / float64(X), Adjust: false}).Mean().Values()
+	//x := S.EWM(stat.EW{Alpha: float64(M) / float64(X), Adjust: false}).Mean().Values()
+	x := S.EWM(stat.EW{Alpha: float64(M) / float64(X), Adjust: false}).Mean()
 	return x
 }
 

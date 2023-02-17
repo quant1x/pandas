@@ -6,19 +6,18 @@ import (
 )
 
 // REF 引用前N的序列
-func REF(S stat.Series, N any) any {
-	var X []float32
+func REF(S stat.Series, N any) stat.Series {
+	var X []stat.DType
 	switch v := N.(type) {
 	case int:
-		X = stat.Repeat[float32](float32(v), S.Len())
+		X = stat.Repeat[stat.DType](stat.DType(v), S.Len())
 	case stat.Series:
-		vs := v.Values()
-		X = stat.SliceToFloat32(vs)
-		X = stat.Align(X, stat.Nil2Float32, S.Len())
+		vs := v.DTypes()
+		X = stat.Align(vs, stat.DTypeNaN, S.Len())
 	default:
 		panic(exception.New(1, "error window"))
 	}
-	return S.Ref(X).Values()
+	return S.Ref(X)
 }
 
 func REF2[T stat.GenericType](S []T, N any) []T {
@@ -28,7 +27,7 @@ func REF2[T stat.GenericType](S []T, N any) []T {
 	case int:
 		X = stat.Repeat[stat.DType](stat.DType(v), sLen)
 	case []stat.DType:
-		X = stat.Align(X, stat.Nil2Float64, sLen)
+		X = stat.Align(v, stat.DTypeNaN, sLen)
 	default:
 		panic(exception.New(1, "error window"))
 	}

@@ -5,7 +5,6 @@ import (
 	"gitee.com/quant1x/pandas/exception"
 	"github.com/mymmsc/gox/logger"
 	"github.com/viterin/vek/vek32"
-	"golang.org/x/exp/slices"
 	"math"
 	"reflect"
 	"strconv"
@@ -66,7 +65,8 @@ func SliceToFloat32(v any) []float32 {
 	case []uint:
 		return slice_any_to_float32(values)
 	case []float32: // 克隆
-		return slices.Clone(values)
+		//return slices.Clone(values)
+		return values
 	case []float64: // 加速
 		return vek32.FromFloat64(values)
 	case []bool:
