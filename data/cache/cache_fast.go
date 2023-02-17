@@ -2,6 +2,7 @@ package cache
 
 import (
 	"errors"
+	"gitee.com/quant1x/pandas"
 	"gitee.com/quant1x/pandas/data/category"
 	"github.com/mymmsc/gox/logger"
 	"os"
@@ -100,4 +101,12 @@ func GetCache(fullCode string) *os.File {
 		}
 	}
 	return file
+}
+
+// KLine 加载K线
+func KLine(code string) pandas.DataFrame {
+	filename := GetCacheFilename(code)
+	df := pandas.ReadCSV(filename)
+	_ = df.SetNames("date", "open", "high", "low", "close", "volume")
+	return df
 }

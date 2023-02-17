@@ -345,3 +345,23 @@ func (self *NDFrame) FillNa(v any, inplace bool) stat.Series {
 	}
 	return self
 }
+
+func (self *NDFrame) Add(x any) stat.Series {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (self *NDFrame) Sub(x any) stat.Series {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (self *NDFrame) Mul(x any) stat.Series {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (self *NDFrame) Div(x any) stat.Series {
+	//TODO implement me
+	panic("implement me")
+}

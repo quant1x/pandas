@@ -106,9 +106,9 @@ func ParseFloat32(s string, v any) float32 {
 		// TODO:NaN是针对64位, 这样直接转换应该有问题, 需要进一步确认
 		return Nil2Float32
 	}
-	if isTrue(s) {
+	if StringIsTrue(s) {
 		return StringTrue2Float32
-	} else if isFalse(s) {
+	} else if StringIsFalse(s) {
 		return StringFalse2Float32
 	}
 
@@ -128,6 +128,6 @@ func AnyToFloat32(v any) float32 {
 		v = vv
 	}
 
-	f := valueToNumber(v, Nil2Float32, boolToFloat32, ParseFloat32)
+	f := valueToNumber(v, Nil2Float32, BoolToFloat32, ParseFloat32)
 	return f
 }

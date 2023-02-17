@@ -13,6 +13,7 @@ type Type = reflect.Kind
 const (
 	SERIES_TYPE_INVAILD = reflect.Invalid // 无效类型
 	SERIES_TYPE_BOOL    = reflect.Bool    // 布尔类型
+	SERIES_TYPE_INT32   = reflect.Int32   // int64
 	SERIES_TYPE_INT64   = reflect.Int64   // int64
 	SERIES_TYPE_FLOAT32 = reflect.Float32 // float32
 	SERIES_TYPE_FLOAT64 = reflect.Float64 // float64

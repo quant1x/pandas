@@ -30,9 +30,9 @@ func ParseInt64(s string, v any) int64 {
 	if IsEmpty(s) {
 		return Nil2Int64
 	}
-	if isTrue(s) {
+	if StringIsTrue(s) {
 		return StringTrue2Int64
-	} else if isFalse(s) {
+	} else if StringIsFalse(s) {
 		return StringFalse2Int64
 	}
 	i, err := strconv.ParseInt(s, 10, 64)
@@ -66,6 +66,6 @@ func AnyToInt64(v any) int64 {
 		v = vv
 	}
 
-	f := valueToNumber[int64](v, Nil2Int64, boolToInt64, ParseInt64)
+	f := valueToNumber[int64](v, Nil2Int64, BoolToInt64, ParseInt64)
 	return f
 }

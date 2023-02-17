@@ -15,12 +15,9 @@ type Series interface {
 	Type() Type
 	// Values 获得全部数据集
 	Values() any
-
-	// Reverse 序列反转
-	Reverse() Series
-
 	// NaN 输出默认的NaN
 	NaN() any
+
 	// Floats 强制转成[]float32
 	Floats() []float32
 	// DTypes 强制转[]stat.DType
@@ -41,23 +38,44 @@ type Series interface {
 	Empty(t ...Type) Series
 	// Copy 复制
 	Copy() Series
+	// Reverse 序列反转
+	Reverse() Series
+	// Select 选取一段记录
+	Select(r ScopeLimit) Series
+	// Append 增加一批记录
+	Append(values ...any) Series
+
 	// Records returns the elements of a Series as a []string
 	Records() []string
 	// Subset 获取子集
 	Subset(start, end int, opt ...any) Series
 	// Repeat elements of an array.
 	Repeat(x any, repeats int) Series
+	// FillNa Fill NA/NaN values using the specified method.
+	FillNa(v any, inplace bool) Series
+
+	// Ref 引用其它周期的数据
+	Ref(param any) (s Series)
 	// Shift index by desired number of periods with an optional time freq.
 	// 使用可选的时间频率按所需的周期数移动索引.
 	Shift(periods int) Series
 	// Rolling 序列化版本
 	Rolling(param any) RollingAndExpandingMixin
+	// Apply 接受一个回调函数
+	Apply(f func(idx int, v any))
+	// Logic 逻辑处理
+	Logic(f func(idx int, v any) bool) []bool
+	// EWM Provide exponentially weighted (EW) calculations.
+	//
+	//	Exactly one of ``com``, ``span``, ``halflife``, or ``alpha`` must be
+	//	provided if ``times`` is not provided. If ``times`` is provided,
+	//	``halflife`` and one of ``com``, ``span`` or ``alpha`` may be provided.
+	EWM(alpha EW) ExponentialMovingWindow
+
 	// Mean calculates the average value of a series
 	Mean() DType
 	// StdDev calculates the standard deviation of a series
 	StdDev() DType
-	// FillNa Fill NA/NaN values using the specified method.
-	FillNa(v any, inplace bool) Series
 	// Max 找出最大值
 	Max() any
 	// ArgMax Returns the indices of the maximum values along an axis
@@ -66,28 +84,16 @@ type Series interface {
 	Min() any
 	// ArgMin Returns the indices of the minimum values along an axis
 	ArgMin() int
-	// Select 选取一段记录
-	Select(r ScopeLimit) Series
-	// Append 增加一批记录
-	Append(values ...any) Series
-	// Apply 接受一个回调函数
-	Apply(f func(idx int, v any))
-	// Logic 逻辑处理
-	Logic(f func(idx int, v any) bool) []bool
 	// Diff 元素的第一个离散差
 	Diff(param any) (s Series)
-	// Ref 引用其它周期的数据
-	Ref(param any) (s Series)
 	// Std 计算标准差
 	Std() DType
 	// Sum 计算累和
 	Sum() DType
-	// EWM Provide exponentially weighted (EW) calculations.
-	//
-	//	Exactly one of ``com``, ``span``, ``halflife``, or ``alpha`` must be
-	//	provided if ``times`` is not provided. If ``times`` is provided,
-	//	``halflife`` and one of ``com``, ``span`` or ``alpha`` may be provided.
-	EWM(alpha EW) ExponentialMovingWindow
+	Add(x any) Series
+	Sub(x any) Series
+	Mul(x any) Series
+	Div(x any) Series
 }
 
 // DetectTypeBySlice 检测类型

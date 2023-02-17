@@ -67,11 +67,11 @@ func __arg_max_go[T Ordered](x []T) int {
 }
 
 func __arg_max_go_bool(x []bool) int {
-	max := bool2Int(x[0])
+	max := BoolToInt(x[0])
 	idx := 0
 	for i, v := range x[1:] {
-		if bool2Int(v) > max {
-			max = bool2Int(v)
+		if BoolToInt(v) > max {
+			max = BoolToInt(v)
 			idx = 1 + i
 		}
 	}

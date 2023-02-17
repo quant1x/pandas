@@ -203,7 +203,7 @@ func __anyToNumber[T Number](v any) T {
 	case float64:
 		return T(val)
 	case bool:
-		return T(bool2Int(val))
+		return T(BoolToInt(val))
 	case string:
 		vt := ParseFloat64(val, v)
 		if Float64IsNaN(vt) {

@@ -67,11 +67,11 @@ func __arg_min_go[T Ordered](x []T) int {
 }
 
 func __arg_min_go_bool(x []bool) int {
-	min := bool2Int(x[0])
+	min := BoolToInt(x[0])
 	idx := 0
 	for i, v := range x[1:] {
-		if bool2Int(v) < min {
-			min = bool2Int(v)
+		if BoolToInt(v) < min {
+			min = BoolToInt(v)
 			idx = 1 + i
 		}
 	}

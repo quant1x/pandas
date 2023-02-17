@@ -19,6 +19,19 @@ func (self DataFrame) Col(colname string) stat.Series {
 	return self.columns[idx].Copy()
 }
 
+func (self DataFrame) ColAsNDArray(colname string) stat.Series {
+	if self.Err != nil {
+		return stat.NewSeries[stat.DType]()
+	}
+	// Check that colname exist on dataframe
+	idx := findInStringSlice(colname, self.Names())
+	if idx < 0 {
+		return stat.NewSeries[stat.DType]()
+	}
+	vs := self.columns[idx].DTypes()
+	return stat.NewSeries[stat.DType](vs...)
+}
+
 // SetNames changes the column names of a DataFrame to the ones passed as an
 // argument.
 // 修改全部的列名

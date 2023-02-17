@@ -30,9 +30,9 @@ func ParseInt32(s string, v any) int32 {
 	if IsEmpty(s) {
 		return Nil2Int32
 	}
-	if isTrue(s) {
+	if StringIsTrue(s) {
 		return StringTrue2Int32
-	} else if isFalse(s) {
+	} else if StringIsFalse(s) {
 		return StringFalse2Int32
 	}
 	i, err := strconv.ParseInt(s, 10, 32)
@@ -66,6 +66,6 @@ func AnyToInt32(v any) int32 {
 		v = vv
 	}
 
-	f := valueToNumber[int32](v, Nil2Int32, boolToInt32, ParseInt32)
+	f := valueToNumber[int32](v, Nil2Int32, BoolToInt32, ParseInt32)
 	return f
 }

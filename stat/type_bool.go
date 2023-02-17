@@ -19,7 +19,7 @@ const (
 	StringFalse2Bool = false // 字符串false转bool
 )
 
-func isTrue(s string) bool {
+func StringIsTrue(s string) bool {
 	if s == "true" || s == "TRUE" || s == "True" || s == "1" || s == "真" || s == "对" || s == "好" {
 		return true
 	} else {
@@ -27,7 +27,7 @@ func isTrue(s string) bool {
 	}
 }
 
-func isFalse(s string) bool {
+func StringIsFalse(s string) bool {
 	if s == "false" || s == "FALSE" || s == "False" || s == "0" || s == "假" || s == "错" || s == "坏" {
 		return true
 	} else {
@@ -35,37 +35,37 @@ func isFalse(s string) bool {
 	}
 }
 
-func bool2Int(b bool) int8 {
+func BoolToInt(b bool) int8 {
 	if b {
 		return int8(1)
 	}
 	return int8(0)
 }
 
-func boolToInt32(b bool) int32 {
+func BoolToInt32(b bool) int32 {
 	if b {
 		return True2Int32
 	}
 	return False2Int32
 }
 
-func boolToInt64(b bool) int64 {
+func BoolToInt64(b bool) int64 {
 	if b {
 		return True2Int64
 	}
 	return False2Int64
 }
 
-// bool转float32
-func boolToFloat32(b bool) float32 {
+// BoolToFloat32 bool转float32
+func BoolToFloat32(b bool) float32 {
 	if b {
 		return True2Float32
 	}
 	return False2Float32
 }
 
-// bool转float64
-func boolToFloat64(b bool) float64 {
+// BoolToFloat64 bool转float64
+func BoolToFloat64(b bool) float64 {
 	if b {
 		return True2Float64
 	}
@@ -73,7 +73,8 @@ func boolToFloat64(b bool) float64 {
 }
 
 // ParseBool 字符串转bool
-// 任意组合的nan字符串都会被解析成NaN
+//
+//	任意组合的nan字符串都会被解析成NaN
 func ParseBool(s string, v any) bool {
 	defer func() {
 		// 解析失败以后输出日志, 以备检查
@@ -138,9 +139,9 @@ func AnyToBool(v any) bool {
 		if IsEmpty(*val) {
 			return Nil2Bool
 		}
-		if isTrue(*val) {
+		if StringIsTrue(*val) {
 			return StringTrue2Bool
-		} else if isFalse(*val) {
+		} else if StringIsFalse(*val) {
 			return StringFalse2Bool
 		}
 		f := ParseBool(*val, v)
@@ -149,9 +150,9 @@ func AnyToBool(v any) bool {
 		if IsEmpty(val) {
 			return Nil2Bool
 		}
-		if isTrue(val) {
+		if StringIsTrue(val) {
 			return StringTrue2Bool
-		} else if isFalse(val) {
+		} else if StringIsFalse(val) {
 			return StringFalse2Bool
 		}
 		f := ParseBool(val, v)

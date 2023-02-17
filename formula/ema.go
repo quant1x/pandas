@@ -8,7 +8,7 @@ import (
 // EMA 指数移动平均,为了精度 S>4*N  EMA至少需要120周期
 // alpha=2/(span+1)
 // TODO:这个版本是对的, 通达信EMA居然实现了真的序列, 那为啥SMA不是呢?!
-func EMA(S stat.Series, N any) any {
+func EMA(S stat.Series, N any) stat.Series {
 	var X []stat.DType
 	switch v := N.(type) {
 	case int:
@@ -28,7 +28,7 @@ func EMA(S stat.Series, N any) any {
 			k = j
 		}
 		return stat.DType(stat.DType(2) / (j + 1))
-	}, Adjust: false}).Mean().Values()
+	}, Adjust: false}).Mean()
 	_ = k
 	return x
 }

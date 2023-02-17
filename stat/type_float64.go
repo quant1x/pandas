@@ -58,9 +58,9 @@ func ParseFloat64(s string, v any) float64 {
 	if IsEmpty(s) {
 		return Nil2Float64
 	}
-	if isTrue(s) {
+	if StringIsTrue(s) {
 		return StringTrue2Float64
-	} else if isFalse(s) {
+	} else if StringIsFalse(s) {
 		return StringFalse2Float64
 	}
 	f, err := strconv.ParseFloat(s, 64)
@@ -79,7 +79,7 @@ func AnyToFloat64(v any) float64 {
 		v = vv
 	}
 
-	f := valueToNumber(v, Nil2Float64, boolToFloat64, ParseFloat64)
+	f := valueToNumber(v, Nil2Float64, BoolToFloat64, ParseFloat64)
 	return f
 }
 
