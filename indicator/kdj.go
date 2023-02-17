@@ -35,8 +35,9 @@ func KDJ(df pandas.DataFrame, N, M1, M2 int) pandas.DataFrame {
 
 	//(CLOSE-LLV(LOW,N))/(HHV(HIGH,N)-LLV(LOW,N))*100
 	RSV := x11.Div(x12).Mul(100)
-	//K:SMA(RSV,M1,1);
+	//K:EMA(RSV,M1,1);
 	K := EMA(RSV, M1*2-1)
+	//D:EMA(K,M2,1)
 	D := EMA(K, M2*2-1)
 	// 3*K-2*D;
 	J := K.Mul(3).Sub(D.Mul(2))
