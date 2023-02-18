@@ -3,10 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"gitee.com/quant1x/pandas/data"
-	"gitee.com/quant1x/pandas/data/cache"
-	"gitee.com/quant1x/pandas/data/category"
-	"gitee.com/quant1x/pandas/data/security"
+	"gitee.com/quant1x/data/security"
 	"gitee.com/quant1x/pandas/stat"
 	"github.com/mymmsc/gox/logger"
 	"github.com/mymmsc/gox/util/treemap"
@@ -32,17 +29,17 @@ type Strategy interface {
 
 func main() {
 	var (
-		path     string // 数据路径
-		strategy int    // 策略编号
-		avx2     bool   // AVX2加速状态
-		cpuNum   int    // cpu数量
+		//path     string // 数据路径
+		strategy int  // 策略编号
+		avx2     bool // AVX2加速状态
+		cpuNum   int  // cpu数量
 	)
-	flag.StringVar(&path, "path", category.DATA_ROOT_PATH, "stock history data path")
+	//flag.StringVar(&path, "path", category.DATA_ROOT_PATH, "stock history data path")
 	flag.IntVar(&strategy, "strategy", 1, "strategy serial number")
 	flag.BoolVar(&avx2, "avx2", false, "Avx2 acceleration")
 	flag.IntVar(&cpuNum, "cpu", runtime.NumCPU()/2, "sets the maximum number of CPUs")
 	flag.Parse()
-	cache.Init(path)
+	//cache.Init(path)
 	var api Strategy
 	switch strategy {
 	//case 89:
@@ -54,7 +51,7 @@ func main() {
 	//numCPU := runtime.NumCPU() / 2
 	runtime.GOMAXPROCS(cpuNum)
 	// 获取全部证券代码
-	ss := data.GetCodeList()
+	ss := security.GetCodeList()
 	count := len(ss)
 	var wg = sync.WaitGroup{}
 	fmt.Println("Quant1X 预警系统")

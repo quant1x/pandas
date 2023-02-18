@@ -1,9 +1,9 @@
 package main
 
 import (
+	"gitee.com/quant1x/data/cache"
+	"gitee.com/quant1x/data/security"
 	pandas "gitee.com/quant1x/pandas"
-	"gitee.com/quant1x/pandas/data/cache"
-	"gitee.com/quant1x/pandas/data/security"
 	. "gitee.com/quant1x/pandas/formula"
 	"github.com/mymmsc/gox/logger"
 	"github.com/mymmsc/gox/util/treemap"
@@ -28,7 +28,7 @@ func (this *FormulaNo1) Evaluate(fullCode string, info *security.StaticBasic, re
 	N := MaximumResultDays
 
 	//fmt.Printf("%s\n", fullCode)
-	filename := cache.GetCacheFilename(fullCode)
+	filename := cache.GetKLineFilename(fullCode)
 	df := pandas.ReadCSV(filename)
 	if df.Err != nil {
 		return
