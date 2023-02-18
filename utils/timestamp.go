@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"gitee.com/quant1x/pandas/data/category"
+	"gitee.com/quant1x/data/category"
 	"github.com/mymmsc/gox/errors"
 	"github.com/mymmsc/gox/util"
 	"strings"

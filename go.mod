@@ -4,7 +4,6 @@ go 1.20
 
 require (
 	gitee.com/quant1x/data v0.7.1
-	gitee.com/quant1x/gotdx v1.1.3
 	github.com/chewxy/math32 v1.10.1
 	github.com/huandu/go-clone v1.4.1
 	github.com/mymmsc/gox v1.3.3
@@ -17,7 +16,6 @@ require (
 	github.com/viterin/vek v0.4.0
 	golang.org/x/exp v0.0.0-20220907003533-145caa8ea1d0
 	gonum.org/v1/gonum v0.12.0
-	google.golang.org/protobuf v1.28.1
 )
 
 require (
@@ -41,4 +39,5 @@ require (
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
 	golang.org/x/sys v0.5.0 // indirect
 	golang.org/x/text v0.5.0 // indirect
+	google.golang.org/protobuf v1.28.1 // indirect
 )
