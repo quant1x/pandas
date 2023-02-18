@@ -9,3 +9,7 @@ import (
 func MA(S stat.Series, N any) []stat.DType {
 	return S.Rolling(N).Mean().DTypes()
 }
+
+func MA2(S stat.Series, N any) stat.Series {
+	return S.Rolling(N).Mean()
+}

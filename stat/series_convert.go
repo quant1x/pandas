@@ -64,7 +64,7 @@ func ToBool(s Series) []bool {
 	case SERIES_TYPE_FLOAT32:
 		return __NumberToBool_S(values.([]float32))
 	case SERIES_TYPE_FLOAT64:
-		return __NumberToBool_S(values.([]int64))
+		return __NumberToBool_S(values.([]float64))
 	case SERIES_TYPE_INT32:
 		return __NumberToBool_S(values.([]int32))
 	case SERIES_TYPE_INT64:

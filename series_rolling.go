@@ -1,8 +1,8 @@
 package pandas
 
 import (
-	"gitee.com/quant1x/pandas/exception"
 	"gitee.com/quant1x/pandas/stat"
+	"github.com/mymmsc/gox/exception"
 )
 
 // Rolling RollingAndExpandingMixin

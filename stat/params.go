@@ -14,7 +14,7 @@ func AnyToSlice[T BaseType](A any, n int) []T {
 	case []T:
 		d = Align(v, typeDefault[T](), n)
 	default:
-		panic(ErrUnsupportedType)
+		panic(Throw(A))
 	}
 	return d.([]T)
 }

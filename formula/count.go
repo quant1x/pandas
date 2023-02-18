@@ -20,22 +20,3 @@ func COUNT(S []bool, N int) []int {
 	}
 	return ret
 }
-
-func COUNT_V2(S stat.Series, N any) stat.Series {
-	return S.Rolling(N).Count()
-}
-
-// COUNT_v1 一般性比较
-func COUNT_v1(S stat.Series, N any) []stat.Int {
-	//values := S.DTypes()
-	return S.Rolling(N).Apply(func(X stat.Series, W stat.DType) stat.DType {
-		x := X.DTypes()
-		n := 0
-		for _, v := range x {
-			if v != 0 {
-				n++
-			}
-		}
-		return stat.DType(n)
-	}).Ints()
-}

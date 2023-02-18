@@ -2,8 +2,8 @@ package pandas
 
 import (
 	"fmt"
-	"gitee.com/quant1x/pandas/exception"
 	"gitee.com/quant1x/pandas/stat"
+	"github.com/mymmsc/gox/exception"
 	"reflect"
 	"strconv"
 	"strings"
@@ -66,7 +66,7 @@ func findTypeByString(arr []string) (stat.Type, error) {
 		}
 		hasStrings = true
 	}
-	if stringLengthEqual == 0 {
+	if !hasFloats && stringLengthEqual == 0 {
 		hasStrings = true
 	}
 	// 类型优先级, string > bool > float > int, string 为默认类型

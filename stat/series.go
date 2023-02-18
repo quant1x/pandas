@@ -5,6 +5,10 @@ import (
 	"reflect"
 )
 
+// Series
+//
+//	Data structure for 1-dimensional cross-sectional and time series data
+//	一维横截面和时间序列数据的数据结构
 type Series interface {
 	// Name 取得series名称
 	Name() string
@@ -55,9 +59,9 @@ type Series interface {
 	FillNa(v any, inplace bool) Series
 
 	// Ref 引用其它周期的数据
-	Ref(param any) (s Series)
+	Ref(periods any) (s Series)
 	// Shift index by desired number of periods with an optional time freq.
-	// 使用可选的时间频率按所需的周期数移动索引.
+	//	使用可选的时间频率按所需的周期数移动索引.
 	Shift(periods int) Series
 	// Rolling 序列化版本
 	Rolling(param any) RollingAndExpandingMixin
@@ -94,6 +98,12 @@ type Series interface {
 	Sub(x any) Series
 	Mul(x any) Series
 	Div(x any) Series
+	Eq(x any) Series
+	Gt(x any) Series
+	Gte(x any) Series
+	Lt(x any) Series
+	Lte(x any) Series
+	And(x any) Series
 }
 
 // DetectTypeBySlice 检测类型

@@ -1,53 +1,26 @@
 package pandas
 
 import (
-	"gitee.com/quant1x/pandas/exception"
 	"gitee.com/quant1x/pandas/stat"
 )
 
 func (self *NDFrame) Ref(param any) (s stat.Series) {
-	var N []float32
-	switch v := param.(type) {
-	case int:
-		N = stat.Repeat[float32](float32(v), self.Len())
-	case []float32:
-		N = stat.Align(v, stat.Nil2Float32, self.Len())
-	case stat.Series:
-		vs := v.Values()
-		N = stat.SliceToFloat32(vs)
-		N = stat.Align(N, stat.Nil2Float32, self.Len())
-	default:
-		panic(exception.New(1, "error window"))
-	}
 
-	var d stat.Series
-	d = stat.Clone(self).(stat.Series)
-	//return Shift[float64](&d, periods, func() float64 {
-	//	return Nil2Float64
-	//})
 	switch values := self.values.(type) {
 	case []bool:
-		_ = values
-		return Shift2[bool](&d, N, func() bool {
-			return stat.BoolNaN
-		})
+		d := stat.Shift[bool](values, param)
+		return NewSeries(stat.SERIES_TYPE_BOOL, self.Name(), d)
 	case []string:
-		return Shift2[string](&d, N, func() string {
-			return stat.StringNaN
-		})
+		d := stat.Shift[string](values, param)
+		return NewSeries(stat.SERIES_TYPE_STRING, self.Name(), d)
 	case []int64:
-		return Shift2[int64](&d, N, func() int64 {
-			return stat.Nil2Int64
-		})
+		d := stat.Shift[int64](values, param)
+		return NewSeries(stat.SERIES_TYPE_INT32, self.Name(), d)
 	case []float32:
-		return Shift2[float32](&d, N, func() float32 {
-			return stat.Nil2Float32
-		})
+		d := stat.Shift[float32](values, param)
+		return NewSeries(stat.SERIES_TYPE_FLOAT32, self.Name(), d)
 	default: //case []float64:
-		return Shift2[float64](&d, N, func() float64 {
-			return stat.Nil2Float64
-		})
+		d := stat.Shift[float64](values.([]float64), param)
+		return NewSeries(stat.SERIES_TYPE_FLOAT64, self.Name(), d)
 	}
-
-	return d
 }

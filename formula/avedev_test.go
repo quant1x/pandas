@@ -3,6 +3,7 @@ package formula
 import (
 	"fmt"
 	"gitee.com/quant1x/pandas"
+	"gitee.com/quant1x/pandas/data/cache"
 	"testing"
 )
 
@@ -11,13 +12,12 @@ func TestAVEDEV(t *testing.T) {
 	Y := pandas.NewSeriesWithoutType("y", y)
 	fmt.Println(AVEDEV(Y, 5))
 
-	csv := "~/.quant1x/data/cn/002528.csv"
-	df := pandas.ReadCSV(csv)
+	df := cache.KLine("sz002528")
 	df.SetNames("data", "open", "close", "high", "low", "volume", "amount", "zf", "zdf", "zde", "hsl")
 	fmt.Println(df)
 	fmt.Println(df.Names())
 	df.SetName("收盘", "close")
-	CLOSE := df.Col("close")
+	CLOSE := df.ColAsNDArray("close")
 
 	c1 := AVEDEV(CLOSE, 5)
 	C := pandas.NewSeriesWithoutType("c1", c1)

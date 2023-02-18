@@ -1,7 +1,7 @@
 package stat
 
 import (
-	"gitee.com/quant1x/pandas/exception"
+	"github.com/mymmsc/gox/exception"
 )
 
 // Rolling returns an array with elements that roll beyond the last position are re-introduced at the first.

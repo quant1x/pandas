@@ -1,10 +1,30 @@
 package formula
 
 import (
-	"gitee.com/quant1x/pandas/exception"
 	"gitee.com/quant1x/pandas/stat"
+	"github.com/mymmsc/gox/exception"
 	"github.com/viterin/vek"
 )
+
+// EQ 相等
+func EQ(S1, S2 stat.Series) []bool {
+	var d []bool
+	switch S1.Type() {
+	case stat.SERIES_TYPE_BOOL:
+		d = stat.Equal[bool](S1.Values().([]bool), S2.Values().([]bool))
+	case stat.SERIES_TYPE_STRING:
+		d = stat.Equal[string](S1.Values().([]string), S2.Values().([]string))
+	default:
+		f1 := S1.DTypes()
+		f2 := S2.DTypes()
+		d = stat.Equal[stat.DType](f1, f2)
+	}
+	return d
+}
+
+func EQ2(S1 []stat.DType, S2 int) []bool {
+	return vek.EqNumber(S1, stat.DType(S2))
+}
 
 func AND[T stat.Number | ~bool](a, b []T) []bool {
 	return stat.And(a, b)

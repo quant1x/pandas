@@ -68,21 +68,38 @@ func unaryOperations2[T Number, E Number](x []T, f32 func([]float32) E, f64 func
 //	calculate
 func binaryOperations[T Number](x []T, y any, f32 func(x, y []float32) []float32, f64 func(x, y []float64) []float64, cany func(x, y []T) []T) []T {
 	var d any
-	xLen := len(x)
+	length := len(x)
 	var s any = x
 	switch vs := s.(type) {
 	case []float32:
-		f32s := AnyToSlice[float32](y, xLen)
+		f32s := AnyToSlice[float32](y, length)
 		d = f32(vs, f32s)
 	case []float64:
-		f64s := AnyToSlice[float64](y, xLen)
+		f64s := AnyToSlice[float64](y, length)
 		d = f64(vs, f64s)
 	default:
-		//panic(ErrUnsupportedType)
-		ts := AnyToSlice[T](y, xLen)
-		d = cany(x, ts)
+		ys := AnyToSlice[T](y, length)
+		d = cany(x, ys)
 	}
 	return d.([]T)
+}
+
+func binaryOperations2[T BaseType, E BaseType](x, y []T, f32 func(x, y []float32) []E, f64 func(x, y []float64) []E, cany func(x, y []T) []E) []E {
+	var d any
+	length := len(x)
+	var s any = x
+	switch vs := s.(type) {
+	case []float32:
+		f32s := AnyToSlice[float32](y, length)
+		d = f32(vs, f32s)
+	case []float64:
+		f64s := AnyToSlice[float64](y, length)
+		d = f64(vs, f64s)
+	default:
+		ys := AnyToSlice[T](y, length)
+		d = cany(x, ys)
+	}
+	return d.([]E)
 }
 
 // 三元运算 triple operations

@@ -1,8 +1,7 @@
 package stat
 
 import (
-	"gitee.com/quant1x/pandas/exception"
-	gc "github.com/huandu/go-clone"
+	"github.com/mymmsc/gox/exception"
 	"reflect"
 )
 
@@ -79,7 +78,7 @@ func (self NDArray[T]) Subset(start, end int, opt ...any) Series {
 		vs = vvs.Interface()
 		rows = vv.Len()
 		if __optCopy && rows > 0 {
-			vs = gc.Clone(vs)
+			vs = Clone(vs)
 			//vs = slices.Clone(vs)
 		}
 		rows = vvs.Len()
@@ -169,14 +168,14 @@ func (self NDArray[T]) Logic(f func(idx int, v any) bool) []bool {
 	return d
 }
 
-func (self NDArray[T]) Diff(param any) Series {
-	d := Diff2(self, param)
+func (self NDArray[T]) Diff(n any) Series {
+	d := Diff2(self, n)
 	return NDArray[T](d)
 }
 
-func (self NDArray[T]) Ref(param any) Series {
+func (self NDArray[T]) Ref(n any) Series {
 	values := self.Values().([]T)
-	d := Shift3(values, param)
+	d := Shift(values, n)
 	return NDArray[T](d)
 }
 

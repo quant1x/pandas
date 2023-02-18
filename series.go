@@ -19,6 +19,36 @@ type NDFrame struct {
 	values    any                  // 只能是一个一维slice, 在所有的运算中, values强制转换成float64切片
 }
 
+func (self *NDFrame) And(x any) stat.Series {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (self *NDFrame) Eq(x any) stat.Series {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (self *NDFrame) Gt(x any) stat.Series {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (self *NDFrame) Gte(x any) stat.Series {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (self *NDFrame) Lt(x any) stat.Series {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (self *NDFrame) Lte(x any) stat.Series {
+	//TODO implement me
+	panic("implement me")
+}
+
 //"""
 //N-dimensional analogue of DataFrame. Store multi-dimensional in a
 //size-mutable, labeled data structure
@@ -92,23 +122,6 @@ func assign[T stat.GenericType](frame *NDFrame, idx, size int, v T) {
 	}
 	// 行数+1
 	frame.rows += 1
-}
-
-// Repeat 重复生成a
-func Repeat[T stat.GenericType](a T, n int) []T {
-	dst := make([]T, n)
-	for i := 0; i < n; i++ {
-		dst[i] = a
-	}
-	return dst
-}
-
-// Repeat2 重复生成a
-func Repeat2[T stat.GenericType](dst []T, a T, n int) []T {
-	for i := 0; i < n; i++ {
-		dst[i] = a
-	}
-	return dst
 }
 
 func (self *NDFrame) Name() string {
@@ -230,51 +243,40 @@ func (self *NDFrame) Repeat(x any, repeats int) stat.Series {
 	switch values := self.values.(type) {
 	case []bool:
 		_ = values
-		vs := Repeat(stat.AnyToBool(x), repeats)
+		vs := stat.Repeat(stat.AnyToBool(x), repeats)
 		return NewNDFrame(self.name, vs...)
 	case []string:
-		vs := Repeat(stat.AnyToString(x), repeats)
+		vs := stat.Repeat(stat.AnyToString(x), repeats)
 		return NewNDFrame(self.name, vs...)
 	case []int64:
-		vs := Repeat(stat.AnyToInt64(x), repeats)
+		vs := stat.Repeat(stat.AnyToInt64(x), repeats)
 		return NewNDFrame(self.name, vs...)
 	case []float32:
-		vs := Repeat(stat.AnyToFloat32(x), repeats)
+		vs := stat.Repeat(stat.AnyToFloat32(x), repeats)
 		return NewNDFrame(self.name, vs...)
 	default: //case []float64:
-		vs := Repeat(stat.AnyToFloat64(x), repeats)
+		vs := stat.Repeat(stat.AnyToFloat64(x), repeats)
 		return NewNDFrame(self.name, vs...)
 	}
 }
 
 func (self *NDFrame) Shift(periods int) stat.Series {
-	var d stat.Series
-	d = stat.Clone(self).(stat.Series)
-	//return Shift[float64](&d, periods, func() float64 {
-	//	return Nil2Float64
-	//})
 	switch values := self.values.(type) {
 	case []bool:
-		_ = values
-		return Shift[bool](&d, periods, func() bool {
-			return stat.BoolNaN
-		})
+		d := stat.Shift[bool](values, periods)
+		return NewSeries(stat.SERIES_TYPE_BOOL, self.Name(), d)
 	case []string:
-		return Shift[string](&d, periods, func() string {
-			return stat.StringNaN
-		})
+		d := stat.Shift[string](values, periods)
+		return NewSeries(stat.SERIES_TYPE_STRING, self.Name(), d)
 	case []int64:
-		return Shift[int64](&d, periods, func() int64 {
-			return stat.Nil2Int64
-		})
+		d := stat.Shift[int64](values, periods)
+		return NewSeries(stat.SERIES_TYPE_INT64, self.Name(), d)
 	case []float32:
-		return Shift[float32](&d, periods, func() float32 {
-			return stat.Nil2Float32
-		})
+		d := stat.Shift[float32](values, periods)
+		return NewSeries(stat.SERIES_TYPE_FLOAT32, self.Name(), d)
 	default: //case []float64:
-		return Shift[float64](&d, periods, func() float64 {
-			return stat.Nil2Float64
-		})
+		d := stat.Shift[float64](values.([]float64), periods)
+		return NewSeries(stat.SERIES_TYPE_FLOAT64, self.Name(), d)
 	}
 }
 

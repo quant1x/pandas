@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"gitee.com/quant1x/pandas"
 	"gitee.com/quant1x/pandas/stat"
-	"github.com/viterin/vek/vek32"
 	"testing"
 )
 
@@ -18,10 +17,10 @@ func TestSMA(t *testing.T) {
 	fmt.Println(df)
 	fmt.Println(df.Names())
 	df.SetName("收盘", "close")
-	CLOSE := df.Col("close")
-	cs := CLOSE.Values().([]float32)
-	REF10 := REF(CLOSE, 10).([]float32)
-	d1 := vek32.Div(cs, REF10)
+	CLOSE := df.ColAsNDArray("close")
+	cs := CLOSE
+	REF10 := REF(CLOSE, 10)
+	d1 := cs.Div(REF10)
 	//as := stat.Repeat[float32](1, CLOSE.Len())
 	//bs := stat.Repeat[float32](0, CLOSE.Len())
 	df01 := pandas.NewSeries(stat.SERIES_TYPE_FLOAT32, "x", d1)

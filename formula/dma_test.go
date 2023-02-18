@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"gitee.com/quant1x/pandas"
 	"gitee.com/quant1x/pandas/stat"
-	"github.com/viterin/vek/vek32"
 	"testing"
 )
 
@@ -21,11 +20,11 @@ func TestDMA(t *testing.T) {
 	df := pandas.ReadCSV(csv)
 	df.SetNames("data", "open", "close", "high", "low", "volume", "amount", "zf", "zdf", "zde", "hsl")
 	fmt.Println(df)
-	CLOSE := df.Col("close")
+	CLOSE := df.ColAsNDArray("close")
 
-	cs := CLOSE.Values().([]float32)
-	REF10 := REF(CLOSE, 10).([]float32)
-	d1 := vek32.Div(cs, REF10)
+	cs := CLOSE
+	REF10 := REF(CLOSE, 10)
+	d1 := cs.Div(REF10)
 	df01 := pandas.NewSeries(stat.SERIES_TYPE_FLOAT32, "x", d1)
 	x0 := make([]stat.DType, CLOSE.Len())
 	df01.Apply(func(idx int, v any) {

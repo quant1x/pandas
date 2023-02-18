@@ -31,7 +31,7 @@ func TestREF(t *testing.T) {
 	D := df2.Col("d")
 
 	// 2日前的D值
-	r2 := REF(D, 2)
+	r2 := REF(D, 1)
 	fmt.Println(r2)
 
 	_ = A

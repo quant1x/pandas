@@ -6,7 +6,9 @@ package stat
 func Align[T BaseType](x []T, a T, dLen int) []T {
 	d := []T{}
 	xLen := len(x)
-	if xLen >= dLen {
+	if xLen == dLen {
+		return x
+	} else if xLen > dLen {
 		// 截断
 		d = make([]T, dLen)
 		copy(d, x[0:dLen])

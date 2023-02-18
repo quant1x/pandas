@@ -2,7 +2,7 @@ package stat
 
 import (
 	"fmt"
-	"gitee.com/quant1x/pandas/exception"
+	"github.com/mymmsc/gox/exception"
 	"github.com/mymmsc/gox/logger"
 	"github.com/viterin/vek"
 	"math"

@@ -1,13 +1,55 @@
 package stat
 
 import (
-	"gitee.com/quant1x/pandas/exception"
+	"github.com/mymmsc/gox/exception"
 	"golang.org/x/exp/slices"
 	"math"
 )
 
-// Shift series切片, 使用可选的时间频率按所需的周期数移动索引
-func Shift[T BaseType](S []T, periods int) []T {
+// Shift 使用可选的时间频率按所需的周期数移动索引
+//
+//	param 支持前后移动
+func Shift[T BaseType](S []T, N any) []T {
+	length := len(S)
+	var _n []DType
+	switch v := N.(type) {
+	case int:
+		if v == 0 {
+			return S
+		}
+		_n = Repeat[DType](DType(v), length)
+	case DType:
+		if v == 0 || DTypeIsNaN(v) {
+			return S
+		}
+		_n = Repeat[DType](DType(v), length)
+	case []int:
+		_n = Slice2DType(v)
+		_n = Align(_n, DTypeNaN, length)
+	case []DType:
+		_n = Align(v, DTypeNaN, length)
+	default:
+		panic(exception.New(1, "error window"))
+	}
+	var d []T
+	d = slices.Clone(S)
+	values := d
+	for i, _ := range S {
+		x := _n[i]
+		pos := int(x)
+		if DTypeIsNaN(x) || i-pos >= length || i-pos < 0 {
+			values[i] = typeDefault[T]()
+			continue
+		}
+		values[i] = S[i-pos]
+	}
+
+	return d
+}
+
+// ShiftN series切片, 使用可选的时间频率按所需的周期数移动索引
+// Deprecated: 不推荐使用
+func ShiftN[T BaseType](S []T, periods int) []T {
 	d := slices.Clone(S)
 	if periods == 0 {
 		return d
@@ -38,57 +80,5 @@ func Shift[T BaseType](S []T, periods int) []T {
 		naVals[i] = typeDefault[T]()
 	}
 	_ = naVals
-	return d
-}
-
-// Shift2 series切片, 使用可选的时间频率按所需的周期数移动索引
-func Shift2[T GenericType](S []T, N []DType) []T {
-	var d []T
-	d = slices.Clone(S)
-	if len(N) == 0 {
-		return d
-	}
-	values := d
-	for i, _ := range S {
-		x := N[i]
-		if DTypeIsNaN(x) || int(x) > i {
-			values[i] = typeDefault[T]()
-			continue
-		}
-		values[i] = S[i-int(x)]
-	}
-
-	return d
-}
-
-// Shift3 series切片, 使用可选的时间频率按所需的周期数移动索引
-//
-//	param不支持负值
-func Shift3[T BaseType](S []T, param any) []T {
-	sLen := len(S)
-	var N []DType
-	switch v := param.(type) {
-	case int:
-		N = Repeat[DType](DType(v), sLen)
-	case []DType:
-		N = Align(v, DTypeNaN, sLen)
-	default:
-		panic(exception.New(1, "error window"))
-	}
-	var d []T
-	d = slices.Clone(S)
-	if len(N) == 0 {
-		return d
-	}
-	values := d
-	for i, _ := range S {
-		x := N[i]
-		if DTypeIsNaN(x) || int(x) > i {
-			values[i] = typeDefault[T]()
-			continue
-		}
-		values[i] = S[i-int(x)]
-	}
-
 	return d
 }

@@ -1,7 +1,7 @@
 package stat
 
 import (
-	"gitee.com/quant1x/pandas/exception"
+	"github.com/mymmsc/gox/exception"
 	"reflect"
 )
 
