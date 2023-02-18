@@ -38,7 +38,7 @@ func findTypeByString(arr []string) (stat.Type, error) {
 			stringLengthEqual = 0
 		}
 		if stringLenth < 1 {
-			if stringLengthEqual == -1 {
+			if stringLengthEqual <= 0 {
 				stringLenth = tLen
 			}
 		} else if stringLengthEqual >= 0 && tLen != stringLenth {
