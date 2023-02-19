@@ -3,10 +3,10 @@ module gitee.com/quant1x/pandas
 go 1.20
 
 require (
-	gitee.com/quant1x/data v0.7.3
+	gitee.com/quant1x/data v0.7.5
 	github.com/chewxy/math32 v1.10.1
 	github.com/huandu/go-clone v1.4.1
-	github.com/mymmsc/gox v1.3.5
+	github.com/mymmsc/gox v1.3.6
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/shirou/gopsutil/v3 v3.23.1
 	github.com/tealeg/xlsx v1.0.5
@@ -18,12 +18,13 @@ require (
 )
 
 require (
+	gitee.com/quant1x/gotdx v1.1.5 // indirect
 	github.com/frankban/quicktest v1.11.2 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/google/btree v1.0.0 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
-	github.com/kr/pretty v0.2.1 // indirect
-	github.com/kr/text v0.1.0 // indirect
+	github.com/kr/pretty v0.3.0 // indirect
+	github.com/kr/text v0.2.0 // indirect
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
 	github.com/mattn/go-runewidth v0.0.14 // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
@@ -31,6 +32,7 @@ require (
 	github.com/power-devops/perfstat v0.0.0-20210106213030-5aafc221ea8c // indirect
 	github.com/rivo/uniseg v0.4.3 // indirect
 	github.com/rogpeppe/fastuuid v1.2.0 // indirect
+	github.com/rogpeppe/go-internal v1.6.1 // indirect
 	github.com/shabbyrobe/xmlwriter v0.0.0-20200208144257-9fca06d00ffa // indirect
 	github.com/tklauser/go-sysconf v0.3.11 // indirect
 	github.com/tklauser/numcpus v0.6.0 // indirect

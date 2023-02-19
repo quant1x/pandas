@@ -2,8 +2,8 @@ package formula
 
 import (
 	"fmt"
+	"gitee.com/quant1x/data/cache"
 	"gitee.com/quant1x/pandas"
-	"gitee.com/quant1x/pandas/internal"
 	"testing"
 )
 
@@ -12,7 +12,7 @@ func TestAVEDEV(t *testing.T) {
 	Y := pandas.NewSeriesWithoutType("y", y)
 	fmt.Println(AVEDEV(Y, 5))
 
-	df := internal.KLine("sz002528")
+	df := cache.KLine("sz002528")
 	df.SetNames("data", "open", "close", "high", "low", "volume", "amount", "zf", "zdf", "zde", "hsl")
 	fmt.Println(df)
 	fmt.Println(df.Names())
