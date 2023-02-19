@@ -27,71 +27,53 @@ func StringIsNaN(s string) bool {
 	return false
 }
 
-// AnyToString any转string
-func AnyToString(v any) string {
+func __anyToString(v any) string {
 	switch val := v.(type) {
 	case nil:
 		return Nil2String
-	case *bool:
-		if val == nil {
-			return Nil2String
-		}
-		if *val == true {
-			return True2String
-		} else {
-			return False2String
-		}
-	case bool:
-		if val == true {
-			return True2String
-		} else {
-			return False2String
-		}
-	case *string:
-		if val == nil {
-			return Nil2String
-		}
-		return []string{*val}[0]
-	case string:
-		return val
-	case *float64:
-		if val == nil {
-			return Nil2String
-		}
-		return strconv.FormatFloat(*val, 'G', -1, 64)
-	case float64:
-		return strconv.FormatFloat(val, 'G', -1, 64)
-	case *float32:
-		if val == nil {
-			return Nil2String
-		}
-		return strconv.FormatFloat(float64(*val), 'G', -1, 64)
-	case float32:
-		return strconv.FormatFloat(float64(val), 'G', -1, 64)
-	case *int64:
-		if val == nil {
-			return Nil2String
-		}
-		return strconv.FormatInt(*val, 10)
-	case int64:
-		return strconv.FormatInt(val, 10)
-	case *int:
-		if val == nil {
-			return Nil2String
-		}
-		return strconv.Itoa(*val)
-	case int:
-		return strconv.Itoa(val)
-	case *int32:
-		if val == nil {
-			return Nil2String
-		}
-		return strconv.FormatInt(int64(*val), 10)
+	case int8:
+		return strconv.FormatInt(int64(val), 10)
+	case uint8:
+		return strconv.FormatUint(uint64(val), 10)
+	case int16:
+		return strconv.FormatInt(int64(val), 10)
+	case uint16:
+		return strconv.FormatUint(uint64(val), 10)
 	case int32:
 		return strconv.FormatInt(int64(val), 10)
+	case uint32:
+		return strconv.FormatUint(uint64(val), 10)
+	case int64:
+		return strconv.FormatInt(int64(val), 10)
+	case uint64:
+		return strconv.FormatUint(uint64(val), 10)
+	case int:
+		return strconv.Itoa(val)
+	case uint:
+		return strconv.FormatUint(uint64(val), 10)
+	case uintptr:
+		return strconv.FormatUint(uint64(val), 10)
+	case float32:
+		return strconv.FormatFloat(float64(val), 'G', -1, 64)
+	case float64:
+		return strconv.FormatFloat(float64(val), 'G', -1, 64)
+	case bool:
+		return BoolToString(val)
+	case string:
+		return val
 	default:
 		logger.Errorf("%s, error=The type is not recognized\n", v)
 		_ = v.(string) // Intentionally panic
 		return Nil2String
 	}
+}
+
+// AnyToString any转string
+func AnyToString(v any) string {
+	if vv, ok := extraceValueFromPointer(v); ok {
+		v = vv
+	}
+
+	s := __anyToString(v)
+	return s
 }

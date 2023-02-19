@@ -72,6 +72,14 @@ func BoolToFloat64(b bool) float64 {
 	return False2Float64
 }
 
+// BoolToString bool 转 string
+func BoolToString(b bool) string {
+	if b {
+		return True2String
+	}
+	return False2String
+}
+
 // ParseBool 字符串转bool
 //
 //	任意组合的nan字符串都会被解析成NaN

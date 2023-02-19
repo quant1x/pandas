@@ -65,25 +65,6 @@ func TestEwm(t *testing.T) {
 	var t2 map[string][]int
 	a2 := parser.Decode(&t2)
 	fmt.Println(a2, t2)
-	//df := dframe.ReadJSON(reader)
-	//fmt.Println(df)
-	//values := []int64{1, 2, 3, 4, 5, 6, 7, 8, 9}
-	//s1 := dframe.NewSeries(values, dframe.Int, "x")
-	//df = dframe.NewFrame(s1)
-	//fmt.Println(df)
-	//xs := df.Col("x")
-	//r1 := xs.RollingV1(5).Mean()
-	//fmt.Println(r1)
-	//
-	//e1 := xs.EWM(dframe.Alpha{Span: 5, At: dframe.AlphaSpan}, false, false).Mean()
-	//fmt.Println(e1)
-	//
-	//df1 := dframe.NewFrame(e1)
-	//fmt.Println(df1)
-	//
-	//e2 := xs.EWM(dframe.Alpha{Span: 5, At: dframe.AlphaSpan}, true, false).Mean()
-	//fmt.Println(e2)
-	//
-	//df2 := dframe.NewFrame(e1, e2)
-	//fmt.Println(df2)
+	df := ReadCSV(reader)
+	fmt.Println(df)
 }

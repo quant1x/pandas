@@ -4,6 +4,7 @@ import (
 	"encoding/csv"
 	"gitee.com/quant1x/pandas/stat"
 	"github.com/mymmsc/gox/api"
+	"github.com/mymmsc/gox/exception"
 	"github.com/mymmsc/gox/logger"
 	"github.com/mymmsc/gox/util/homedir"
 	"io"
@@ -38,6 +39,9 @@ func ReadCSV(in any, options ...LoadOption) DataFrame {
 		}
 		defer api.CloseQuietly(csvFile)
 		reader = csvFile
+	}
+	if reader == nil {
+		return DataFrame{Err: exception.New(1, "csv文件操作失败")}
 	}
 
 	csvReader := csv.NewReader(reader)
