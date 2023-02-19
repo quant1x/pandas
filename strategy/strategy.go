@@ -6,9 +6,9 @@ import (
 	"gitee.com/quant1x/data/security"
 	"gitee.com/quant1x/pandas/stat"
 	"github.com/mymmsc/gox/logger"
+	"github.com/mymmsc/gox/progressbar"
 	"github.com/mymmsc/gox/util/treemap"
 	tableView "github.com/olekukonko/tablewriter"
-	progressbar "github.com/qianlnk/pgbar"
 	"github.com/shirou/gopsutil/v3/cpu"
 	"github.com/shirou/gopsutil/v3/mem"
 	"os"
@@ -29,12 +29,10 @@ type Strategy interface {
 
 func main() {
 	var (
-		//path     string // 数据路径
 		strategy int  // 策略编号
 		avx2     bool // AVX2加速状态
 		cpuNum   int  // cpu数量
 	)
-	//flag.StringVar(&path, "path", category.DATA_ROOT_PATH, "stock history data path")
 	flag.IntVar(&strategy, "strategy", 1, "strategy serial number")
 	flag.BoolVar(&avx2, "avx2", false, "Avx2 acceleration")
 	flag.IntVar(&cpuNum, "cpu", runtime.NumCPU()/2, "sets the maximum number of CPUs")
