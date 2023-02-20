@@ -65,3 +65,14 @@ func TestNDArray_Rolling(t *testing.T) {
 	r2 := s.Rolling(d2).Mean()
 	fmt.Println(r2)
 }
+
+func TestNDArray_Apply(t *testing.T) {
+	d1 := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
+	s1 := NewSeries(d1...)
+	fmt.Println(s1)
+	s2 := s1.(NDArray[float64])
+	s2.Apply2(func(idx int, v float64) float64 {
+		return v * v
+	}, true)
+	fmt.Println(s2)
+}

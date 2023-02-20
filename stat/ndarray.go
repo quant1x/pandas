@@ -155,8 +155,23 @@ func (self NDArray[T]) Select(r ScopeLimit) Series {
 }
 
 func (self NDArray[T]) Apply(f func(idx int, v any)) {
+	//inplace := true
 	for i, v := range self {
 		f(i, v)
+	}
+}
+
+// Apply2 提供可替换功能的apply方法, 默认不替换
+func (self NDArray[T]) Apply2(f func(idx int, v T) T, args ...bool) {
+	inplace := false
+	if len(args) >= 1 {
+		inplace = args[0]
+	}
+	for i, v := range self {
+		r := f(i, v)
+		if inplace {
+			self[i] = r
+		}
 	}
 }
 
