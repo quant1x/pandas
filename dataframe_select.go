@@ -7,7 +7,11 @@ import (
 
 // Col returns a copy of the Series with the given column name contained in the DataFrame.
 // 选取一列
-func (self DataFrame) Col(colname string) stat.Series {
+func (self DataFrame) Col(colname string, args ...bool) stat.Series {
+	inplace := false
+	if len(args) >= 1 {
+		inplace = args[0]
+	}
 	if self.Err != nil {
 		return NewSeriesWithType(stat.SERIES_TYPE_INVAILD, "")
 	}
@@ -15,6 +19,9 @@ func (self DataFrame) Col(colname string) stat.Series {
 	idx := findInStringSlice(colname, self.Names())
 	if idx < 0 {
 		return NewSeriesWithType(stat.SERIES_TYPE_INVAILD, "")
+	}
+	if inplace {
+		return self.columns[idx]
 	}
 	return self.columns[idx].Copy()
 }
