@@ -71,8 +71,9 @@ func TestNDArray_Apply(t *testing.T) {
 	s1 := NewSeries(d1...)
 	fmt.Println(s1)
 	s2 := s1.(NDArray[float64])
-	s2.Apply2(func(idx int, v float64) float64 {
-		return v * v
+	s2.Apply2(func(idx int, v any) any {
+		f := anyToGeneric[float64](v)
+		return f * f
 	}, true)
 	fmt.Println(s2)
 }

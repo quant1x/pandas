@@ -48,6 +48,9 @@ type Series interface {
 	Select(r ScopeLimit) Series
 	// Append 增加一批记录
 	Append(values ...any) Series
+	// Concat concatenates two series together. It will return a new Series with the
+	// combined elements of both Series.
+	Concat(x Series) Series
 
 	// Records returns the elements of a Series as a []string
 	Records() []string
@@ -67,6 +70,8 @@ type Series interface {
 	Rolling(param any) RollingAndExpandingMixin
 	// Apply 接受一个回调函数
 	Apply(f func(idx int, v any))
+	// Apply2 增加替换功能, 默认不替换
+	Apply2(f func(idx int, v any) any, args ...bool) Series
 	// Logic 逻辑处理
 	Logic(f func(idx int, v any) bool) []bool
 	// EWM Provide exponentially weighted (EW) calculations.

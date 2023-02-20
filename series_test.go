@@ -75,3 +75,20 @@ func TestRolling2(t *testing.T) {
 	r2 := df.Col("x").Rolling(s2).Mean().Values()
 	fmt.Println("序列化结果:", r2)
 }
+
+func TestSeriesConcat(t *testing.T) {
+	d1 := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
+	s1 := NewNDFrame[float64]("x", d1...)
+	d2 := []float64{101, 102}
+	s2 := NewNDFrame[float64]("x", d2...)
+	s21 := s2.Apply2(func(idx int, v any) any {
+		r := v.(float64)
+		return r * r
+	}, true)
+	fmt.Println(s21)
+	fmt.Println(s1)
+	fmt.Println(s2)
+	s3 := s1.Concat(s2)
+	fmt.Println(s1)
+	fmt.Println(s3)
+}

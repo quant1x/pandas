@@ -162,7 +162,7 @@ func (self NDArray[T]) Apply(f func(idx int, v any)) {
 }
 
 // Apply2 提供可替换功能的apply方法, 默认不替换
-func (self NDArray[T]) Apply2(f func(idx int, v T) T, args ...bool) {
+func (self NDArray[T]) Apply2(f func(idx int, v any) any, args ...bool) Series {
 	inplace := false
 	if len(args) >= 1 {
 		inplace = args[0]
@@ -170,9 +170,10 @@ func (self NDArray[T]) Apply2(f func(idx int, v T) T, args ...bool) {
 	for i, v := range self {
 		r := f(i, v)
 		if inplace {
-			self[i] = r
+			self[i] = anyToGeneric[T](r)
 		}
 	}
+	return self
 }
 
 func (self NDArray[T]) Logic(f func(idx int, v any) bool) []bool {

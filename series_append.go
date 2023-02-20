@@ -75,3 +75,9 @@ func (self *NDFrame) Append(values ...any) stat.Series {
 	}
 	return self
 }
+
+func (self *NDFrame) Concat(x stat.Series) stat.Series {
+	y := self.Copy()
+	y = y.Append(x.Values())
+	return y
+}

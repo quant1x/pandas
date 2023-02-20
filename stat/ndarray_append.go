@@ -93,3 +93,9 @@ func (self NDArray[T]) Append(values ...any) Series {
 	}
 	return self
 }
+
+func (self NDArray[T]) Concat(x Series) Series {
+	y := self.Copy()
+	y = y.Append(x.Values())
+	return y
+}

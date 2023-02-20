@@ -34,3 +34,17 @@ func TestLoadStructs(t *testing.T) {
 	df2 := LoadStructs(dataTags)
 	fmt.Println(df2)
 }
+
+func TestDataFrame_Concat(t *testing.T) {
+	d1 := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
+	s1 := NewNDFrame[float64]("x", d1...)
+	df1 := NewDataFrame(s1)
+	d2 := []float64{101, 102}
+	s2 := NewNDFrame[float64]("x", d2...)
+	df2 := NewDataFrame(s2)
+	fmt.Println(df1)
+	fmt.Println(df2)
+	df3 := df1.Concat(df2)
+	fmt.Println(df1)
+	fmt.Println(df3)
+}

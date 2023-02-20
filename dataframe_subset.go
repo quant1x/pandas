@@ -1,6 +1,8 @@
 package pandas
 
-import "gitee.com/quant1x/pandas/stat"
+import (
+	"gitee.com/quant1x/pandas/stat"
+)
 
 // Subset returns a subset of the rows of the original DataFrame based on the
 // Series subsetting indexes.
@@ -40,4 +42,48 @@ func (self DataFrame) SelectRows(p stat.ScopeLimit) DataFrame {
 		nrows:   nrows,
 	}
 	return newDF
+}
+
+func (self DataFrame) Concat(dfb DataFrame) DataFrame {
+	if self.Err != nil {
+		return self
+	}
+	if dfb.Err != nil {
+		return dfb
+	}
+
+	uniques := make(map[string]struct{})
+	cols := []string{}
+	for _, t := range []DataFrame{self, dfb} {
+		for _, u := range t.Names() {
+			if _, ok := uniques[u]; !ok {
+				uniques[u] = struct{}{}
+				cols = append(cols, u)
+			}
+		}
+	}
+
+	expandedSeries := make([]stat.Series, len(cols))
+	for k, v := range cols {
+		aidx := findInStringSlice(v, self.Names())
+		bidx := findInStringSlice(v, dfb.Names())
+
+		// aidx and bidx must not be -1 at the same time.
+		var a, b stat.Series
+		if aidx != -1 {
+			a = self.columns[aidx]
+		} else {
+			bb := dfb.columns[bidx]
+			a = NewSeries(bb.Type(), bb.Name(), make([]struct{}, self.nrows))
+
+		}
+		if bidx != -1 {
+			b = dfb.columns[bidx]
+		} else {
+			b = NewSeries(a.Type(), a.Name(), make([]struct{}, dfb.nrows))
+		}
+		newSeries := a.Concat(b)
+		expandedSeries[k] = newSeries
+	}
+	return NewDataFrame(expandedSeries...)
 }
