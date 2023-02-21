@@ -28,6 +28,8 @@ type Series interface {
 	DTypes() []DType
 	// Ints 强制转换成整型
 	Ints() []Int
+	// Strings 强制转换string切片
+	Strings() []string
 
 	// sort.Interface
 

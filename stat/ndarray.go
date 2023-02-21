@@ -39,6 +39,10 @@ func (self NDArray[T]) Ints() []Int {
 	return d
 }
 
+func (self NDArray[T]) Strings() []string {
+	return SliceToString(self.Values())
+}
+
 func (self NDArray[T]) Empty(tv ...Type) Series {
 	empty := []T{}
 	return NDArray[T](empty)

@@ -92,3 +92,10 @@ func TestSeriesConcat(t *testing.T) {
 	fmt.Println(s1)
 	fmt.Println(s3)
 }
+
+func TestNDFrame_Strings(t *testing.T) {
+	d1 := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
+	s1 := NewNDFrame[float64]("x", d1...)
+	ss := s1.Strings()
+	fmt.Println(ss)
+}

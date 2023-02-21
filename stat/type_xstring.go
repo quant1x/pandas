@@ -1,7 +1,10 @@
 package stat
 
 import (
+	"fmt"
+	"github.com/mymmsc/gox/exception"
 	"github.com/mymmsc/gox/logger"
+	"reflect"
 	"strconv"
 	"strings"
 )
@@ -76,4 +79,55 @@ func AnyToString(v any) string {
 
 	s := __anyToString(v)
 	return s
+}
+
+func slice_any_to_string[T BaseType](s []T) []string {
+	count := len(s)
+	if count == 0 {
+		return []string{}
+	}
+	d := make([]string, count)
+	for idx, iv := range s {
+		d[idx] = anyToGeneric[string](iv)
+	}
+	return d
+}
+
+// SliceToString any输入只能是一维slice或者数组
+func SliceToString(v any) []string {
+	switch values := v.(type) {
+	case []int8:
+		return slice_any_to_string(values)
+	case []uint8:
+		return slice_any_to_string(values)
+	case []int16:
+		return slice_any_to_string(values)
+	case []uint16:
+		return slice_any_to_string(values)
+	case []int32:
+		return slice_any_to_string(values)
+	case []uint32:
+		return slice_any_to_string(values)
+	case []int64:
+		return slice_any_to_string(values)
+	case []uint64:
+		return slice_any_to_string(values)
+	case []int:
+		return slice_any_to_string(values)
+	case []uint:
+		return slice_any_to_string(values)
+	case []float32:
+		return slice_any_to_string(values)
+	case []float64:
+		return slice_any_to_string(values)
+	case []bool:
+		return slice_any_to_string(values)
+	case []string:
+		return values
+	default:
+		vv := reflect.ValueOf(v)
+		vk := vv.Kind()
+		panic(exception.New(errorFloat64Base+0, fmt.Sprintf("Unsupported type: %s", vk.String())))
+	}
+	return []string{}
 }

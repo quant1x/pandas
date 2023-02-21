@@ -175,6 +175,10 @@ func (self *NDFrame) Ints() []stat.Int {
 	return ns
 }
 
+func (self *NDFrame) Strings() []string {
+	return stat.SliceToString(self.Values())
+}
+
 func (self *NDFrame) Empty(t ...stat.Type) stat.Series {
 	if len(t) > 0 {
 		self.type_ = t[0]
