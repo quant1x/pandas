@@ -2,7 +2,6 @@ package stat
 
 import (
 	"github.com/mymmsc/gox/exception"
-	"reflect"
 )
 
 type NDArray[T BaseType] []T
@@ -59,38 +58,6 @@ func (self NDArray[T]) Records() []string {
 
 }
 
-func (self NDArray[T]) Subset(start, end int, opt ...any) Series {
-	// 默认不copy
-	var __optCopy bool = false
-	if len(opt) > 0 {
-		// 第一个参数为是否copy
-		if _cp, ok := opt[0].(bool); ok {
-			__optCopy = _cp
-		}
-	}
-	var vs any
-	var rows int
-	vv := reflect.ValueOf(self.Values())
-	vk := vv.Kind()
-	switch vk {
-	case reflect.Slice, reflect.Array: // 切片和数组同样的处理逻辑
-		vvs := vv.Slice(start, end)
-		vs = vvs.Interface()
-		rows = vv.Len()
-		if __optCopy && rows > 0 {
-			vs = Clone(vs)
-			//vs = slices.Clone(vs)
-		}
-		rows = vvs.Len()
-		var d Series
-		d = NDArray[T](vs.([]T))
-		return d
-	default:
-		// 其它类型忽略
-	}
-	return self.Empty()
-}
-
 func (self NDArray[T]) Repeat(x any, repeats int) Series {
 	var d any
 	switch values := self.Values().(type) {
@@ -107,6 +74,11 @@ func (self NDArray[T]) Repeat(x any, repeats int) Series {
 		d = Repeat(AnyToFloat64(x), repeats)
 	}
 	return NDArray[T](d.([]T))
+}
+
+func (self NDArray[T]) FillNa(v any, inplace bool) Series {
+	d := FillNa(self, v, inplace)
+	return NDArray[T](d)
 }
 
 func (self NDArray[T]) Shift(periods int) Series {
@@ -130,11 +102,6 @@ func (self NDArray[T]) StdDev() DType {
 	return self.Std()
 }
 
-func (self NDArray[T]) FillNa(v any, inplace bool) Series {
-	d := FillNa(self, v, inplace)
-	return NDArray[T](d)
-}
-
 func (self NDArray[T]) Max() any {
 	d := Max2(self)
 	return d
@@ -143,15 +110,6 @@ func (self NDArray[T]) Max() any {
 func (self NDArray[T]) Min() any {
 	d := Min2(self)
 	return d
-}
-
-func (self NDArray[T]) Select(r ScopeLimit) Series {
-	start, end, err := r.Limits(self.Len())
-	if err != nil {
-		return nil
-	}
-	series := self.Subset(start, end+1)
-	return series
 }
 
 func (self NDArray[T]) Apply(f func(idx int, v any)) {

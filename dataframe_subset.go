@@ -87,3 +87,28 @@ func (self DataFrame) Concat(dfb DataFrame) DataFrame {
 	}
 	return NewDataFrame(expandedSeries...)
 }
+
+// IndexOf 取一条记录
+//
+//	idx 为负值时从后往前取
+func (self DataFrame) IndexOf(idx int, opt ...any) map[string]any {
+	one := map[string]any{}
+	if idx < 0 {
+		idx = self.Nrow() + idx
+	} else if idx >= self.Nrow() {
+		idx = self.Nrow() - 1
+	}
+	var __optInplace = false
+	if len(opt) > 0 {
+		// 第一个参数为是否copy
+		if _opt, ok := opt[0].(bool); ok {
+			__optInplace = _opt
+		}
+	}
+	for _, series := range self.columns {
+		key := series.Name()
+		value := series.IndexOf(idx, __optInplace)
+		one[key] = value
+	}
+	return one
+}

@@ -54,6 +54,8 @@ type Series interface {
 
 	// Records returns the elements of a Series as a []string
 	Records() []string
+	// IndexOf 取一条记录, index<0时, 从后往前取值
+	IndexOf(index int, opt ...any) any
 	// Subset 获取子集
 	Subset(start, end int, opt ...any) Series
 	// Repeat elements of an array.

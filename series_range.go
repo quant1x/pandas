@@ -124,3 +124,24 @@ func (self *NDFrame) Select(r stat.ScopeLimit) stat.Series {
 	series := self.Subset(start, end+1)
 	return series
 }
+
+func (self *NDFrame) IndexOf(index int, opt ...any) any {
+	if index < 0 {
+		index = self.Len() + index
+	} else if index >= self.Len() {
+		index = self.Len() - 1
+	}
+	var __optInplace = false
+	if len(opt) > 0 {
+		// 第一个参数为是否copy
+		if _opt, ok := opt[0].(bool); ok {
+			__optInplace = _opt
+		}
+	}
+	if !__optInplace {
+		return reflect.ValueOf(self.Values()).Index(index).Interface()
+	}
+	vv := reflect.ValueOf(self.values)
+	tv := vv.Index(index)
+	return tv
+}

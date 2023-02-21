@@ -12,6 +12,7 @@ const (
 var (
 	// ErrUnsupportedType 不支持的类型
 	ErrUnsupportedType = exception.New(errorTypeBase+0, "Unsupported type")
+	ErrRange           = exception.New(errorTypeBase+1, "range error")
 )
 
 func Throw(tv any) *exception.Exception {
