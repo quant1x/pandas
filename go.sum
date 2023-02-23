@@ -1,7 +1,7 @@
-gitee.com/quant1x/data v0.7.12 h1:VGxe2ei/Cgkfnvqp8HAEdUJR6iBCh1jgYAo7/xobAm4=
-gitee.com/quant1x/data v0.7.12/go.mod h1:S4NIyUGLPJGr8mkyyu9easPYD44cTJne9iN6tsfXj+0=
-gitee.com/quant1x/gotdx v1.2.2 h1:sdlGRyD8b1YynJ1DCYGcMoYldtt5cJEOydAZ0GRQQWE=
-gitee.com/quant1x/gotdx v1.2.2/go.mod h1:tenxBV0i+c7ysRs+g8mv/1MYboaJhSy6muqJf2Uu0l0=
+gitee.com/quant1x/data v0.7.16 h1:QYJcg/sAowoumurMDLDl7MsDFVNGc0w+57UCNwZMhrI=
+gitee.com/quant1x/data v0.7.16/go.mod h1:9xgfw26RyhtjKml+C1tcU2sBWT+PxIXYZ1EJajbAuCA=
+gitee.com/quant1x/gotdx v1.2.3 h1:JHKfZL52tfrEnFJ+tzATUaAEIsHQNjywM6zWCpbdtsg=
+gitee.com/quant1x/gotdx v1.2.3/go.mod h1:+1sjU0yMgkW1JGcbYjPIaNwR7CmE0oS+1ZaIePp0LQA=
 github.com/chewxy/math32 v1.10.1 h1:LFpeY0SLJXeaiej/eIp2L40VYfscTvKh/FSEZ68uMkU=
 github.com/chewxy/math32 v1.10.1/go.mod h1:dOB2rcuFrCn6UHrze36WSLVPKtzPMRAQvBvUwkSsLqs=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
@@ -45,10 +45,8 @@ github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0/go.mod h1:zJYVVT2
 github.com/mattn/go-runewidth v0.0.9/go.mod h1:H031xJmbD/WCDINGzjvQ9THkh0rPKHF+m2gUSrubnMI=
 github.com/mattn/go-runewidth v0.0.14 h1:+xnbZSEeDbOIg5/mE6JF0w6n9duR1l3/WmbinWVwUuU=
 github.com/mattn/go-runewidth v0.0.14/go.mod h1:Jdepj2loyihRzMpdS35Xk/zdY8IAYHsh153qUoGf23w=
-github.com/modern-go/reflect2 v1.0.2 h1:xBagoLtFs94CBntxluKeaWgTMpvLxC4ur3nMaC9Gz0M=
-github.com/modern-go/reflect2 v1.0.2/go.mod h1:yWuevngMOJpCy52FWWMvUC8ws7m/LJsjYzDa0/r8luk=
-github.com/mymmsc/gox v1.3.7 h1:XYztcQnrtrAKIMeCojD641SOdoLUKvR9SjZPShIYBdg=
-github.com/mymmsc/gox v1.3.7/go.mod h1:A67NVxiHB3ZBcRfZVjvDfIVTUe5JaUjuy/F70ucUtdk=
+github.com/mymmsc/gox v1.3.8 h1:OEom0fY5SlPGf4GAX9T83L2cBx1bQCx1pD6R6NtQTKs=
+github.com/mymmsc/gox v1.3.8/go.mod h1:KAD7bkNM7N24gNCuR7YsmKe1cJLZ5o5x885uctG5mw0=
 github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e/go.mod h1:zD1mROLANZcx1PVRCS0qkT7pwLkGfwJo4zjcN/Tysno=
 github.com/olekukonko/tablewriter v0.0.5 h1:P2Ga83D34wi1o9J6Wh1mRuqd4mF/x/lgBS7N7AbDhec=
 github.com/olekukonko/tablewriter v0.0.5/go.mod h1:hPp6KlRPjbx+hW8ykQs1w3UBbZlj6HuIJcUGPhkA7kY=

@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"gitee.com/quant1x/data/category"
 	"gitee.com/quant1x/data/security"
 	"gitee.com/quant1x/pandas/stat"
 	"github.com/mymmsc/gox/logger"
@@ -49,7 +50,7 @@ func main() {
 	//numCPU := runtime.NumCPU() / 2
 	runtime.GOMAXPROCS(cpuNum)
 	// 获取全部证券代码
-	ss := security.GetCodeList()
+	ss := category.GetCodeList()
 	count := len(ss)
 	var wg = sync.WaitGroup{}
 	fmt.Println("Quant1X 预警系统")

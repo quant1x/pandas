@@ -3,10 +3,10 @@ module gitee.com/quant1x/pandas
 go 1.20
 
 require (
-	gitee.com/quant1x/data v0.7.12
+	gitee.com/quant1x/data v0.7.16
 	github.com/chewxy/math32 v1.10.1
 	github.com/huandu/go-clone v1.4.1
-	github.com/mymmsc/gox v1.3.7
+	github.com/mymmsc/gox v1.3.8
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/shirou/gopsutil/v3 v3.23.1
 	github.com/tealeg/xlsx v1.0.5
@@ -18,7 +18,7 @@ require (
 )
 
 require (
-	gitee.com/quant1x/gotdx v1.2.2 // indirect
+	gitee.com/quant1x/gotdx v1.2.3 // indirect
 	github.com/dlclark/regexp2 v1.7.0 // indirect
 	github.com/dop251/goja v0.0.0-20230216180835-5937a312edda // indirect
 	github.com/frankban/quicktest v1.11.2 // indirect
@@ -30,7 +30,6 @@ require (
 	github.com/kr/text v0.2.0 // indirect
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
 	github.com/mattn/go-runewidth v0.0.14 // indirect
-	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/peterbourgon/diskv v2.0.1+incompatible // indirect
 	github.com/power-devops/perfstat v0.0.0-20210106213030-5aafc221ea8c // indirect
 	github.com/rivo/uniseg v0.4.3 // indirect
