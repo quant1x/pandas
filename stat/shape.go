@@ -1,5 +1,6 @@
 package stat
 
+// Shape 返回一维或2维数组的行数和列数
 func Shape[T Number](x any) (r, c int) {
 	return __slice_shape_go[T](x)
 }

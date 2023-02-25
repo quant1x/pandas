@@ -136,11 +136,8 @@ func Dot_v1[T Number](a, b [][]T) [][]T {
 func Dot2D1[T Number](a [][]T, b []T) []T {
 	B := [][]T{b}
 	b1 := Transpose2D(B)
-	//fmt.Println("Dot2D1: b1 =", b1)
 	x1 := Dot[T](a, b1)
-	//fmt.Println("Dot2D1: x1 =", x1)
 	x2 := Transpose2D(x1)
-	//fmt.Println("Dot2D1: x2 =", x2)
 	return x2[0]
 }
 
@@ -153,7 +150,7 @@ func Dot2D1_v2[T Number](a [][]T, b []T) []T {
 
 	fmt.Println("m, n:", m, n)
 	fmt.Println("k, l:", k, l)
-	x := make( /*[]*/ []T, m)
+	x := make([]T, m)
 	// 行
 	for i := 0; i < m; i++ {
 		col := T(0)
