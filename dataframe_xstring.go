@@ -72,14 +72,18 @@ func (self DataFrame) print(
 	}
 
 	// Add the row numbers
+	rowNumbersOffset := 0
 	for i := 0; i < nTotal+1; /*self.nrows+1*/ i++ {
 		add := ""
-		if i == 0 || (i == nMinRows+1 && shortening) {
+		if i == 0 {
 			// 跳过
+		} else if i == nMinRows+1 && shortening {
+			// 跳过
+			rowNumbersOffset -= 1
 		} else if i < nMinRows+1 {
-			add = strconv.Itoa(i-1) + ":"
+			add = strconv.Itoa(i-1+rowNumbersOffset) + ":"
 		} else {
-			add = strconv.Itoa(nrows-maxRows+i-1) + ":"
+			add = strconv.Itoa(nrows-maxRows+i-1+rowNumbersOffset) + ":"
 		}
 		//fmt.Println(i)
 		records[i] = append([]string{add}, records[i]...)

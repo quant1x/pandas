@@ -6,7 +6,7 @@ require (
 	gitee.com/quant1x/data v0.7.16
 	github.com/chewxy/math32 v1.10.1
 	github.com/huandu/go-clone v1.4.1
-	github.com/mymmsc/gox v1.3.8
+	github.com/mymmsc/gox v1.3.9
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/shirou/gopsutil/v3 v3.23.1
 	github.com/tealeg/xlsx v1.0.5
@@ -18,7 +18,7 @@ require (
 )
 
 require (
-	gitee.com/quant1x/gotdx v1.2.3 // indirect
+	gitee.com/quant1x/gotdx v1.2.5 // indirect
 	github.com/dlclark/regexp2 v1.7.0 // indirect
 	github.com/dop251/goja v0.0.0-20230216180835-5937a312edda // indirect
 	github.com/frankban/quicktest v1.11.2 // indirect

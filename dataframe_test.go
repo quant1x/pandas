@@ -36,7 +36,7 @@ func TestLoadStructs(t *testing.T) {
 }
 
 func TestDataFrame_Concat(t *testing.T) {
-	d1 := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
+	d1 := []float64{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
 	s1 := NewNDFrame[float64]("x", d1...)
 	df1 := NewDataFrame(s1)
 	d2 := []float64{101, 102}
