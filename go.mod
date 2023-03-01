@@ -3,9 +3,8 @@ module gitee.com/quant1x/pandas
 go 1.20
 
 require (
-	gitee.com/quant1x/data v0.7.16
+	gitee.com/quant1x/data v0.7.21
 	github.com/chewxy/math32 v1.10.1
-	github.com/huandu/go-clone v1.4.1
 	github.com/mymmsc/gox v1.3.9
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/shirou/gopsutil/v3 v3.23.1

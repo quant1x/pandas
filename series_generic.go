@@ -29,19 +29,24 @@ func NewSeriesWithType(_type stat.Type, name string, values ...any) stat.Series 
 	frame.type_ = _type
 	if frame.type_ == stat.SERIES_TYPE_BOOL {
 		// bool
-		frame.values = reflect.MakeSlice(stat.TypeBool, 0, 0).Interface()
+		//frame.values = reflect.MakeSlice(stat.TypeBool, 0, 0).Interface()
+		frame.values = make([]bool, 0)
 	} else if frame.type_ == stat.SERIES_TYPE_INT64 {
 		// int64
-		frame.values = reflect.MakeSlice(stat.TypeInt64, 0, 0).Interface()
+		//frame.values = reflect.MakeSlice(stat.TypeInt64, 0, 0).Interface()
+		frame.values = make([]int64, 0)
 	} else if frame.type_ == stat.SERIES_TYPE_FLOAT32 {
 		// float32
-		frame.values = reflect.MakeSlice(stat.TypeFloat32, 0, 0).Interface()
+		//frame.values = reflect.MakeSlice(stat.TypeFloat32, 0, 0).Interface()
+		frame.values = make([]float32, 0)
 	} else if frame.type_ == stat.SERIES_TYPE_FLOAT64 {
 		// float64
-		frame.values = reflect.MakeSlice(stat.TypeFloat64, 0, 0).Interface()
+		//frame.values = reflect.MakeSlice(stat.TypeFloat64, 0, 0).Interface()
+		frame.values = make([]float64, 0)
 	} else {
 		// string, 字符串最后容错使用
-		frame.values = reflect.MakeSlice(stat.TypeString, 0, 0).Interface()
+		//frame.values = reflect.MakeSlice(stat.TypeString, 0, 0).Interface()
+		frame.values = make([]string, 0)
 	}
 	frame.Append(values...)
 

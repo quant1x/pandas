@@ -2,7 +2,6 @@ package pandas
 
 import (
 	"gitee.com/quant1x/pandas/stat"
-	gc "github.com/huandu/go-clone"
 	"reflect"
 )
 
@@ -14,44 +13,7 @@ func (self *NDFrame) Copy() stat.Series {
 
 func (self *NDFrame) Subset(start, end int, opt ...any) stat.Series {
 	// 默认不copy
-	var __optCopy bool = false
-	if len(opt) > 0 {
-		// 第一个参数为是否copy
-		if _cp, ok := opt[0].(bool); ok {
-			__optCopy = _cp
-		}
-	}
-	var vs any
-	var rows int
-	vv := reflect.ValueOf(self.values)
-	vk := vv.Kind()
-	switch vk {
-	case reflect.Slice, reflect.Array: // 切片和数组同样的处理逻辑
-		vvs := vv.Slice(start, end)
-		vs = vvs.Interface()
-		rows = vv.Len()
-		if __optCopy && rows > 0 {
-			vs = gc.Clone(vs)
-		}
-		rows = vvs.Len()
-		frame := NDFrame{
-			formatter: self.formatter,
-			name:      self.name,
-			type_:     self.type_,
-			nilCount:  0,
-			rows:      rows,
-			values:    vs,
-		}
-		return &frame
-	default:
-		// 其它类型忽略
-	}
-	return self.Empty(0)
-}
-
-func (self *NDFrame) oldSubset(start, end int, opt ...any) stat.Series {
-	// 默认不copy
-	var __optCopy bool = false
+	var __optCopy = false
 	if len(opt) > 0 {
 		// 第一个参数为是否copy
 		if _cp, ok := opt[0].(bool); ok {
@@ -81,6 +43,16 @@ func (self *NDFrame) oldSubset(start, end int, opt ...any) stat.Series {
 			_vs = append(_vs, subset...)
 			vs = _vs
 		}
+	case []int32:
+		subset := values[start:end]
+		rows = len(subset)
+		if !__optCopy {
+			vs = subset
+		} else {
+			_vs := make([]int32, 0)
+			_vs = append(_vs, subset...)
+			vs = _vs
+		}
 	case []int64:
 		subset := values[start:end]
 		rows = len(subset)
@@ -88,6 +60,16 @@ func (self *NDFrame) oldSubset(start, end int, opt ...any) stat.Series {
 			vs = subset
 		} else {
 			_vs := make([]int64, 0)
+			_vs = append(_vs, subset...)
+			vs = _vs
+		}
+	case []float32:
+		subset := values[start:end]
+		rows = len(subset)
+		if !__optCopy {
+			vs = subset
+		} else {
+			_vs := make([]float32, 0)
 			_vs = append(_vs, subset...)
 			vs = _vs
 		}

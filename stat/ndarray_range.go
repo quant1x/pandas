@@ -1,6 +1,9 @@
 package stat
 
-import "reflect"
+import (
+	"golang.org/x/exp/slices"
+	"reflect"
+)
 
 func (self NDArray[T]) IndexOf(index int, opt ...any) any {
 	if index < 0 {
@@ -26,34 +29,22 @@ func (self NDArray[T]) IndexOf(index int, opt ...any) any {
 
 func (self NDArray[T]) Subset(start, end int, opt ...any) Series {
 	// 默认不copy
-	var __optCopy bool = false
+	var __optCopy = false
 	if len(opt) > 0 {
 		// 第一个参数为是否copy
 		if _cp, ok := opt[0].(bool); ok {
 			__optCopy = _cp
 		}
 	}
-	var vs any
-	var rows int
-	vv := reflect.ValueOf(self.Values())
-	vk := vv.Kind()
-	switch vk {
-	case reflect.Slice, reflect.Array: // 切片和数组同样的处理逻辑
-		vvs := vv.Slice(start, end)
-		vs = vvs.Interface()
-		rows = vv.Len()
-		if __optCopy && rows > 0 {
-			vs = Clone(vs)
-			//vs = slices.Clone(vs)
-		}
-		rows = vvs.Len()
-		var d Series
-		d = NDArray[T](vs.([]T))
-		return d
-	default:
-		// 其它类型忽略
+	values := []T(self)
+	rows := self.Len()
+	vvs := values[start:end]
+	if __optCopy && rows > 0 {
+		vvs = slices.Clone(vvs)
 	}
-	return self.Empty()
+	var d Series
+	d = NDArray[T](vvs)
+	return d
 }
 
 func (self NDArray[T]) Select(r ScopeLimit) Series {
