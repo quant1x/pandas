@@ -6,7 +6,7 @@ import (
 )
 
 // WMA 通达信S序列的N日加权移动平均 Yn = (1*X1+2*X2+3*X3+...+n*Xn)/(1+2+3+...+Xn)
-func WMA(S stat.Series, N any) any {
+func WMA(S stat.Series, N any) stat.Series {
 	var X []stat.DType
 	switch v := N.(type) {
 	case int:
@@ -17,7 +17,7 @@ func WMA(S stat.Series, N any) any {
 	default:
 		panic(exception.New(1, "error window"))
 	}
-	return S.Rolling(X).Apply(func(S stat.Series, N stat.DType) stat.DType {
+	d := S.Rolling(X).Apply(func(S stat.Series, N stat.DType) stat.DType {
 		if S.Len() == 0 {
 			return stat.DTypeNaN
 		}
@@ -27,5 +27,6 @@ func WMA(S stat.Series, N any) any {
 		v1 := stat.Sum(v)
 		v2 := v1 * 2 / N / (N + 1)
 		return v2
-	}).Values()
+	})
+	return d
 }
