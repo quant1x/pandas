@@ -26,6 +26,9 @@ func WMA(S stat.Series, N any) stat.Series {
 		v := stat.CumSum(x)
 		v1 := stat.Sum(v)
 		v2 := v1 * 2 / N / (N + 1)
+		if stat.DTypeIsNaN(v2) {
+			v2 = stat.DTypeNaN
+		}
 		return v2
 	})
 	return d

@@ -2,19 +2,36 @@ package formula
 
 import (
 	"fmt"
-	"gitee.com/quant1x/pandas"
+	"gitee.com/quant1x/data/stock"
 	"testing"
 )
 
 func TestWMA(t *testing.T) {
-	f0 := []float64{1, 2, 3, 4}
-	//f1 := []float64{70, 80, 75, 83, 86}
-	//f2 := []float64{90, 69, 60, 88, 87}
+	df := stock.KLine("000736.sz")
+	fmt.Println(df)
+	var (
+		CLOSE = df.ColAsNDArray("close")
+		HIGH  = df.ColAsNDArray("high")
+		LOW   = df.ColAsNDArray("low")
+		//VOL   = df.ColAsNDArray("volume")
+		//DATE  = df.ColAsNDArray("date")
+	)
+	//length := CLOSE.Len()
+	//N1 := N
+	N2 := 5
+	N3 := 2
+	//N1:=6;
+	//重心:(2*C+H+L)/4,COLOR00FFFF,LINETHICK0;
+	ZX := CLOSE.Mul(2).Add(HIGH).Add(LOW).Div(4)
+	//SJ:=WMA((重心-LLV(L,5))/(HHV(H,5)-LLV(L,5))*100,2);
+	LLV5 := LLV(LOW, N2)
+	HHV5 := HHV(HIGH, N2)
 
-	s0 := pandas.NewSeriesWithoutType("f0", f0)
-	//s1 := pandas.NewSeriesWithoutType("f1", f1)
-	//s2 := pandas.NewSeriesWithoutType("f2", f2)
-	fmt.Println(WMA(s0, 4))
-	//fmt.Println(WMA(s1, 5))
-	//fmt.Println(WMA(s2, 5))
+	sj1 := ZX.Sub(LLV5)
+	sj2 := HHV5.Sub(LLV5)
+	sj3 := sj1.Div(sj2).Mul(100)
+	SJ := WMA(sj3, N3)
+	//CLOSE := df.Col("close")
+	fmt.Println(SJ)
+
 }
