@@ -222,6 +222,8 @@ func (self NDArray[T]) And(x any) Series {
 	//	b = Repeat[DType](DType(sx), length)
 	case []DType:
 		b = __NumberToBool_S(sx)
+	case []bool:
+		b = sx
 	default:
 		panic(Throw(x))
 	}
