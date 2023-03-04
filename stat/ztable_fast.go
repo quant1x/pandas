@@ -20,13 +20,14 @@ func FindZScore(percent float64) (zScore float64) {
 	return __percentToZscore[index]
 }
 
-// ConfidenceIntervalToZscore 通过置信区间百分比
+// ConfidenceIntervalToZscore 通过置信区间百分比查找Z分值
 func ConfidenceIntervalToZscore(confidenceInterval float64) (zScore float64) {
 	// 约束 percentage在0~9999范围内
 	index := int(confidenceInterval*(kMaxScale)) % kMaxScale
 	return __z_table[index]
 }
 
+// ZscoreToConfidenceInterval 通过分值查找置信区间
 func ZscoreToConfidenceInterval(zScore float64) (confidenceInterval float64) {
 	index := __SearchFloat64s(__z_table, zScore)
 	confidenceInterval = float64(index) / float64(kMaxScale)
