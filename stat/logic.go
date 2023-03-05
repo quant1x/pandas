@@ -86,7 +86,7 @@ func __compare[T ~[]E, E any](x T, y any, comparator func(f1, f2 DType) bool) []
 	case []bool:
 		d = __compare_slice(x, Y, comparator)
 	default:
-		// 其它类型原样返回
+		// 其它未知类型抛异常
 		panic(Throw(any(x)))
 	}
 	return d
@@ -139,17 +139,19 @@ func __compare_slice[T ~[]E, E any, T2 ~[]E2, E2 any](x T, y T2, comparator func
 }
 
 var (
+	// 大于
 	__logic_gt = func(f1, f2 DType) bool {
 		return f1 > f2
 	}
-
+	// 大于等于
 	__logic_gte = func(f1, f2 DType) bool {
 		return f1 >= f2
 	}
-
+	// 小于
 	__logic_lt = func(f1, f2 DType) bool {
 		return f1 < f2
 	}
+	// 小于等于
 	__logic_lte = func(f1, f2 DType) bool {
 		return f1 <= f2
 	}
