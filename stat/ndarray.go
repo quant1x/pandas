@@ -142,14 +142,6 @@ func (self NDArray[T]) Apply2(f func(idx int, v any) any, args ...bool) Series {
 	return self
 }
 
-func (self NDArray[T]) Logic(f func(idx int, v any) bool) []bool {
-	d := make([]bool, self.Len())
-	for i, v := range self {
-		d[i] = f(i, v)
-	}
-	return d
-}
-
 func (self NDArray[T]) Diff(n any) Series {
 	d := Diff2(self, n)
 	return NDArray[T](d)
