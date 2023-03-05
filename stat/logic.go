@@ -1,8 +1,11 @@
 package stat
 
-import "github.com/viterin/vek"
+import (
+	"github.com/viterin/vek"
+	"github.com/viterin/vek/vek32"
+)
 
-func __compare[T ~[]E, E any](x T, y any, comparator func(f1, f2 DType) bool) []bool {
+func __compare[T ~[]E, E any](x T, y any, c int, comparator func(f1, f2 DType) bool) []bool {
 	if __y, ok := y.(Series); ok {
 		y = __y.Values()
 	}
@@ -10,37 +13,37 @@ func __compare[T ~[]E, E any](x T, y any, comparator func(f1, f2 DType) bool) []
 	switch Y := y.(type) {
 	case nil, int8, uint8, int16, uint16, int32, uint32, int64, uint64, int, uint, float32, float64, bool, string:
 		f2 := Any2DType(Y)
-		d = __compare_dtype(x, f2, comparator)
+		d = __compare_dtype(x, f2, c, comparator)
 	case []float32:
-		d = __compare_slice(x, Y, comparator)
+		d = __compare_slice(x, Y, c, comparator)
 	case []float64:
-		d = __compare_slice(x, Y, comparator)
+		d = __compare_slice(x, Y, c, comparator)
 	case []int:
-		d = __compare_slice(x, Y, comparator)
+		d = __compare_slice(x, Y, c, comparator)
 	case []int8:
-		d = __compare_slice(x, Y, comparator)
+		d = __compare_slice(x, Y, c, comparator)
 	case []int16:
-		d = __compare_slice(x, Y, comparator)
+		d = __compare_slice(x, Y, c, comparator)
 	case []int32:
-		d = __compare_slice(x, Y, comparator)
+		d = __compare_slice(x, Y, c, comparator)
 	case []int64:
-		d = __compare_slice(x, Y, comparator)
+		d = __compare_slice(x, Y, c, comparator)
 	case []uint:
-		d = __compare_slice(x, Y, comparator)
+		d = __compare_slice(x, Y, c, comparator)
 	case []uint8:
-		d = __compare_slice(x, Y, comparator)
+		d = __compare_slice(x, Y, c, comparator)
 	case []uint16:
-		d = __compare_slice(x, Y, comparator)
+		d = __compare_slice(x, Y, c, comparator)
 	case []uint32:
-		d = __compare_slice(x, Y, comparator)
+		d = __compare_slice(x, Y, c, comparator)
 	case []uint64:
-		d = __compare_slice(x, Y, comparator)
+		d = __compare_slice(x, Y, c, comparator)
 	case []uintptr:
-		d = __compare_slice(x, Y, comparator)
+		d = __compare_slice(x, Y, c, comparator)
 	case []string:
-		d = __compare_slice(x, Y, comparator)
+		d = __compare_slice(x, Y, c, comparator)
 	case []bool:
-		d = __compare_slice(x, Y, comparator)
+		d = __compare_slice(x, Y, c, comparator)
 	default:
 		// 其它未知类型抛异常
 		panic(Throw(y))
@@ -48,24 +51,121 @@ func __compare[T ~[]E, E any](x T, y any, comparator func(f1, f2 DType) bool) []
 	return d
 }
 
-func __compare_dtype[T ~[]E, E any](x T, y DType, comparator func(f1, f2 DType) bool) []bool {
+// 切片和dtype对比, 不用考虑slice长度对齐的问题
+func __compare_dtype[T ~[]E, E any](x T, y DType, c int, comparator func(f1, f2 DType) bool) []bool {
 	var bs = []bool{}
 	xLen := len(x)
-	// b不是切片
 	bs = make([]bool, xLen)
-	for i := 0; i < xLen; i++ {
-		A := Any2DType(x[i])
-		bs[i] = comparator(A, y)
+
+	kind := checkoutRawType(x)
+	if kind == SERIES_TYPE_FLOAT64 && c == __k_compare_gt {
+		return vek.GtNumber_Into(bs, any(x).([]float64), y)
+	} else if kind == SERIES_TYPE_FLOAT64 && c == __k_compare_gte {
+		return vek.GteNumber_Into(bs, any(x).([]float64), y)
+	} else if kind == SERIES_TYPE_FLOAT64 && c == __k_compare_lt {
+		return vek.LtNumber_Into(bs, any(x).([]float64), y)
+	} else if kind == SERIES_TYPE_FLOAT64 && c == __k_compare_lte {
+		return vek.LteNumber_Into(bs, any(x).([]float64), y)
+	} else if kind == SERIES_TYPE_FLOAT32 && c == __k_compare_gt {
+		return vek32.GtNumber_Into(bs, any(x).([]float32), float32(y))
+	} else if kind == SERIES_TYPE_FLOAT32 && c == __k_compare_gte {
+		return vek32.GteNumber_Into(bs, any(x).([]float32), float32(y))
+	} else if kind == SERIES_TYPE_FLOAT32 && c == __k_compare_lt {
+		return vek32.LtNumber_Into(bs, any(x).([]float32), float32(y))
+	} else if kind == SERIES_TYPE_FLOAT32 && c == __k_compare_lte {
+		return vek32.LteNumber_Into(bs, any(x).([]float32), float32(y))
+	} else {
+		b := y
+		for i := 0; i < xLen; i++ {
+			a := Any2DType(x[i])
+			bs[i] = comparator(a, b)
+		}
 	}
 	return bs
 }
 
-func __compare_slice[T ~[]E, E any, T2 ~[]E2, E2 any](x T, y T2, comparator func(f1, f2 DType) bool) []bool {
+// 切片和切片对比
+func __compare_slice[T ~[]E, E any, T2 ~[]E2, E2 any](x T, y T2, c int, comparator func(f1, f2 DType) bool) []bool {
 	var bs = []bool{}
 	xLen := len(x)
-	// b不是切片
-	bs = make([]bool, xLen)
 	yLen := len(y)
+	xKind := checkoutRawType(x)
+	yKind := checkoutRawType(y)
+
+	if xLen >= yLen {
+		bs = make([]bool, xLen)
+		if xKind == SERIES_TYPE_FLOAT64 && xKind == yKind && c == __k_compare_gt {
+			vek.Gt_Into(bs[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
+		} else if xKind == SERIES_TYPE_FLOAT64 && xKind == yKind && c == __k_compare_gte {
+			vek.Gte_Into(bs[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
+		} else if xKind == SERIES_TYPE_FLOAT64 && xKind == yKind && c == __k_compare_lt {
+			vek.Lt_Into(bs[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
+		} else if xKind == SERIES_TYPE_FLOAT64 && xKind == yKind && c == __k_compare_lte {
+			vek.Lte_Into(bs[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
+		} else if xKind == SERIES_TYPE_FLOAT32 && xKind == yKind && c == __k_compare_gt {
+			vek32.Gt_Into(bs[:yLen], any(x).([]float32)[:yLen], any(y).([]float32)[:yLen])
+		} else if xKind == SERIES_TYPE_FLOAT32 && xKind == yKind && c == __k_compare_gte {
+			vek32.Gte_Into(bs[:yLen], any(x).([]float32)[:yLen], any(y).([]float32)[:yLen])
+		} else if xKind == SERIES_TYPE_FLOAT32 && xKind == yKind && c == __k_compare_lt {
+			vek32.Lt_Into(bs[:yLen], any(x).([]float32)[:yLen], any(y).([]float32)[:yLen])
+		} else if xKind == SERIES_TYPE_FLOAT32 && xKind == yKind && c == __k_compare_lte {
+			vek32.Lte_Into(bs[:yLen], any(x).([]float32)[:yLen], any(y).([]float32)[:yLen])
+		} else if xKind == SERIES_TYPE_BOOL && xKind == yKind && c == __k_compare_and {
+			vek.And_Into(bs[:yLen], any(x).([]bool)[:yLen], any(y).([]bool)[:yLen])
+		} else {
+			for i := 0; i < yLen; i++ {
+				f1 := Any2DType(x[i])
+				f2 := Any2DType(y[i])
+				bs[i] = comparator(f1, f2)
+			}
+		}
+		for i := yLen; i < xLen; i++ {
+			f1 := Any2DType(x[i])
+			f2 := DType(0)
+			bs[i] = comparator(f1, f2)
+		}
+	} else {
+		bs = make([]bool, yLen)
+		if xKind == SERIES_TYPE_FLOAT64 && xKind == yKind && c == __k_compare_gt {
+			vek.Gt_Into(bs[:xLen], any(x).([]float64)[:xLen], any(y).([]float64)[:xLen])
+		} else if xKind == SERIES_TYPE_FLOAT64 && xKind == yKind && c == __k_compare_gte {
+			vek.Gte_Into(bs[:xLen], any(x).([]float64)[:xLen], any(y).([]float64)[:xLen])
+		} else if xKind == SERIES_TYPE_FLOAT64 && xKind == yKind && c == __k_compare_lt {
+			vek.Lt_Into(bs[:xLen], any(x).([]float64)[:xLen], any(y).([]float64)[:xLen])
+		} else if xKind == SERIES_TYPE_FLOAT64 && xKind == yKind && c == __k_compare_lte {
+			vek.Lte_Into(bs[:xLen], any(x).([]float64)[:xLen], any(y).([]float64)[:xLen])
+		} else if xKind == SERIES_TYPE_FLOAT32 && xKind == yKind && c == __k_compare_gt {
+			vek32.Gt_Into(bs[:xLen], any(x).([]float32)[:xLen], any(y).([]float32)[:xLen])
+		} else if xKind == SERIES_TYPE_FLOAT32 && xKind == yKind && c == __k_compare_gte {
+			vek32.Gte_Into(bs[:xLen], any(x).([]float32)[:xLen], any(y).([]float32)[:xLen])
+		} else if xKind == SERIES_TYPE_FLOAT32 && xKind == yKind && c == __k_compare_lt {
+			vek32.Lt_Into(bs[:xLen], any(x).([]float32)[:xLen], any(y).([]float32)[:xLen])
+		} else if xKind == SERIES_TYPE_FLOAT32 && xKind == yKind && c == __k_compare_lte {
+			vek32.Lte_Into(bs[:xLen], any(x).([]float32)[:xLen], any(y).([]float32)[:xLen])
+		} else if xKind == SERIES_TYPE_BOOL && xKind == yKind && c == __k_compare_and {
+			vek.And_Into(bs[:xLen], any(x).([]bool)[:xLen], any(y).([]bool)[:xLen])
+		} else {
+			for i := 0; i < xLen; i++ {
+				f1 := Any2DType(x[i])
+				f2 := Any2DType(y[i])
+				bs[i] = comparator(f1, f2)
+			}
+		}
+		for i := xLen; i < yLen; i++ {
+			f1 := DType(0)
+			f2 := Any2DType(y[i])
+			bs[i] = comparator(f1, f2)
+		}
+	}
+	return bs
+}
+
+// 切片和切片对比
+func __v1_compare_slice[T ~[]E, E any, T2 ~[]E2, E2 any](x T, y T2, c int, comparator func(f1, f2 DType) bool) []bool {
+	var bs = []bool{}
+	xLen := len(x)
+	yLen := len(y)
+
 	if xLen >= yLen {
 		bs = make([]bool, xLen)
 		for i := 0; i < yLen; i++ {
@@ -94,6 +194,14 @@ func __compare_slice[T ~[]E, E any, T2 ~[]E2, E2 any](x T, y T2, comparator func
 	return bs
 }
 
+const (
+	__k_compare_gt  = 1
+	__k_compare_gte = 2
+	__k_compare_lt  = 3
+	__k_compare_lte = 4
+	__k_compare_and = 5
+)
+
 var (
 	// 大于
 	__logic_gt = func(f1, f2 DType) bool {
@@ -119,27 +227,27 @@ var (
 
 // Gt 比较 v > x
 func Gt[S ~[]E, E any](v S, x any) []bool {
-	return __compare(v, x, __logic_gt)
+	return __compare(v, x, __k_compare_gt, __logic_gt)
 }
 
 // Gte 比较 v >= x
 func Gte[S ~[]E, E any](v S, x any) []bool {
-	return __compare(v, x, __logic_gte)
+	return __compare(v, x, __k_compare_gte, __logic_gte)
 }
 
 // Lt 比较 v < x
 func Lt[S ~[]E, E any](v S, x any) []bool {
-	return __compare(v, x, __logic_lt)
+	return __compare(v, x, __k_compare_lt, __logic_lt)
 }
 
 // Lte 比较 v <= x
 func Lte[S ~[]E, E any](v S, x any) []bool {
-	return __compare(v, x, __logic_lte)
+	return __compare(v, x, __k_compare_lte, __logic_lte)
 }
 
 // And 比较 v && v
 func And[S ~[]E, E any](v S, x any) []bool {
-	return __compare(v, x, __logic_and)
+	return __compare(v, x, __k_compare_and, __logic_and)
 }
 
 // And 两者为真
