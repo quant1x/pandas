@@ -30,6 +30,8 @@ type Series interface {
 	Ints() []Int
 	// Strings 强制转换string切片
 	Strings() []string
+	// Bools 强制转换成bool切片
+	Bools() []bool
 
 	// sort.Interface
 

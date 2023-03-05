@@ -179,6 +179,10 @@ func (self *NDFrame) Strings() []string {
 	return stat.SliceToString(self.Values())
 }
 
+func (self *NDFrame) Bools() []bool {
+	return stat.ToBool(self)
+}
+
 func (self *NDFrame) Empty(t ...stat.Type) stat.Series {
 	if len(t) > 0 {
 		self.type_ = t[0]

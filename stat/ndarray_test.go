@@ -84,3 +84,10 @@ func TestNDArray_Strings(t *testing.T) {
 	ss := s1.Strings()
 	fmt.Println(ss)
 }
+
+func TestNDArray_Bools(t *testing.T) {
+	d1 := []float64{1, 2, 3, 4, 5, 0, 7, 8, 9, 10, 11, 12}
+	s1 := NewSeries[float64](d1...)
+	ss := s1.Bools()
+	fmt.Println(ss)
+}

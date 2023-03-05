@@ -99,3 +99,10 @@ func TestNDFrame_Strings(t *testing.T) {
 	ss := s1.Strings()
 	fmt.Println(ss)
 }
+
+func TestNDFrame_Bools(t *testing.T) {
+	d1 := []float64{1, 2, 0, 4, 5, 6, 7, 8, 9, 10, 11, 12}
+	s1 := NewNDFrame[float64]("x", d1...)
+	ss := s1.Bools()
+	fmt.Println(ss)
+}
