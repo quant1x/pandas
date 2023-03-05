@@ -1,55 +1,9 @@
 package stat
 
-//// Gt 比较 v > x
-//func Gt(v []DType, x any) []bool {
-//	return __compare(v, x, vek.Gt)
-//}
-//
-//// Gte 比较 v >= x
-//func Gte(v []DType, x any) []bool {
-//	return __compare(v, x, vek.Gte)
-//}
-//
-//// Lt 比较 v < x
-//func Lt(v []DType, x any) []bool {
-//	return __compare(v, x, vek.Lt)
-//}
-//
-//// Lte 比较 v <= x
-//func Lte(v []DType, x any) []bool {
-//	return __compare(v, x, vek.Lte)
-//}
-//
-//// __compare 比较 v 和 x
-//func __compare(v []DType, x any, comparator func(x, y []float64) []bool) []bool {
-//	vlen := len(v)
-//
-//	// 处理默认值
-//	defaultValue := DType(0)
-//	var X []DType
-//	switch vx := x.(type) {
-//	case int:
-//		X = Repeat[DType](DType(vx), vlen)
-//	case []DType:
-//		xlen := len(vx)
-//		if vlen < xlen {
-//			vlen = xlen
-//		}
-//		X = Align[DType](vx, defaultValue, vlen)
-//	case Series:
-//		vs := vx.DTypes()
-//		xlen := len(vs)
-//		if vlen < xlen {
-//			vlen = xlen
-//		}
-//		X = Align(vs, defaultValue, vlen)
-//	default:
-//		panic(exception.New(1, "error window"))
-//	}
-//	return comparator(v, X)
-//}
-
 func __compare[T ~[]E, E any](x T, y any, comparator func(f1, f2 DType) bool) []bool {
+	if __y, ok := y.(Series); ok {
+		y = __y.Values()
+	}
 	var d = []bool{}
 	switch Y := y.(type) {
 	case nil, int8, uint8, int16, uint16, int32, uint32, int64, uint64, int, uint, float32, float64, bool, string:
@@ -87,7 +41,7 @@ func __compare[T ~[]E, E any](x T, y any, comparator func(f1, f2 DType) bool) []
 		d = __compare_slice(x, Y, comparator)
 	default:
 		// 其它未知类型抛异常
-		panic(Throw(any(x)))
+		panic(Throw(y))
 	}
 	return d
 }
