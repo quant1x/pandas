@@ -3,7 +3,7 @@ package stat
 import "github.com/viterin/vek"
 
 // And 两者为真
-func And[T Number | ~bool](x, y []T) []bool {
+func V1And[T Number | ~bool](x, y []T) []bool {
 	switch vs := any(x).(type) {
 	case []bool:
 		return vek.And(vs, any(y).([]bool))

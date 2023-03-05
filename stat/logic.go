@@ -109,6 +109,10 @@ var (
 	__logic_lte = func(f1, f2 DType) bool {
 		return f1 <= f2
 	}
+	// AND
+	__logic_and = func(f1, f2 DType) bool {
+		return f1 != 0 && f2 != 0
+	}
 )
 
 // Gt 比较 v > x
@@ -129,4 +133,9 @@ func Lt[S ~[]E, E any](v S, x any) []bool {
 // Lte 比较 v <= x
 func Lte[S ~[]E, E any](v S, x any) []bool {
 	return __compare(v, x, __logic_lte)
+}
+
+// And 比较 v && v
+func And[S ~[]E, E any](v S, x any) []bool {
+	return __compare(v, x, __logic_and)
 }

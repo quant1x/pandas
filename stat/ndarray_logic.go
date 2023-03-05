@@ -79,25 +79,7 @@ func (self NDArray[T]) Lte(x any) Series {
 }
 
 func (self NDArray[T]) And(x any) Series {
-	length := self.Len()
-	var b []bool
-	switch sx := x.(type) {
-	case Series:
-		b = ToBool(sx)
-	case int:
-		b = Repeat[bool](integer2Bool(sx), length)
-	case DType:
-		b = Repeat[bool](integer2Bool(sx), length)
-	//case int8, uint8, int16, uint16, int32, uint32, int64, uint64, int, uint, uintptr, float32, float64:
-	//	b = Repeat[DType](DType(sx), length)
-	case []DType:
-		b = __NumberToBool_S(sx)
-	case []bool:
-		b = sx
-	default:
-		panic(Throw(x))
-	}
-	a := ToBool(self)
-	s := vek.And(a, b)
-	return NDArray[bool](s)
+	values := self.Values().([]T)
+	bs := And(values, x)
+	return NDArray[bool](bs)
 }
