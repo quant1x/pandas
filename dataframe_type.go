@@ -10,7 +10,8 @@ import (
 )
 
 const (
-	MAX_FLOAT32_PRICE = float32(9999.9999) // float32的价最大阀值触发扩展到float64
+	//MAX_FLOAT32_PRICE = float32(9999.9999) // float32的价最大阀值触发扩展到float64
+	MAX_FLOAT32_PRICE = float32(0) // float32的价最大阀值触发扩展到float64
 )
 
 var (
