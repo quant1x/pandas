@@ -1,6 +1,9 @@
 package pandas
 
-import "gitee.com/quant1x/pandas/stat"
+import (
+	"gitee.com/quant1x/pandas/stat"
+	"golang.org/x/exp/slices"
+)
 
 func (self DataFrame) align(ss ...stat.Series) []stat.Series {
 	defaultValue := []stat.Series{}
@@ -42,16 +45,20 @@ func (self DataFrame) align(ss ...stat.Series) []stat.Series {
 }
 
 // Join 默认右连接, 加入一个series
-func (self DataFrame) Join(series stat.Series) DataFrame {
-	if series.Len() < 0 {
+func (self DataFrame) Join(S ...stat.Series) DataFrame {
+	sNum := len(S)
+	if sNum == 0 {
 		return self
 	}
-	nCol := self.Ncol()
-	cols := make([]stat.Series, nCol+1)
-	cols[len(cols)-1] = series
-	for i, s := range self.columns {
-		cols[i] = s
+
+	cols := slices.Clone(self.columns)
+	for _, series := range S {
+		if series.Len() < 0 {
+			continue
+		}
+		cols = append(cols, series)
 	}
+
 	cols = self.align(cols...)
 	df := NewDataFrame(cols...)
 	self = df
