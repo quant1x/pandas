@@ -13,6 +13,8 @@ func Shift[T BaseType](S []T, N any) []T {
 	length := len(S)
 	var _n []DType
 	switch v := N.(type) {
+	case Series:
+		_n = v.DTypes()
 	case int:
 		if v == 0 {
 			return S

@@ -2,7 +2,7 @@ package formula
 
 import (
 	"gitee.com/quant1x/pandas/stat"
-	"github.com/viterin/vek"
+	"gitee.com/quant1x/vek"
 )
 
 // CROSS

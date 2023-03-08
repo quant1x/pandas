@@ -1,7 +1,7 @@
 package avx2
 
 //
-//import "github.com/viterin/vek"
+//import "gitee.com/quant1x/vek"
 //
 //// 初始化 avx2
 //// 可以参考另一个实现库 gonum.org/v1/gonum/stat

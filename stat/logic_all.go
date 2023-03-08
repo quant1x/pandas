@@ -1,6 +1,6 @@
 package stat
 
-import "github.com/viterin/vek"
+import "gitee.com/quant1x/vek"
 
 // All 全部为真
 func All[T Number | ~bool](x []T) bool {

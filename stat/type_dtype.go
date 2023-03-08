@@ -1,7 +1,7 @@
 package stat
 
 import (
-	"github.com/viterin/vek"
+	"gitee.com/quant1x/vek"
 )
 
 type DType = float64

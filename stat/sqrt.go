@@ -1,9 +1,9 @@
 package stat
 
 import (
+	"gitee.com/quant1x/vek"
+	"gitee.com/quant1x/vek/vek32"
 	"github.com/chewxy/math32"
-	"github.com/viterin/vek"
-	"github.com/viterin/vek/vek32"
 	"math"
 )
 

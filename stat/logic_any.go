@@ -1,6 +1,6 @@
 package stat
 
-import "github.com/viterin/vek"
+import "gitee.com/quant1x/vek"
 
 // Any 任意一个为真
 func Any[T Number | ~bool](x []T) bool {

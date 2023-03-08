@@ -3,7 +3,8 @@ module gitee.com/quant1x/pandas
 go 1.20
 
 require (
-	gitee.com/quant1x/data v0.8.2
+	gitee.com/quant1x/data v0.8.8
+	gitee.com/quant1x/vek v0.5.3
 	github.com/chewxy/math32 v1.10.1
 	github.com/mymmsc/gox v1.3.9
 	github.com/olekukonko/tablewriter v0.0.5
@@ -11,7 +12,6 @@ require (
 	github.com/tealeg/xlsx v1.0.5
 	github.com/tealeg/xlsx/v3 v3.2.4
 	github.com/viterin/partial v1.0.0
-	github.com/viterin/vek v0.4.0
 	golang.org/x/exp v0.0.0-20220907003533-145caa8ea1d0
 	gonum.org/v1/gonum v0.12.0
 )
