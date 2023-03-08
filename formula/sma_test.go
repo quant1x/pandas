@@ -34,7 +34,7 @@ func TestSMA(t *testing.T) {
 		x[idx] = t
 	})
 	//x := stat.Where(v2, as, bs)
-	n := BARSLAST(pandas.NewSeries(stat.SERIES_TYPE_FLOAT32, "", x))
+	n := BARSLAST2(pandas.NewSeries(stat.SERIES_TYPE_FLOAT32, "", x))
 	fmt.Println(n[len(n)-10:])
 	//r1 := SMA(CLOSE, pandas.NewSeries(pandas.SERIES_TYPE_FLOAT32, "", n), 1)
 	r1 := SMA(CLOSE, 7, 1)

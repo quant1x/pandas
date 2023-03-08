@@ -5,7 +5,7 @@ import (
 )
 
 // BARSSINCEN N周期内第一次S条件成立到现在的周期数,N为常量
-func BARSSINCEN(S stat.Series, N any) []stat.Int {
+func BARSSINCEN(S stat.Series, N any) stat.Series {
 	ret := S.Rolling(N).Apply(func(X stat.Series, M stat.DType) stat.DType {
 		x := X.DTypes()
 		n := int(M)
@@ -20,6 +20,5 @@ func BARSSINCEN(S stat.Series, N any) []stat.Int {
 		return stat.DType(r)
 	})
 	r1 := ret.FillNa(0, true)
-	r2 := r1.Ints()
-	return r2
+	return r1
 }

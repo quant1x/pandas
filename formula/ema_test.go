@@ -32,7 +32,7 @@ func TestEMA(t *testing.T) {
 		x0[idx] = t
 	})
 	//x := stat.Where(v2, as, bs)
-	n := BARSLAST(pandas.NewSeries(stat.SERIES_TYPE_FLOAT32, "", x0))
+	n := BARSLAST2(pandas.NewSeries(stat.SERIES_TYPE_FLOAT32, "", x0))
 	fmt.Println(n[len(n)-10:])
 	x := EMA(CLOSE, pandas.NewSeries(stat.SERIES_TYPE_DTYPE, "", n))
 
