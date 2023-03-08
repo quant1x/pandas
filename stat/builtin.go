@@ -18,12 +18,9 @@ var (
 var (
 	// IgnoreParseExceptions 忽略解析异常
 	IgnoreParseExceptions bool = true
-
-	Avx2Enabled = false // AVX2加速开关
+	Avx2Enabled                = false // AVX2加速开关
 )
 
-// 初始化 avx2
-// 可以参考另一个实现库 gonum.org/v1/gonum/stat
 func init() {
 	Nil2Float64 = math.NaN()
 	// 这个转换是对的, NaN对float32也有效

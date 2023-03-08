@@ -19,36 +19,6 @@ type NDFrame struct {
 	values    any                  // 只能是一个一维slice, 在所有的运算中, values强制转换成float64切片
 }
 
-func (self *NDFrame) And(x any) stat.Series {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (self *NDFrame) Eq(x any) stat.Series {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (self *NDFrame) Gt(x any) stat.Series {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (self *NDFrame) Gte(x any) stat.Series {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (self *NDFrame) Lt(x any) stat.Series {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (self *NDFrame) Lte(x any) stat.Series {
-	//TODO implement me
-	panic("implement me")
-}
-
 //"""
 //N-dimensional analogue of DataFrame. Store multi-dimensional in a
 //size-mutable, labeled data structure
@@ -354,24 +324,4 @@ func (self *NDFrame) FillNa(v any, inplace bool) stat.Series {
 		}
 	}
 	return self
-}
-
-func (self *NDFrame) Add(x any) stat.Series {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (self *NDFrame) Sub(x any) stat.Series {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (self *NDFrame) Mul(x any) stat.Series {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (self *NDFrame) Div(x any) stat.Series {
-	//TODO implement me
-	panic("implement me")
 }
