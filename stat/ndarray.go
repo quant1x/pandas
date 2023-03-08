@@ -48,8 +48,28 @@ func (self NDArray[T]) Bools() []bool {
 }
 
 func (self NDArray[T]) Empty(tv ...Type) Series {
-	empty := []T{}
-	return NDArray[T](empty)
+	if len(tv) == 0 {
+		empty := []T{}
+		return NDArray[T](empty)
+	}
+
+	__type := tv[0]
+	switch __type {
+	case SERIES_TYPE_STRING:
+		return NewSeries[string]()
+	case SERIES_TYPE_BOOL:
+		return NewSeries[bool]()
+	case SERIES_TYPE_INT32:
+		return NewSeries[int32]()
+	case SERIES_TYPE_INT64:
+		return NewSeries[int64]()
+	case SERIES_TYPE_FLOAT32:
+		return NewSeries[float32]()
+	case SERIES_TYPE_FLOAT64:
+		return NewSeries[float64]()
+	default:
+		panic(ErrUnsupportedType)
+	}
 }
 
 func (self NDArray[T]) Copy() Series {
