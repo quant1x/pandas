@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	gitee.com/quant1x/data v0.8.8
-	gitee.com/quant1x/vek v0.5.3
+	gitee.com/quant1x/vek v0.5.5
 	github.com/chewxy/math32 v1.10.1
 	github.com/mymmsc/gox v1.3.9
 	github.com/olekukonko/tablewriter v0.0.5
