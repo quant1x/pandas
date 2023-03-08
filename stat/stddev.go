@@ -1,8 +1,8 @@
 package stat
 
 import (
-	"github.com/viterin/vek"
-	"github.com/viterin/vek/vek32"
+	"gitee.com/quant1x/vek"
+	"gitee.com/quant1x/vek/vek32"
 	"golang.org/x/exp/slices"
 	"gonum.org/v1/gonum/stat"
 	"math"

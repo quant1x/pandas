@@ -2,8 +2,8 @@ package formula
 
 import (
 	"gitee.com/quant1x/pandas/stat"
+	"gitee.com/quant1x/vek"
 	"github.com/mymmsc/gox/exception"
-	"github.com/viterin/vek"
 )
 
 // EQ 相等

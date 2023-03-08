@@ -2,7 +2,7 @@ package stat
 
 import (
 	//gc "github.com/huandu/go-clone"
-	"github.com/viterin/vek"
+	"gitee.com/quant1x/vek"
 	"math"
 	"reflect"
 	"strings"

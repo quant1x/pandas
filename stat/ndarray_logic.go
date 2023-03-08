@@ -1,6 +1,6 @@
 package stat
 
-import "github.com/viterin/vek"
+import "gitee.com/quant1x/vek"
 
 func (self NDArray[T]) Logic(f func(idx int, v any) bool) []bool {
 	d := make([]bool, self.Len())

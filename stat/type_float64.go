@@ -2,9 +2,9 @@ package stat
 
 import (
 	"fmt"
+	"gitee.com/quant1x/vek"
 	"github.com/mymmsc/gox/exception"
 	"github.com/mymmsc/gox/logger"
-	"github.com/viterin/vek"
 	"math"
 	"reflect"
 	"strconv"

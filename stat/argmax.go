@@ -1,8 +1,8 @@
 package stat
 
 import (
-	"github.com/viterin/vek"
-	"github.com/viterin/vek/vek32"
+	"gitee.com/quant1x/vek"
+	"gitee.com/quant1x/vek/vek32"
 )
 
 // ArgMax Returns the indices of the maximum values along an axis.

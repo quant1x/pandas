@@ -1,6 +1,6 @@
 package stat
 
-import "github.com/viterin/vek"
+import "gitee.com/quant1x/vek"
 
 // Count 统计
 func Count[T Number | ~bool](x []T) int {
