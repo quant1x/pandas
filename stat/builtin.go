@@ -1,7 +1,6 @@
 package stat
 
 import (
-	//gc "github.com/huandu/go-clone"
 	"gitee.com/quant1x/vek"
 	"math"
 	"reflect"
@@ -26,8 +25,6 @@ var (
 // 初始化 avx2
 // 可以参考另一个实现库 gonum.org/v1/gonum/stat
 func init() {
-	// 开启加速选项
-	SetAvx2Enabled(true)
 	Nil2Float64 = math.NaN()
 	// 这个转换是对的, NaN对float32也有效
 	Nil2Float32 = float32(Nil2Float64)
