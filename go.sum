@@ -43,8 +43,8 @@ github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0/go.mod h1:zJYVVT2
 github.com/mattn/go-runewidth v0.0.9/go.mod h1:H031xJmbD/WCDINGzjvQ9THkh0rPKHF+m2gUSrubnMI=
 github.com/mattn/go-runewidth v0.0.14 h1:+xnbZSEeDbOIg5/mE6JF0w6n9duR1l3/WmbinWVwUuU=
 github.com/mattn/go-runewidth v0.0.14/go.mod h1:Jdepj2loyihRzMpdS35Xk/zdY8IAYHsh153qUoGf23w=
-github.com/mymmsc/gox v1.3.9 h1:8o06xvA8lEGj0PGdLri1qE94gODiCSnoNoezgKx1qFM=
-github.com/mymmsc/gox v1.3.9/go.mod h1:KAD7bkNM7N24gNCuR7YsmKe1cJLZ5o5x885uctG5mw0=
+github.com/mymmsc/gox v1.3.10 h1:U8uKmBxcOWWmF7dSU9AGCJuhj78b24yyDY7iOsa7JMI=
+github.com/mymmsc/gox v1.3.10/go.mod h1:KAD7bkNM7N24gNCuR7YsmKe1cJLZ5o5x885uctG5mw0=
 github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e/go.mod h1:zD1mROLANZcx1PVRCS0qkT7pwLkGfwJo4zjcN/Tysno=
 github.com/olekukonko/tablewriter v0.0.5 h1:P2Ga83D34wi1o9J6Wh1mRuqd4mF/x/lgBS7N7AbDhec=
 github.com/olekukonko/tablewriter v0.0.5/go.mod h1:hPp6KlRPjbx+hW8ykQs1w3UBbZlj6HuIJcUGPhkA7kY=
