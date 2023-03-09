@@ -12,8 +12,9 @@ import (
 )
 
 // ReadCSV reads a CSV file from a io.Reader and builds a DataFrame with the
-// resulting records.
-// 支持文件名和io两种方式读取数据
+//
+//	resulting records.
+//	支持文件名和io两种方式读取数据
 func ReadCSV(in any, options ...LoadOption) DataFrame {
 	var (
 		reader   io.Reader
@@ -66,7 +67,8 @@ func ReadCSV(in any, options ...LoadOption) DataFrame {
 }
 
 // WriteCSV writes the DataFrame to the given io.Writer as a CSV file.
-// 支持文件名和io两种方式写入数据
+//
+//	支持文件名和io两种方式写入数据
 func (self DataFrame) WriteCSV(out any, options ...WriteOption) error {
 	var (
 		writer   io.Writer
@@ -84,6 +86,8 @@ func (self DataFrame) WriteCSV(out any, options ...WriteOption) error {
 		if err != nil {
 			return err
 		}
+		// 检查目录, 不存在就创建
+		_ = api.CheckFilepath(filepath, true)
 		csvFile, err := os.Create(filepath)
 		if err != nil {
 			return err
