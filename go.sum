@@ -1,7 +1,7 @@
-gitee.com/quant1x/data v0.9.5 h1://7RZZ00fid1qd5gWTiO/ZrW8r7hpM2Bxvs+KX18ZMM=
-gitee.com/quant1x/data v0.9.5/go.mod h1:r0I79gvUarP8OdvASRXvSotF5iY8Vdia1QLoJtnCtf4=
-gitee.com/quant1x/gotdx v1.2.6 h1:iOVyDQcK5c4z5D6wfPKVIfdDZzjEUQv0xrRgBuvN2Xc=
-gitee.com/quant1x/gotdx v1.2.6/go.mod h1:lOJYzC4mcKmeHpm1L5jl94S0pPifue1sf9JMTP2kmho=
+gitee.com/quant1x/data v0.9.6 h1:yrYeABj70dQrtCCoMJwGfPALGCYHJ87K/4lrd9Gd/xU=
+gitee.com/quant1x/data v0.9.6/go.mod h1:r0I79gvUarP8OdvASRXvSotF5iY8Vdia1QLoJtnCtf4=
+gitee.com/quant1x/gotdx v1.2.8 h1:ZmxO4XKglJIJvHjzS7/NAG7tTPs5KJpzSxE253mQm2Y=
+gitee.com/quant1x/gotdx v1.2.8/go.mod h1:cqnwMyxffvDqd/pLz4NxtRrwWstx/3jwV0lfkt++g4Q=
 gitee.com/quant1x/vek v0.5.5 h1:3/VJ2N2EHNwNabrCh26vRQ+4SV9oyBmPMV/Pr9gGlXg=
 gitee.com/quant1x/vek v0.5.5/go.mod h1:Ap27ODpuce5KAMg0X8abkGMzKxly0CSJKoYLTf8oUWM=
 github.com/chewxy/math32 v1.10.1 h1:LFpeY0SLJXeaiej/eIp2L40VYfscTvKh/FSEZ68uMkU=

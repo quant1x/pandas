@@ -3,7 +3,7 @@ module gitee.com/quant1x/pandas
 go 1.20
 
 require (
-	gitee.com/quant1x/data v0.9.5
+	gitee.com/quant1x/data v0.9.6
 	gitee.com/quant1x/vek v0.5.5
 	github.com/chewxy/math32 v1.10.1
 	github.com/mymmsc/gox v1.3.10
@@ -17,7 +17,7 @@ require (
 )
 
 require (
-	gitee.com/quant1x/gotdx v1.2.6 // indirect
+	gitee.com/quant1x/gotdx v1.2.8 // indirect
 	github.com/dlclark/regexp2 v1.7.0 // indirect
 	github.com/dop251/goja v0.0.0-20230216180835-5937a312edda // indirect
 	github.com/frankban/quicktest v1.11.2 // indirect
