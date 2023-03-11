@@ -96,6 +96,8 @@ func parseType(s string) (stat.Type, error) {
 		return stat.SERIES_TYPE_FLOAT64, nil
 	case "int", "int64", "int32", "int16", "int8":
 		return stat.SERIES_TYPE_INT64, nil
+	case "uint", "uint64", "uint32", "uint16", "uint8", "byte":
+		return stat.SERIES_TYPE_INT64, nil
 	case "string":
 		return stat.SERIES_TYPE_STRING, nil
 	case "bool":
