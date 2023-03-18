@@ -8,11 +8,11 @@ require (
 	github.com/chewxy/math32 v1.10.1
 	github.com/mymmsc/gox v1.3.15
 	github.com/olekukonko/tablewriter v0.0.5
-	github.com/shirou/gopsutil/v3 v3.23.1
+	github.com/shirou/gopsutil/v3 v3.23.2
 	github.com/tealeg/xlsx v1.0.5
 	github.com/tealeg/xlsx/v3 v3.2.4
 	github.com/viterin/partial v1.0.0
-	golang.org/x/exp v0.0.0-20220907003533-145caa8ea1d0
+	golang.org/x/exp v0.0.0-20230315142452-642cacee5cc0
 	gonum.org/v1/gonum v0.12.0
 )
 
