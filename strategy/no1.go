@@ -52,8 +52,8 @@ func (this *FormulaNo1) Evaluate(fullCode string, info *security.StaticBasic, re
 		logger.Errorf("金叉, 数据没对齐")
 	}
 	// 两个统计
-	r1 := COUNT(c1, N)
-	r2 := COUNT(c2, N)
+	r1 := V1COUNT(c1, N)
+	r2 := V1COUNT(c2, N)
 	if len(r1) != days || len(r2) != days {
 		logger.Errorf("统计, 数据没对齐")
 	}
