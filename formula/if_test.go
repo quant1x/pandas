@@ -19,6 +19,7 @@ func TestIFF(t *testing.T) {
 	A := pandas.NewSeries(stat.SERIES_TYPE_FLOAT32, "", []float32{11, 12, 13})
 	B := pandas.NewSeries(stat.SERIES_TYPE_FLOAT32, "", []float32{21, 22, 23})
 	fmt.Println(IFF(S, A, B))
+	fmt.Println(IFF(S, 1, 0))
 }
 
 func TestIFN(t *testing.T) {
@@ -26,4 +27,5 @@ func TestIFN(t *testing.T) {
 	A := pandas.NewSeries(stat.SERIES_TYPE_FLOAT32, "", []float32{11, 12, 13})
 	B := pandas.NewSeries(stat.SERIES_TYPE_FLOAT32, "", []float32{21, 22, 23})
 	fmt.Println(IFN(S, A, B))
+	fmt.Println(IFN(S, A, 0))
 }

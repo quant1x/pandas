@@ -5,20 +5,22 @@ import (
 )
 
 // IF 序列布尔判断 return=A  if S==True  else  B
-func IF(S, A, B stat.Series) stat.Series {
+func IF(S stat.Series, A, B any) stat.Series {
 	return IFF(S, A, B)
 }
 
 // IFF 序列布尔判断 return=A  if S==True  else  B
-func IFF(S, A, B stat.Series) stat.Series {
+func IFF(S stat.Series, A, B any) stat.Series {
+	length := S.Len()
 	s := S.DTypes()
-	a := A.DTypes()
-	b := B.DTypes()
+
+	a := stat.Align2Series(A, length).DTypes()
+	b := stat.Align2Series(B, length).DTypes()
 	ret := stat.Where(s, a, b)
 	return stat.NewSeries[stat.DType](ret...)
 }
 
 // IFN 序列布尔判断 return=A  if S==False  else  B
-func IFN(S, A, B stat.Series) stat.Series {
+func IFN(S stat.Series, A, B any) stat.Series {
 	return IFF(S, B, A)
 }

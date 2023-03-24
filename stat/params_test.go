@@ -16,4 +16,8 @@ func TestAnyToSlice(t *testing.T) {
 	fmt.Println(AnyToSlice[bool](d3, 5))
 	fmt.Println(AnyToSlice[string](d4, 5))
 	fmt.Println(AnyToSlice[string](nil, 5))
+	fmt.Println(AnyToSlice[string]([]string{"a"}, 5))
+	fmt.Println(AnyToSlice[string]("a", 5))
+	fmt.Println(AnyToSlice[bool](true, 5))
+	fmt.Println(AnyToSlice[bool]([]bool{true}, 5))
 }
