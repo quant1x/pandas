@@ -11,7 +11,7 @@ import (
 
 // FormulaNo1 3天内5天线上穿10天线，10天线上穿20天线的个股
 //
-//	count(cross(MA(c,5),MA(c,10)),3)>=1 and count(cross(MA(c,10),MA(c,20)),3)>=1
+//	count(cross(MAV1(c,5),MAV1(c,10)),3)>=1 and count(cross(MAV1(c,10),MAV1(c,20)),3)>=1
 type FormulaNo1 struct {
 }
 
@@ -39,9 +39,9 @@ func (this *FormulaNo1) Evaluate(fullCode string, info *security.StaticBasic, re
 	days := CLOSE.Len()
 
 	// 取5、10、20日均线
-	ma5 := MA(CLOSE, 5)
-	ma10 := MA(CLOSE, 10)
-	ma20 := MA(CLOSE, 20)
+	ma5 := MAV1(CLOSE, 5)
+	ma10 := MAV1(CLOSE, 10)
+	ma20 := MAV1(CLOSE, 20)
 	if len(ma5) != days || len(ma10) != days || len(ma20) != days {
 		logger.Errorf("均线, 数据没对齐")
 	}

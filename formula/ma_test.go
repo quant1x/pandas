@@ -28,6 +28,6 @@ func TestMA(t *testing.T) {
 	B := df2.Col("b")
 
 	// 2日均线
-	r2 := MA(B, 2)
+	r2 := MAV1(B, 2)
 	fmt.Println(r2)
 }
