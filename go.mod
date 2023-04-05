@@ -9,6 +9,7 @@ require (
 	github.com/mymmsc/gox v1.3.17
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/shirou/gopsutil/v3 v3.23.2
+	github.com/shopspring/decimal v1.3.1
 	github.com/tealeg/xlsx v1.0.5
 	github.com/tealeg/xlsx/v3 v3.2.4
 	github.com/viterin/partial v1.0.0

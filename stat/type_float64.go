@@ -135,10 +135,24 @@ func SliceToFloat64(v any) []float64 {
 	return []float64{}
 }
 
-// Decimal float64 保留小数点后位数
-// value float64 浮点数
-// prec int 需保留小数点后的位数
-func Decimal(value float64, prec int) float64 {
+// Round float64 保留小数点后位数
+//
+//	value float64 浮点数
+//	prec int 需保留小数点后的位数
+func Round(value float64, prec int) float64 {
 	value, _ = strconv.ParseFloat(strconv.FormatFloat(value, 'f', prec, 64), 64)
+	return value
+}
+
+// Decimal float64 保留小数点后位数
+//
+//	math.Trunc(value*1e2+0.5) * 1e-2
+func Decimal(value float64, prec int) float64 {
+	const (
+		RoundDiff = 0.5
+	)
+	front := math.Pow10(prec)
+	round := math.Pow10(-prec)
+	value = math.Trunc(value*front+RoundDiff) * round
 	return value
 }
