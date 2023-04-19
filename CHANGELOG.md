@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.9.15] - 2023-04-19
+### Changed
+- !84 #I6W559 实现dataframe分组能力 * 实现分组功能 * 修复print在记录集少于maxRows序号错1位的bug * dataframe支持从后到前的选择一个子集.
+
 ## [0.9.14] - 2023-04-15
 ### Changed
 - Update modules.
@@ -406,7 +410,8 @@ All notable changes to this project will be documented in this file.
 - 引入github.com/WinPooh32/series代码.
 - Initial commit.
 
-[Unreleased]: https://gitee.com/quant1x/pandas/compare/v0.9.14...HEAD
+[Unreleased]: https://gitee.com/quant1x/pandas/compare/v0.9.15...HEAD
+[0.9.15]: https://gitee.com/quant1x/pandas/compare/v0.9.14...v0.9.15
 [0.9.14]: https://gitee.com/quant1x/pandas/compare/v0.9.13...v0.9.14
 [0.9.13]: https://gitee.com/quant1x/pandas/compare/v0.9.12...v0.9.13
 [0.9.12]: https://gitee.com/quant1x/pandas/compare/v0.9.11...v0.9.12
