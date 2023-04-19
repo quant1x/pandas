@@ -26,7 +26,13 @@ func (self DataFrame) Subset(start, end int) DataFrame {
 	}
 }
 
-// Select 选择一段记录
+// Sub 选择一个子集, start end 支持从后到前选择
+func (self DataFrame) Sub(start, end int) DataFrame {
+	sl := stat.RangeFinite(start, end)
+	return self.SelectRows(sl)
+}
+
+// SelectRows 选择一段记录
 func (self DataFrame) SelectRows(p stat.ScopeLimit) DataFrame {
 	columns := []stat.Series{}
 	for i := range self.columns {

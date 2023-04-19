@@ -36,7 +36,7 @@ func (self DataFrame) print(
 		str = fmt.Sprintf("%s error: %v", class, self.Err)
 		return
 	}
-	nMinRows := int(maxRows / 2)
+	nMinRows := maxRows / 2
 	nTotal := 0
 	nrows, ncols := self.Dims()
 	if nrows == 0 || ncols == 0 {
@@ -80,10 +80,10 @@ func (self DataFrame) print(
 		} else if i == nMinRows+1 && shortening {
 			// 跳过
 			rowNumbersOffset -= 1
-		} else if i < nMinRows+1 {
-			add = strconv.Itoa(i-1+rowNumbersOffset) + ":"
-		} else {
+		} else if i >= nMinRows+1 && shortening {
 			add = strconv.Itoa(nrows-maxRows+i-1+rowNumbersOffset) + ":"
+		} else {
+			add = strconv.Itoa(i-1+rowNumbersOffset) + ":"
 		}
 		//fmt.Println(i)
 		records[i] = append([]string{add}, records[i]...)
