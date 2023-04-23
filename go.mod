@@ -3,22 +3,22 @@ module gitee.com/quant1x/pandas
 go 1.20
 
 require (
-	gitee.com/quant1x/data v1.0.17
+	gitee.com/quant1x/data v1.1.3
 	gitee.com/quant1x/vek v0.5.5
 	github.com/chewxy/math32 v1.10.1
-	github.com/mymmsc/gox v1.3.18
+	github.com/mymmsc/gox v1.3.20
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/shirou/gopsutil/v3 v3.23.3
 	github.com/shopspring/decimal v1.3.1
 	github.com/tealeg/xlsx v1.0.5
 	github.com/tealeg/xlsx/v3 v3.2.4
 	github.com/viterin/partial v1.0.0
-	golang.org/x/exp v0.0.0-20230321023759-10a507213a29
+	golang.org/x/exp v0.0.0-20230420155640-133eef4313cb
 	gonum.org/v1/gonum v0.12.0
 )
 
 require (
-	gitee.com/quant1x/gotdx v1.5.5 // indirect
+	gitee.com/quant1x/gotdx v1.5.10 // indirect
 	github.com/dlclark/regexp2 v1.7.0 // indirect
 	github.com/dop251/goja v0.0.0-20230402114112-623f9dda9079 // indirect
 	github.com/frankban/quicktest v1.11.2 // indirect
@@ -41,5 +41,5 @@ require (
 	github.com/tklauser/numcpus v0.6.0 // indirect
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
 	golang.org/x/sys v0.6.0 // indirect
-	golang.org/x/text v0.8.0 // indirect
+	golang.org/x/text v0.9.0 // indirect
 )
