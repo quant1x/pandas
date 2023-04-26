@@ -5,10 +5,6 @@ import (
 	"testing"
 )
 
-func TestSlice2DType(t *testing.T) {
-	//
-}
-
 func Test_point_to_1float32(t *testing.T) {
 	var p1 *int8
 	f1 := AnyToFloat32(p1)
