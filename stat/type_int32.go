@@ -35,6 +35,9 @@ func ParseInt32(s string, v any) int32 {
 	} else if StringIsFalse(s) {
 		return StringFalse2Int32
 	}
+	if StringIsNaN(s) {
+		return StringFalse2Int32
+	}
 	i, err := strconv.ParseInt(s, 10, 32)
 	if err == nil {
 		return int32(i)
