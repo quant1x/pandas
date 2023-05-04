@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.9.19] - 2023-05-04
+### Changed
+- 浮点显示的时候, 小数点后3位四舍五入.
+- 修订NaN字符串解释异常的bug.
+
 ## [0.9.18] - 2023-05-04
 ### Changed
 - 支持是否四舍五入.
@@ -423,7 +428,8 @@ All notable changes to this project will be documented in this file.
 - 引入github.com/WinPooh32/series代码.
 - Initial commit.
 
-[Unreleased]: https://gitee.com/quant1x/pandas/compare/v0.9.18...HEAD
+[Unreleased]: https://gitee.com/quant1x/pandas/compare/v0.9.19...HEAD
+[0.9.19]: https://gitee.com/quant1x/pandas/compare/v0.9.18...v0.9.19
 [0.9.18]: https://gitee.com/quant1x/pandas/compare/v0.9.17...v0.9.18
 [0.9.17]: https://gitee.com/quant1x/pandas/compare/v0.9.16...v0.9.17
 [0.9.16]: https://gitee.com/quant1x/pandas/compare/v0.9.15...v0.9.16
