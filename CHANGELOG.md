@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.9.20] - 2023-05-04
+### Changed
+- 收敛输出浮点的函数.
+
 ## [0.9.19] - 2023-05-04
 ### Changed
 - 浮点显示的时候, 小数点后3位四舍五入.
@@ -428,7 +432,8 @@ All notable changes to this project will be documented in this file.
 - 引入github.com/WinPooh32/series代码.
 - Initial commit.
 
-[Unreleased]: https://gitee.com/quant1x/pandas/compare/v0.9.19...HEAD
+[Unreleased]: https://gitee.com/quant1x/pandas/compare/v0.9.20...HEAD
+[0.9.20]: https://gitee.com/quant1x/pandas/compare/v0.9.19...v0.9.20
 [0.9.19]: https://gitee.com/quant1x/pandas/compare/v0.9.18...v0.9.19
 [0.9.18]: https://gitee.com/quant1x/pandas/compare/v0.9.17...v0.9.18
 [0.9.17]: https://gitee.com/quant1x/pandas/compare/v0.9.16...v0.9.17
