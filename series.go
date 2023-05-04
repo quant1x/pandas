@@ -209,10 +209,19 @@ func (self *NDFrame) Empty(t ...stat.Type) stat.Series {
 	return &frame
 }
 
-func (self *NDFrame) Records() []string {
+func (self *NDFrame) Records(round ...bool) []string {
 	ret := make([]string, self.Len())
+	needRound := false
+	if len(round) > 0 {
+		needRound = round[0]
+	}
+	t := self.Type()
 	self.Apply(func(idx int, v any) {
-		ret[idx] = stat.AnyToString(v)
+		val := v
+		if needRound && (t == stat.SERIES_TYPE_FLOAT32 || t == stat.SERIES_TYPE_FLOAT64) {
+			val = stat.Round(stat.AnyToFloat64(val), 2)
+		}
+		ret[idx] = stat.AnyToString(val)
 	})
 	return ret
 }

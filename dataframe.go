@@ -112,7 +112,11 @@ func (self DataFrame) Types() []string {
 }
 
 // Records return the string record representation of a DataFrame.
-func (self DataFrame) Records() [][]string {
+func (self DataFrame) Records(round ...bool) [][]string {
+	needRound := false
+	if len(round) > 0 {
+		needRound = round[0]
+	}
 	var records [][]string
 	records = append(records, self.Names())
 	if self.ncols == 0 || self.nrows == 0 {
@@ -120,7 +124,7 @@ func (self DataFrame) Records() [][]string {
 	}
 	var tRecords [][]string
 	for _, col := range self.columns {
-		tRecords = append(tRecords, col.Records())
+		tRecords = append(tRecords, col.Records(needRound))
 	}
 	records = append(records, transposeRecords(tRecords)...)
 	return records

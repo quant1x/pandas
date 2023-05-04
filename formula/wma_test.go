@@ -2,12 +2,13 @@ package formula
 
 import (
 	"fmt"
-	"gitee.com/quant1x/data/stock"
+	"gitee.com/quant1x/pandas"
 	"testing"
 )
 
 func TestWMA(t *testing.T) {
-	df := stock.KLine("000736.sz")
+	csv := "~/.quant1x/data/cn/002528.csv"
+	df := pandas.ReadCSV(csv)
 	fmt.Println(df)
 	var (
 		CLOSE = df.ColAsNDArray("close")

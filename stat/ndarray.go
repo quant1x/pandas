@@ -77,10 +77,19 @@ func (self NDArray[T]) Copy() Series {
 	return self.Subset(0, vlen, true)
 }
 
-func (self NDArray[T]) Records() []string {
+func (self NDArray[T]) Records(round ...bool) []string {
 	ret := make([]string, self.Len())
+	needRound := false
+	if len(round) > 0 {
+		needRound = round[0]
+	}
+	t := self.Type()
 	self.Apply(func(idx int, v any) {
-		ret[idx] = AnyToString(v)
+		val := v
+		if needRound && (t == SERIES_TYPE_FLOAT32 || t == SERIES_TYPE_FLOAT64) {
+			val = Round(AnyToFloat64(val), 2)
+		}
+		ret[idx] = AnyToString(val)
 	})
 	return ret
 

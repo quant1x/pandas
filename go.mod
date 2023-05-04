@@ -3,24 +3,24 @@ module gitee.com/quant1x/pandas
 go 1.20
 
 require (
-	gitee.com/quant1x/data v1.2.0
+	gitee.com/quant1x/data v1.3.0
 	gitee.com/quant1x/vek v0.5.5
 	github.com/chewxy/math32 v1.10.1
 	github.com/mymmsc/gox v1.3.25
 	github.com/olekukonko/tablewriter v0.0.5
-	github.com/shirou/gopsutil/v3 v3.23.3
+	github.com/shirou/gopsutil/v3 v3.23.4
 	github.com/shopspring/decimal v1.3.1
 	github.com/tealeg/xlsx v1.0.5
 	github.com/tealeg/xlsx/v3 v3.2.4
 	github.com/viterin/partial v1.0.0
 	golang.org/x/exp v0.0.0-20230425010034-47ecfdc1ba53
-	gonum.org/v1/gonum v0.12.0
+	gonum.org/v1/gonum v0.13.0
 )
 
 require (
-	gitee.com/quant1x/gotdx v1.6.0 // indirect
+	gitee.com/quant1x/gotdx v1.6.11 // indirect
 	github.com/dlclark/regexp2 v1.7.0 // indirect
-	github.com/dop251/goja v0.0.0-20230402114112-623f9dda9079 // indirect
+	github.com/dop251/goja v0.0.0-20230427124612-428fc442ff5f // indirect
 	github.com/frankban/quicktest v1.11.2 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/go-sourcemap/sourcemap v2.1.3+incompatible // indirect
@@ -36,10 +36,10 @@ require (
 	github.com/rogpeppe/fastuuid v1.2.0 // indirect
 	github.com/rogpeppe/go-internal v1.6.1 // indirect
 	github.com/shabbyrobe/xmlwriter v0.0.0-20200208144257-9fca06d00ffa // indirect
-	github.com/shoenig/go-m1cpu v0.1.4 // indirect
+	github.com/shoenig/go-m1cpu v0.1.5 // indirect
 	github.com/tklauser/go-sysconf v0.3.11 // indirect
 	github.com/tklauser/numcpus v0.6.0 // indirect
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
-	golang.org/x/sys v0.6.0 // indirect
+	golang.org/x/sys v0.7.0 // indirect
 	golang.org/x/text v0.9.0 // indirect
 )
