@@ -219,7 +219,7 @@ func (self *NDFrame) Records(round ...bool) []string {
 	self.Apply(func(idx int, v any) {
 		val := v
 		if needRound && (t == stat.SERIES_TYPE_FLOAT32 || t == stat.SERIES_TYPE_FLOAT64) {
-			val = stat.Round(stat.AnyToFloat64(val), 2)
+			val = stat.Round(stat.AnyToFloat64(val), 3)
 		}
 		ret[idx] = stat.AnyToString(val)
 	})

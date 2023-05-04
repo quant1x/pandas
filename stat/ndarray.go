@@ -87,7 +87,7 @@ func (self NDArray[T]) Records(round ...bool) []string {
 	self.Apply(func(idx int, v any) {
 		val := v
 		if needRound && (t == SERIES_TYPE_FLOAT32 || t == SERIES_TYPE_FLOAT64) {
-			val = Round(AnyToFloat64(val), 2)
+			val = Round(AnyToFloat64(val), 3)
 		}
 		ret[idx] = AnyToString(val)
 	})

@@ -48,7 +48,7 @@ func (self DataFrame) print(
 	if shortRows && nrows > maxRows {
 		shortening = true
 		dfHead := self.Subset(0, nMinRows)
-		records = dfHead.Records()
+		records = dfHead.Records(true)
 		nTotal += dfHead.Nrow()
 		if shortening {
 			dots := make([]string, ncols)
@@ -59,11 +59,11 @@ func (self DataFrame) print(
 		}
 		nTotal += 1
 		dfTail := self.Subset(nrows-nMinRows, nrows)
-		tails := dfTail.Records()
+		tails := dfTail.Records(true)
 		nTotal += dfTail.Nrow()
 		records = append(records, tails[1:]...)
 	} else {
-		records = self.Records()
+		records = self.Records(true)
 		nTotal += self.Nrow()
 	}
 
