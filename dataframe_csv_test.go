@@ -11,13 +11,13 @@ import (
 func TestCsv(t *testing.T) {
 	csvStr := `
 Country,Date,Age,Amount,Id,close
-"United States",2012-02-01,50,112.1,01234,1.23
-"United States",2012-02-01,32,321.31,54320,1.23
-"United Kingdom",2012-02-01,17,18.2,12345,1.23
-"United States",2012-02-01,32,321.31,54320,1.23
-"United Kingdom",2012-02-01,NA,18.2,12345,1.23
-"United States",2012-02-01,32,321.31,54320,1.23
-"United States",2012-02-01,32,321.31,54320,1.23
+"United States",2012-02-01,50,112.1,01234,1.231111
+"United States",2012-02-01,32,321.31,54320,1.232222
+"United Kingdom",2012-02-01,17,18.2,12345,1.233333
+"United States",2012-02-01,32,321.31,54320,1.234444
+"United Kingdom",2012-02-01,NA,18.2,12345,1.235555
+"United States",2012-02-01,32,321.31,54320,1.236666
+"United States",2012-02-01,32,321.31,54320,1.237777
 Spain,2012-02-01,66,555.42,00241,1.23
 `
 	df := ReadCSV(strings.NewReader(csvStr))
