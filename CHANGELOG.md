@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.9.18] - 2023-05-04
+### Changed
+- 支持是否四舍五入.
+- 支持是否四舍五入.
+
 ## [0.9.17] - 2023-04-26
 ### Changed
 - 更新依赖库版本.
@@ -418,7 +423,8 @@ All notable changes to this project will be documented in this file.
 - 引入github.com/WinPooh32/series代码.
 - Initial commit.
 
-[Unreleased]: https://gitee.com/quant1x/pandas/compare/v0.9.17...HEAD
+[Unreleased]: https://gitee.com/quant1x/pandas/compare/v0.9.18...HEAD
+[0.9.18]: https://gitee.com/quant1x/pandas/compare/v0.9.17...v0.9.18
 [0.9.17]: https://gitee.com/quant1x/pandas/compare/v0.9.16...v0.9.17
 [0.9.16]: https://gitee.com/quant1x/pandas/compare/v0.9.15...v0.9.16
 [0.9.15]: https://gitee.com/quant1x/pandas/compare/v0.9.14...v0.9.15
