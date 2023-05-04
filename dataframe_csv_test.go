@@ -28,7 +28,7 @@ Spain,2012-02-01,66,555.42,00241,1.23
 	_ = df.WriteCSV(buf)
 	df = ReadCSV(filename)
 	fmt.Println(df)
-	df.SetNames("a", "b", "c", "d", "e")
+	_ = df.SetNames("a", "b", "c", "d", "e")
 	//s1 := df.Col("d")
 	//fmt.Println(s1)
 	//

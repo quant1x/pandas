@@ -71,6 +71,45 @@ func __anyToString(v any) string {
 	}
 }
 
+func __printString(v any) string {
+	switch val := v.(type) {
+	case nil:
+		return Nil2String
+	case int8:
+		return strconv.FormatInt(int64(val), 10)
+	case uint8:
+		return strconv.FormatUint(uint64(val), 10)
+	case int16:
+		return strconv.FormatInt(int64(val), 10)
+	case uint16:
+		return strconv.FormatUint(uint64(val), 10)
+	case int32:
+		return strconv.FormatInt(int64(val), 10)
+	case uint32:
+		return strconv.FormatUint(uint64(val), 10)
+	case int64:
+		return strconv.FormatInt(int64(val), 10)
+	case uint64:
+		return strconv.FormatUint(uint64(val), 10)
+	case int:
+		return strconv.Itoa(val)
+	case uint:
+		return strconv.FormatUint(uint64(val), 10)
+	case uintptr:
+		return strconv.FormatUint(uint64(val), 10)
+	case float32, float64:
+		return fmt.Sprintf("%.3f", val)
+	case bool:
+		return BoolToString(val)
+	case string:
+		return val
+	default:
+		logger.Errorf("%s, error=The type is not recognized\n", v)
+		_ = v.(string) // Intentionally panic
+		return Nil2String
+	}
+}
+
 // AnyToString any转string
 func AnyToString(v any) string {
 	if vv, ok := extraceValueFromPointer(v); ok {
@@ -78,6 +117,15 @@ func AnyToString(v any) string {
 	}
 
 	s := __anyToString(v)
+	return s
+}
+
+func PrintString(v any) string {
+	if vv, ok := extraceValueFromPointer(v); ok {
+		v = vv
+	}
+
+	s := __printString(v)
 	return s
 }
 
