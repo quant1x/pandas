@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.9.21] - 2023-05-05
+### Changed
+- 更新版本号.
+
 ## [0.9.20] - 2023-05-04
 ### Changed
 - 收敛输出浮点的函数.
@@ -432,7 +436,8 @@ All notable changes to this project will be documented in this file.
 - 引入github.com/WinPooh32/series代码.
 - Initial commit.
 
-[Unreleased]: https://gitee.com/quant1x/pandas/compare/v0.9.20...HEAD
+[Unreleased]: https://gitee.com/quant1x/pandas/compare/v0.9.21...HEAD
+[0.9.21]: https://gitee.com/quant1x/pandas/compare/v0.9.20...v0.9.21
 [0.9.20]: https://gitee.com/quant1x/pandas/compare/v0.9.19...v0.9.20
 [0.9.19]: https://gitee.com/quant1x/pandas/compare/v0.9.18...v0.9.19
 [0.9.18]: https://gitee.com/quant1x/pandas/compare/v0.9.17...v0.9.18
