@@ -1,7 +1,7 @@
 package stat
 
 import (
-	"gitee.com/quant1x/pandas/stat/partial"
+	"github.com/viterin/partial"
 	"golang.org/x/exp/slices"
 	"math"
 )
