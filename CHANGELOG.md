@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.9.23] - 2023-05-06
+### Changed
+- 增加斜率计算.
+
 ## [0.9.22] - 2023-05-05
 ### Changed
 - 梳理依赖.
@@ -442,7 +446,8 @@ All notable changes to this project will be documented in this file.
 - 引入github.com/WinPooh32/series代码.
 - Initial commit.
 
-[Unreleased]: https://gitee.com/quant1x/pandas/compare/v0.9.22...HEAD
+[Unreleased]: https://gitee.com/quant1x/pandas/compare/v0.9.23...HEAD
+[0.9.23]: https://gitee.com/quant1x/pandas/compare/v0.9.22...v0.9.23
 [0.9.22]: https://gitee.com/quant1x/pandas/compare/v0.9.21...v0.9.22
 [0.9.21]: https://gitee.com/quant1x/pandas/compare/v0.9.20...v0.9.21
 [0.9.20]: https://gitee.com/quant1x/pandas/compare/v0.9.19...v0.9.20
