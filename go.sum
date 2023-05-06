@@ -15,8 +15,8 @@ github.com/kr/pretty v0.2.1/go.mod h1:ipq/a2n7PKx3OHsz4KJII5eveXtPO4qwEXGdVfWzfn
 github.com/kr/pty v1.1.1/go.mod h1:pFQYn66WHrOpPYNljwOMqo10TkYh1fy3cYio2l3bCsQ=
 github.com/kr/text v0.1.0 h1:45sCR5RtlFHMR4UwH9sdQ5TC8v0qDQCHnXt+kaKSTVE=
 github.com/kr/text v0.1.0/go.mod h1:4Jbv+DJW3UT/LiOwJeYQe1efqtUx/iVham/4vfdArNI=
-github.com/mymmsc/gox v1.3.26 h1:UmEDNUriPvSQ7fBNnT7pfyqGJEH3eMy4BiX678js5JI=
-github.com/mymmsc/gox v1.3.26/go.mod h1:e/H/5/UzrRdDywK3RgUG9jBAT6yOeSLRLk/7RezWBvU=
+github.com/mymmsc/gox v1.3.27 h1:CE9wDic5mzhBzHjkzL/qB44RbzVgiPTQ+LVggfMPNzo=
+github.com/mymmsc/gox v1.3.27/go.mod h1:e/H/5/UzrRdDywK3RgUG9jBAT6yOeSLRLk/7RezWBvU=
 github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e/go.mod h1:zD1mROLANZcx1PVRCS0qkT7pwLkGfwJo4zjcN/Tysno=
 github.com/peterbourgon/diskv v2.0.1+incompatible h1:UBdAOUP5p4RWqPBg048CAvpKN+vxiaj6gdUUzhl4XmI=
 github.com/peterbourgon/diskv v2.0.1+incompatible/go.mod h1:uqqh8zWWbv1HBMNONnaR/tNboyR3/BZd58JJSHlUSCU=
