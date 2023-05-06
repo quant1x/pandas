@@ -1,7 +1,7 @@
 package stat
 
 import (
-	"gitee.com/quant1x/pandas/utils"
+	"gitee.com/quant1x/pandas/internal"
 	"math"
 	"testing"
 )
@@ -65,7 +65,7 @@ func TestWhere(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := Where(tt.args.condition, tt.args.x, tt.args.y); !utils.SliceWantFloat(got, tt.want) {
+			if got := Where(tt.args.condition, tt.args.x, tt.args.y); !internal.SliceWantFloat(got, tt.want) {
 				t.Errorf("Where() = %v, want %v", got, tt.want)
 			}
 		})
