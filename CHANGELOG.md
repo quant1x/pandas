@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.9.28] - 2023-05-10
+### Changed
+- 去掉读取文件时的错误日志的数据, 日志应该有应用层处理.
+
 ## [0.9.27] - 2023-05-07
 ### Changed
 - 升级gox版本号.
@@ -463,7 +467,8 @@ All notable changes to this project will be documented in this file.
 - 引入github.com/WinPooh32/series代码.
 - Initial commit.
 
-[Unreleased]: https://gitee.com/quant1x/pandas/compare/v0.9.27...HEAD
+[Unreleased]: https://gitee.com/quant1x/pandas/compare/v0.9.28...HEAD
+[0.9.28]: https://gitee.com/quant1x/pandas/compare/v0.9.27...v0.9.28
 [0.9.27]: https://gitee.com/quant1x/pandas/compare/v0.9.26...v0.9.27
 [0.9.26]: https://gitee.com/quant1x/pandas/compare/v0.9.25...v0.9.26
 [0.9.25]: https://gitee.com/quant1x/pandas/compare/v0.9.24...v0.9.25
