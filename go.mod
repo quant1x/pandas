@@ -3,7 +3,7 @@ module gitee.com/quant1x/pandas
 go 1.20
 
 require (
-	gitee.com/quant1x/vek v0.5.5
+	gitee.com/quant1x/vek v0.5.6
 	github.com/chewxy/math32 v1.10.1
 	github.com/mymmsc/gox v1.3.29
 	github.com/tealeg/xlsx/v3 v3.2.4
@@ -21,6 +21,6 @@ require (
 	github.com/peterbourgon/diskv v2.0.1+incompatible // indirect
 	github.com/rogpeppe/fastuuid v1.2.0 // indirect
 	github.com/shabbyrobe/xmlwriter v0.0.0-20200208144257-9fca06d00ffa // indirect
-	golang.org/x/sys v0.5.0 // indirect
+	golang.org/x/sys v0.8.0 // indirect
 	golang.org/x/text v0.8.0 // indirect
 )

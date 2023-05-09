@@ -1,5 +1,5 @@
-gitee.com/quant1x/vek v0.5.5 h1:3/VJ2N2EHNwNabrCh26vRQ+4SV9oyBmPMV/Pr9gGlXg=
-gitee.com/quant1x/vek v0.5.5/go.mod h1:Ap27ODpuce5KAMg0X8abkGMzKxly0CSJKoYLTf8oUWM=
+gitee.com/quant1x/vek v0.5.6 h1:wbV7L+ApX7m/w3Fh7q3M5XIC0jY2QfAZb+yKtPk48DI=
+gitee.com/quant1x/vek v0.5.6/go.mod h1:ZjfC1Cc/CEVUjD4Zhql9jVGO3G+uGkoQZBNeHsJ36Mc=
 github.com/chewxy/math32 v1.10.1 h1:LFpeY0SLJXeaiej/eIp2L40VYfscTvKh/FSEZ68uMkU=
 github.com/chewxy/math32 v1.10.1/go.mod h1:dOB2rcuFrCn6UHrze36WSLVPKtzPMRAQvBvUwkSsLqs=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
@@ -27,15 +27,15 @@ github.com/rogpeppe/fastuuid v1.2.0 h1:Ppwyp6VYCF1nvBTXL3trRso7mXMlRrw9ooo375wvi
 github.com/rogpeppe/fastuuid v1.2.0/go.mod h1:jVj6XXZzXRy/MSR5jhDC/2q6DgLz+nrA6LYCDYWNEvQ=
 github.com/shabbyrobe/xmlwriter v0.0.0-20200208144257-9fca06d00ffa h1:2cO3RojjYl3hVTbEvJVqrMaFmORhL6O06qdW42toftk=
 github.com/shabbyrobe/xmlwriter v0.0.0-20200208144257-9fca06d00ffa/go.mod h1:Yjr3bdWaVWyME1kha7X0jsz3k2DgXNa1Pj3XGyUAbx8=
-github.com/stretchr/testify v1.8.1 h1:w7B6lhMri9wdJUVmEZPGGhZzrYTPvgJArz7wNPgYKsk=
+github.com/stretchr/testify v1.8.2 h1:+h33VjcLVPDHtOdpUCuF+7gSuG3yGIftsP1YvFihtJ8=
 github.com/tealeg/xlsx/v3 v3.2.4 h1:QPuk5v1xEivxoEUFmqszqINF52ppWCMejEd11ju3180=
 github.com/tealeg/xlsx/v3 v3.2.4/go.mod h1:0j6U48nJBWJsvo1FmYilbGo81oRdLyYInWvjb2WAeOA=
 github.com/viterin/partial v1.0.0 h1:e6z0cWJ+SddpXHoLU4ikIDrsI/ZE+p+hqMsB++8IfwE=
 github.com/viterin/partial v1.0.0/go.mod h1:K9y+kVePpmfZN510YNHoUs+6scZ2K7BLojfI8aW2nw0=
 golang.org/x/exp v0.0.0-20230425010034-47ecfdc1ba53 h1:5llv2sWeaMSnA3w2kS57ouQQ4pudlXrR0dCgw51QK9o=
 golang.org/x/exp v0.0.0-20230425010034-47ecfdc1ba53/go.mod h1:V1LtkGg67GoY2N1AnLN78QLrzxkLyJw7RJb1gzOOz9w=
-golang.org/x/sys v0.5.0 h1:MUK/U/4lj1t1oPg0HfuXDN/Z1wv31ZJ/YcPiGccS4DU=
-golang.org/x/sys v0.5.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
+golang.org/x/sys v0.8.0 h1:EBmGv8NaZBZTWvrbjNoL6HVt+IVy3QDQpJs7VRIw3tU=
+golang.org/x/sys v0.8.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/text v0.3.2/go.mod h1:bEr9sfX3Q8Zfm5fL9x+3itogRgK3+ptLWKqgva+5dAk=
 golang.org/x/text v0.3.3/go.mod h1:5Zoc/QRtKVWzQhOtBMvqHzDpF6irO9z98xDceosuGiQ=
 golang.org/x/text v0.8.0 h1:57P1ETyNKtuIjB4SRd15iJxuhj8Gc416Y78H3qgMh68=
