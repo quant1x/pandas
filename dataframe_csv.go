@@ -5,7 +5,6 @@ import (
 	"gitee.com/quant1x/pandas/stat"
 	"github.com/mymmsc/gox/api"
 	"github.com/mymmsc/gox/exception"
-	"github.com/mymmsc/gox/logger"
 	"github.com/mymmsc/gox/util/homedir"
 	"io"
 	"os"
@@ -30,13 +29,11 @@ func ReadCSV(in any, options ...LoadOption) DataFrame {
 	if !stat.IsEmpty(filename) {
 		filepath, err := homedir.Expand(filename)
 		if err != nil {
-			logger.Errorf("%s, error=%+v\n", filename, err)
-			return DataFrame{}
+			return DataFrame{Err: err}
 		}
 		csvFile, err := os.Open(filepath)
 		if err != nil {
-			logger.Errorf("%s, error=%+v\n", filename, err)
-			return DataFrame{}
+			return DataFrame{Err: err}
 		}
 		defer api.CloseQuietly(csvFile)
 		reader = csvFile

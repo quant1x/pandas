@@ -3,9 +3,8 @@ package pandas
 import (
 	"fmt"
 	"gitee.com/quant1x/pandas/stat"
-	"github.com/mymmsc/gox/logger"
 	"github.com/mymmsc/gox/util/homedir"
-	xlsv3 "github.com/tealeg/xlsx/v3"
+	"github.com/tealeg/xlsx/v3"
 	"strings"
 )
 
@@ -17,11 +16,9 @@ func ReadExcel(filename string, options ...LoadOption) DataFrame {
 
 	filepath, err := homedir.Expand(filename)
 	if err != nil {
-		logger.Errorf("%s, error=%+v\n", filename, err)
 		return DataFrame{Err: err}
 	}
-	//filename := "test.xlsx"
-	xlFile, err := xlsv3.OpenFile(filepath)
+	xlFile, err := xlsx.OpenFile(filepath)
 	if err != nil {
 		return DataFrame{Err: err}
 	}
@@ -42,9 +39,9 @@ func ReadExcel(filename string, options ...LoadOption) DataFrame {
 		//	}
 		//	colnums = append(colnums, col)
 		//}
-		_ = sheet.ForEachRow(func(r *xlsv3.Row) error {
+		_ = sheet.ForEachRow(func(r *xlsx.Row) error {
 			col := make([]string, 0)
-			_ = r.ForEachCell(func(c *xlsv3.Cell) error {
+			_ = r.ForEachCell(func(c *xlsx.Cell) error {
 				if c.IsTime() {
 					c.SetFormat("yyyy-mm-dd")
 				} else if strings.HasPrefix(c.Value, "0") {
@@ -70,7 +67,7 @@ func (self DataFrame) WriteExcel(filename string, options ...WriteOption) error 
 	if err != nil {
 		return err
 	}
-	xlFile := xlsv3.NewFile()
+	xlFile := xlsx.NewFile()
 	sheet, err := xlFile.AddSheet("Sheet(pandas)")
 	if err != nil {
 		return err
