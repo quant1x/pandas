@@ -5,10 +5,10 @@ go 1.20
 require (
 	gitee.com/quant1x/vek v0.5.6
 	github.com/chewxy/math32 v1.10.1
-	github.com/mymmsc/gox v1.3.30
+	github.com/mymmsc/gox v1.3.31
 	github.com/tealeg/xlsx/v3 v3.2.4
 	github.com/viterin/partial v1.0.0
-	golang.org/x/exp v0.0.0-20230425010034-47ecfdc1ba53
+	golang.org/x/exp v0.0.0-20230510235704-dd950f8aeaea
 	gonum.org/v1/gonum v0.13.0
 )
 
