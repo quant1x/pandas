@@ -1,6 +1,6 @@
 package stat
 
-import "gitee.com/quant1x/vek"
+import "gitee.com/quant1x/gox/vek"
 
 // Any 任意一个为真
 func Any[T Number | ~bool](x []T) bool {

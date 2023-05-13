@@ -1,9 +1,9 @@
 package formula
 
 import (
+	"gitee.com/quant1x/gox/exception"
+	"gitee.com/quant1x/gox/vek"
 	"gitee.com/quant1x/pandas/stat"
-	"gitee.com/quant1x/vek"
-	"github.com/mymmsc/gox/exception"
 )
 
 // EQ 相等

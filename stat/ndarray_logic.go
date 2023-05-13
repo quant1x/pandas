@@ -1,6 +1,6 @@
 package stat
 
-import "gitee.com/quant1x/vek"
+import "gitee.com/quant1x/gox/vek"
 
 func (self NDArray[T]) Logic(f func(idx int, v any) bool) []bool {
 	d := make([]bool, self.Len())

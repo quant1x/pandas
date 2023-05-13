@@ -1,7 +1,7 @@
 package stat
 
 import (
-	"github.com/mymmsc/gox/exception"
+	"gitee.com/quant1x/gox/exception"
 	"golang.org/x/exp/slices"
 	"math"
 )

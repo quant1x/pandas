@@ -1,7 +1,7 @@
 package stat
 
 import (
-	"gitee.com/quant1x/vek"
+	"gitee.com/quant1x/gox/vek"
 	"math"
 )
 

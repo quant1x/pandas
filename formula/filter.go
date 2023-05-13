@@ -1,8 +1,8 @@
 package formula
 
 import (
+	"gitee.com/quant1x/gox/exception"
 	"gitee.com/quant1x/pandas/stat"
-	"github.com/mymmsc/gox/exception"
 )
 
 // FILTER 过滤连续出现的信号

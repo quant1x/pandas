@@ -1,6 +1,6 @@
 package stat
 
-import "github.com/mymmsc/gox/exception"
+import "gitee.com/quant1x/gox/exception"
 
 // Align Data alignment
 //

@@ -2,10 +2,10 @@ package pandas
 
 import (
 	"encoding/csv"
+	"gitee.com/quant1x/gox/api"
+	"gitee.com/quant1x/gox/exception"
+	"gitee.com/quant1x/gox/util/homedir"
 	"gitee.com/quant1x/pandas/stat"
-	"github.com/mymmsc/gox/api"
-	"github.com/mymmsc/gox/exception"
-	"github.com/mymmsc/gox/util/homedir"
 	"io"
 	"os"
 )

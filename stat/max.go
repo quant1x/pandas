@@ -1,8 +1,8 @@
 package stat
 
 import (
-	"gitee.com/quant1x/vek"
-	"gitee.com/quant1x/vek/vek32"
+	"gitee.com/quant1x/gox/vek"
+	"gitee.com/quant1x/gox/vek/vek32"
 )
 
 // Max 纵向计算x最大值

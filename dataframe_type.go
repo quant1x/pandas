@@ -2,8 +2,8 @@ package pandas
 
 import (
 	"fmt"
+	"gitee.com/quant1x/gox/exception"
 	"gitee.com/quant1x/pandas/stat"
-	"github.com/mymmsc/gox/exception"
 	"reflect"
 	"strconv"
 	"strings"

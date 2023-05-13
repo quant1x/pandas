@@ -1,6 +1,6 @@
 package stat
 
-import "gitee.com/quant1x/vek"
+import "gitee.com/quant1x/gox/vek"
 
 // Count 统计
 func Count[T Number | ~bool](x []T) int {

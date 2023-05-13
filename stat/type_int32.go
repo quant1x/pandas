@@ -2,7 +2,7 @@ package stat
 
 import (
 	"fmt"
-	"github.com/mymmsc/gox/logger"
+	"gitee.com/quant1x/gox/logger"
 	"math"
 	"strconv"
 )

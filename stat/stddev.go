@@ -1,8 +1,8 @@
 package stat
 
 import (
-	"gitee.com/quant1x/vek"
-	"gitee.com/quant1x/vek/vek32"
+	"gitee.com/quant1x/gox/vek"
+	"gitee.com/quant1x/gox/vek/vek32"
 	"golang.org/x/exp/slices"
 	"gonum.org/v1/gonum/stat"
 	"math"

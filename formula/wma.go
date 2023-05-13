@@ -1,8 +1,8 @@
 package formula
 
 import (
+	"gitee.com/quant1x/gox/exception"
 	"gitee.com/quant1x/pandas/stat"
-	"github.com/mymmsc/gox/exception"
 )
 
 // WMA 通达信S序列的N日加权移动平均 Yn = (1*X1+2*X2+3*X3+...+n*Xn)/(1+2+3+...+Xn)

@@ -1,6 +1,6 @@
 package stat
 
-import "gitee.com/quant1x/vek"
+import "gitee.com/quant1x/gox/vek"
 
 // All 全部为真
 func All[T Number | ~bool](x []T) bool {
