@@ -1,14 +1,14 @@
 package stat
 
 import (
-	"gitee.com/quant1x/gox/vek"
-	"gitee.com/quant1x/gox/vek/vek32"
+	"gitee.com/quant1x/gox/num"
+	"gitee.com/quant1x/gox/num/num32"
 	"golang.org/x/exp/slices"
 )
 
 // Sub arithmetics 减法
 func Sub[T Number](x []T, y any) []T {
-	return binaryOperations(x, y, vek32.Sub, vek.Sub, __sub_go[T])
+	return binaryOperations(x, y, num32.Sub, num.Sub, __sub_go[T])
 }
 
 func __sub_go[T Number](x, y []T) []T {

@@ -1,8 +1,6 @@
 package stat
 
-import (
-	"gitee.com/quant1x/gox/vek"
-)
+import "gitee.com/quant1x/gox/num"
 
 type DType = float64
 type Int = int32
@@ -24,5 +22,5 @@ func Any2DType(v any) DType {
 
 // DType切片转int32切片
 func DType2Int(d []DType) []Int {
-	return vek.ToInt32(d)
+	return num.ToInt32(d)
 }

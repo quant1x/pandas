@@ -1,13 +1,13 @@
 package stat
 
 import (
-	"gitee.com/quant1x/gox/vek"
-	"gitee.com/quant1x/gox/vek/vek32"
+	"gitee.com/quant1x/gox/num"
+	"gitee.com/quant1x/gox/num/num32"
 )
 
 // Min 纵向计算x最小值
 func Min[T Number](x []T) T {
-	return unaryOperations1[T](x, vek32.Min, vek.Min, __min_go[T])
+	return unaryOperations1[T](x, num32.Min, num.Min, __min_go[T])
 }
 
 func __min_go[T Number | ~string](x []T) T {

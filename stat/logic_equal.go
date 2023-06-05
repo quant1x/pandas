@@ -1,13 +1,13 @@
 package stat
 
 import (
-	"gitee.com/quant1x/gox/vek"
-	"gitee.com/quant1x/gox/vek/vek32"
+	"gitee.com/quant1x/gox/num"
+	"gitee.com/quant1x/gox/num/num32"
 )
 
 // Equal 比较相等
 func Equal[T BaseType](x, y []T) []bool {
-	return binaryOperations2[T, bool](x, y, vek32.Eq, vek.Eq, __eq_go[T])
+	return binaryOperations2[T, bool](x, y, num32.Eq, num.Eq, __eq_go[T])
 }
 
 func __eq_go[T BaseType](x, y []T) []bool {

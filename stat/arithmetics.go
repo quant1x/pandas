@@ -191,28 +191,28 @@ func __arithmetic_dtype[T ~[]E, E Number](x T, y DType, c int, calculator func(f
 	switch {
 	case kind == SERIES_TYPE_FLOAT64 && c == __k_calc_add:
 		fs := make([]float64, xLen)
-		d = vek.AddNumber_Into(fs, any(x).([]float64), y)
+		d = num.AddNumber_Into(fs, any(x).([]float64), y)
 	case kind == SERIES_TYPE_FLOAT64 && c == __k_calc_sub:
 		fs := make([]float64, xLen)
-		d = vek.SubNumber_Into(fs, any(x).([]float64), y)
+		d = num.SubNumber_Into(fs, any(x).([]float64), y)
 	case kind == SERIES_TYPE_FLOAT64 && c == __k_calc_mul:
 		fs := make([]float64, xLen)
-		d = vek.MulNumber_Into(fs, any(x).([]float64), y)
+		d = num.MulNumber_Into(fs, any(x).([]float64), y)
 	case kind == SERIES_TYPE_FLOAT64 && c == __k_calc_div:
 		fs := make([]float64, xLen)
-		d = vek.DivNumber_Into(fs, any(x).([]float64), y)
+		d = num.DivNumber_Into(fs, any(x).([]float64), y)
 	case kind == SERIES_TYPE_FLOAT32 && c == __k_calc_add:
 		fs := make([]float32, xLen)
-		d = vek32.AddNumber_Into(fs, any(x).([]float32), float32(y))
+		d = num32.AddNumber_Into(fs, any(x).([]float32), float32(y))
 	case kind == SERIES_TYPE_FLOAT32 && c == __k_calc_sub:
 		fs := make([]float32, xLen)
-		d = vek32.SubNumber_Into(fs, any(x).([]float32), float32(y))
+		d = num32.SubNumber_Into(fs, any(x).([]float32), float32(y))
 	case kind == SERIES_TYPE_FLOAT32 && c == __k_calc_mul:
 		fs := make([]float32, xLen)
-		d = vek32.MulNumber_Into(fs, any(x).([]float32), float32(y))
+		d = num32.MulNumber_Into(fs, any(x).([]float32), float32(y))
 	case kind == SERIES_TYPE_FLOAT32 && c == __k_calc_div:
 		fs := make([]float32, xLen)
-		d = vek32.DivNumber_Into(fs, any(x).([]float32), float32(y))
+		d = num32.DivNumber_Into(fs, any(x).([]float32), float32(y))
 	default:
 		b := y
 		bs := make([]E, xLen)
@@ -234,47 +234,47 @@ func __arithmetic_slice[T ~[]E, E Number, T2 ~[]E2, E2 Number](x T, y T2, c int,
 		es := make([]E, xLen)
 		switch xs := any(x).(type) {
 		case []float64:
-			vek.Add_Into(es[:yLen], xs[:yLen], any(y).([]float64)[:yLen])
+			num.Add_Into(es[:yLen], xs[:yLen], any(y).([]float64)[:yLen])
 		}
 		switch {
 		case xKind == SERIES_TYPE_FLOAT64 && xKind == yKind && c == __k_calc_add:
-			vek.Add_Into(es[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
+			num.Add_Into(es[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
 		case xKind == SERIES_TYPE_FLOAT64 && xKind == yKind && c == __k_calc_sub:
-			vek.Sub_Into(es[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
+			num.Sub_Into(es[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
 		case xKind == SERIES_TYPE_FLOAT64 && xKind == yKind && c == __k_calc_mul:
-			vek.Mul_Into(es[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
+			num.Mul_Into(es[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
 		case xKind == SERIES_TYPE_FLOAT64 && xKind == yKind && c == __k_calc_div:
-			vek.Div_Into(es[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
+			num.Div_Into(es[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
 		case xKind == SERIES_TYPE_FLOAT32 && xKind == yKind && c == __k_calc_add:
-			vek.Add_Into(es[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
+			num.Add_Into(es[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
 		case xKind == SERIES_TYPE_FLOAT32 && xKind == yKind && c == __k_calc_sub:
-			vek.Sub_Into(es[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
+			num.Sub_Into(es[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
 		case xKind == SERIES_TYPE_FLOAT32 && xKind == yKind && c == __k_calc_mul:
-			vek.Mul_Into(es[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
+			num.Mul_Into(es[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
 		case xKind == SERIES_TYPE_FLOAT32 && xKind == yKind && c == __k_calc_div:
-			vek.Div_Into(es[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
+			num.Div_Into(es[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
 		}
 		if xKind == SERIES_TYPE_FLOAT64 && xKind == yKind && c == __k_calc_add {
-			vek.Gt_Into(es[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
+			num.Gt_Into(es[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
 		} else if xKind == SERIES_TYPE_FLOAT64 && xKind == yKind && c == __k_compare_gte {
 			es := make([]float64, xLen)
-			vek.Gte_Into(es[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
+			num.Gte_Into(es[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
 		} else if xKind == SERIES_TYPE_FLOAT64 && xKind == yKind && c == __k_compare_lt {
 			es := make([]float64, xLen)
-			vek.Lt_Into(es[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
+			num.Lt_Into(es[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
 		} else if xKind == SERIES_TYPE_FLOAT64 && xKind == yKind && c == __k_compare_lte {
 			es := make([]float64, xLen)
-			vek.Lte_Into(es[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
+			num.Lte_Into(es[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
 		} else if xKind == SERIES_TYPE_FLOAT32 && xKind == yKind && c == __k_compare_gt {
-			vek32.Gt_Into(es[:yLen], any(x).([]float32)[:yLen], any(y).([]float32)[:yLen])
+			num32.Gt_Into(es[:yLen], any(x).([]float32)[:yLen], any(y).([]float32)[:yLen])
 		} else if xKind == SERIES_TYPE_FLOAT32 && xKind == yKind && c == __k_compare_gte {
-			vek32.Gte_Into(es[:yLen], any(x).([]float32)[:yLen], any(y).([]float32)[:yLen])
+			num32.Gte_Into(es[:yLen], any(x).([]float32)[:yLen], any(y).([]float32)[:yLen])
 		} else if xKind == SERIES_TYPE_FLOAT32 && xKind == yKind && c == __k_compare_lt {
-			vek32.Lt_Into(es[:yLen], any(x).([]float32)[:yLen], any(y).([]float32)[:yLen])
+			num32.Lt_Into(es[:yLen], any(x).([]float32)[:yLen], any(y).([]float32)[:yLen])
 		} else if xKind == SERIES_TYPE_FLOAT32 && xKind == yKind && c == __k_compare_lte {
-			vek32.Lte_Into(es[:yLen], any(x).([]float32)[:yLen], any(y).([]float32)[:yLen])
+			num32.Lte_Into(es[:yLen], any(x).([]float32)[:yLen], any(y).([]float32)[:yLen])
 		} else if xKind == SERIES_TYPE_BOOL && xKind == yKind && c == __k_compare_and {
-			vek.And_Into(es[:yLen], any(x).([]bool)[:yLen], any(y).([]bool)[:yLen])
+			num.And_Into(es[:yLen], any(x).([]bool)[:yLen], any(y).([]bool)[:yLen])
 		} else {
 			for i := 0; i < yLen; i++ {
 				f1 := Any2DType(x[i])
@@ -290,23 +290,23 @@ func __arithmetic_slice[T ~[]E, E Number, T2 ~[]E2, E2 Number](x T, y T2, c int,
 	} else {
 		es = make([]bool, yLen)
 		if xKind == SERIES_TYPE_FLOAT64 && xKind == yKind && c == __k_compare_gt {
-			vek.Gt_Into(es[:xLen], any(x).([]float64)[:xLen], any(y).([]float64)[:xLen])
+			num.Gt_Into(es[:xLen], any(x).([]float64)[:xLen], any(y).([]float64)[:xLen])
 		} else if xKind == SERIES_TYPE_FLOAT64 && xKind == yKind && c == __k_compare_gte {
-			vek.Gte_Into(es[:xLen], any(x).([]float64)[:xLen], any(y).([]float64)[:xLen])
+			num.Gte_Into(es[:xLen], any(x).([]float64)[:xLen], any(y).([]float64)[:xLen])
 		} else if xKind == SERIES_TYPE_FLOAT64 && xKind == yKind && c == __k_compare_lt {
-			vek.Lt_Into(es[:xLen], any(x).([]float64)[:xLen], any(y).([]float64)[:xLen])
+			num.Lt_Into(es[:xLen], any(x).([]float64)[:xLen], any(y).([]float64)[:xLen])
 		} else if xKind == SERIES_TYPE_FLOAT64 && xKind == yKind && c == __k_compare_lte {
-			vek.Lte_Into(es[:xLen], any(x).([]float64)[:xLen], any(y).([]float64)[:xLen])
+			num.Lte_Into(es[:xLen], any(x).([]float64)[:xLen], any(y).([]float64)[:xLen])
 		} else if xKind == SERIES_TYPE_FLOAT32 && xKind == yKind && c == __k_compare_gt {
-			vek32.Gt_Into(es[:xLen], any(x).([]float32)[:xLen], any(y).([]float32)[:xLen])
+			num32.Gt_Into(es[:xLen], any(x).([]float32)[:xLen], any(y).([]float32)[:xLen])
 		} else if xKind == SERIES_TYPE_FLOAT32 && xKind == yKind && c == __k_compare_gte {
-			vek32.Gte_Into(es[:xLen], any(x).([]float32)[:xLen], any(y).([]float32)[:xLen])
+			num32.Gte_Into(es[:xLen], any(x).([]float32)[:xLen], any(y).([]float32)[:xLen])
 		} else if xKind == SERIES_TYPE_FLOAT32 && xKind == yKind && c == __k_compare_lt {
-			vek32.Lt_Into(es[:xLen], any(x).([]float32)[:xLen], any(y).([]float32)[:xLen])
+			num32.Lt_Into(es[:xLen], any(x).([]float32)[:xLen], any(y).([]float32)[:xLen])
 		} else if xKind == SERIES_TYPE_FLOAT32 && xKind == yKind && c == __k_compare_lte {
-			vek32.Lte_Into(es[:xLen], any(x).([]float32)[:xLen], any(y).([]float32)[:xLen])
+			num32.Lte_Into(es[:xLen], any(x).([]float32)[:xLen], any(y).([]float32)[:xLen])
 		} else if xKind == SERIES_TYPE_BOOL && xKind == yKind && c == __k_compare_and {
-			vek.And_Into(es[:xLen], any(x).([]bool)[:xLen], any(y).([]bool)[:xLen])
+			num.And_Into(es[:xLen], any(x).([]bool)[:xLen], any(y).([]bool)[:xLen])
 		} else {
 			for i := 0; i < xLen; i++ {
 				f1 := Any2DType(x[i])

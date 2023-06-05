@@ -1,8 +1,8 @@
 package stat
 
 import (
-	"gitee.com/quant1x/gox/vek"
-	"gitee.com/quant1x/gox/vek/vek32"
+	"gitee.com/quant1x/gox/num"
+	"gitee.com/quant1x/gox/num/num32"
 )
 
 // Sum 求和
@@ -15,9 +15,9 @@ func Sum[T Number](f []T) T {
 	s = f
 	switch fs := s.(type) {
 	case []float32:
-		d = vek32.Sum(fs)
+		d = num32.Sum(fs)
 	case []float64:
-		d = vek.Sum(fs)
+		d = num.Sum(fs)
 	default:
 		d = __sum(fs.([]T))
 	}

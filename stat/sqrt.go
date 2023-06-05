@@ -1,8 +1,8 @@
 package stat
 
 import (
-	"gitee.com/quant1x/gox/vek"
-	"gitee.com/quant1x/gox/vek/vek32"
+	"gitee.com/quant1x/gox/num"
+	"gitee.com/quant1x/gox/num/num32"
 	"github.com/chewxy/math32"
 	"math"
 )
@@ -13,9 +13,9 @@ func Sqrt[T Number](v []T) []T {
 	var values any = v
 	switch fs := values.(type) {
 	case []float32:
-		d = vek32.Sqrt(fs)
+		d = num32.Sqrt(fs)
 	case []float64:
-		d = vek.Sqrt(fs)
+		d = num.Sqrt(fs)
 	default:
 		panic(ErrUnsupportedType)
 	}

@@ -1,7 +1,7 @@
 package stat
 
 import (
-	"gitee.com/quant1x/gox/vek"
+	"gitee.com/quant1x/gox/num"
 	"math"
 )
 
@@ -240,8 +240,8 @@ func PolyVal(p, x []DType) []DType {
 	//y = y * x + pv
 	y := Repeat(DType(0), len(x))
 	for _, v := range p {
-		vek.Mul_Inplace(y, x)
-		vek.AddNumber_Inplace(y, v)
+		num.Mul_Inplace(y, x)
+		num.AddNumber_Inplace(y, v)
 	}
 	return y
 }

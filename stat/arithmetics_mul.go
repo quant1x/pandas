@@ -1,14 +1,14 @@
 package stat
 
 import (
-	"gitee.com/quant1x/gox/vek"
-	"gitee.com/quant1x/gox/vek/vek32"
+	"gitee.com/quant1x/gox/num"
+	"gitee.com/quant1x/gox/num/num32"
 	"golang.org/x/exp/slices"
 )
 
 // Mul arithmetics 乘法
 func Mul[T Number](x []T, y any) []T {
-	return binaryOperations(x, y, vek32.Mul, vek.Mul, __mul_go[T])
+	return binaryOperations(x, y, num32.Mul, num.Mul, __mul_go[T])
 }
 
 func __mul_go[T Number](x, y []T) []T {

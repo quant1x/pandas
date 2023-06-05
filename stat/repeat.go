@@ -1,8 +1,8 @@
 package stat
 
 import (
-	"gitee.com/quant1x/gox/vek"
-	"gitee.com/quant1x/gox/vek/vek32"
+	"gitee.com/quant1x/gox/num"
+	"gitee.com/quant1x/gox/num/num32"
 )
 
 // Repeat 构造n长度的f的泛型切片
@@ -11,9 +11,9 @@ func Repeat[T BaseType](f T, n int) []T {
 	var s any = f
 	switch fs := s.(type) {
 	case float32:
-		d = vek32.Repeat(fs, n)
+		d = num32.Repeat(fs, n)
 	case float64:
-		d = vek.Repeat(fs, n)
+		d = num.Repeat(fs, n)
 	default:
 		// 剩下非float32和float64, 循环吧
 		d = []T{}
@@ -30,9 +30,9 @@ func Repeat[T BaseType](f T, n int) []T {
 func RepeatInto[T BaseType](s []T, f T, n int) []T {
 	switch fs := any(s).(type) {
 	case []float32:
-		vek32.Repeat_Into(fs, any(f).(float32), n)
+		num32.Repeat_Into(fs, any(f).(float32), n)
 	case []float64:
-		vek.Repeat_Into(fs, any(f).(float64), n)
+		num.Repeat_Into(fs, any(f).(float64), n)
 	default:
 		// 剩下非float32和float64, 循环吧
 		for i := 0; i < n; i++ {
@@ -50,9 +50,9 @@ func Range[T Number](n int) []T {
 	var v any = start
 	switch a := v.(type) {
 	case float32:
-		dest = vek32.Range(a, a+float32(n))
+		dest = num32.Range(a, a+float32(n))
 	case float64:
-		dest = vek.Range(a, a+float64(n))
+		dest = num.Range(a, a+float64(n))
 	default:
 		// 其它类型
 		d := make([]T, n)

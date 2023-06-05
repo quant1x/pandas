@@ -1,8 +1,8 @@
 package stat
 
 import (
-	"gitee.com/quant1x/gox/vek"
-	"gitee.com/quant1x/gox/vek/vek32"
+	"gitee.com/quant1x/gox/num"
+	"gitee.com/quant1x/gox/num/num32"
 )
 
 // Abs 泛型绝对值
@@ -11,9 +11,9 @@ func Abs[T BaseType](x []T) []T {
 	var v any = x
 	switch xv := v.(type) {
 	case []float32:
-		d = vek32.Abs(xv)
+		d = num32.Abs(xv)
 	case []float64:
-		d = vek.Abs(xv)
+		d = num.Abs(xv)
 	case []int:
 		d = __abs_go(xv)
 	case []int8:

@@ -1,13 +1,13 @@
 package stat
 
 import (
-	"gitee.com/quant1x/gox/vek"
-	"gitee.com/quant1x/gox/vek/vek32"
+	"gitee.com/quant1x/gox/num"
+	"gitee.com/quant1x/gox/num/num32"
 )
 
 // Mean 求均值
 func Mean[T Number](x []T) T {
-	return unaryOperations1[T](x, vek32.Mean, vek.Mean, __mean_go[T])
+	return unaryOperations1[T](x, num32.Mean, num.Mean, __mean_go[T])
 }
 
 func __mean_go[T Number](x []T) T {

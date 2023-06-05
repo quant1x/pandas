@@ -1,13 +1,13 @@
 package stat
 
 import (
-	"gitee.com/quant1x/gox/vek"
-	"gitee.com/quant1x/gox/vek/vek32"
+	"gitee.com/quant1x/gox/num"
+	"gitee.com/quant1x/gox/num/num32"
 )
 
 // Max 纵向计算x最大值
 func Max[T Number](x []T) T {
-	return unaryOperations1[T](x, vek32.Max, vek.Max, __max_go[T])
+	return unaryOperations1[T](x, num32.Max, num.Max, __max_go[T])
 }
 
 func __max_go[T Number | ~string](x []T) T {

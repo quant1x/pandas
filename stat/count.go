@@ -1,12 +1,12 @@
 package stat
 
-import "gitee.com/quant1x/gox/vek"
+import "gitee.com/quant1x/gox/num"
 
 // Count 统计
 func Count[T Number | ~bool](x []T) int {
 	switch vs := any(x).(type) {
 	case []bool:
-		return vek.Count(vs)
+		return num.Count(vs)
 	case []int8:
 		return __count_go(vs)
 	case []uint8:

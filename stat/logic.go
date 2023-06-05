@@ -1,8 +1,8 @@
 package stat
 
 import (
-	"gitee.com/quant1x/gox/vek"
-	"gitee.com/quant1x/gox/vek/vek32"
+	"gitee.com/quant1x/gox/num"
+	"gitee.com/quant1x/gox/num/num32"
 )
 
 func __compare[T ~[]E, E any](x T, y any, c int, comparator func(f1, f2 DType) bool) []bool {
@@ -59,21 +59,21 @@ func __compare_dtype[T ~[]E, E any](x T, y DType, c int, comparator func(f1, f2 
 
 	kind := checkoutRawType(x)
 	if kind == SERIES_TYPE_FLOAT64 && c == __k_compare_gt {
-		return vek.GtNumber_Into(bs, any(x).([]float64), y)
+		return num.GtNumber_Into(bs, any(x).([]float64), y)
 	} else if kind == SERIES_TYPE_FLOAT64 && c == __k_compare_gte {
-		return vek.GteNumber_Into(bs, any(x).([]float64), y)
+		return num.GteNumber_Into(bs, any(x).([]float64), y)
 	} else if kind == SERIES_TYPE_FLOAT64 && c == __k_compare_lt {
-		return vek.LtNumber_Into(bs, any(x).([]float64), y)
+		return num.LtNumber_Into(bs, any(x).([]float64), y)
 	} else if kind == SERIES_TYPE_FLOAT64 && c == __k_compare_lte {
-		return vek.LteNumber_Into(bs, any(x).([]float64), y)
+		return num.LteNumber_Into(bs, any(x).([]float64), y)
 	} else if kind == SERIES_TYPE_FLOAT32 && c == __k_compare_gt {
-		return vek32.GtNumber_Into(bs, any(x).([]float32), float32(y))
+		return num32.GtNumber_Into(bs, any(x).([]float32), float32(y))
 	} else if kind == SERIES_TYPE_FLOAT32 && c == __k_compare_gte {
-		return vek32.GteNumber_Into(bs, any(x).([]float32), float32(y))
+		return num32.GteNumber_Into(bs, any(x).([]float32), float32(y))
 	} else if kind == SERIES_TYPE_FLOAT32 && c == __k_compare_lt {
-		return vek32.LtNumber_Into(bs, any(x).([]float32), float32(y))
+		return num32.LtNumber_Into(bs, any(x).([]float32), float32(y))
 	} else if kind == SERIES_TYPE_FLOAT32 && c == __k_compare_lte {
-		return vek32.LteNumber_Into(bs, any(x).([]float32), float32(y))
+		return num32.LteNumber_Into(bs, any(x).([]float32), float32(y))
 	} else {
 		b := y
 		for i := 0; i < xLen; i++ {
@@ -95,23 +95,23 @@ func __compare_slice[T ~[]E, E any, T2 ~[]E2, E2 any](x T, y T2, c int, comparat
 	if xLen >= yLen {
 		bs = make([]bool, xLen)
 		if xKind == SERIES_TYPE_FLOAT64 && xKind == yKind && c == __k_compare_gt {
-			vek.Gt_Into(bs[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
+			num.Gt_Into(bs[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
 		} else if xKind == SERIES_TYPE_FLOAT64 && xKind == yKind && c == __k_compare_gte {
-			vek.Gte_Into(bs[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
+			num.Gte_Into(bs[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
 		} else if xKind == SERIES_TYPE_FLOAT64 && xKind == yKind && c == __k_compare_lt {
-			vek.Lt_Into(bs[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
+			num.Lt_Into(bs[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
 		} else if xKind == SERIES_TYPE_FLOAT64 && xKind == yKind && c == __k_compare_lte {
-			vek.Lte_Into(bs[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
+			num.Lte_Into(bs[:yLen], any(x).([]float64)[:yLen], any(y).([]float64)[:yLen])
 		} else if xKind == SERIES_TYPE_FLOAT32 && xKind == yKind && c == __k_compare_gt {
-			vek32.Gt_Into(bs[:yLen], any(x).([]float32)[:yLen], any(y).([]float32)[:yLen])
+			num32.Gt_Into(bs[:yLen], any(x).([]float32)[:yLen], any(y).([]float32)[:yLen])
 		} else if xKind == SERIES_TYPE_FLOAT32 && xKind == yKind && c == __k_compare_gte {
-			vek32.Gte_Into(bs[:yLen], any(x).([]float32)[:yLen], any(y).([]float32)[:yLen])
+			num32.Gte_Into(bs[:yLen], any(x).([]float32)[:yLen], any(y).([]float32)[:yLen])
 		} else if xKind == SERIES_TYPE_FLOAT32 && xKind == yKind && c == __k_compare_lt {
-			vek32.Lt_Into(bs[:yLen], any(x).([]float32)[:yLen], any(y).([]float32)[:yLen])
+			num32.Lt_Into(bs[:yLen], any(x).([]float32)[:yLen], any(y).([]float32)[:yLen])
 		} else if xKind == SERIES_TYPE_FLOAT32 && xKind == yKind && c == __k_compare_lte {
-			vek32.Lte_Into(bs[:yLen], any(x).([]float32)[:yLen], any(y).([]float32)[:yLen])
+			num32.Lte_Into(bs[:yLen], any(x).([]float32)[:yLen], any(y).([]float32)[:yLen])
 		} else if xKind == SERIES_TYPE_BOOL && xKind == yKind && c == __k_compare_and {
-			vek.And_Into(bs[:yLen], any(x).([]bool)[:yLen], any(y).([]bool)[:yLen])
+			num.And_Into(bs[:yLen], any(x).([]bool)[:yLen], any(y).([]bool)[:yLen])
 		} else {
 			for i := 0; i < yLen; i++ {
 				f1 := Any2DType(x[i])
@@ -127,23 +127,23 @@ func __compare_slice[T ~[]E, E any, T2 ~[]E2, E2 any](x T, y T2, c int, comparat
 	} else {
 		bs = make([]bool, yLen)
 		if xKind == SERIES_TYPE_FLOAT64 && xKind == yKind && c == __k_compare_gt {
-			vek.Gt_Into(bs[:xLen], any(x).([]float64)[:xLen], any(y).([]float64)[:xLen])
+			num.Gt_Into(bs[:xLen], any(x).([]float64)[:xLen], any(y).([]float64)[:xLen])
 		} else if xKind == SERIES_TYPE_FLOAT64 && xKind == yKind && c == __k_compare_gte {
-			vek.Gte_Into(bs[:xLen], any(x).([]float64)[:xLen], any(y).([]float64)[:xLen])
+			num.Gte_Into(bs[:xLen], any(x).([]float64)[:xLen], any(y).([]float64)[:xLen])
 		} else if xKind == SERIES_TYPE_FLOAT64 && xKind == yKind && c == __k_compare_lt {
-			vek.Lt_Into(bs[:xLen], any(x).([]float64)[:xLen], any(y).([]float64)[:xLen])
+			num.Lt_Into(bs[:xLen], any(x).([]float64)[:xLen], any(y).([]float64)[:xLen])
 		} else if xKind == SERIES_TYPE_FLOAT64 && xKind == yKind && c == __k_compare_lte {
-			vek.Lte_Into(bs[:xLen], any(x).([]float64)[:xLen], any(y).([]float64)[:xLen])
+			num.Lte_Into(bs[:xLen], any(x).([]float64)[:xLen], any(y).([]float64)[:xLen])
 		} else if xKind == SERIES_TYPE_FLOAT32 && xKind == yKind && c == __k_compare_gt {
-			vek32.Gt_Into(bs[:xLen], any(x).([]float32)[:xLen], any(y).([]float32)[:xLen])
+			num32.Gt_Into(bs[:xLen], any(x).([]float32)[:xLen], any(y).([]float32)[:xLen])
 		} else if xKind == SERIES_TYPE_FLOAT32 && xKind == yKind && c == __k_compare_gte {
-			vek32.Gte_Into(bs[:xLen], any(x).([]float32)[:xLen], any(y).([]float32)[:xLen])
+			num32.Gte_Into(bs[:xLen], any(x).([]float32)[:xLen], any(y).([]float32)[:xLen])
 		} else if xKind == SERIES_TYPE_FLOAT32 && xKind == yKind && c == __k_compare_lt {
-			vek32.Lt_Into(bs[:xLen], any(x).([]float32)[:xLen], any(y).([]float32)[:xLen])
+			num32.Lt_Into(bs[:xLen], any(x).([]float32)[:xLen], any(y).([]float32)[:xLen])
 		} else if xKind == SERIES_TYPE_FLOAT32 && xKind == yKind && c == __k_compare_lte {
-			vek32.Lte_Into(bs[:xLen], any(x).([]float32)[:xLen], any(y).([]float32)[:xLen])
+			num32.Lte_Into(bs[:xLen], any(x).([]float32)[:xLen], any(y).([]float32)[:xLen])
 		} else if xKind == SERIES_TYPE_BOOL && xKind == yKind && c == __k_compare_and {
-			vek.And_Into(bs[:xLen], any(x).([]bool)[:xLen], any(y).([]bool)[:xLen])
+			num.And_Into(bs[:xLen], any(x).([]bool)[:xLen], any(y).([]bool)[:xLen])
 		} else {
 			for i := 0; i < xLen; i++ {
 				f1 := Any2DType(x[i])
@@ -254,7 +254,7 @@ func And[S ~[]E, E any](v S, x any) []bool {
 func V1And[T Number | ~bool](x, y []T) []bool {
 	switch vs := any(x).(type) {
 	case []bool:
-		return vek.And(vs, any(y).([]bool))
+		return num.And(vs, any(y).([]bool))
 	case []int8:
 		return __and_go(vs, any(y).([]int8))
 	case []uint8:

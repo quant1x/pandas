@@ -1,8 +1,6 @@
 package stat
 
-import (
-	"gitee.com/quant1x/gox/vek"
-)
+import "gitee.com/quant1x/gox/num"
 
 func (r RollingAndExpandingMixin) Count() (s Series) {
 	if r.Series.Type() != SERIES_TYPE_BOOL {
@@ -15,7 +13,7 @@ func (r RollingAndExpandingMixin) Count() (s Series) {
 			continue
 		}
 		bs := block.Values().([]bool)
-		values[i] = DType(vek.Count(bs))
+		values[i] = DType(num.Count(bs))
 	}
 	s = r.Series.Empty(SERIES_TYPE_DTYPE)
 	s.Rename(r.Series.Name())

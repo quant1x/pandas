@@ -1,12 +1,12 @@
 package stat
 
-import "gitee.com/quant1x/gox/vek"
+import "gitee.com/quant1x/gox/num"
 
 // Any 任意一个为真
 func Any[T Number | ~bool](x []T) bool {
 	switch vs := any(x).(type) {
 	case []bool:
-		return vek.Any(vs)
+		return num.Any(vs)
 	case []int8:
 		return __any_go(vs)
 	case []uint8:

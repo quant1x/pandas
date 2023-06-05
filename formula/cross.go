@@ -1,7 +1,7 @@
 package formula
 
 import (
-	"gitee.com/quant1x/gox/vek"
+	"gitee.com/quant1x/gox/num"
 	"gitee.com/quant1x/pandas/stat"
 )
 
@@ -25,7 +25,7 @@ func V2CROSS(S1, S2 []stat.DType) []bool {
 	b1 := CompareLt(r11, r12)
 	b2 := CompareGte(r1, r2)
 
-	c := vek.And(b1, b2)
+	c := num.And(b1, b2)
 	return c
 }
 
@@ -38,6 +38,6 @@ func V1CROSS(S1, S2 stat.Series) []bool {
 	b1 := CompareLt(r11, r12)
 	b2 := CompareGte(r1, r2)
 
-	c := vek.And(b1, b2)
+	c := num.And(b1, b2)
 	return c
 }

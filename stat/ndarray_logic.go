@@ -1,6 +1,6 @@
 package stat
 
-import "gitee.com/quant1x/gox/vek"
+import "gitee.com/quant1x/gox/num"
 
 func (self NDArray[T]) Logic(f func(idx int, v any) bool) []bool {
 	d := make([]bool, self.Len())
@@ -50,7 +50,7 @@ func (self NDArray[T]) V1Gt(x any) Series {
 		panic(Throw(x))
 	}
 	a := self.DTypes()
-	s := vek.Gt(a, b)
+	s := num.Gt(a, b)
 	return NDArray[bool](s)
 }
 

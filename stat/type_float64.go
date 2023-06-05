@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"gitee.com/quant1x/gox/exception"
 	"gitee.com/quant1x/gox/logger"
-	"gitee.com/quant1x/gox/vek"
+	"gitee.com/quant1x/gox/num"
 	"math"
 	"reflect"
 	"strconv"
@@ -95,11 +95,11 @@ func SliceToFloat64(v any) []float64 {
 	case []uint16:
 		return slice_any_to_float64(values)
 	case []int32: // 加速
-		return vek.FromInt32(values)
+		return num.FromInt32(values)
 	case []uint32:
 		return slice_any_to_float64(values)
 	case []int64: // 加速
-		return vek.FromInt64(values)
+		return num.FromInt64(values)
 	case []uint64:
 		return slice_any_to_float64(values)
 	case []int:
@@ -107,7 +107,7 @@ func SliceToFloat64(v any) []float64 {
 	case []uint:
 		return slice_any_to_float64(values)
 	case []float32: // 加速
-		return vek.FromFloat32(values)
+		return num.FromFloat32(values)
 	case []float64: // 克隆
 		//return slices.Clone(values)
 		return values
@@ -117,7 +117,7 @@ func SliceToFloat64(v any) []float64 {
 			return []float64{}
 		}
 		// 加速
-		return vek.FromBool(values)
+		return num.FromBool(values)
 	case []string:
 		count := len(values)
 		if count == 0 {

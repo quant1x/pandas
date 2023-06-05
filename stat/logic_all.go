@@ -1,12 +1,12 @@
 package stat
 
-import "gitee.com/quant1x/gox/vek"
+import "gitee.com/quant1x/gox/num"
 
 // All 全部为真
 func All[T Number | ~bool](x []T) bool {
 	switch vs := any(x).(type) {
 	case []bool:
-		return vek.All(vs)
+		return num.All(vs)
 	case []int8:
 		return __all_go(vs)
 	case []uint8:

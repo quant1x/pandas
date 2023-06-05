@@ -1,7 +1,7 @@
 package stat
 
 import (
-	"gitee.com/quant1x/gox/vek"
+	"gitee.com/quant1x/gox/num"
 	"math"
 	"reflect"
 	"strings"
@@ -30,7 +30,7 @@ func init() {
 
 // SetAvx2Enabled 设定AVX2加速开关
 func SetAvx2Enabled(enabled bool) {
-	vek.SetAcceleration(enabled)
+	num.SetAcceleration(enabled)
 	Avx2Enabled = enabled
 }
 

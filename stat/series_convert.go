@@ -1,8 +1,8 @@
 package stat
 
 import (
-	"gitee.com/quant1x/gox/vek"
-	"gitee.com/quant1x/gox/vek/vek32"
+	"gitee.com/quant1x/gox/num"
+	"gitee.com/quant1x/gox/num/num32"
 )
 
 // 这里做数组统一转换
@@ -22,16 +22,16 @@ func ToFloat32(s Series) []float32 {
 	case SERIES_TYPE_FLOAT32:
 		return values.([]float32) // TODO:是否复制
 	case SERIES_TYPE_FLOAT64:
-		return vek32.FromFloat64(values.([]float64))
+		return num32.FromFloat64(values.([]float64))
 	case SERIES_TYPE_INT32:
-		return vek32.FromInt32(values.([]int32))
+		return num32.FromInt32(values.([]int32))
 	case SERIES_TYPE_INT64:
-		return vek32.FromInt64(values.([]int64))
+		return num32.FromInt64(values.([]int64))
 	case SERIES_TYPE_BOOL:
-		return vek32.FromBool(values.([]bool))
+		return num32.FromBool(values.([]bool))
 	default:
 		length := s.Len()
-		defaultSlice := vek32.Repeat(Nil2Float32, length)
+		defaultSlice := num32.Repeat(Nil2Float32, length)
 		return defaultSlice
 	}
 }
@@ -41,18 +41,18 @@ func ToFloat64(s Series) []float64 {
 	__type := s.Type()
 	switch __type {
 	case SERIES_TYPE_FLOAT32:
-		return vek.FromFloat32(values.([]float32))
+		return num.FromFloat32(values.([]float32))
 	case SERIES_TYPE_FLOAT64:
 		return values.([]float64) // TODO:是否复制
 	case SERIES_TYPE_INT32:
-		return vek.FromInt32(values.([]int32))
+		return num.FromInt32(values.([]int32))
 	case SERIES_TYPE_INT64:
-		return vek.FromInt64(values.([]int64))
+		return num.FromInt64(values.([]int64))
 	case SERIES_TYPE_BOOL:
-		return vek.FromBool(values.([]bool))
+		return num.FromBool(values.([]bool))
 	default:
 		length := s.Len()
-		defaultSlice := vek.Repeat(Nil2Float64, length)
+		defaultSlice := num.Repeat(Nil2Float64, length)
 		return defaultSlice
 	}
 }

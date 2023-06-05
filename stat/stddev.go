@@ -1,8 +1,8 @@
 package stat
 
 import (
-	"gitee.com/quant1x/gox/vek"
-	"gitee.com/quant1x/gox/vek/vek32"
+	"gitee.com/quant1x/gox/num"
+	"gitee.com/quant1x/gox/num/num32"
 	"golang.org/x/exp/slices"
 	"gonum.org/v1/gonum/stat"
 	"math"
@@ -55,14 +55,14 @@ func Std[T BaseType](f []T) T {
 func f64_std(f []float64) float64 {
 	values := slices.Clone(f)
 	// 求平均数
-	meam := vek.Mean(values)
+	meam := num.Mean(values)
 	// 减去 平均数
-	vek.SubNumber_Inplace(values, meam)
+	num.SubNumber_Inplace(values, meam)
 	// 计算方差
-	y := vek.Repeat(2.00, len(f))
-	vek.Pow_Inplace(values, y)
+	y := num.Repeat(2.00, len(f))
+	num.Pow_Inplace(values, y)
 	// 再求方差平均数
-	meam = vek.Mean(values)
+	meam = num.Mean(values)
 	meam = math.Sqrt(meam)
 	return meam
 }
@@ -70,14 +70,14 @@ func f64_std(f []float64) float64 {
 func f32_std(f []float32) float32 {
 	values := slices.Clone(f)
 	// 求平均数
-	meam := vek32.Mean(values)
+	meam := num32.Mean(values)
 	// 减去 平均数
-	vek32.SubNumber_Inplace(values, meam)
+	num32.SubNumber_Inplace(values, meam)
 	// 计算方差
-	y := vek32.Repeat(2.00, len(f))
-	vek32.Pow_Inplace(values, y)
+	y := num32.Repeat(2.00, len(f))
+	num32.Pow_Inplace(values, y)
 	// 再求方差平均数
-	meam = vek32.Mean(values)
+	meam = num32.Mean(values)
 	meam = float32(math.Sqrt(float64(meam)))
 	return meam
 }

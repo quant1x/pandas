@@ -2,7 +2,7 @@ package formula
 
 import (
 	"gitee.com/quant1x/gox/exception"
-	"gitee.com/quant1x/gox/vek"
+	"gitee.com/quant1x/gox/num"
 	"gitee.com/quant1x/pandas/stat"
 )
 
@@ -23,7 +23,7 @@ func EQ(S1, S2 stat.Series) []bool {
 }
 
 func EQ2(S1 []stat.DType, S2 int) []bool {
-	return vek.EqNumber(S1, stat.DType(S2))
+	return num.EqNumber(S1, stat.DType(S2))
 }
 
 func AND[T stat.Number | ~bool](a, b []T) []bool {
@@ -31,27 +31,27 @@ func AND[T stat.Number | ~bool](a, b []T) []bool {
 }
 
 func OR(a, b []bool) []bool {
-	return vek.Or(a, b)
+	return num.Or(a, b)
 }
 
 // CompareGt 比较 v > x
 func CompareGt(v []stat.DType, x any) []bool {
-	return __compare(v, x, vek.Gt)
+	return __compare(v, x, num.Gt)
 }
 
 // CompareGte 比较 v >= x
 func CompareGte(v []stat.DType, x any) []bool {
-	return __compare(v, x, vek.Gte)
+	return __compare(v, x, num.Gte)
 }
 
 // CompareLt 比较 v < x
 func CompareLt(v []stat.DType, x any) []bool {
-	return __compare(v, x, vek.Lt)
+	return __compare(v, x, num.Lt)
 }
 
 // CompareLte 比较 v <= x
 func CompareLte(v []stat.DType, x any) []bool {
-	return __compare(v, x, vek.Lte)
+	return __compare(v, x, num.Lte)
 }
 
 // __compare 比较 v 和 x

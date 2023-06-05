@@ -1,8 +1,8 @@
 package stat
 
 import (
-	"gitee.com/quant1x/gox/vek"
-	"gitee.com/quant1x/gox/vek/vek32"
+	"gitee.com/quant1x/gox/num"
+	"gitee.com/quant1x/gox/num/num32"
 	"golang.org/x/exp/slices"
 )
 
@@ -34,9 +34,9 @@ func Minimum[T Number](f1, f2 []T) []T {
 	var d any
 	switch fs1 := s1.(type) {
 	case []float32:
-		d = vek32.Minimum(fs1, s2.([]float32))
+		d = num32.Minimum(fs1, s2.([]float32))
 	case []float64:
-		d = vek.Minimum(fs1, s2.([]float64))
+		d = num.Minimum(fs1, s2.([]float64))
 	default:
 		// 目前暂时走不到这里
 		f1 = slices.Clone(f1)

@@ -3,11 +3,11 @@ module gitee.com/quant1x/pandas
 go 1.20
 
 require (
-	gitee.com/quant1x/gox v1.5.1
+	gitee.com/quant1x/gox v1.6.1
 	github.com/chewxy/math32 v1.10.1
 	github.com/tealeg/xlsx/v3 v3.2.4
 	github.com/viterin/partial v1.0.0
-	golang.org/x/exp v0.0.0-20230510235704-dd950f8aeaea
+	golang.org/x/exp v0.0.0-20230522175609-2e198f4a06a1
 	gonum.org/v1/gonum v0.13.0
 )
 

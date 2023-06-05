@@ -1,5 +1,5 @@
-gitee.com/quant1x/gox v1.5.1 h1:wSI29ePPOTXs5DGUnc0Ko0Dqg0MWyDsV+T+m40qa5hg=
-gitee.com/quant1x/gox v1.5.1/go.mod h1:u5/iQVywm9Ir0bnv5KjlYGLVBrbSV+zsicsLvQcErGM=
+gitee.com/quant1x/gox v1.6.1 h1:S8BHRQL6j2hoYqtmnAqDIMH3PqeLJmiVdiriEBNHsMA=
+gitee.com/quant1x/gox v1.6.1/go.mod h1:j0hAZbJQDTAIEbIV/XvKvy1NJpsfaHwAnrkrE++Y36E=
 github.com/chewxy/math32 v1.10.1 h1:LFpeY0SLJXeaiej/eIp2L40VYfscTvKh/FSEZ68uMkU=
 github.com/chewxy/math32 v1.10.1/go.mod h1:dOB2rcuFrCn6UHrze36WSLVPKtzPMRAQvBvUwkSsLqs=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
@@ -25,13 +25,13 @@ github.com/rogpeppe/fastuuid v1.2.0 h1:Ppwyp6VYCF1nvBTXL3trRso7mXMlRrw9ooo375wvi
 github.com/rogpeppe/fastuuid v1.2.0/go.mod h1:jVj6XXZzXRy/MSR5jhDC/2q6DgLz+nrA6LYCDYWNEvQ=
 github.com/shabbyrobe/xmlwriter v0.0.0-20200208144257-9fca06d00ffa h1:2cO3RojjYl3hVTbEvJVqrMaFmORhL6O06qdW42toftk=
 github.com/shabbyrobe/xmlwriter v0.0.0-20200208144257-9fca06d00ffa/go.mod h1:Yjr3bdWaVWyME1kha7X0jsz3k2DgXNa1Pj3XGyUAbx8=
-github.com/stretchr/testify v1.8.2 h1:+h33VjcLVPDHtOdpUCuF+7gSuG3yGIftsP1YvFihtJ8=
+github.com/stretchr/testify v1.8.4 h1:CcVxjf3Q8PM0mHUKJCdn+eZZtm5yQwehR5yeSVQQcUk=
 github.com/tealeg/xlsx/v3 v3.2.4 h1:QPuk5v1xEivxoEUFmqszqINF52ppWCMejEd11ju3180=
 github.com/tealeg/xlsx/v3 v3.2.4/go.mod h1:0j6U48nJBWJsvo1FmYilbGo81oRdLyYInWvjb2WAeOA=
 github.com/viterin/partial v1.0.0 h1:e6z0cWJ+SddpXHoLU4ikIDrsI/ZE+p+hqMsB++8IfwE=
 github.com/viterin/partial v1.0.0/go.mod h1:K9y+kVePpmfZN510YNHoUs+6scZ2K7BLojfI8aW2nw0=
-golang.org/x/exp v0.0.0-20230510235704-dd950f8aeaea h1:vLCWI/yYrdEHyN2JzIzPO3aaQJHQdp89IZBA/+azVC4=
-golang.org/x/exp v0.0.0-20230510235704-dd950f8aeaea/go.mod h1:V1LtkGg67GoY2N1AnLN78QLrzxkLyJw7RJb1gzOOz9w=
+golang.org/x/exp v0.0.0-20230522175609-2e198f4a06a1 h1:k/i9J1pBpvlfR+9QsetwPyERsqu1GIbi967PQMq3Ivc=
+golang.org/x/exp v0.0.0-20230522175609-2e198f4a06a1/go.mod h1:V1LtkGg67GoY2N1AnLN78QLrzxkLyJw7RJb1gzOOz9w=
 golang.org/x/sys v0.8.0 h1:EBmGv8NaZBZTWvrbjNoL6HVt+IVy3QDQpJs7VRIw3tU=
 golang.org/x/sys v0.8.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/text v0.3.2/go.mod h1:bEr9sfX3Q8Zfm5fL9x+3itogRgK3+ptLWKqgva+5dAk=

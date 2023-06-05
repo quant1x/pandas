@@ -1,15 +1,15 @@
 package stat
 
 import (
-	"gitee.com/quant1x/gox/vek"
-	"gitee.com/quant1x/gox/vek/vek32"
+	"gitee.com/quant1x/gox/num"
+	"gitee.com/quant1x/gox/num/num32"
 )
 
 // ArgMin Returns the indices of the minimum values along an axis.
 //
 //	返回轴上最小值的索引
 func ArgMin[T Number](x []T) int {
-	ret := unaryOperations2[T, int](x, vek32.ArgMin, vek.ArgMin, __arg_min_go[T])
+	ret := unaryOperations2[T, int](x, num32.ArgMin, num.ArgMin, __arg_min_go[T])
 	return ret
 }
 

@@ -1,14 +1,14 @@
 package stat
 
 import (
-	"gitee.com/quant1x/gox/vek"
-	"gitee.com/quant1x/gox/vek/vek32"
+	"gitee.com/quant1x/gox/num"
+	"gitee.com/quant1x/gox/num/num32"
 	"golang.org/x/exp/slices"
 )
 
 // CumSum 计算累和
 func CumSum[T Number](x []T) []T {
-	return unaryOperations(x, vek32.CumSum, vek.CumSum, __cumsum_go[T])
+	return unaryOperations(x, num32.CumSum, num.CumSum, __cumsum_go[T])
 }
 
 //func CumSum[T StatType](x []T) []T {
@@ -20,9 +20,9 @@ func CumSum[T Number](x []T) []T {
 //	s = x
 //	switch fs := s.(type) {
 //	case []float32:
-//		d = vek32.CumSum(fs)
+//		d = num32.CumSum(fs)
 //	case []float64:
-//		d = vek.CumSum(fs)
+//		d = num.CumSum(fs)
 //	default:
 //		// 剩下的就是int32和int64, 循环吧
 //		sum := T(0)

@@ -366,7 +366,8 @@ All notable changes to this project will be documented in this file.
 - !32 #I6CYP9 实现了STD标准差计算函数及series.rolling的算法 * #I6CYP9 新增Std标准差方法及stat函数, 原gonum的stat.StdDev计算有变差, 可能是理解的有问题, 再同等输入参数… * 修复一处any数组类型检测只跑了一层的bug,改为递归调用 * series接口增加Std方法 * 修复一处any数组类型检测只跑了一层的bug,改为递归调用.
 - !31 #I6CYPA 实现ABS绝对值函数 * #I6CYPA 实现ABS绝对值函数.
 - !30 #I6CYPG 实现了IF, IFF, IFN三个函数 * #I6CYPG 实现IF, IFF, IFN三个函数 * 删除无用的代码.
-- !29 #I6CYPE 实现MIN函数, 发现avx2的max比对的bug,NaN比任何float都大,也比任何float都小 * #I6CYPE 实现MIN函数 * 修复avx2 max的bug * vek的float数组最大值对比有bug, NaN比任何float都大, 也比任何float都小, 所以最大值比对的时候, 正确的应该是Na….
+- !29 #I6CYPE 实现MIN函数, 发现avx2的max比对的bug,NaN比任何float都大,也比任何float都小 * #I6CYPE 实现MIN函数 * 修复avx2
+  max的bug * num的float数组最大值对比有bug, NaN比任何float都大, 也比任何float都小, 所以最大值比对的时候, 正确的应该是Na….
 - !28 #I6CYPC 实现MAX函数 * #I6CYPC 实现MAX函数 * 增加加速开关的初始化.
 - !27 #I6CYOQ 实现LLV函数 * #I6CYOQ 实现LLV函数 * 修复max方法在记录为空时的一个bug * 修正注释.
 - !26 #I6CYOP 实现了HHV函数 * Merge branch 'hhv' of https://gitee.com/quant1x/pandas into hhv * #I6CYOP 增加HHV函数 * #I6CYPC 增加HHV函数 * rolling增加max方法 * 新增不支持类型的异常 * 规制函数的归属到内建源文件 * 增加类型强制转换函数 * 增加泛型类型, 强化类型约束 * 选择记录集时使用copy选项 * 增加sort.Interface需要的除Len()之外的Less()和Swap两个方法 * 优化max * 增加一个输出NaN的方法 * 测试字符串数组的排序方法 * 增加sort.Interface需要的除Len()之外的Less()和Swap两个方法 * 修订注释.
