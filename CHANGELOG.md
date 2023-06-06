@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.9.35] - 2023-06-06
+### Changed
+- 增加CSV转结构体切片的函数.
+
 ## [0.9.34] - 2023-06-06
 ### Changed
 - 删除浮点操作的函数.
@@ -493,7 +497,8 @@ All notable changes to this project will be documented in this file.
 - 引入github.com/WinPooh32/series代码.
 - Initial commit.
 
-[Unreleased]: https://gitee.com/quant1x/pandas/compare/v0.9.34...HEAD
+[Unreleased]: https://gitee.com/quant1x/pandas/compare/v0.9.35...HEAD
+[0.9.35]: https://gitee.com/quant1x/pandas/compare/v0.9.34...v0.9.35
 [0.9.34]: https://gitee.com/quant1x/pandas/compare/v0.9.33...v0.9.34
 [0.9.33]: https://gitee.com/quant1x/pandas/compare/v0.9.32...v0.9.33
 [0.9.32]: https://gitee.com/quant1x/pandas/compare/v0.9.31...v0.9.32
