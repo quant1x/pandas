@@ -5,6 +5,7 @@ go 1.20
 require (
 	gitee.com/quant1x/gox v1.6.1
 	github.com/chewxy/math32 v1.10.1
+	github.com/gocarina/gocsv v0.0.0-20230513223533-9ddd7fd60602
 	github.com/tealeg/xlsx/v3 v3.2.4
 	github.com/viterin/partial v1.0.0
 	golang.org/x/exp v0.0.0-20230522175609-2e198f4a06a1
