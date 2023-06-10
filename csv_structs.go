@@ -17,6 +17,8 @@ func init() {
 }
 
 // Csv2Slices CSV文件转struct切片
+//
+//	deprecated: Use CsvToSlices
 func Csv2Slices[S ~[]E, E any](filename string, pointer *S) error {
 	filepath, err := homedir.Expand(filename)
 	if err != nil {
@@ -27,6 +29,8 @@ func Csv2Slices[S ~[]E, E any](filename string, pointer *S) error {
 }
 
 // Slices2Csv struct切片保存csv文件
+//
+//	deprecated: Use SlicesToCsv
 func Slices2Csv[S ~[]E, E any](filename string, s S) error {
 	filepath, err := homedir.Expand(filename)
 	if err != nil {
