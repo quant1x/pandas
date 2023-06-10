@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.0.0] - 2023-06-10
+### Changed
+- 统一CSV文件的tag为dataframe.
+
 ## [0.9.37] - 2023-06-10
 ### Changed
 - 调整csv组件依赖库.
@@ -505,7 +509,8 @@ All notable changes to this project will be documented in this file.
 - 引入github.com/WinPooh32/series代码.
 - Initial commit.
 
-[Unreleased]: https://gitee.com/quant1x/pandas/compare/v0.9.37...HEAD
+[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.0.0...HEAD
+[1.0.0]: https://gitee.com/quant1x/pandas/compare/v0.9.37...v1.0.0
 [0.9.37]: https://gitee.com/quant1x/pandas/compare/v0.9.36...v0.9.37
 [0.9.36]: https://gitee.com/quant1x/pandas/compare/v0.9.35...v0.9.36
 [0.9.35]: https://gitee.com/quant1x/pandas/compare/v0.9.34...v0.9.35
