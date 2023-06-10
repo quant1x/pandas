@@ -80,7 +80,7 @@ func LoadStructs(i interface{}, options ...LoadOption) DataFrame {
 			fieldType := field.Type.String()
 
 			// Process struct tags
-			fieldTags := field.Tag.Get("dataframe")
+			fieldTags := field.Tag.Get(DefaultTagName)
 			if fieldTags == "-" {
 				continue
 			}
