@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.0.1] - 2023-06-10
+### Changed
+- 旧版本的转换函数设置为不推荐使用, 并提示正确方法.
+
 ## [1.0.0] - 2023-06-10
 ### Changed
 - 统一CSV文件的tag为dataframe.
@@ -509,7 +513,8 @@ All notable changes to this project will be documented in this file.
 - 引入github.com/WinPooh32/series代码.
 - Initial commit.
 
-[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.0.0...HEAD
+[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.0.1...HEAD
+[1.0.1]: https://gitee.com/quant1x/pandas/compare/v1.0.0...v1.0.1
 [1.0.0]: https://gitee.com/quant1x/pandas/compare/v0.9.37...v1.0.0
 [0.9.37]: https://gitee.com/quant1x/pandas/compare/v0.9.36...v0.9.37
 [0.9.36]: https://gitee.com/quant1x/pandas/compare/v0.9.35...v0.9.36
