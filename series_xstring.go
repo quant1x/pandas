@@ -1,6 +1,7 @@
 package pandas
 
 import (
+	"gitee.com/quant1x/gox/api"
 	"gitee.com/quant1x/pandas/stat"
 )
 
@@ -121,7 +122,7 @@ func (self SeriesString) Min() any {
 	panic("implement me")
 }
 
-func (self SeriesString) Select(r stat.ScopeLimit) stat.Series {
+func (self SeriesString) Select(r api.ScopeLimit) stat.Series {
 	//TODO implement me
 	panic("implement me")
 }

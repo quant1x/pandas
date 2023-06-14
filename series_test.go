@@ -2,6 +2,7 @@ package pandas
 
 import (
 	"fmt"
+	"gitee.com/quant1x/gox/api"
 	"gitee.com/quant1x/pandas/stat"
 	"testing"
 )
@@ -35,7 +36,7 @@ func TestNDFrameNew(t *testing.T) {
 	nd1 := NewNDFrame[float64]("x", d1...)
 	fmt.Println(nd1)
 
-	r := stat.RangeFinite(-1)
+	r := api.RangeFinite(-1)
 	ndr1 := nd1.Select(r)
 	fmt.Println(ndr1.Values())
 

@@ -2,6 +2,7 @@ package stat
 
 import (
 	"fmt"
+	"gitee.com/quant1x/gox/api"
 	"reflect"
 )
 
@@ -49,7 +50,7 @@ type Series interface {
 	// Reverse 序列反转
 	Reverse() Series
 	// Select 选取一段记录
-	Select(r ScopeLimit) Series
+	Select(r api.ScopeLimit) Series
 	// Append 增加一批记录
 	Append(values ...any) Series
 	// Concat concatenates two series together. It will return a new Series with the

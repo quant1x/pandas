@@ -1,6 +1,7 @@
 package stat
 
 import (
+	"gitee.com/quant1x/gox/api"
 	"golang.org/x/exp/slices"
 	"reflect"
 )
@@ -47,7 +48,7 @@ func (self NDArray[T]) Subset(start, end int, opt ...any) Series {
 	return d
 }
 
-func (self NDArray[T]) Select(r ScopeLimit) Series {
+func (self NDArray[T]) Select(r api.ScopeLimit) Series {
 	start, end, err := r.Limits(self.Len())
 	if err != nil {
 		return nil

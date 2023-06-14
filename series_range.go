@@ -1,6 +1,7 @@
 package pandas
 
 import (
+	"gitee.com/quant1x/gox/api"
 	"gitee.com/quant1x/pandas/stat"
 	"reflect"
 )
@@ -98,7 +99,7 @@ func (self *NDFrame) Subset(start, end int, opt ...any) stat.Series {
 }
 
 // Select 选取一段记录
-func (self *NDFrame) Select(r stat.ScopeLimit) stat.Series {
+func (self *NDFrame) Select(r api.ScopeLimit) stat.Series {
 	start, end, err := r.Limits(self.Len())
 	if err != nil {
 		return nil

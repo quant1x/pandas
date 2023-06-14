@@ -1,6 +1,7 @@
 package pandas
 
 import (
+	"gitee.com/quant1x/gox/api"
 	"gitee.com/quant1x/pandas/stat"
 )
 
@@ -18,7 +19,7 @@ func (self DataFrame) Group(columnName string, filter func(kind stat.Type, e any
 			indexes = append(indexes, idx)
 		}
 	})
-	ranges := stat.IntsToRanges(indexes)
+	ranges := api.IntsToRanges(indexes)
 	df := DataFrame{}
 	for _, r := range ranges {
 		tmp := self.SelectRows(r)

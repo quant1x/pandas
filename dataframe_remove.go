@@ -1,9 +1,12 @@
 package pandas
 
-import "gitee.com/quant1x/pandas/stat"
+import (
+	"gitee.com/quant1x/gox/api"
+	"gitee.com/quant1x/pandas/stat"
+)
 
 // Remove 删除一段范围内的记录
-func (self DataFrame) Remove(p stat.ScopeLimit) DataFrame {
+func (self DataFrame) Remove(p api.ScopeLimit) DataFrame {
 	rowLen := self.Nrow()
 	start, end, err := p.Limits(rowLen)
 	if err != nil {

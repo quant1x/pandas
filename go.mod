@@ -3,7 +3,7 @@ module gitee.com/quant1x/pandas
 go 1.20
 
 require (
-	gitee.com/quant1x/gox v1.6.1
+	gitee.com/quant1x/gox v1.7.0
 	github.com/chewxy/math32 v1.10.1
 	github.com/gocarina/gocsv v0.0.0-20230513223533-9ddd7fd60602
 	github.com/tealeg/xlsx/v3 v3.2.4
