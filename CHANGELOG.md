@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.0.3] - 2023-06-16
+### Changed
+- 删除废弃的功能.
+- 更新依赖库版本.
+
 ## [1.0.2] - 2023-06-14
 ### Changed
 - 收敛ScopeLimit到gox工具库.
@@ -517,7 +522,8 @@ All notable changes to this project will be documented in this file.
 - 引入github.com/WinPooh32/series代码.
 - Initial commit.
 
-[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.0.2...HEAD
+[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.0.3...HEAD
+[1.0.3]: https://gitee.com/quant1x/pandas/compare/v1.0.2...v1.0.3
 [1.0.2]: https://gitee.com/quant1x/pandas/compare/v1.0.1...v1.0.2
 [1.0.1]: https://gitee.com/quant1x/pandas/compare/v1.0.0...v1.0.1
 [1.0.0]: https://gitee.com/quant1x/pandas/compare/v0.9.37...v1.0.0
