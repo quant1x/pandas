@@ -2,9 +2,14 @@ package pandas
 
 import (
 	"fmt"
+	"gitee.com/quant1x/gox/api"
 	"gitee.com/quant1x/pandas/stat"
 	"reflect"
 	"strings"
+)
+
+var (
+	DefaultTagName = api.DefaultTagName
 )
 
 // LoadStructs creates a new DataFrame from arbitrary struct slices.
