@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.0.4] - 2023-06-16
+### Changed
+- 引用api中的struct默认tag name.
+
 ## [1.0.3] - 2023-06-16
 ### Changed
 - 删除废弃的功能.
@@ -522,7 +526,8 @@ All notable changes to this project will be documented in this file.
 - 引入github.com/WinPooh32/series代码.
 - Initial commit.
 
-[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.0.3...HEAD
+[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.0.4...HEAD
+[1.0.4]: https://gitee.com/quant1x/pandas/compare/v1.0.3...v1.0.4
 [1.0.3]: https://gitee.com/quant1x/pandas/compare/v1.0.2...v1.0.3
 [1.0.2]: https://gitee.com/quant1x/pandas/compare/v1.0.1...v1.0.2
 [1.0.1]: https://gitee.com/quant1x/pandas/compare/v1.0.0...v1.0.1
