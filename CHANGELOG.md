@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.0.7] - 2023-07-15
+### Changed
+- 新增增加通达信函数BARSLASTS词条.
+- 增加通达信函数BARSLASTS, 计算倒数第N次条件到现在的周期数.
+
 ## [1.0.6] - 2023-07-08
 ### Changed
 - 更新依赖库版本号.
@@ -534,7 +539,8 @@ All notable changes to this project will be documented in this file.
 - 引入github.com/WinPooh32/series代码.
 - Initial commit.
 
-[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.0.6...HEAD
+[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.0.7...HEAD
+[1.0.7]: https://gitee.com/quant1x/pandas/compare/v1.0.6...v1.0.7
 [1.0.6]: https://gitee.com/quant1x/pandas/compare/v1.0.5...v1.0.6
 [1.0.5]: https://gitee.com/quant1x/pandas/compare/v1.0.4...v1.0.5
 [1.0.4]: https://gitee.com/quant1x/pandas/compare/v1.0.3...v1.0.4
