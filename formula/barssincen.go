@@ -13,7 +13,6 @@ func BARSSINCEN(S stat.Series, N any) stat.Series {
 		r := 0
 		if argMax != 0 || x[0] != 0 {
 			r = n - 1 - argMax
-
 		} else {
 			r = 0
 		}
