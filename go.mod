@@ -3,7 +3,7 @@ module gitee.com/quant1x/pandas
 go 1.20
 
 require (
-	gitee.com/quant1x/gox v1.9.3
+	gitee.com/quant1x/gox v1.9.5
 	github.com/chewxy/math32 v1.10.1
 	github.com/tealeg/xlsx/v3 v3.3.0
 	github.com/viterin/partial v1.0.0
