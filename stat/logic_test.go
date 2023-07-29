@@ -24,6 +24,10 @@ func Test___compare(t *testing.T) {
 	fmt.Println(Lt(d1, d2))
 	fmt.Println(Lt(d1, 13))
 	fmt.Println("----------<Lte>----------")
-	fmt.Println(Lte(d1, d2))
-	fmt.Println(Lte(d1, 13))
+	l1 := Lte(d1, d2)
+	l2 := Lte(d1, 13)
+	fmt.Println(l1)
+	fmt.Println(l2)
+	l3 := Or(l1, l2)
+	fmt.Println(l3)
 }

@@ -37,3 +37,9 @@ func (self *NDFrame) Lte(x any) stat.Series {
 	s := stat.NDArray[stat.DType](vs)
 	return s.Lte(x)
 }
+
+func (self *NDFrame) Or(x any) stat.Series {
+	vs := self.DTypes()
+	s := stat.NDArray[stat.DType](vs)
+	return s.Or(x)
+}

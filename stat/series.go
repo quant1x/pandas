@@ -116,6 +116,7 @@ type Series interface {
 	Lt(x any) Series
 	Lte(x any) Series
 	And(x any) Series
+	Or(x any) Series
 }
 
 // DetectTypeBySlice 检测类型

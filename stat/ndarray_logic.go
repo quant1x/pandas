@@ -107,3 +107,9 @@ func (self NDArray[T]) V1And(x any) Series {
 	s := V1And(a, b)
 	return NDArray[bool](s)
 }
+
+func (self NDArray[T]) Or(x any) Series {
+	values := self.Values().([]T)
+	bs := Or(values, x)
+	return NDArray[bool](bs)
+}

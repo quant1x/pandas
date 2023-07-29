@@ -112,6 +112,8 @@ func __compare_slice[T ~[]E, E any, T2 ~[]E2, E2 any](x T, y T2, c int, comparat
 			num32.Lte_Into(bs[:yLen], any(x).([]float32)[:yLen], any(y).([]float32)[:yLen])
 		} else if xKind == SERIES_TYPE_BOOL && xKind == yKind && c == __k_compare_and {
 			num.And_Into(bs[:yLen], any(x).([]bool)[:yLen], any(y).([]bool)[:yLen])
+		} else if xKind == SERIES_TYPE_BOOL && xKind == yKind && c == __k_compare_or {
+			num.Or_Into(bs[:yLen], any(x).([]bool)[:yLen], any(y).([]bool)[:yLen])
 		} else {
 			for i := 0; i < yLen; i++ {
 				f1 := Any2DType(x[i])
@@ -144,6 +146,8 @@ func __compare_slice[T ~[]E, E any, T2 ~[]E2, E2 any](x T, y T2, c int, comparat
 			num32.Lte_Into(bs[:xLen], any(x).([]float32)[:xLen], any(y).([]float32)[:xLen])
 		} else if xKind == SERIES_TYPE_BOOL && xKind == yKind && c == __k_compare_and {
 			num.And_Into(bs[:xLen], any(x).([]bool)[:xLen], any(y).([]bool)[:xLen])
+		} else if xKind == SERIES_TYPE_BOOL && xKind == yKind && c == __k_compare_or {
+			num.Or_Into(bs[:xLen], any(x).([]bool)[:xLen], any(y).([]bool)[:xLen])
 		} else {
 			for i := 0; i < xLen; i++ {
 				f1 := Any2DType(x[i])
@@ -200,6 +204,7 @@ const (
 	__k_compare_lt  = 3
 	__k_compare_lte = 4
 	__k_compare_and = 5
+	__k_compare_or  = 6
 )
 
 var (
@@ -223,6 +228,10 @@ var (
 	__logic_and = func(f1, f2 DType) bool {
 		return f1 != 0 && f2 != 0
 	}
+	// OR
+	__logic_or = func(f1, f2 DType) bool {
+		return f1 != 0 || f2 != 0
+	}
 )
 
 // Gt 比较 v > x
@@ -245,9 +254,14 @@ func Lte[S ~[]E, E any](v S, x any) []bool {
 	return __compare(v, x, __k_compare_lte, __logic_lte)
 }
 
-// And 比较 v && v
+// And 比较 v && x
 func And[S ~[]E, E any](v S, x any) []bool {
 	return __compare(v, x, __k_compare_and, __logic_and)
+}
+
+// Or 比较 v || x
+func Or[S ~[]E, E any](v S, x any) []bool {
+	return __compare(v, x, __k_compare_or, __logic_or)
 }
 
 // And 两者为真

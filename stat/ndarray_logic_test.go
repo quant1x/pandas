@@ -24,4 +24,5 @@ func TestNDArray_Gt(t *testing.T) {
 	fmt.Println("----------<Lte>----------")
 	fmt.Println(Lte(d1, d2))
 	fmt.Println(And(d1, 13))
+	fmt.Println(Or(d1, 13))
 }
