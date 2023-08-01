@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.1.0] - 2023-07-29
+### Changed
+- 增加逻辑操作OR.
+
 ## [1.0.9] - 2023-07-24
 ### Changed
 - 修正金叉一定要高于, 不包含等于.
@@ -547,7 +551,8 @@ All notable changes to this project will be documented in this file.
 - 引入github.com/WinPooh32/series代码.
 - Initial commit.
 
-[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.0.9...HEAD
+[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.1.0...HEAD
+[1.1.0]: https://gitee.com/quant1x/pandas/compare/v1.0.9...v1.1.0
 [1.0.9]: https://gitee.com/quant1x/pandas/compare/v1.0.8...v1.0.9
 [1.0.8]: https://gitee.com/quant1x/pandas/compare/v1.0.7...v1.0.8
 [1.0.7]: https://gitee.com/quant1x/pandas/compare/v1.0.6...v1.0.7
