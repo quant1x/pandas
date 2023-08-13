@@ -2,8 +2,8 @@ package stat
 
 import (
 	"gitee.com/quant1x/gox/num"
+	"gitee.com/quant1x/gox/num/math32"
 	"gitee.com/quant1x/gox/num/num32"
-	"github.com/chewxy/math32"
 	"math"
 )
 
