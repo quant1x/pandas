@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.1.1] - 2023-08-13
+### Changed
+- 升级go版本到1.21.0.
+
 ## [1.1.0] - 2023-07-29
 ### Changed
 - 增加逻辑操作OR.
@@ -551,7 +555,8 @@ All notable changes to this project will be documented in this file.
 - 引入github.com/WinPooh32/series代码.
 - Initial commit.
 
-[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.1.0...HEAD
+[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.1.1...HEAD
+[1.1.1]: https://gitee.com/quant1x/pandas/compare/v1.1.0...v1.1.1
 [1.1.0]: https://gitee.com/quant1x/pandas/compare/v1.0.9...v1.1.0
 [1.0.9]: https://gitee.com/quant1x/pandas/compare/v1.0.8...v1.0.9
 [1.0.8]: https://gitee.com/quant1x/pandas/compare/v1.0.7...v1.0.8
