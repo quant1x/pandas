@@ -2,8 +2,8 @@ package stat
 
 import (
 	"gitee.com/quant1x/gox/num/partial"
-	"golang.org/x/exp/slices"
 	"math"
+	"slices"
 )
 
 // Median returns median value of series.

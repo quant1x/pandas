@@ -3,7 +3,7 @@ package stat
 import (
 	"gitee.com/quant1x/gox/num"
 	"gitee.com/quant1x/gox/num/num32"
-	"golang.org/x/exp/slices"
+	"slices"
 )
 
 // Mul arithmetics 乘法

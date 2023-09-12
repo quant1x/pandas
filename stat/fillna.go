@@ -1,6 +1,6 @@
 package stat
 
-import "golang.org/x/exp/slices"
+import "slices"
 
 // Fill 填充
 //

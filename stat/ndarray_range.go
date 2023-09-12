@@ -2,8 +2,8 @@ package stat
 
 import (
 	"gitee.com/quant1x/gox/api"
-	"golang.org/x/exp/slices"
 	"reflect"
+	"slices"
 )
 
 func (self NDArray[T]) IndexOf(index int, opt ...any) any {

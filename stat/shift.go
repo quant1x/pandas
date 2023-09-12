@@ -2,8 +2,8 @@ package stat
 
 import (
 	"gitee.com/quant1x/gox/exception"
-	"golang.org/x/exp/slices"
 	"math"
+	"slices"
 )
 
 // Shift 使用可选的时间频率按所需的周期数移动索引

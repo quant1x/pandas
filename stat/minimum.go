@@ -3,7 +3,7 @@ package stat
 import (
 	"gitee.com/quant1x/gox/num"
 	"gitee.com/quant1x/gox/num/num32"
-	"golang.org/x/exp/slices"
+	"slices"
 )
 
 // Minimum AVX2版本, 两个序列横向比较最大值

@@ -2,7 +2,7 @@ package pandas
 
 import (
 	"gitee.com/quant1x/pandas/stat"
-	"golang.org/x/exp/slices"
+	"slices"
 )
 
 func (self DataFrame) align(ss ...stat.Series) []stat.Series {

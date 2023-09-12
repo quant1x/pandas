@@ -3,9 +3,9 @@ package stat
 import (
 	"gitee.com/quant1x/gox/num"
 	"gitee.com/quant1x/gox/num/num32"
-	"golang.org/x/exp/slices"
 	"gonum.org/v1/gonum/stat"
 	"math"
+	"slices"
 )
 
 // Std_TODO StdDev 这个版本有bug, gonum计算的std不对
