@@ -4,7 +4,7 @@ go 1.21
 
 require (
 	gitee.com/quant1x/gox v1.11.3
-	github.com/tealeg/xlsx/v3 v3.3.0
+	github.com/tealeg/xlsx/v3 v3.3.1
 	gonum.org/v1/gonum v0.14.0
 )
 
