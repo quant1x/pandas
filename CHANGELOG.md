@@ -3,6 +3,14 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.1.5] - 2023-09-15
+### Changed
+- 更新依赖库版本.
+
+## [1.1.4] - 2023-09-15
+### Changed
+- 更新依赖库.
+
 ## [1.1.3] - 2023-09-12
 ### Changed
 - 更换golang.org/x/exp/slices为系统标准库.
@@ -563,7 +571,9 @@ All notable changes to this project will be documented in this file.
 - 引入github.com/WinPooh32/series代码.
 - Initial commit.
 
-[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.1.3...HEAD
+[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.1.5...HEAD
+[1.1.5]: https://gitee.com/quant1x/pandas/compare/v1.1.4...v1.1.5
+[1.1.4]: https://gitee.com/quant1x/pandas/compare/v1.1.3...v1.1.4
 [1.1.3]: https://gitee.com/quant1x/pandas/compare/v1.1.2...v1.1.3
 [1.1.2]: https://gitee.com/quant1x/pandas/compare/v1.1.1...v1.1.2
 [1.1.1]: https://gitee.com/quant1x/pandas/compare/v1.1.0...v1.1.1
