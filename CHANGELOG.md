@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.1.6] - 2023-10-08
+### Changed
+- 更新依赖版本.
+- 增加测试MA的增量计算函数.
+
 ## [1.1.5] - 2023-09-15
 ### Changed
 - 更新依赖库版本.
@@ -571,7 +576,8 @@ All notable changes to this project will be documented in this file.
 - 引入github.com/WinPooh32/series代码.
 - Initial commit.
 
-[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.1.5...HEAD
+[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.1.6...HEAD
+[1.1.6]: https://gitee.com/quant1x/pandas/compare/v1.1.5...v1.1.6
 [1.1.5]: https://gitee.com/quant1x/pandas/compare/v1.1.4...v1.1.5
 [1.1.4]: https://gitee.com/quant1x/pandas/compare/v1.1.3...v1.1.4
 [1.1.3]: https://gitee.com/quant1x/pandas/compare/v1.1.2...v1.1.3
