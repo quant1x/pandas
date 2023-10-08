@@ -15,3 +15,13 @@ func MAV1(S stat.Series, N any) []stat.DType {
 func MA(S stat.Series, N any) stat.Series {
 	return S.Rolling(N).Mean()
 }
+
+// MAx 增量MA
+func MAx(n int, old, new stat.DType) stat.DType {
+	if n < 1 {
+		return new
+	}
+	x := old * stat.DType(n-1)
+	x = (x + new) / stat.DType(n)
+	return x
+}
