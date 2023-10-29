@@ -3,8 +3,8 @@ module gitee.com/quant1x/pandas
 go 1.21
 
 require (
-	gitee.com/quant1x/gox v1.13.3
-	github.com/tealeg/xlsx/v3 v3.3.2
+	gitee.com/quant1x/gox v1.13.7
+	github.com/tealeg/xlsx/v3 v3.3.4
 	gonum.org/v1/gonum v0.14.0
 )
 
