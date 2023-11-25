@@ -30,9 +30,12 @@ func TestREF(t *testing.T) {
 	C := df2.Col("c")
 	D := df2.Col("d")
 
-	// 2日前的D值
-	r2 := REF(D, 1)
-	fmt.Println(r2)
+	// 0日前的D值
+	r0 := REF(D, 0)
+	fmt.Println(r0)
+	// 1日前的D值
+	r1 := REF(D, 1)
+	fmt.Println(r1)
 
 	_ = A
 	_ = B
