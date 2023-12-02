@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.2.1] - 2023-12-03
+### Changed
+- 更新依赖库gox版本号, 调整gocsv的引用到pkg.
+
 ## [1.2.0] - 2023-12-02
 ### Changed
 - 更新依赖库版本号.
@@ -593,7 +597,8 @@ All notable changes to this project will be documented in this file.
 - 引入github.com/WinPooh32/series代码.
 - Initial commit.
 
-[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.2.0...HEAD
+[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.2.1...HEAD
+[1.2.1]: https://gitee.com/quant1x/pandas/compare/v1.2.0...v1.2.1
 [1.2.0]: https://gitee.com/quant1x/pandas/compare/v1.1.9...v1.2.0
 [1.1.9]: https://gitee.com/quant1x/pandas/compare/v1.1.8...v1.1.9
 [1.1.8]: https://gitee.com/quant1x/pandas/compare/v1.1.7...v1.1.8
