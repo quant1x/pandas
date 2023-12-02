@@ -267,3 +267,8 @@ func anyToGeneric[T BaseType](v any) T {
 	}
 	return d.(T)
 }
+
+// GenericParse 泛型解析
+func GenericParse[T BaseType](text string) T {
+	return anyToGeneric[T](text)
+}
