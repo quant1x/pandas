@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.2.0] - 2023-12-02
+### Changed
+- 更新依赖库版本号.
+
 ## [1.1.9] - 2023-12-02
 ### Changed
 - 暴露一个类型转换函数.
@@ -589,7 +593,8 @@ All notable changes to this project will be documented in this file.
 - 引入github.com/WinPooh32/series代码.
 - Initial commit.
 
-[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.1.9...HEAD
+[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.2.0...HEAD
+[1.2.0]: https://gitee.com/quant1x/pandas/compare/v1.1.9...v1.2.0
 [1.1.9]: https://gitee.com/quant1x/pandas/compare/v1.1.8...v1.1.9
 [1.1.8]: https://gitee.com/quant1x/pandas/compare/v1.1.7...v1.1.8
 [1.1.7]: https://gitee.com/quant1x/pandas/compare/v1.1.6...v1.1.7
