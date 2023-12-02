@@ -1,16 +1,16 @@
 module gitee.com/quant1x/pandas
 
-go 1.21
+go 1.21.1
 
 require (
-	gitee.com/quant1x/gox v1.14.0
+	gitee.com/quant1x/gox v1.14.1
 	github.com/tealeg/xlsx/v3 v3.3.4
 	gonum.org/v1/gonum v0.14.0
 )
 
 require (
+	gitee.com/quant1x/pkg v0.1.2 // indirect
 	github.com/frankban/quicktest v1.14.6 // indirect
-	github.com/gocarina/gocsv v0.0.0-20231116093920-b87c2d0e983a // indirect
 	github.com/google/btree v1.1.2 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/kr/pretty v0.3.1 // indirect
