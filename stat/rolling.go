@@ -22,6 +22,8 @@ func Rolling[T BaseType](S []T, N any) [][]T {
 	case []T: // 这块到不了, N和S不是同一个泛型类型
 		window = Slice2DType(vn)
 		window = Align[DType](window, DTypeNaN, sLen)
+	case Series:
+		window = vn.DTypes()
 	default:
 		panic(exception.New(1, "error window"))
 	}

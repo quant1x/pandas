@@ -1,15 +1,15 @@
 module gitee.com/quant1x/pandas
 
-go 1.21.1
+go 1.21.5
 
 require (
-	gitee.com/quant1x/gox v1.14.5
+	gitee.com/quant1x/gox v1.15.5
 	github.com/tealeg/xlsx/v3 v3.3.4
 	gonum.org/v1/gonum v0.14.0
 )
 
 require (
-	gitee.com/quant1x/pkg v0.1.2 // indirect
+	gitee.com/quant1x/pkg v0.1.5 // indirect
 	github.com/frankban/quicktest v1.14.6 // indirect
 	github.com/google/btree v1.1.2 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
@@ -19,7 +19,7 @@ require (
 	github.com/rogpeppe/fastuuid v1.2.0 // indirect
 	github.com/rogpeppe/go-internal v1.11.0 // indirect
 	github.com/shabbyrobe/xmlwriter v0.0.0-20230525083848-85336ec334fa // indirect
-	golang.org/x/exp v0.0.0-20231110203233-9a3e6036ecaa // indirect
+	golang.org/x/exp v0.0.0-20231206192017-f3f8817b8deb // indirect
 	golang.org/x/sys v0.15.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 )
