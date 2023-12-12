@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.2.3] - 2023-12-12
+### Changed
+- RollingWindow支持series.
+
 ## [1.2.2] - 2023-12-04
 ### Changed
 - 更新依赖库gox版本.
@@ -601,7 +605,8 @@ All notable changes to this project will be documented in this file.
 - 引入github.com/WinPooh32/series代码.
 - Initial commit.
 
-[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.2.2...HEAD
+[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.2.3...HEAD
+[1.2.3]: https://gitee.com/quant1x/pandas/compare/v1.2.2...v1.2.3
 [1.2.2]: https://gitee.com/quant1x/pandas/compare/v1.2.1...v1.2.2
 [1.2.1]: https://gitee.com/quant1x/pandas/compare/v1.2.0...v1.2.1
 [1.2.0]: https://gitee.com/quant1x/pandas/compare/v1.1.9...v1.2.0
