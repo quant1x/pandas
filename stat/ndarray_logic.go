@@ -1,7 +1,5 @@
 package stat
 
-import "gitee.com/quant1x/gox/num"
-
 func (self NDArray[T]) Logic(f func(idx int, v any) bool) []bool {
 	d := make([]bool, self.Len())
 	for i, v := range self {
@@ -32,7 +30,7 @@ func (self NDArray[T]) Eq(x any) Series {
 	return NDArray[bool](s)
 }
 
-func (self NDArray[T]) V1Gt(x any) Series {
+func (self NDArray[T]) Neq(x any) Series {
 	length := self.Len()
 	var b []DType
 	switch sx := x.(type) {
@@ -50,7 +48,7 @@ func (self NDArray[T]) V1Gt(x any) Series {
 		panic(Throw(x))
 	}
 	a := self.DTypes()
-	s := num.Gt(a, b)
+	s := NotEqual(a, b)
 	return NDArray[bool](s)
 }
 
@@ -84,32 +82,14 @@ func (self NDArray[T]) And(x any) Series {
 	return NDArray[bool](bs)
 }
 
-func (self NDArray[T]) V1And(x any) Series {
-	length := self.Len()
-	var b []bool
-	switch sx := x.(type) {
-	case Series:
-		b = ToBool(sx)
-	case int:
-		b = Repeat[bool](integer2Bool(sx), length)
-	case DType:
-		b = Repeat[bool](integer2Bool(sx), length)
-	//case int8, uint8, int16, uint16, int32, uint32, int64, uint64, int, uint, uintptr, float32, float64:
-	//	b = Repeat[DType](DType(sx), length)
-	case []DType:
-		b = __NumberToBool_S(sx)
-	case []bool:
-		b = sx
-	default:
-		panic(Throw(x))
-	}
-	a := ToBool(self)
-	s := V1And(a, b)
-	return NDArray[bool](s)
-}
-
 func (self NDArray[T]) Or(x any) Series {
 	values := self.Values().([]T)
 	bs := Or(values, x)
+	return NDArray[bool](bs)
+}
+
+func (self NDArray[T]) Not() Series {
+	values := self.Values().([]T)
+	bs := Not(values)
 	return NDArray[bool](bs)
 }

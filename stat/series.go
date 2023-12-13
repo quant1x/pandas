@@ -106,17 +106,32 @@ type Series interface {
 	Std() DType
 	// Sum 计算累和
 	Sum() DType
+	// Add 加
 	Add(x any) Series
+	// Sub 减
 	Sub(x any) Series
+	// Mul 乘
 	Mul(x any) Series
+	// Div 除
 	Div(x any) Series
+	// Eq 等于
 	Eq(x any) Series
+	// Neq 不等于
+	Neq(x any) Series
+	// Gt 大于
 	Gt(x any) Series
+	// Gte 大于等于
 	Gte(x any) Series
+	// Lt 小于
 	Lt(x any) Series
+	// Lte 小于等于
 	Lte(x any) Series
+	// And 与
 	And(x any) Series
+	// Or 或
 	Or(x any) Series
+	// Not 非
+	Not() Series
 }
 
 // DetectTypeBySlice 检测类型

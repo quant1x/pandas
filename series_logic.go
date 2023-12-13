@@ -14,6 +14,12 @@ func (self *NDFrame) Eq(x any) stat.Series {
 	return s.Eq(x)
 }
 
+func (self *NDFrame) Neq(x any) stat.Series {
+	vs := self.DTypes()
+	s := stat.NDArray[stat.DType](vs)
+	return s.Neq(x)
+}
+
 func (self *NDFrame) Gt(x any) stat.Series {
 	vs := self.DTypes()
 	s := stat.NDArray[stat.DType](vs)
@@ -42,4 +48,10 @@ func (self *NDFrame) Or(x any) stat.Series {
 	vs := self.DTypes()
 	s := stat.NDArray[stat.DType](vs)
 	return s.Or(x)
+}
+
+func (self *NDFrame) Not() stat.Series {
+	vs := self.DTypes()
+	s := stat.NDArray[stat.DType](vs)
+	return s.Not()
 }

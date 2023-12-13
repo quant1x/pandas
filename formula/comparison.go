@@ -26,12 +26,33 @@ func EQ2(S1 []stat.DType, S2 int) []bool {
 	return num.EqNumber(S1, stat.DType(S2))
 }
 
+func NEQ(S1, S2 stat.Series) []bool {
+	var d []bool
+	switch S1.Type() {
+	case stat.SERIES_TYPE_BOOL:
+		d = stat.Equal[bool](S1.Values().([]bool), S2.Values().([]bool))
+	case stat.SERIES_TYPE_STRING:
+		d = stat.Equal[string](S1.Values().([]string), S2.Values().([]string))
+	default:
+		f1 := S1.DTypes()
+		f2 := S2.DTypes()
+		d = stat.NotEqual[stat.DType](f1, f2)
+	}
+	return d
+}
+
 func AND[T stat.Number | ~bool](a, b []T) []bool {
 	return stat.And(a, b)
 }
 
 func OR(a, b []bool) []bool {
 	return num.Or(a, b)
+}
+
+func NOT(S stat.Series) stat.Series {
+	x := S.Bools()
+	x = stat.Not(x)
+	return stat.NewSeries(x...)
 }
 
 // CompareGt 比较 v > x

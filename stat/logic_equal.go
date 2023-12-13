@@ -20,3 +20,19 @@ func __eq_go[T BaseType](x, y []T) []bool {
 	}
 	return d
 }
+
+// NotEqual 不相等
+func NotEqual[T BaseType](x, y []T) []bool {
+	return binaryOperations2[T, bool](x, y, num32.Neq, num.Neq, __neq_go[T])
+}
+
+func __neq_go[T BaseType](x, y []T) []bool {
+	length := len(x)
+	d := make([]bool, length)
+	for i := 0; i < length; i++ {
+		if x[i] != y[i] {
+			d[i] = true
+		}
+	}
+	return d
+}

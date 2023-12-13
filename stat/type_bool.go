@@ -2,7 +2,10 @@ package stat
 
 import (
 	"fmt"
+	"gitee.com/quant1x/gox/exception"
 	"gitee.com/quant1x/gox/logger"
+	"gitee.com/quant1x/gox/num"
+	"reflect"
 	"strconv"
 )
 
@@ -169,4 +172,64 @@ func AnyToBool(v any) bool {
 		f := ParseBool(fmt.Sprintf("%v", v), v)
 		return f
 	}
+}
+
+func slice_any_to_bool[T Number](s []T) []bool {
+	count := len(s)
+	if count == 0 {
+		return []bool{}
+	}
+	d := make([]bool, count)
+	for idx, iv := range s {
+		d[idx] = anyToGeneric[bool](iv)
+	}
+	return d
+}
+
+// SliceToBool any输入只能是一维slice或者数组
+func SliceToBool(v any) []bool {
+	var vs []bool
+	switch values := v.(type) {
+	case []int8:
+		return slice_any_to_bool(values)
+	case []uint8:
+		return slice_any_to_bool(values)
+	case []int16:
+		return slice_any_to_bool(values)
+	case []uint16:
+		return slice_any_to_bool(values)
+	case []int32:
+		return slice_any_to_bool(values)
+	case []uint32:
+		return slice_any_to_bool(values)
+	case []int64:
+		return slice_any_to_bool(values)
+	case []uint64:
+		return slice_any_to_bool(values)
+	case []int:
+		return slice_any_to_bool(values)
+	case []uint:
+		return slice_any_to_bool(values)
+	case []float32: // 不能加速
+		return slice_any_to_bool(values)
+	case []float64: // 加速
+		return num.ToBool(values)
+	case []bool:
+		// 加速
+		return values
+	case []string:
+		count := len(values)
+		if count == 0 {
+			return []bool{}
+		}
+		vs = make([]bool, count)
+		for idx, iv := range values {
+			vs[idx] = AnyToBool(iv)
+		}
+	default:
+		vv := reflect.ValueOf(v)
+		vk := vv.Kind()
+		panic(exception.New(errorFloat64Base+0, fmt.Sprintf("Unsupported type: %s", vk.String())))
+	}
+	return []bool{}
 }

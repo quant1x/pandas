@@ -5,6 +5,75 @@ import (
 	"gitee.com/quant1x/gox/num/num32"
 )
 
+//func __compare_one[T ~[]E, E any](x T, y any, c int, comparator func(f1, f2 DType) bool) []bool {
+//	if __y, ok := y.(Series); ok {
+//		y = __y.Values()
+//	}
+//	var d = []bool{}
+//	switch Y := y.(type) {
+//	case nil, int8, uint8, int16, uint16, int32, uint32, int64, uint64, int, uint, float32, float64, bool, string:
+//		f2 := Any2DType(Y)
+//		d = __compare_dtype(x, f2, c, comparator)
+//	case []float32:
+//		d = __compare_slice(x, Y, c, comparator)
+//	case []float64:
+//		d = __compare_slice(x, Y, c, comparator)
+//	case []int:
+//		d = __compare_slice(x, Y, c, comparator)
+//	case []int8:
+//		d = __compare_slice(x, Y, c, comparator)
+//	case []int16:
+//		d = __compare_slice(x, Y, c, comparator)
+//	case []int32:
+//		d = __compare_slice(x, Y, c, comparator)
+//	case []int64:
+//		d = __compare_slice(x, Y, c, comparator)
+//	case []uint:
+//		d = __compare_slice(x, Y, c, comparator)
+//	case []uint8:
+//		d = __compare_slice(x, Y, c, comparator)
+//	case []uint16:
+//		d = __compare_slice(x, Y, c, comparator)
+//	case []uint32:
+//		d = __compare_slice(x, Y, c, comparator)
+//	case []uint64:
+//		d = __compare_slice(x, Y, c, comparator)
+//	case []uintptr:
+//		d = __compare_slice(x, Y, c, comparator)
+//	case []string:
+//		d = __compare_slice(x, Y, c, comparator)
+//	case []bool:
+//		d = __compare_slice(x, Y, c, comparator)
+//	default:
+//		// 其它未知类型抛异常
+//		panic(Throw(y))
+//	}
+//	return d
+//}
+
+//// 一元运算 unary operations
+//func unaryOperationsForLogic[T Number | ~bool](x []T, f32 func([]bool) []bool, f64 func([]bool) []bool, cany func([]bool) []bool) []bool {
+//	var t []bool
+//	if len(x) == 0 {
+//		return t
+//	}
+//	var d any
+//	var s any
+//	s = x
+//	switch fs := s.(type) {
+//	case []float32:
+//		bs := AnyToSlice[bool](fs, len(fs))
+//		d = f32(bs)
+//	case []float64:
+//		bs := AnyToSlice[bool](fs, len(fs))
+//		d = f64(bs)
+//	default:
+//		bs := AnyToSlice[bool](x, len(x))
+//		d = cany(bs)
+//	}
+//	return d.([]bool)
+//}
+
 func __compare[T ~[]E, E any](x T, y any, c int, comparator func(f1, f2 DType) bool) []bool {
 	if __y, ok := y.(Series); ok {
 		y = __y.Values()
@@ -164,40 +233,6 @@ func __compare_slice[T ~[]E, E any, T2 ~[]E2, E2 any](x T, y T2, c int, comparat
 	return bs
 }
 
-// 切片和切片对比
-func __v1_compare_slice[T ~[]E, E any, T2 ~[]E2, E2 any](x T, y T2, c int, comparator func(f1, f2 DType) bool) []bool {
-	var bs = []bool{}
-	xLen := len(x)
-	yLen := len(y)
-
-	if xLen >= yLen {
-		bs = make([]bool, xLen)
-		for i := 0; i < yLen; i++ {
-			f1 := Any2DType(x[i])
-			f2 := Any2DType(y[i])
-			bs[i] = comparator(f1, f2)
-		}
-		for i := yLen; i < xLen; i++ {
-			f1 := Any2DType(x[i])
-			f2 := DType(0)
-			bs[i] = comparator(f1, f2)
-		}
-	} else {
-		bs = make([]bool, yLen)
-		for i := 0; i < xLen; i++ {
-			f1 := Any2DType(x[i])
-			f2 := Any2DType(y[i])
-			bs[i] = comparator(f1, f2)
-		}
-		for i := xLen; i < yLen; i++ {
-			f1 := DType(0)
-			f2 := Any2DType(y[i])
-			bs[i] = comparator(f1, f2)
-		}
-	}
-	return bs
-}
-
 const (
 	__k_compare_gt  = 1
 	__k_compare_gte = 2
@@ -264,49 +299,8 @@ func Or[S ~[]E, E any](v S, x any) []bool {
 	return __compare(v, x, __k_compare_or, __logic_or)
 }
 
-// And 两者为真
-func V1And[T Number | ~bool](x, y []T) []bool {
-	switch vs := any(x).(type) {
-	case []bool:
-		return num.And(vs, any(y).([]bool))
-	case []int8:
-		return __and_go(vs, any(y).([]int8))
-	case []uint8:
-		return __and_go(vs, any(y).([]uint8))
-	case []int16:
-		return __and_go(vs, any(y).([]int16))
-	case []uint16:
-		return __and_go(vs, any(y).([]uint16))
-	case []int32:
-		return __and_go(vs, any(y).([]int32))
-	case []uint32:
-		return __and_go(vs, any(y).([]uint32))
-	case []int64:
-		return __and_go(vs, any(y).([]int64))
-	case []uint64:
-		return __and_go(vs, any(y).([]uint64))
-	case []int:
-		return __and_go(vs, any(y).([]int))
-	case []uint:
-		return __and_go(vs, any(y).([]uint))
-	case []uintptr:
-		return __and_go(vs, any(y).([]uintptr))
-	case []float32:
-		return __and_go(vs, any(y).([]float32))
-	case []float64:
-		return __and_go(vs, any(y).([]float64))
-	}
-	panic(Throw(x))
-}
-
-func __and_go[T Number](x, y []T) []bool {
-	d := make([]bool, len(x))
-	for i := 0; i < len(x); i++ {
-		if x[i] != 0 && y[i] != 0 {
-			d[i] = true
-		} else {
-			d[i] = false
-		}
-	}
-	return d
+// Not 非
+func Not[S ~[]E, E any](v S) []bool {
+	x := SliceToBool(v)
+	return num.Not(x)
 }

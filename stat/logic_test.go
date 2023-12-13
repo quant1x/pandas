@@ -30,4 +30,6 @@ func Test___compare(t *testing.T) {
 	fmt.Println(l2)
 	l3 := Or(l1, l2)
 	fmt.Println(l3)
+	l4 := Not(l3)
+	fmt.Println(l4)
 }
