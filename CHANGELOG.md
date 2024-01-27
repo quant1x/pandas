@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.2.9] - 2024-01-28
+### Changed
+- 更新gox版本号.
+
 ## [1.2.8] - 2024-01-13
 ### Changed
 - 更新gox版本号.
@@ -625,7 +629,8 @@ All notable changes to this project will be documented in this file.
 - 引入github.com/WinPooh32/series代码.
 - Initial commit.
 
-[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.2.8...HEAD
+[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.2.9...HEAD
+[1.2.9]: https://gitee.com/quant1x/pandas/compare/v1.2.8...v1.2.9
 [1.2.8]: https://gitee.com/quant1x/pandas/compare/v1.2.7...v1.2.8
 [1.2.7]: https://gitee.com/quant1x/pandas/compare/v1.2.6...v1.2.7
 [1.2.6]: https://gitee.com/quant1x/pandas/compare/v1.2.5...v1.2.6
