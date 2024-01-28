@@ -80,3 +80,20 @@ func EMA_v1(S stat.Series, N any) any {
 	return x
 
 }
+
+// AlphaOfEMA 根据周期是计算α值
+//
+//	EMA的计算是全部数据, 所以不用考虑第一个元素的情况
+func AlphaOfEMA(n int) float64 {
+	alpha := float64(2) / float64(1+n)
+	return alpha
+}
+
+// EmaIncr 增量计算EMA
+//
+//	通过上一条数值last, alpha和最新值计算
+//	yt = (1−α)*y(t−1) + α*x(t)
+func EmaIncr(now, last, alpha float64) float64 {
+	current := (1-alpha)*last + alpha*now
+	return current
+}
