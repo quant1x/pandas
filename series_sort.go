@@ -3,14 +3,14 @@ package pandas
 import "gitee.com/quant1x/pandas/stat"
 
 // Len 获得行数, 实现sort.Interface接口的获取元素数量方法
-func (self *NDFrame) Len() int {
-	return self.rows
+func (this *NDFrame) Len() int {
+	return this.rows
 }
 
 // Less 实现sort.Interface接口的比较元素方法
-func (self *NDFrame) Less(i, j int) bool {
-	if self.type_ == stat.SERIES_TYPE_BOOL {
-		values := self.Values().([]bool)
+func (this *NDFrame) Less(i, j int) bool {
+	if this.type_ == stat.SERIES_TYPE_BOOL {
+		values := this.Values().([]bool)
 		var (
 			a = int(0)
 			b = int(0)
@@ -22,17 +22,17 @@ func (self *NDFrame) Less(i, j int) bool {
 			b = 1
 		}
 		return a < b
-	} else if self.type_ == stat.SERIES_TYPE_INT64 {
-		values := self.Values().([]int64)
+	} else if this.type_ == stat.SERIES_TYPE_INT64 {
+		values := this.Values().([]int64)
 		return values[i] < values[j]
-	} else if self.type_ == stat.SERIES_TYPE_FLOAT32 {
-		values := self.Values().([]float32)
+	} else if this.type_ == stat.SERIES_TYPE_FLOAT32 {
+		values := this.Values().([]float32)
 		return values[i] < values[j]
-	} else if self.type_ == stat.SERIES_TYPE_FLOAT64 {
-		values := self.Values().([]float64)
+	} else if this.type_ == stat.SERIES_TYPE_FLOAT64 {
+		values := this.Values().([]float64)
 		return values[i] < values[j]
-	} else if self.type_ == stat.SERIES_TYPE_STRING {
-		values := self.Values().([]string)
+	} else if this.type_ == stat.SERIES_TYPE_STRING {
+		values := this.Values().([]string)
 		return values[i] < values[j]
 	} else {
 		// SERIES_TYPE_INVAILD
@@ -44,21 +44,21 @@ func (self *NDFrame) Less(i, j int) bool {
 }
 
 // Swap 实现sort.Interface接口的交换元素方法
-func (self *NDFrame) Swap(i, j int) {
-	if self.type_ == stat.SERIES_TYPE_BOOL {
-		values := self.Values().([]bool)
+func (this *NDFrame) Swap(i, j int) {
+	if this.type_ == stat.SERIES_TYPE_BOOL {
+		values := this.Values().([]bool)
 		values[i], values[j] = values[j], values[i]
-	} else if self.type_ == stat.SERIES_TYPE_INT64 {
-		values := self.Values().([]int64)
+	} else if this.type_ == stat.SERIES_TYPE_INT64 {
+		values := this.Values().([]int64)
 		values[i], values[j] = values[j], values[i]
-	} else if self.type_ == stat.SERIES_TYPE_FLOAT32 {
-		values := self.Values().([]float32)
+	} else if this.type_ == stat.SERIES_TYPE_FLOAT32 {
+		values := this.Values().([]float32)
 		values[i], values[j] = values[j], values[i]
-	} else if self.type_ == stat.SERIES_TYPE_FLOAT64 {
-		values := self.Values().([]float64)
+	} else if this.type_ == stat.SERIES_TYPE_FLOAT64 {
+		values := this.Values().([]float64)
 		values[i], values[j] = values[j], values[i]
-	} else if self.type_ == stat.SERIES_TYPE_STRING {
-		values := self.Values().([]string)
+	} else if this.type_ == stat.SERIES_TYPE_STRING {
+		values := this.Values().([]string)
 		values[i], values[j] = values[j], values[i]
 	} else {
 		// SERIES_TYPE_INVAILD

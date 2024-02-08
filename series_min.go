@@ -2,8 +2,8 @@ package pandas
 
 import "gitee.com/quant1x/pandas/stat"
 
-func (self *NDFrame) Min() any {
-	values := self.Values()
+func (this *NDFrame) Min() any {
+	values := this.Values()
 	switch rows := values.(type) {
 	case []bool:
 		min := true
@@ -82,7 +82,7 @@ func (self *NDFrame) Min() any {
 		}
 		return stat.Nil2Float32
 	//case []float32:
-	//	if self.Len() == 0 {
+	//	if this.Len() == 0 {
 	//		return Nil2Float32
 	//	}
 	//	return stat.Min(rows)
@@ -108,7 +108,7 @@ func (self *NDFrame) Min() any {
 		}
 		return stat.Nil2Float64
 	//case []float64:
-	//	if self.Len() == 0 {
+	//	if this.Len() == 0 {
 	//		return Nil2Float64
 	//	}
 	//	return stat.Min(rows)
@@ -118,6 +118,6 @@ func (self *NDFrame) Min() any {
 	return stat.Nil2Float64
 }
 
-func (self *NDFrame) ArgMin() int {
-	return stat.ArgMin2(self.DTypes())
+func (this *NDFrame) ArgMin() int {
+	return stat.ArgMin2(this.DTypes())
 }

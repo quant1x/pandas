@@ -2,7 +2,7 @@ package pandas
 
 import "gitee.com/quant1x/pandas/stat"
 
-func (self *NDFrame) Sum() stat.DType {
-	fs := self.DTypes()
+func (this *NDFrame) Sum() stat.DType {
+	fs := this.DTypes()
 	return stat.Sum(fs)
 }

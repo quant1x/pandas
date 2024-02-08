@@ -9,24 +9,24 @@ import (
 // First discrete difference of element.
 // Calculates the difference of a {klass} element compared with another
 // element in the {klass} (default is element in previous row).
-func (self *NDFrame) Diff(param any) (s stat.Series) {
-	if !(self.type_ == stat.SERIES_TYPE_INT64 || self.type_ == stat.SERIES_TYPE_FLOAT32 || self.type_ == stat.SERIES_TYPE_FLOAT64) {
+func (this *NDFrame) Diff(param any) (s stat.Series) {
+	if !(this.type_ == stat.SERIES_TYPE_INT64 || this.type_ == stat.SERIES_TYPE_FLOAT32 || this.type_ == stat.SERIES_TYPE_FLOAT64) {
 		return NewSeries(stat.SERIES_TYPE_INVAILD, "", "")
 	}
 	var N []stat.DType
 	switch v := param.(type) {
 	case int:
-		N = stat.Repeat[stat.DType](stat.DType(v), self.Len())
+		N = stat.Repeat[stat.DType](stat.DType(v), this.Len())
 	case stat.Series:
 		vs := v.DTypes()
-		N = stat.Align(vs, stat.DTypeNaN, self.Len())
+		N = stat.Align(vs, stat.DTypeNaN, this.Len())
 	default:
 		//periods = 1
-		N = stat.Repeat[stat.DType](stat.DType(1), self.Len())
+		N = stat.Repeat[stat.DType](stat.DType(1), this.Len())
 	}
 	r := stat.RollingAndExpandingMixin{
 		Window: N,
-		Series: self,
+		Series: this,
 	}
 	var d []stat.DType
 	var front = stat.DTypeNaN

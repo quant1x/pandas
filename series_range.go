@@ -7,12 +7,12 @@ import (
 )
 
 // Copy 复制一个副本
-func (self *NDFrame) Copy() stat.Series {
-	vlen := self.Len()
-	return self.Subset(0, vlen, true)
+func (this *NDFrame) Copy() stat.Series {
+	vlen := this.Len()
+	return this.Subset(0, vlen, true)
 }
 
-func (self *NDFrame) Subset(start, end int, opt ...any) stat.Series {
+func (this *NDFrame) Subset(start, end int, opt ...any) stat.Series {
 	// 默认不copy
 	var __optCopy = false
 	if len(opt) > 0 {
@@ -23,7 +23,7 @@ func (self *NDFrame) Subset(start, end int, opt ...any) stat.Series {
 	}
 	var vs any
 	var rows int
-	switch values := self.values.(type) {
+	switch values := this.values.(type) {
 	case []bool:
 		subset := values[start:end]
 		rows = len(subset)
@@ -86,9 +86,9 @@ func (self *NDFrame) Subset(start, end int, opt ...any) stat.Series {
 		}
 	}
 	frame := NDFrame{
-		formatter: self.formatter,
-		name:      self.name,
-		type_:     self.type_,
+		formatter: this.formatter,
+		name:      this.name,
+		type_:     this.type_,
 		nilCount:  0,
 		rows:      rows,
 		values:    vs,
@@ -99,20 +99,20 @@ func (self *NDFrame) Subset(start, end int, opt ...any) stat.Series {
 }
 
 // Select 选取一段记录
-func (self *NDFrame) Select(r api.ScopeLimit) stat.Series {
-	start, end, err := r.Limits(self.Len())
+func (this *NDFrame) Select(r api.ScopeLimit) stat.Series {
+	start, end, err := r.Limits(this.Len())
 	if err != nil {
 		return nil
 	}
-	series := self.Subset(start, end+1)
+	series := this.Subset(start, end+1)
 	return series
 }
 
-func (self *NDFrame) IndexOf(index int, opt ...any) any {
+func (this *NDFrame) IndexOf(index int, opt ...any) any {
 	if index < 0 {
-		index = self.Len() + index
-	} else if index >= self.Len() {
-		index = self.Len() - 1
+		index = this.Len() + index
+	} else if index >= this.Len() {
+		index = this.Len() - 1
 	}
 	var __optInplace = false
 	if len(opt) > 0 {
@@ -122,9 +122,9 @@ func (self *NDFrame) IndexOf(index int, opt ...any) any {
 		}
 	}
 	if !__optInplace {
-		return reflect.ValueOf(self.Values()).Index(index).Interface()
+		return reflect.ValueOf(this.Values()).Index(index).Interface()
 	}
-	vv := reflect.ValueOf(self.values)
+	vv := reflect.ValueOf(this.values)
 	tv := vv.Index(index)
 	return tv
 }

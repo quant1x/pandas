@@ -5,8 +5,8 @@ import (
 	"reflect"
 )
 
-func (self *NDFrame) Apply(f func(idx int, v any)) {
-	vv := reflect.ValueOf(self.values)
+func (this *NDFrame) Apply(f func(idx int, v any)) {
+	vv := reflect.ValueOf(this.values)
 	vk := vv.Kind()
 	switch vk {
 	case reflect.Invalid: // {interface} nil
@@ -26,9 +26,9 @@ func (self *NDFrame) Apply(f func(idx int, v any)) {
 	}
 }
 
-func (self *NDFrame) Logic(f func(idx int, v any) bool) []bool {
-	x := make([]bool, self.Len())
-	vv := reflect.ValueOf(self.values)
+func (this *NDFrame) Logic(f func(idx int, v any) bool) []bool {
+	x := make([]bool, this.Len())
+	vv := reflect.ValueOf(this.values)
 	vk := vv.Kind()
 	switch vk {
 	case reflect.Invalid: // {interface} nil
@@ -49,12 +49,12 @@ func (self *NDFrame) Logic(f func(idx int, v any) bool) []bool {
 	return x
 }
 
-func (self *NDFrame) Apply2(f func(idx int, v any) any, args ...bool) stat.Series {
+func (this *NDFrame) Apply2(f func(idx int, v any) any, args ...bool) stat.Series {
 	inplace := false
 	if len(args) >= 1 {
 		inplace = args[0]
 	}
-	vv := reflect.ValueOf(self.values)
+	vv := reflect.ValueOf(this.values)
 	vk := vv.Kind()
 	switch vk {
 	case reflect.Invalid: // {interface} nil
@@ -70,5 +70,5 @@ func (self *NDFrame) Apply2(f func(idx int, v any) any, args ...bool) stat.Serie
 	default:
 		// 其它类型忽略
 	}
-	return self
+	return this
 }

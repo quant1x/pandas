@@ -5,7 +5,7 @@ import (
 )
 
 // EWM provides exponential weighted calculations.
-func (s *NDFrame) EWM(alpha stat.EW) stat.ExponentialMovingWindow {
+func (this *NDFrame) EWM(alpha stat.EW) stat.ExponentialMovingWindow {
 	atype := stat.AlphaAlpha
 	param := 0.00
 	adjust := alpha.Adjust
@@ -24,7 +24,7 @@ func (s *NDFrame) EWM(alpha stat.EW) stat.ExponentialMovingWindow {
 		param = alpha.Alpha
 	}
 
-	dest := NewSeries(stat.SERIES_TYPE_FLOAT64, s.name, s.Values())
+	dest := NewSeries(stat.SERIES_TYPE_FLOAT64, this.name, this.Values())
 	return stat.ExponentialMovingWindow{
 		Data:     dest,
 		AType:    atype,
