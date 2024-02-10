@@ -44,7 +44,7 @@ var (
 //
 // If the struct tags and the given LoadOptions contradict each other, the later
 // will have preference over the former.
-func LoadStructs(i interface{}, options ...LoadOption) DataFrame {
+func LoadStructs(i any, options ...LoadOption) DataFrame {
 	if i == nil {
 		return DataFrame{Err: fmt.Errorf("load: can't create DataFrame from <nil> value")}
 	}
@@ -123,7 +123,7 @@ func LoadStructs(i interface{}, options ...LoadOption) DataFrame {
 			}
 
 			// Create Series for this field
-			elements := make([]interface{}, val.Len())
+			elements := make([]any, val.Len())
 			for i := 0; i < val.Len(); i++ {
 				fieldValue := val.Index(i).Field(j)
 				elements[i] = fieldValue.Interface()
@@ -136,7 +136,7 @@ func LoadStructs(i interface{}, options ...LoadOption) DataFrame {
 
 			// Handle `hasHeader` option
 			if !cfg.hasHeader {
-				tmp := make([]interface{}, 1)
+				tmp := make([]any, 1)
 				tmp[0] = fieldName
 				elements = append(tmp, elements...)
 				fieldName = ""

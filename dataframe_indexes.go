@@ -77,7 +77,7 @@ func parseSelectIndexes(l int, indexes SelectIndexes, colnames []string) ([]int,
 //	Series [Int]     // Same as []int
 //	Series [Bool]    // Same as []bool
 //	Series [String]  // Same as []string
-type SelectIndexes interface{}
+type SelectIndexes any
 
 // Select the given DataFrame columns
 func (df DataFrame) Select(indexes SelectIndexes) DataFrame {

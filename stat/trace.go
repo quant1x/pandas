@@ -7,7 +7,7 @@ import (
 )
 
 // PanicTrace panic 堆栈信息
-func PanicTrace(err interface{}) string {
+func PanicTrace(err any) string {
 	buf := new(bytes.Buffer)
 	_, _ = fmt.Fprintf(buf, "%v\n", err)
 	for i := 1; ; i++ {

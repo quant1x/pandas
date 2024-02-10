@@ -7,7 +7,7 @@ import (
 
 // LoadMaps creates a new DataFrame based on the given maps. This function assumes
 // that every map on the array represents a row of observations.
-func LoadMaps(maps []map[string]interface{}, options ...LoadOption) DataFrame {
+func LoadMaps(maps []map[string]any, options ...LoadOption) DataFrame {
 	if len(maps) == 0 {
 		return DataFrame{Err: fmt.Errorf("load maps: empty array")}
 	}
