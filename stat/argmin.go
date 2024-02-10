@@ -55,11 +55,11 @@ func ArgMin2[T BaseType](x []T) int {
 }
 
 func __arg_min_go[T Ordered](x []T) int {
-	min := x[0]
+	minValue := x[0]
 	idx := 0
 	for i, v := range x[1:] {
-		if v < min {
-			min = v
+		if v < minValue {
+			minValue = v
 			idx = 1 + i
 		}
 	}
@@ -67,11 +67,11 @@ func __arg_min_go[T Ordered](x []T) int {
 }
 
 func __arg_min_go_bool(x []bool) int {
-	min := BoolToInt(x[0])
+	minValue := BoolToInt(x[0])
 	idx := 0
 	for i, v := range x[1:] {
-		if BoolToInt(v) < min {
-			min = BoolToInt(v)
+		if BoolToInt(v) < minValue {
+			minValue = BoolToInt(v)
 			idx = 1 + i
 		}
 	}

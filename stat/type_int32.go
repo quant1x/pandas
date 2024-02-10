@@ -65,7 +65,7 @@ func int32ToString(v int32) string {
 
 // AnyToInt32 any转换int32
 func AnyToInt32(v any) int32 {
-	if vv, ok := extractValueFromPointer(v); ok {
+	if vv, ok := ExtractValueFromPointer(v); ok {
 		v = vv
 	}
 

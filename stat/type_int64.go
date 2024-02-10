@@ -65,7 +65,7 @@ func int64ToString(v int64) string {
 
 // AnyToInt64 any转换int64
 func AnyToInt64(v any) int64 {
-	if vv, ok := extractValueFromPointer(v); ok {
+	if vv, ok := ExtractValueFromPointer(v); ok {
 		v = vv
 	}
 

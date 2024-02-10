@@ -75,7 +75,7 @@ func (w ExponentialMovingWindow) applyMean(data Series, alpha DType) Series {
 	if w.Adjust {
 		w.adjustedMean(data, alpha, w.IgnoreNA)
 	} else {
-		w.notadjustedMean(data, alpha, w.IgnoreNA)
+		w.notAdjustedMean(data, alpha, w.IgnoreNA)
 	}
 	return data
 }
@@ -106,7 +106,7 @@ func (w ExponentialMovingWindow) adjustedMean(data Series, alpha DType, ignoreNA
 	}
 }
 
-func (w ExponentialMovingWindow) notadjustedMean(data Series, alpha DType, ignoreNA bool) {
+func (w ExponentialMovingWindow) notAdjustedMean(data Series, alpha DType, ignoreNA bool) {
 	hasCallback := false
 	if DTypeIsNaN(alpha) {
 		hasCallback = true

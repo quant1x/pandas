@@ -55,11 +55,11 @@ func ArgMax2[T BaseType](x []T) int {
 }
 
 func __arg_max_go[T Ordered](x []T) int {
-	max := x[0]
+	maxValue := x[0]
 	idx := 0
 	for i, v := range x[1:] {
-		if v > max {
-			max = v
+		if v > maxValue {
+			maxValue = v
 			idx = 1 + i
 		}
 	}
@@ -67,11 +67,11 @@ func __arg_max_go[T Ordered](x []T) int {
 }
 
 func __arg_max_go_bool(x []bool) int {
-	max := BoolToInt(x[0])
+	maxValue := BoolToInt(x[0])
 	idx := 0
 	for i, v := range x[1:] {
-		if BoolToInt(v) > max {
-			max = BoolToInt(v)
+		if BoolToInt(v) > maxValue {
+			maxValue = BoolToInt(v)
 			idx = 1 + i
 		}
 	}

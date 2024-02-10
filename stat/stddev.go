@@ -3,33 +3,9 @@ package stat
 import (
 	"gitee.com/quant1x/gox/num"
 	"gitee.com/quant1x/gox/num/num32"
-	"gonum.org/v1/gonum/stat"
 	"math"
 	"slices"
 )
-
-// Std_TODO StdDev 这个版本有bug, gonum计算的std不对
-// TODO: 于总来解决
-func Std_TODO[T Float](f []T) T {
-	if len(f) == 0 {
-		return T(0)
-	}
-	var d any
-	var s any
-	s = f
-	switch fs := s.(type) {
-	case []float32:
-		d = f32_std(fs)
-	case []float64:
-		// 这里计算不对
-		d = stat.StdDev(fs, nil)
-	default:
-		// 应该不会走到这里
-		panic(ErrUnsupportedType)
-	}
-
-	return d.(T)
-}
 
 // Std 计算标准差
 func Std[T BaseType](f []T) T {

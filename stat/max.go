@@ -11,13 +11,13 @@ func Max[T Number](x []T) T {
 }
 
 func __max_go[T Number | ~string](x []T) T {
-	max := x[0]
+	maxValue := x[0]
 	for _, v := range x[1:] {
-		if v > max {
-			max = v
+		if v > maxValue {
+			maxValue = v
 		}
 	}
-	return max
+	return maxValue
 }
 
 func Max2[T BaseType](x []T) T {

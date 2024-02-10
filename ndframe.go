@@ -2,7 +2,6 @@ package pandas
 
 import (
 	"gitee.com/quant1x/pandas/stat"
-	gs "gonum.org/v1/gonum/stat"
 	"reflect"
 	"sync"
 )
@@ -282,15 +281,7 @@ func (this *NDFrame) Mean() stat.DType {
 }
 
 func (this *NDFrame) StdDev() stat.DType {
-	if this.Len() < 1 {
-		return stat.NaN()
-	}
-	values := make([]stat.DType, this.Len())
-	this.Apply(func(idx int, v any) {
-		values[idx] = stat.Any2DType(v)
-	})
-	stdDev := gs.StdDev(values, nil)
-	return stdDev
+	return this.Std()
 }
 
 func (this *NDFrame) Std() stat.DType {

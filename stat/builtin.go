@@ -39,9 +39,8 @@ func GetAvx2Enabled() bool {
 	return Avx2Enabled
 }
 
-// 从指针/地址提取值
-// Extract value from pointer
-func extractValueFromPointer(v any) (any, bool) {
+// ExtractValueFromPointer 从指针/地址提取值
+func ExtractValueFromPointer(v any) (any, bool) {
 	vv := reflect.ValueOf(v)
 	if vv.Kind() == reflect.Pointer {
 		if vv.IsNil() {
@@ -51,9 +50,6 @@ func extractValueFromPointer(v any) (any, bool) {
 		return ve.Interface(), true
 	}
 	return v, false
-
-	//kind := reflect.ValueOf(v).Kind()
-	//return nil, reflect.Pointer == kind
 }
 
 // IsEmpty Code to test if string is empty

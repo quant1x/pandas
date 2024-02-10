@@ -11,13 +11,13 @@ func Min[T Number](x []T) T {
 }
 
 func __min_go[T Number | ~string](x []T) T {
-	min := x[0]
+	minValue := x[0]
 	for _, v := range x[1:] {
-		if v < min {
-			min = v
+		if v < minValue {
+			minValue = v
 		}
 	}
-	return min
+	return minValue
 }
 
 func Min2[T BaseType](x []T) T {

@@ -38,7 +38,7 @@ func __abs_go[T Signed | Float](x []T) []T {
 	d := make([]T, xlen)
 	for i := 0; i < xlen; i++ {
 		if x[i] < 0 {
-			d[i] = x[i] * (-1)
+			d[i] = -x[i]
 		} else {
 			d[i] = x[i]
 		}

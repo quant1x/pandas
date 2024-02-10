@@ -6,7 +6,6 @@ import (
 )
 
 func TestAbs(t *testing.T) {
-
 	v1 := []int32{1, -1, 2, -2}
 	fmt.Println(Abs(v1))
 	v2 := []int64{1, -1, 2, -2}
@@ -26,5 +25,4 @@ func TestAbs(t *testing.T) {
 	fmt.Println(Abs(v8))
 	v9 := []int{1, -1, 2, -2}
 	fmt.Println(Abs(v9))
-
 }
