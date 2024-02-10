@@ -112,7 +112,7 @@ func __printString(v any) string {
 
 // AnyToString any转string
 func AnyToString(v any) string {
-	if vv, ok := extraceValueFromPointer(v); ok {
+	if vv, ok := extractValueFromPointer(v); ok {
 		v = vv
 	}
 
@@ -121,7 +121,7 @@ func AnyToString(v any) string {
 }
 
 func PrintString(v any) string {
-	if vv, ok := extraceValueFromPointer(v); ok {
+	if vv, ok := extractValueFromPointer(v); ok {
 		v = vv
 	}
 

@@ -41,7 +41,7 @@ func GetAvx2Enabled() bool {
 
 // 从指针/地址提取值
 // Extract value from pointer
-func extraceValueFromPointer(v any) (any, bool) {
+func extractValueFromPointer(v any) (any, bool) {
 	vv := reflect.ValueOf(v)
 	if vv.Kind() == reflect.Pointer {
 		if vv.IsNil() {

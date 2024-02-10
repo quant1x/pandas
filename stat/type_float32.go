@@ -124,7 +124,7 @@ func ParseFloat32(s string, v any) float32 {
 }
 
 func AnyToFloat32(v any) float32 {
-	if vv, ok := extraceValueFromPointer(v); ok {
+	if vv, ok := extractValueFromPointer(v); ok {
 		v = vv
 	}
 

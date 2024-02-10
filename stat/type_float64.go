@@ -74,7 +74,7 @@ func ParseFloat64(s string, v any) float64 {
 }
 
 func AnyToFloat64(v any) float64 {
-	if vv, ok := extraceValueFromPointer(v); ok {
+	if vv, ok := extractValueFromPointer(v); ok {
 		v = vv
 	}
 
