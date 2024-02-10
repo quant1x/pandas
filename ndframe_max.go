@@ -6,21 +6,21 @@ func (this *NDFrame) Max() any {
 	values := this.Values()
 	switch rows := values.(type) {
 	case []bool:
-		max := false
+		maxValue := false
 		i := 0
 		for idx, iv := range rows {
-			if iv && !max {
-				max = iv
+			if iv && !maxValue {
+				maxValue = iv
 				i += 1
 			}
 			_ = idx
 		}
 		if i > 0 {
-			return max
+			return maxValue
 		}
 		return false
 	case []string:
-		max := ""
+		maxValue := ""
 		hasNaN := false
 		i := 0
 		for idx, iv := range rows {
@@ -28,8 +28,8 @@ func (this *NDFrame) Max() any {
 				hasNaN = true
 				break
 			}
-			if iv > max {
-				max = iv
+			if iv > maxValue {
+				maxValue = iv
 				i += 1
 			}
 			_ = idx
@@ -37,25 +37,25 @@ func (this *NDFrame) Max() any {
 		if hasNaN {
 			return stat.StringNaN
 		} else if i > 0 {
-			return max
+			return maxValue
 		}
 		return stat.StringNaN
 	case []int64:
-		max := stat.MinInt64
+		maxValue := stat.MinInt64
 		//i := 0
 		for idx, iv := range rows {
 			if stat.Float64IsNaN(float64(iv)) {
 				continue
 			}
-			if iv > max {
-				max = iv
+			if iv > maxValue {
+				maxValue = iv
 				//i = idx
 			}
 			_ = idx
 		}
-		return max
+		return maxValue
 	case []float32:
-		max := stat.MinFloat32
+		maxValue := stat.MinFloat32
 		hasNan := false
 		i := 0
 		for idx, iv := range rows {
@@ -63,8 +63,8 @@ func (this *NDFrame) Max() any {
 				hasNan = true
 				break
 			}
-			if iv > max {
-				max = iv
+			if iv > maxValue {
+				maxValue = iv
 				i += 1
 			}
 			_ = idx
@@ -72,7 +72,7 @@ func (this *NDFrame) Max() any {
 		if hasNan {
 			return stat.Nil2Float32
 		} else if i > 0 {
-			return max
+			return maxValue
 		}
 		return stat.Nil2Float32
 	//case []float32:
@@ -81,7 +81,7 @@ func (this *NDFrame) Max() any {
 	//	}
 	//	return stat.Max(rows)
 	case []float64:
-		max := stat.MinFloat64
+		maxValue := stat.MinFloat64
 		hasNaN := false
 		i := 0
 		for idx, iv := range rows {
@@ -89,8 +89,8 @@ func (this *NDFrame) Max() any {
 				hasNaN = true
 				break
 			}
-			if iv > max {
-				max = iv
+			if iv > maxValue {
+				maxValue = iv
 				i += 1
 			}
 			_ = idx
@@ -98,7 +98,7 @@ func (this *NDFrame) Max() any {
 		if hasNaN {
 			return stat.Nil2Float64
 		} else if i > 0 {
-			return max
+			return maxValue
 		}
 		return stat.Nil2Float64
 	//case []float64:
