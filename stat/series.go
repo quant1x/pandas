@@ -200,3 +200,7 @@ func NewSeries[T BaseType](data ...T) Series {
 	S = NDArray[T](values)
 	return S
 }
+
+func ToSeries[T BaseType](data ...T) Series {
+	return NDArray[T](data)
+}
