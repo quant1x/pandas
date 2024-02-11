@@ -201,6 +201,7 @@ func NewSeries[T BaseType](data ...T) Series {
 	return S
 }
 
+// ToSeries 转换切片为Series
 func ToSeries[T BaseType](data ...T) Series {
 	return NDArray[T](data)
 }
