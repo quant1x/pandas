@@ -2,12 +2,11 @@ package pandas
 
 import (
 	"gitee.com/quant1x/num"
-	"gitee.com/quant1x/pandas/stat"
 	"slices"
 )
 
-func (self DataFrame) align(ss ...stat.Series) []stat.Series {
-	defaultValue := []stat.Series{}
+func (self DataFrame) align(ss ...Series) []Series {
+	defaultValue := []Series{}
 	sLen := len(ss)
 	if sLen == 0 {
 		return defaultValue
@@ -21,7 +20,7 @@ func (self DataFrame) align(ss ...stat.Series) []stat.Series {
 	if maxLength <= 0 {
 		return defaultValue
 	}
-	cols := make([]stat.Series, sLen)
+	cols := make([]Series, sLen)
 	for i, v := range ss {
 		vt := v.Type()
 		vn := v.Name()
@@ -29,15 +28,15 @@ func (self DataFrame) align(ss ...stat.Series) []stat.Series {
 		// 声明any的ns变量用于接收逻辑分支的输出
 		// 切片数据不能直接对齐, 需要根据类型指定Nil和NaN默认值
 		var ns any
-		if vt == stat.SERIES_TYPE_BOOL {
+		if vt == SERIES_TYPE_BOOL {
 			ns = num.Align(vs.([]bool), num.Nil2Bool, int(maxLength))
-		} else if vt == stat.SERIES_TYPE_INT64 {
+		} else if vt == SERIES_TYPE_INT64 {
 			ns = num.Align(vs.([]int64), num.Nil2Int64, int(maxLength))
-		} else if vt == stat.SERIES_TYPE_STRING {
+		} else if vt == SERIES_TYPE_STRING {
 			ns = num.Align(vs.([]string), num.Nil2String, int(maxLength))
-		} else if vt == stat.SERIES_TYPE_FLOAT32 {
+		} else if vt == SERIES_TYPE_FLOAT32 {
 			ns = num.Align(vs.([]float32), num.Nil2Float32, int(maxLength))
-		} else if vt == stat.SERIES_TYPE_FLOAT64 {
+		} else if vt == SERIES_TYPE_FLOAT64 {
 			ns = num.Align(vs.([]float64), num.Nil2Float64, int(maxLength))
 		}
 		cols[i] = NewSeries(vt, vn, ns)
@@ -46,7 +45,7 @@ func (self DataFrame) align(ss ...stat.Series) []stat.Series {
 }
 
 // Join 默认右连接, 加入一个series
-func (self DataFrame) Join(S ...stat.Series) DataFrame {
+func (self DataFrame) Join(S ...Series) DataFrame {
 	sNum := len(S)
 	if sNum == 0 {
 		return self

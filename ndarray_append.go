@@ -1,4 +1,4 @@
-package stat
+package pandas
 
 import (
 	"gitee.com/quant1x/num"
@@ -46,7 +46,7 @@ func ndArrayAssign[T num.BaseType](type_ Type, array Series, idx, size int, v T)
 
 // 插入一条记录
 func (self NDArray[T]) insert(idx, size int, v any) NDArray[T] {
-	type_ := checkoutRawType(self)
+	type_ := num.CheckoutRawType(self)
 	if type_ == SERIES_TYPE_BOOL {
 		val := num.AnyToBool(v)
 		an := ndArrayAssign[bool](type_, self, idx, size, val)

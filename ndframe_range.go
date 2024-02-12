@@ -2,17 +2,16 @@ package pandas
 
 import (
 	"gitee.com/quant1x/gox/api"
-	"gitee.com/quant1x/pandas/stat"
 	"reflect"
 )
 
 // Copy 复制一个副本
-func (this *NDFrame) Copy() stat.Series {
+func (this *NDFrame) Copy() Series {
 	vlen := this.Len()
 	return this.Subset(0, vlen, true)
 }
 
-func (this *NDFrame) Subset(start, end int, opt ...any) stat.Series {
+func (this *NDFrame) Subset(start, end int, opt ...any) Series {
 	// 默认不copy
 	var __optCopy = false
 	if len(opt) > 0 {
@@ -93,13 +92,13 @@ func (this *NDFrame) Subset(start, end int, opt ...any) stat.Series {
 		rows:      rows,
 		values:    vs,
 	}
-	var s stat.Series
+	var s Series
 	s = &frame
 	return s
 }
 
 // Select 选取一段记录
-func (this *NDFrame) Select(r api.ScopeLimit) stat.Series {
+func (this *NDFrame) Select(r api.ScopeLimit) Series {
 	start, end, err := r.Limits(this.Len())
 	if err != nil {
 		return nil

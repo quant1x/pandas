@@ -1,4 +1,4 @@
-package stat
+package pandas
 
 import (
 	"gitee.com/quant1x/num"
@@ -9,7 +9,7 @@ import (
 // 这里做数组统一转换
 func convert[T num.GenericType](s Series, v T) {
 	values := s.Values()
-	rawType := checkoutRawType(values)
+	rawType := num.CheckoutRawType(values)
 	values, ok := values.([]T)
 	_ = rawType
 	_ = ok

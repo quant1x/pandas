@@ -2,12 +2,12 @@ package formula
 
 import (
 	"gitee.com/quant1x/num"
-	"gitee.com/quant1x/pandas/stat"
+	"gitee.com/quant1x/pandas"
 )
 
 // BARSSINCEN N周期内第一次S条件成立到现在的周期数,N为常量
-func BARSSINCEN(S stat.Series, N any) stat.Series {
-	ret := S.Rolling(N).Apply(func(X stat.Series, M num.DType) num.DType {
+func BARSSINCEN(S pandas.Series, N any) pandas.Series {
+	ret := S.Rolling(N).Apply(func(X pandas.Series, M num.DType) num.DType {
 		x := X.DTypes()
 		n := int(M)
 		argMax := num.ArgMax(x)

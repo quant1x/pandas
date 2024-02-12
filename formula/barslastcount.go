@@ -2,11 +2,11 @@ package formula
 
 import (
 	"gitee.com/quant1x/num"
-	"gitee.com/quant1x/pandas/stat"
+	"gitee.com/quant1x/pandas"
 )
 
 // BARSLASTCOUNT 统计连续满足S条件的周期数
-func BARSLASTCOUNT(S stat.Series) stat.Series {
+func BARSLASTCOUNT(S pandas.Series) pandas.Series {
 	s := S.DTypes()
 	slen := len(s)
 	rt := num.Repeat[num.Int](0, slen+1)
@@ -19,5 +19,5 @@ func BARSLASTCOUNT(S stat.Series) stat.Series {
 	}
 	ns := rt[1:]
 	//return stat.NewNDArray[stat.Int](rt[1:]...)
-	return stat.ToSeries(ns...)
+	return pandas.ToSeries(ns...)
 }

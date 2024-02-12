@@ -3,23 +3,22 @@ package pandas
 import (
 	"fmt"
 	"gitee.com/quant1x/num"
-	"gitee.com/quant1x/pandas/stat"
 )
 
 // Col returns a copy of the Series with the given column name contained in the DataFrame.
 // 选取一列
-func (self DataFrame) Col(colname string, args ...bool) stat.Series {
+func (self DataFrame) Col(colname string, args ...bool) Series {
 	inplace := false
 	if len(args) >= 1 {
 		inplace = args[0]
 	}
 	if self.Err != nil {
-		return NewSeriesWithType(stat.SERIES_TYPE_INVAILD, "")
+		return NewSeriesWithType(SERIES_TYPE_INVAILD, "")
 	}
 	// Check that colname exist on dataframe
 	idx := findInStringSlice(colname, self.Names())
 	if idx < 0 {
-		return NewSeriesWithType(stat.SERIES_TYPE_INVAILD, "")
+		return NewSeriesWithType(SERIES_TYPE_INVAILD, "")
 	}
 	if inplace {
 		return self.columns[idx]
@@ -27,17 +26,17 @@ func (self DataFrame) Col(colname string, args ...bool) stat.Series {
 	return self.columns[idx].Copy()
 }
 
-func (self DataFrame) ColAsNDArray(colname string) stat.Series {
+func (self DataFrame) ColAsNDArray(colname string) Series {
 	if self.Err != nil {
-		return stat.NewNDArray[num.DType]()
+		return NewNDArray[num.DType]()
 	}
 	// Check that colname exist on dataframe
 	idx := findInStringSlice(colname, self.Names())
 	if idx < 0 {
-		return stat.NewNDArray[num.DType]()
+		return NewNDArray[num.DType]()
 	}
 	vs := self.columns[idx].DTypes()
-	return stat.NewNDArray[num.DType](vs...)
+	return NewNDArray[num.DType](vs...)
 }
 
 // SetNames changes the column names of a DataFrame to the ones passed as an

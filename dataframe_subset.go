@@ -2,7 +2,6 @@ package pandas
 
 import (
 	"gitee.com/quant1x/gox/api"
-	"gitee.com/quant1x/pandas/stat"
 )
 
 // Subset returns a subset of the rows of the original DataFrame based on the
@@ -11,7 +10,7 @@ func (self DataFrame) Subset(start, end int) DataFrame {
 	if self.Err != nil {
 		return self
 	}
-	columns := make([]stat.Series, self.ncols)
+	columns := make([]Series, self.ncols)
 	for i, column := range self.columns {
 		s := column.Subset(start, end)
 		columns[i] = s
@@ -35,7 +34,7 @@ func (self DataFrame) Sub(start, end int) DataFrame {
 
 // SelectRows 选择一段记录
 func (self DataFrame) SelectRows(p api.ScopeLimit) DataFrame {
-	columns := []stat.Series{}
+	columns := []Series{}
 	for i := range self.columns {
 		columns = append(columns, self.columns[i].Select(p))
 	}
@@ -70,13 +69,13 @@ func (self DataFrame) Concat(dfb DataFrame) DataFrame {
 		}
 	}
 
-	expandedSeries := make([]stat.Series, len(cols))
+	expandedSeries := make([]Series, len(cols))
 	for k, v := range cols {
 		aidx := findInStringSlice(v, self.Names())
 		bidx := findInStringSlice(v, dfb.Names())
 
 		// aidx and bidx must not be -1 at the same time.
-		var a, b stat.Series
+		var a, b Series
 		if aidx != -1 {
 			a = self.columns[aidx]
 		} else {

@@ -4,22 +4,22 @@ import (
 	"gitee.com/quant1x/gox/api"
 	"gitee.com/quant1x/gox/exception"
 	"gitee.com/quant1x/num"
-	"gitee.com/quant1x/pandas/stat"
+	"gitee.com/quant1x/pandas"
 )
 
 // WMA 通达信S序列的N日加权移动平均 Yn = (1*X1+2*X2+3*X3+...+n*Xn)/(1+2+3+...+Xn)
-func WMA(S stat.Series, N any) stat.Series {
+func WMA(S pandas.Series, N any) pandas.Series {
 	var X []num.DType
 	switch v := N.(type) {
 	case int:
 		X = num.Repeat[num.DType](num.DType(v), S.Len())
-	case stat.Series:
+	case pandas.Series:
 		vs := v.DTypes()
 		X = num.Align(vs, num.DTypeNaN, S.Len())
 	default:
 		panic(exception.New(1, "error window"))
 	}
-	d := S.Rolling(X).Apply(func(S stat.Series, N num.DType) num.DType {
+	d := S.Rolling(X).Apply(func(S pandas.Series, N num.DType) num.DType {
 		if S.Len() == 0 {
 			return num.DTypeNaN
 		}

@@ -4,23 +4,22 @@ import (
 	"fmt"
 	"gitee.com/quant1x/gox/api"
 	"gitee.com/quant1x/num"
-	"gitee.com/quant1x/pandas/stat"
 	"testing"
 )
 
 func TestSeriesFrame(t *testing.T) {
 	data := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
-	s1 := NewSeries(stat.SERIES_TYPE_FLOAT64, "x", data)
+	s1 := NewSeries(SERIES_TYPE_FLOAT64, "x", data)
 	fmt.Printf("%+v\n", s1)
 
 	var d1 any
 	d1 = data
-	s2 := NewSeries(stat.SERIES_TYPE_FLOAT64, "x", d1)
+	s2 := NewSeries(SERIES_TYPE_FLOAT64, "x", d1)
 	fmt.Printf("%+v\n", s2)
 
-	var s3 stat.Series
+	var s3 Series
 	// s3 = NewSeriesBool("x", data)
-	s3 = NewSeries(stat.SERIES_TYPE_BOOL, "x", data)
+	s3 = NewSeries(SERIES_TYPE_BOOL, "x", data)
 	fmt.Printf("%+v\n", s3.Values())
 }
 
@@ -66,7 +65,7 @@ func TestRolling2(t *testing.T) {
 	fmt.Println("序列化结果:", r1)
 	fmt.Println("------------------------------------------------------------")
 	d2 := []float64{1, 2, 3, 4, 3, 3, 2, 1, num.Nil2Float64, num.Nil2Float64, num.Nil2Float64, num.Nil2Float64}
-	s2 := NewSeries(stat.SERIES_TYPE_FLOAT64, "x", d2)
+	s2 := NewSeries(SERIES_TYPE_FLOAT64, "x", d2)
 	fmt.Printf("序列化参数: %+v\n", s2.Values())
 	r2 := df.Col("x").Rolling(s2).Mean().Values()
 	fmt.Println("序列化结果:", r2)

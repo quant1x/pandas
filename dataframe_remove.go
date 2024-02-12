@@ -2,7 +2,6 @@ package pandas
 
 import (
 	"gitee.com/quant1x/gox/api"
-	"gitee.com/quant1x/pandas/stat"
 )
 
 // Remove 删除一段范围内的记录
@@ -12,7 +11,7 @@ func (self DataFrame) Remove(p api.ScopeLimit) DataFrame {
 	if err != nil {
 		return self
 	}
-	columns := []stat.Series{}
+	columns := []Series{}
 	for i := range self.columns {
 		ht := self.columns[i].Subset(0, start, true)
 		tail := self.columns[i].Subset(end+1, rowLen).Values()

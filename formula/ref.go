@@ -2,11 +2,11 @@ package formula
 
 import (
 	"gitee.com/quant1x/num"
-	"gitee.com/quant1x/pandas/stat"
+	"gitee.com/quant1x/pandas"
 )
 
 // REF 引用前N的序列
-func REF(S stat.Series, N any) stat.Series {
+func REF(S pandas.Series, N any) pandas.Series {
 	return S.Ref(N)
 }
 

@@ -3,23 +3,22 @@ package pandas
 import (
 	"gitee.com/quant1x/gox/api"
 	"gitee.com/quant1x/num"
-	"gitee.com/quant1x/pandas/stat"
 	"reflect"
 )
 
-func (this *NDFrame) Reverse() stat.Series {
+func (this *NDFrame) Reverse() Series {
 	s := this.Empty()
 
-	if this.type_ == stat.SERIES_TYPE_BOOL {
+	if this.type_ == SERIES_TYPE_BOOL {
 		values := api.Reverse(this.values.([]bool))
 		s = s.Append(values)
-	} else if this.type_ == stat.SERIES_TYPE_INT64 {
+	} else if this.type_ == SERIES_TYPE_INT64 {
 		values := api.Reverse(this.values.([]int64))
 		s = s.Append(values)
-	} else if this.type_ == stat.SERIES_TYPE_FLOAT32 {
+	} else if this.type_ == SERIES_TYPE_FLOAT32 {
 		values := api.Reverse(this.values.([]float32))
 		s = s.Append(values)
-	} else if this.type_ == stat.SERIES_TYPE_FLOAT64 {
+	} else if this.type_ == SERIES_TYPE_FLOAT64 {
 		values := api.Reverse(this.values.([]float64))
 		s = s.Append(values)
 	} else {
@@ -31,16 +30,16 @@ func (this *NDFrame) Reverse() stat.Series {
 
 // 插入一条记录
 func (this *NDFrame) insert(idx, size int, v any) {
-	if this.type_ == stat.SERIES_TYPE_BOOL {
+	if this.type_ == SERIES_TYPE_BOOL {
 		val := num.AnyToBool(v)
 		ndFrameAssign[bool](this, idx, size, val)
-	} else if this.type_ == stat.SERIES_TYPE_INT64 {
+	} else if this.type_ == SERIES_TYPE_INT64 {
 		val := num.AnyToInt64(v)
 		ndFrameAssign[int64](this, idx, size, val)
-	} else if this.type_ == stat.SERIES_TYPE_FLOAT32 {
+	} else if this.type_ == SERIES_TYPE_FLOAT32 {
 		val := num.AnyToFloat32(v)
 		ndFrameAssign[float32](this, idx, size, val)
-	} else if this.type_ == stat.SERIES_TYPE_FLOAT64 {
+	} else if this.type_ == SERIES_TYPE_FLOAT64 {
 		val := num.AnyToFloat64(v)
 		ndFrameAssign[float64](this, idx, size, val)
 	} else {
@@ -50,7 +49,7 @@ func (this *NDFrame) insert(idx, size int, v any) {
 }
 
 // Append 批量增加记录
-func (this *NDFrame) Append(values ...any) stat.Series {
+func (this *NDFrame) Append(values ...any) Series {
 	size := 0
 	for idx, v := range values {
 		switch val := v.(type) {
@@ -78,7 +77,7 @@ func (this *NDFrame) Append(values ...any) stat.Series {
 	return this
 }
 
-func (this *NDFrame) Concat(x stat.Series) stat.Series {
+func (this *NDFrame) Concat(x Series) Series {
 	y := this.Copy()
 	y = y.Append(x.Values())
 	return y

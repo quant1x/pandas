@@ -3,16 +3,16 @@ package formula
 import (
 	"gitee.com/quant1x/num"
 	"gitee.com/quant1x/num/x64"
-	"gitee.com/quant1x/pandas/stat"
+	"gitee.com/quant1x/pandas"
 )
 
 // EQ 相等
-func EQ(S1, S2 stat.Series) []bool {
+func EQ(S1, S2 pandas.Series) []bool {
 	var d []bool
 	switch S1.Type() {
-	case stat.SERIES_TYPE_BOOL:
+	case pandas.SERIES_TYPE_BOOL:
 		d = num.Equal[bool](S1.Values().([]bool), S2.Values().([]bool))
-	case stat.SERIES_TYPE_STRING:
+	case pandas.SERIES_TYPE_STRING:
 		d = num.Equal[string](S1.Values().([]string), S2.Values().([]string))
 	default:
 		f1 := S1.DTypes()
@@ -26,12 +26,12 @@ func EQ2(S1 []num.DType, S2 int) []bool {
 	return x64.EqNumber(S1, num.DType(S2))
 }
 
-func NEQ(S1, S2 stat.Series) []bool {
+func NEQ(S1, S2 pandas.Series) []bool {
 	var d []bool
 	switch S1.Type() {
-	case stat.SERIES_TYPE_BOOL:
+	case pandas.SERIES_TYPE_BOOL:
 		d = num.Equal[bool](S1.Values().([]bool), S2.Values().([]bool))
-	case stat.SERIES_TYPE_STRING:
+	case pandas.SERIES_TYPE_STRING:
 		d = num.Equal[string](S1.Values().([]string), S2.Values().([]string))
 	default:
 		f1 := S1.DTypes()
@@ -49,10 +49,10 @@ func OR(a, b []bool) []bool {
 	return num.Or(a, b)
 }
 
-func NOT(S stat.Series) stat.Series {
+func NOT(S pandas.Series) pandas.Series {
 	x := S.Bools()
 	x = num.Not(x)
-	return stat.ToSeries(x...)
+	return pandas.ToSeries(x...)
 }
 
 // CompareGt 比较 v > x
@@ -91,7 +91,7 @@ func __compare(v []num.DType, x any, comparator func(x, y []float64) []bool) []b
 			vlen = xlen
 		}
 		X = num.Align[num.DType](vx, defaultValue, vlen)
-	case stat.Series:
+	case pandas.Series:
 		vs := vx.DTypes()
 		xlen := len(vs)
 		if vlen < xlen {

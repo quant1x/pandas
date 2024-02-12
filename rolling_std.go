@@ -1,4 +1,4 @@
-package stat
+package pandas
 
 func (r RollingAndExpandingMixin) Std() Series {
 	s := r.Series.Empty()

@@ -3,7 +3,6 @@ package pandas
 import (
 	"fmt"
 	"gitee.com/quant1x/num"
-	"gitee.com/quant1x/pandas/stat"
 	"testing"
 )
 
@@ -30,7 +29,7 @@ func TestDataFrame_Group(t *testing.T) {
 	df := LoadStructs(data)
 	fmt.Println(df)
 
-	df1 := df.Group("A", func(kind stat.Type, e any) bool {
+	df1 := df.Group("A", func(kind Type, e any) bool {
 		v := num.AnyToString(e)
 		if v == "b" {
 			return true

@@ -2,7 +2,7 @@ package formula
 
 import (
 	"gitee.com/quant1x/num"
-	"gitee.com/quant1x/pandas/stat"
+	"gitee.com/quant1x/pandas"
 )
 
 // DMA 返回动态移动平均
@@ -13,10 +13,10 @@ import (
 //	算法:Y=A*X+(1-A)*Y',其中Y'表示上一周期Y值,A必须大于0且小于1.A支持变量
 //	例如:
 //	DMA(CLOSE,VOL/CAPITAL)表示求以换手率作平滑因子的平均价
-func DMA(S stat.Series, A any) []num.DType {
+func DMA(S pandas.Series, A any) []num.DType {
 	switch N := A.(type) {
 	case /*nil, */ int8, uint8, int16, uint16, int32, uint32, int64, uint64, int, uint, float32, float64 /*, bool, string*/ :
-		x := S.EWM(stat.EW{Alpha: 1 / num.Any2DType(N), Adjust: false}).Mean().DTypes()
+		x := S.EWM(pandas.EW{Alpha: 1 / num.Any2DType(N), Adjust: false}).Mean().DTypes()
 		return x
 	case []num.DType:
 		s := S.DTypes()
@@ -31,7 +31,7 @@ func DMA(S stat.Series, A any) []num.DType {
 			Y[i] = a*s[i] + (1-a)*Y[i-1]
 		}
 		return Y
-	case stat.Series:
+	case pandas.Series:
 		s := S.DTypes()
 		M := N.DTypes()
 		num.Fill(M, 1.0, true)

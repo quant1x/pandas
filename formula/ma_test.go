@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"gitee.com/quant1x/num"
 	"gitee.com/quant1x/pandas"
-	"gitee.com/quant1x/pandas/stat"
 	"testing"
 )
 
@@ -35,7 +34,7 @@ func TestMA(t *testing.T) {
 }
 
 func TestMAx(t *testing.T) {
-	s := stat.NewNDArray(1, 2, 3, 4, 5, 6)
+	s := pandas.NewNDArray(1, 2, 3, 4, 5, 6)
 	ma5 := MA(s, 5)
 	fmt.Println(ma5)
 	arr := ma5.DTypes()

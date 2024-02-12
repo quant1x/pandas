@@ -2,7 +2,6 @@ package pandas
 
 import (
 	"gitee.com/quant1x/num"
-	"gitee.com/quant1x/pandas/stat"
 	"reflect"
 	"sync"
 )
@@ -12,7 +11,7 @@ type NDFrame struct {
 	lock      sync.RWMutex        // 读写锁
 	formatter num.StringFormatter // 字符串格式化工具
 	name      string              // 帧名称
-	type_     stat.Type           // values元素类型
+	type_     Type                // values元素类型
 	copy_     bool                // 是否副本
 	nilCount  int                 // nil和nan的元素有多少, 这种统计在bool和int64类型中不会大于0, 只对float64及string有效
 	rows      int                 // 行数
@@ -34,7 +33,7 @@ func NewNDFrame[E num.GenericType](name string, rows ...E) *NDFrame {
 	frame := NDFrame{
 		formatter: num.DefaultFormatter,
 		name:      name,
-		type_:     stat.SERIES_TYPE_INVAILD,
+		type_:     SERIES_TYPE_INVAILD,
 		nilCount:  0,
 		rows:      0,
 		values:    []E{},
@@ -53,20 +52,20 @@ func NewNDFrame[E num.GenericType](name string, rows ...E) *NDFrame {
 // 赋值
 func ndFrameAssign[T num.GenericType](frame *NDFrame, idx, size int, v T) {
 	// 检测类型
-	if frame.type_ == stat.SERIES_TYPE_INVAILD {
+	if frame.type_ == SERIES_TYPE_INVAILD {
 		_type, _ := detectTypes(v)
-		if _type != stat.SERIES_TYPE_INVAILD {
+		if _type != SERIES_TYPE_INVAILD {
 			frame.type_ = _type
 		}
 	}
 	_vv := reflect.ValueOf(v)
 	_vi := _vv.Interface()
 	// float和string类型有可能是NaN, 对nil和NaN进行计数
-	if frame.Type() == stat.SERIES_TYPE_FLOAT32 && num.Float32IsNaN(_vi.(float32)) {
+	if frame.Type() == SERIES_TYPE_FLOAT32 && num.Float32IsNaN(_vi.(float32)) {
 		frame.nilCount++
-	} else if frame.Type() == stat.SERIES_TYPE_FLOAT64 && num.Float64IsNaN(_vi.(float64)) {
+	} else if frame.Type() == SERIES_TYPE_FLOAT64 && num.Float64IsNaN(_vi.(float64)) {
 		frame.nilCount++
-	} else if frame.Type() == stat.SERIES_TYPE_STRING && num.StringIsNaN(_vi.(string)) {
+	} else if frame.Type() == SERIES_TYPE_STRING && num.StringIsNaN(_vi.(string)) {
 		frame.nilCount++
 		// 以下修正string的NaN值, 统一为"NaN"
 		//_rv := reflect.ValueOf(StringNaN)
@@ -102,7 +101,7 @@ func (this *NDFrame) Rename(n string) {
 	this.name = n
 }
 
-func (this *NDFrame) Type() stat.Type {
+func (this *NDFrame) Type() Type {
 	return this.type_
 }
 
@@ -150,15 +149,15 @@ func (this *NDFrame) Strings() []string {
 }
 
 func (this *NDFrame) Bools() []bool {
-	return stat.ToBool(this)
+	return ToBool(this)
 }
 
-func (this *NDFrame) Empty(t ...stat.Type) stat.Series {
+func (this *NDFrame) Empty(t ...Type) Series {
 	if len(t) > 0 {
 		this.type_ = t[0]
 	}
 	var frame NDFrame
-	if this.type_ == stat.SERIES_TYPE_STRING {
+	if this.type_ == SERIES_TYPE_STRING {
 		frame = NDFrame{
 			formatter: this.formatter,
 			name:      this.name,
@@ -167,7 +166,7 @@ func (this *NDFrame) Empty(t ...stat.Type) stat.Series {
 			rows:      0,
 			values:    []string{},
 		}
-	} else if this.type_ == stat.SERIES_TYPE_BOOL {
+	} else if this.type_ == SERIES_TYPE_BOOL {
 		frame = NDFrame{
 			formatter: this.formatter,
 			name:      this.name,
@@ -176,7 +175,7 @@ func (this *NDFrame) Empty(t ...stat.Type) stat.Series {
 			rows:      0,
 			values:    []bool{},
 		}
-	} else if this.type_ == stat.SERIES_TYPE_INT64 {
+	} else if this.type_ == SERIES_TYPE_INT64 {
 		frame = NDFrame{
 			formatter: this.formatter,
 			name:      this.name,
@@ -185,7 +184,7 @@ func (this *NDFrame) Empty(t ...stat.Type) stat.Series {
 			rows:      0,
 			values:    []int64{},
 		}
-	} else if this.type_ == stat.SERIES_TYPE_FLOAT32 {
+	} else if this.type_ == SERIES_TYPE_FLOAT32 {
 		frame = NDFrame{
 			formatter: this.formatter,
 			name:      this.name,
@@ -194,7 +193,7 @@ func (this *NDFrame) Empty(t ...stat.Type) stat.Series {
 			rows:      0,
 			values:    []float32{},
 		}
-	} else if this.type_ == stat.SERIES_TYPE_FLOAT64 {
+	} else if this.type_ == SERIES_TYPE_FLOAT64 {
 		frame = NDFrame{
 			formatter: this.formatter,
 			name:      this.name,
@@ -218,7 +217,7 @@ func (this *NDFrame) Records(round ...bool) []string {
 	t := this.Type()
 	this.Apply(func(idx int, v any) {
 		val := v
-		if needRound && (t == stat.SERIES_TYPE_FLOAT32 || t == stat.SERIES_TYPE_FLOAT64) {
+		if needRound && (t == SERIES_TYPE_FLOAT32 || t == SERIES_TYPE_FLOAT64) {
 			ret[idx] = num.PrintString(val)
 		} else {
 			ret[idx] = num.AnyToString(val)
@@ -227,7 +226,7 @@ func (this *NDFrame) Records(round ...bool) []string {
 	return ret
 }
 
-func (this *NDFrame) Repeat(x any, repeats int) stat.Series {
+func (this *NDFrame) Repeat(x any, repeats int) Series {
 	switch values := this.values.(type) {
 	case []bool:
 		_ = values
@@ -248,23 +247,23 @@ func (this *NDFrame) Repeat(x any, repeats int) stat.Series {
 	}
 }
 
-func (this *NDFrame) Shift(periods int) stat.Series {
+func (this *NDFrame) Shift(periods int) Series {
 	switch values := this.values.(type) {
 	case []bool:
 		d := num.Shift[bool](values, periods)
-		return NewSeries(stat.SERIES_TYPE_BOOL, this.Name(), d)
+		return NewSeries(SERIES_TYPE_BOOL, this.Name(), d)
 	case []string:
 		d := num.Shift[string](values, periods)
-		return NewSeries(stat.SERIES_TYPE_STRING, this.Name(), d)
+		return NewSeries(SERIES_TYPE_STRING, this.Name(), d)
 	case []int64:
 		d := num.Shift[int64](values, periods)
-		return NewSeries(stat.SERIES_TYPE_INT64, this.Name(), d)
+		return NewSeries(SERIES_TYPE_INT64, this.Name(), d)
 	case []float32:
 		d := num.Shift[float32](values, periods)
-		return NewSeries(stat.SERIES_TYPE_FLOAT32, this.Name(), d)
+		return NewSeries(SERIES_TYPE_FLOAT32, this.Name(), d)
 	default: //case []float64:
 		d := num.Shift[float64](values.([]float64), periods)
-		return NewSeries(stat.SERIES_TYPE_FLOAT64, this.Name(), d)
+		return NewSeries(SERIES_TYPE_FLOAT64, this.Name(), d)
 	}
 }
 
@@ -297,7 +296,7 @@ func (this *NDFrame) Std() num.DType {
 	return stdDev
 }
 
-func (this *NDFrame) FillNa(v any, inplace bool) stat.Series {
+func (this *NDFrame) FillNa(v any, inplace bool) Series {
 	values := this.Values()
 	switch rows := values.(type) {
 	case []string:

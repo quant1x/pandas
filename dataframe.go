@@ -2,13 +2,12 @@ package pandas
 
 import (
 	"fmt"
-	"gitee.com/quant1x/pandas/stat"
 	"sort"
 )
 
 // DataFrame 以gota的DataFrame的方法为主, 兼顾新流程, 避免单元格元素结构化
 type DataFrame struct {
-	columns []stat.Series
+	columns []Series
 	ncols   int
 	nrows   int
 
@@ -17,24 +16,24 @@ type DataFrame struct {
 }
 
 // NewDataFrame is the generic DataFrame constructor
-func NewDataFrame(se ...stat.Series) DataFrame {
+func NewDataFrame(se ...Series) DataFrame {
 	if se == nil || len(se) == 0 {
 		return DataFrame{Err: fmt.Errorf("empty DataFrame")}
 	}
 
-	columns := make([]stat.Series, len(se))
+	columns := make([]Series, len(se))
 	for i, s := range se {
-		var d stat.Series
-		if s.Type() == stat.SERIES_TYPE_INT64 {
-			d = NewSeriesWithType(stat.SERIES_TYPE_INT64, s.Name(), s.Values())
-		} else if s.Type() == stat.SERIES_TYPE_BOOL {
-			d = NewSeriesWithType(stat.SERIES_TYPE_BOOL, s.Name(), s.Values())
-		} else if s.Type() == stat.SERIES_TYPE_STRING {
-			d = NewSeriesWithType(stat.SERIES_TYPE_STRING, s.Name(), s.Values())
-		} else if s.Type() == stat.SERIES_TYPE_FLOAT32 {
-			d = NewSeriesWithType(stat.SERIES_TYPE_FLOAT32, s.Name(), s.Values())
+		var d Series
+		if s.Type() == SERIES_TYPE_INT64 {
+			d = NewSeriesWithType(SERIES_TYPE_INT64, s.Name(), s.Values())
+		} else if s.Type() == SERIES_TYPE_BOOL {
+			d = NewSeriesWithType(SERIES_TYPE_BOOL, s.Name(), s.Values())
+		} else if s.Type() == SERIES_TYPE_STRING {
+			d = NewSeriesWithType(SERIES_TYPE_STRING, s.Name(), s.Values())
+		} else if s.Type() == SERIES_TYPE_FLOAT32 {
+			d = NewSeriesWithType(SERIES_TYPE_FLOAT32, s.Name(), s.Values())
 		} else {
-			d = NewSeriesWithType(stat.SERIES_TYPE_FLOAT64, s.Name(), s.Values())
+			d = NewSeriesWithType(SERIES_TYPE_FLOAT64, s.Name(), s.Values())
 		}
 		columns[i] = d
 	}
@@ -78,7 +77,7 @@ func (self DataFrame) Error() error {
 }
 
 // 检查列的尺寸
-func checkColumnsDimensions(se ...stat.Series) (nrows, ncols int, err error) {
+func checkColumnsDimensions(se ...Series) (nrows, ncols int, err error) {
 	ncols = len(se)
 	nrows = -1
 	if se == nil || ncols == 0 {

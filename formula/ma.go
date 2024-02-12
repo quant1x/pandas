@@ -2,18 +2,18 @@ package formula
 
 import (
 	"gitee.com/quant1x/num"
-	"gitee.com/quant1x/pandas/stat"
+	"gitee.com/quant1x/pandas"
 )
 
 // MAV1 计算移动均线
 //
 //	求序列的N日简单移动平均值, 返回序列
 //	Deprecated: 推荐 MA
-func MAV1(S stat.Series, N any) []num.DType {
+func MAV1(S pandas.Series, N any) []num.DType {
 	return S.Rolling(N).Mean().DTypes()
 }
 
-func MA(S stat.Series, N any) stat.Series {
+func MA(S pandas.Series, N any) pandas.Series {
 	return S.Rolling(N).Mean()
 }
 

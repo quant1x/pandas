@@ -3,7 +3,7 @@ package formula
 import (
 	"gitee.com/quant1x/gox/api"
 	"gitee.com/quant1x/num"
-	"gitee.com/quant1x/pandas/stat"
+	"gitee.com/quant1x/pandas"
 )
 
 // LAST LAST(X,A,B):持续存在.
@@ -13,8 +13,8 @@ import (
 //	LAST(CLOSE>OPEN,10,5)
 //	表示从前10日到前5日内一直阳线
 //	若A为0,表示从第一天开始,B为0,表示到最后日止
-func LAST(X stat.Series, A, B int) stat.Series {
-	s := X.Rolling(A + 1).Apply(func(S stat.Series, N num.DType) num.DType {
+func LAST(X pandas.Series, A, B int) pandas.Series {
+	s := X.Rolling(A + 1).Apply(func(S pandas.Series, N num.DType) num.DType {
 		s := S.DTypes()
 		s = api.Reverse(s)
 		T := s[B:]

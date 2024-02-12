@@ -3,7 +3,7 @@ package formula
 import (
 	"gitee.com/quant1x/gox/exception"
 	"gitee.com/quant1x/num"
-	"gitee.com/quant1x/pandas/stat"
+	"gitee.com/quant1x/pandas"
 )
 
 // FILTER 过滤连续出现的信号
@@ -12,12 +12,12 @@ import (
 //	FILTER(X,N):X满足条件后,将其后N周期内的数据置为0,N为常量.
 //	例如:
 //	FILTER(CLOSE>OPEN,5)查找阳线,5天内再次出现的阳线不被记录在内
-func FILTER(S stat.Series, N any) stat.Series {
+func FILTER(S pandas.Series, N any) pandas.Series {
 	var W []num.DType
 	switch v := N.(type) {
 	case int:
 		W = num.Repeat[num.DType](num.DType(v), S.Len())
-	case stat.Series:
+	case pandas.Series:
 		vs := v.DTypes()
 		W = num.Align(vs, num.DTypeNaN, S.Len())
 	default:
@@ -40,5 +40,5 @@ func FILTER(S stat.Series, N any) stat.Series {
 			}
 		}
 	}
-	return stat.NDArray[num.DType](x)
+	return pandas.NDArray[num.DType](x)
 }

@@ -2,7 +2,6 @@ package pandas
 
 import (
 	"gitee.com/quant1x/num"
-	"gitee.com/quant1x/pandas/stat"
 	"reflect"
 )
 
@@ -10,22 +9,22 @@ import (
 // First discrete difference of element.
 // Calculates the difference of a {klass} element compared with another
 // element in the {klass} (default is element in previous row).
-func (this *NDFrame) Diff(param any) (s stat.Series) {
-	if !(this.type_ == stat.SERIES_TYPE_INT64 || this.type_ == stat.SERIES_TYPE_FLOAT32 || this.type_ == stat.SERIES_TYPE_FLOAT64) {
-		return NewSeries(stat.SERIES_TYPE_INVAILD, "", "")
+func (this *NDFrame) Diff(param any) (s Series) {
+	if !(this.type_ == SERIES_TYPE_INT64 || this.type_ == SERIES_TYPE_FLOAT32 || this.type_ == SERIES_TYPE_FLOAT64) {
+		return NewSeries(SERIES_TYPE_INVAILD, "", "")
 	}
 	var N []num.DType
 	switch v := param.(type) {
 	case int:
 		N = num.Repeat[num.DType](num.DType(v), this.Len())
-	case stat.Series:
+	case Series:
 		vs := v.DTypes()
 		N = num.Align(vs, num.DTypeNaN, this.Len())
 	default:
 		//periods = 1
 		N = num.Repeat[num.DType](num.DType(1), this.Len())
 	}
-	r := stat.RollingAndExpandingMixin{
+	r := RollingAndExpandingMixin{
 		Window: N,
 		Series: this,
 	}
@@ -51,6 +50,6 @@ func (this *NDFrame) Diff(param any) (s stat.Series) {
 		d = append(d, diff)
 		front = cf
 	}
-	s = NewSeries(stat.SERIES_TYPE_DTYPE, r.Series.Name(), d)
+	s = NewSeries(SERIES_TYPE_DTYPE, r.Series.Name(), d)
 	return
 }

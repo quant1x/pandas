@@ -2,12 +2,12 @@ package formula
 
 import (
 	"gitee.com/quant1x/num"
-	"gitee.com/quant1x/pandas/stat"
+	"gitee.com/quant1x/pandas"
 )
 
 // FORCAST 返回S序列N周期回线性回归后的预测值
-func FORCAST(S stat.Series, N any) any {
-	return S.Rolling(N).Apply(func(X stat.Series, W num.DType) num.DType {
+func FORCAST(S pandas.Series, N any) any {
+	return S.Rolling(N).Apply(func(X pandas.Series, W num.DType) num.DType {
 		x := X.DTypes()
 		ws := num.Range[float64](int(W))
 		c := num.PolyFit(ws, x, 1)

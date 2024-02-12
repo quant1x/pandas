@@ -3,7 +3,6 @@ package pandas
 import (
 	"fmt"
 	"gitee.com/quant1x/num"
-	"gitee.com/quant1x/pandas/stat"
 )
 
 // LoadRecords creates a new DataFrame based on the given records.
@@ -11,7 +10,7 @@ import (
 func LoadRecords(records [][]string, options ...LoadOption) DataFrame {
 	// Set the default load options
 	cfg := loadOptions{
-		defaultType: stat.SERIES_TYPE_STRING,
+		defaultType: SERIES_TYPE_STRING,
 		detectTypes: true,
 		hasHeader:   true,
 		nanValues:   num.PossibleNaOfString,
@@ -45,7 +44,7 @@ func LoadRecords(records [][]string, options ...LoadOption) DataFrame {
 		headers = cfg.names
 	}
 
-	types := make([]stat.Type, len(headers))
+	types := make([]Type, len(headers))
 	rawcols := make([][]string, len(headers))
 	for i, colname := range headers {
 		rawcol := make([]string, len(records))
@@ -70,7 +69,7 @@ func LoadRecords(records [][]string, options ...LoadOption) DataFrame {
 		types[i] = t
 	}
 
-	columns := make([]stat.Series, len(headers))
+	columns := make([]Series, len(headers))
 	for i, colname := range headers {
 		cols := rawcols[i]
 		col := NewSeries(types[i], colname, cols)

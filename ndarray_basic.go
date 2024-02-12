@@ -1,7 +1,8 @@
-package stat
+package pandas
 
 import (
 	"gitee.com/quant1x/gox/api"
+	"gitee.com/quant1x/num"
 )
 
 func (self NDArray[T]) Name() string {
@@ -13,7 +14,7 @@ func (self NDArray[T]) Rename(name string) {
 }
 
 func (self NDArray[T]) Type() Type {
-	return checkoutRawType(self)
+	return num.CheckoutRawType(self)
 }
 
 func (self NDArray[T]) Values() any {

@@ -1,7 +1,6 @@
 package pandas
 
 import (
-	"gitee.com/quant1x/pandas/stat"
 	"reflect"
 )
 
@@ -49,7 +48,7 @@ func (this *NDFrame) Logic(f func(idx int, v any) bool) []bool {
 	return x
 }
 
-func (this *NDFrame) Apply2(f func(idx int, v any) any, args ...bool) stat.Series {
+func (this *NDFrame) Apply2(f func(idx int, v any) any, args ...bool) Series {
 	inplace := false
 	if len(args) >= 1 {
 		inplace = args[0]

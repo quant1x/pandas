@@ -2,18 +2,18 @@ package formula
 
 import (
 	"gitee.com/quant1x/num"
-	"gitee.com/quant1x/pandas/stat"
+	"gitee.com/quant1x/pandas"
 )
 
 // BARSLAST 上一次条件成立到当前的周期, BARSLAST(C/REF(C,1)>=1.1) 上一次涨停到今天的天数
 //
 //	为了测试SMA,BARSLAST必须要先实现, 给SMA提供序列换参数, 以便验证, python那边还没实现
-func BARSLAST(S stat.Series) stat.Series {
+func BARSLAST(S pandas.Series) pandas.Series {
 	ns := BARSLAST2(S)
-	return stat.ToSeries(ns...)
+	return pandas.ToSeries(ns...)
 }
 
-func BARSLAST2(S stat.Series) []num.DType {
+func BARSLAST2(S pandas.Series) []num.DType {
 	fs := S.DTypes()
 	as := num.Repeat[num.DType](1, S.Len())
 	bs := num.Repeat[num.DType](0, S.Len())

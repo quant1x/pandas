@@ -3,7 +3,6 @@ package pandas
 import (
 	"fmt"
 	"gitee.com/quant1x/num"
-	"gitee.com/quant1x/pandas/stat"
 	"testing"
 )
 
@@ -19,7 +18,7 @@ func TestNDFrame_Diff(t *testing.T) {
 	fmt.Println("序列化结果:", r1)
 	fmt.Println("------------------------------------------------------------")
 	d2 := []float64{1, 2, 3, 4, 3, 3, 2, 1, num.Nil2Float64, num.Nil2Float64, num.Nil2Float64, num.Nil2Float64}
-	s2 := NewSeries(stat.SERIES_TYPE_FLOAT64, "x", d2)
+	s2 := NewSeries(SERIES_TYPE_FLOAT64, "x", d2)
 	fmt.Printf("序列化参数: %+v\n", s2.Values())
 	r2 := df.Col("x").Diff(s2).Values()
 	fmt.Println("序列化结果:", r2)

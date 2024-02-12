@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"gitee.com/quant1x/gox/exception"
 	"gitee.com/quant1x/num"
-	"gitee.com/quant1x/pandas/stat"
 	"reflect"
 	"strconv"
 	"strings"
@@ -26,7 +25,7 @@ func mustFloat64(f float32) bool {
 	return false
 }
 
-func findTypeByString(arr []string) (stat.Type, error) {
+func findTypeByString(arr []string) (Type, error) {
 	var hasFloats, hasInts, hasBools, hasStrings bool
 	var useFloat32, useFloat64 bool
 	var stringLengthEqual = -1
@@ -74,56 +73,56 @@ func findTypeByString(arr []string) (stat.Type, error) {
 	// 类型优先级, string > bool > float > int, string 为默认类型
 	switch {
 	case hasStrings:
-		return stat.SERIES_TYPE_STRING, nil
+		return SERIES_TYPE_STRING, nil
 	case hasBools:
-		return stat.SERIES_TYPE_BOOL, nil
+		return SERIES_TYPE_BOOL, nil
 	case useFloat32 && !useFloat64:
-		return stat.SERIES_TYPE_FLOAT32, nil
+		return SERIES_TYPE_FLOAT32, nil
 	case hasFloats:
-		return stat.SERIES_TYPE_FLOAT64, nil
+		return SERIES_TYPE_FLOAT64, nil
 	case hasInts:
-		return stat.SERIES_TYPE_INT64, nil
+		return SERIES_TYPE_INT64, nil
 	default:
-		return stat.SERIES_TYPE_STRING, fmt.Errorf("couldn't detect type")
+		return SERIES_TYPE_STRING, fmt.Errorf("couldn't detect type")
 	}
 
 }
 
-func parseType(s string) (stat.Type, error) {
+func parseType(s string) (Type, error) {
 	switch s {
 	case "float", "float32":
-		return stat.SERIES_TYPE_FLOAT32, nil
+		return SERIES_TYPE_FLOAT32, nil
 	case "float64":
-		return stat.SERIES_TYPE_FLOAT64, nil
+		return SERIES_TYPE_FLOAT64, nil
 	case "int", "int64", "int32", "int16", "int8":
-		return stat.SERIES_TYPE_INT64, nil
+		return SERIES_TYPE_INT64, nil
 	case "uint", "uint64", "uint32", "uint16", "uint8", "byte":
-		return stat.SERIES_TYPE_INT64, nil
+		return SERIES_TYPE_INT64, nil
 	case "string":
-		return stat.SERIES_TYPE_STRING, nil
+		return SERIES_TYPE_STRING, nil
 	case "bool":
-		return stat.SERIES_TYPE_BOOL, nil
+		return SERIES_TYPE_BOOL, nil
 	}
-	return stat.SERIES_TYPE_INVAILD, fmt.Errorf("type (%s) is not supported", s)
+	return SERIES_TYPE_INVAILD, fmt.Errorf("type (%s) is not supported", s)
 }
 
-func detectTypes[T num.GenericType](v T) (stat.Type, any) {
-	var _type = stat.SERIES_TYPE_STRING
+func detectTypes[T num.GenericType](v T) (Type, any) {
+	var _type = SERIES_TYPE_STRING
 	vv := reflect.ValueOf(v)
 	vk := vv.Kind()
 	switch vk {
 	case reflect.Invalid:
-		_type = stat.SERIES_TYPE_INVAILD
+		_type = SERIES_TYPE_INVAILD
 	case reflect.Bool:
-		_type = stat.SERIES_TYPE_BOOL
+		_type = SERIES_TYPE_BOOL
 	case reflect.Int64:
-		_type = stat.SERIES_TYPE_INT64
+		_type = SERIES_TYPE_INT64
 	case reflect.Float32:
-		_type = stat.SERIES_TYPE_FLOAT32
+		_type = SERIES_TYPE_FLOAT32
 	case reflect.Float64:
-		_type = stat.SERIES_TYPE_FLOAT64
+		_type = SERIES_TYPE_FLOAT64
 	case reflect.String:
-		_type = stat.SERIES_TYPE_STRING
+		_type = SERIES_TYPE_STRING
 	default:
 		panic(fmt.Errorf("unknown type, %+v", v))
 	}

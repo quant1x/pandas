@@ -2,15 +2,15 @@ package formula
 
 import (
 	"gitee.com/quant1x/num"
-	"gitee.com/quant1x/pandas/stat"
+	"gitee.com/quant1x/pandas"
 )
 
 // MAX 两个序列横向对比
-func MAX(S1 stat.Series, S2 any) stat.Series {
+func MAX(S1 pandas.Series, S2 any) pandas.Series {
 	length := S1.Len()
 	var b []num.DType
 	switch sx := S2.(type) {
-	case stat.Series:
+	case pandas.Series:
 		b = sx.DTypes()
 	case int:
 		b = num.Repeat[num.DType](num.DType(sx), length)
@@ -22,6 +22,6 @@ func MAX(S1 stat.Series, S2 any) stat.Series {
 		panic(num.TypeError(S2))
 	}
 	d := num.Maximum(S1.DTypes(), b)
-	return stat.ToSeries(d...)
+	return pandas.ToSeries(d...)
 
 }

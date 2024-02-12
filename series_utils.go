@@ -1,4 +1,4 @@
-package stat
+package pandas
 
 import (
 	"gitee.com/quant1x/gox/exception"

@@ -3,7 +3,6 @@ package formula
 import (
 	"fmt"
 	"gitee.com/quant1x/pandas"
-	"gitee.com/quant1x/pandas/stat"
 	"testing"
 )
 
@@ -23,7 +22,7 @@ func TestSMA(t *testing.T) {
 	d1 := cs.Div(REF10)
 	//as := stat.Repeat[float32](1, CLOSE.Len())
 	//bs := stat.Repeat[float32](0, CLOSE.Len())
-	df01 := pandas.NewSeries(stat.SERIES_TYPE_FLOAT32, "x", d1)
+	df01 := pandas.NewSeries(pandas.SERIES_TYPE_FLOAT32, "x", d1)
 	x := make([]float32, CLOSE.Len())
 	df01.Apply(func(idx int, v any) {
 		f := v.(float32)
@@ -34,11 +33,11 @@ func TestSMA(t *testing.T) {
 		x[idx] = t
 	})
 	//x := stat.Where(v2, as, bs)
-	n := BARSLAST2(pandas.NewSeries(stat.SERIES_TYPE_FLOAT32, "", x))
+	n := BARSLAST2(pandas.NewSeries(pandas.SERIES_TYPE_FLOAT32, "", x))
 	fmt.Println(n[len(n)-10:])
 	//r1 := SMA(CLOSE, pandas.NewNDArray(pandas.SERIES_TYPE_FLOAT32, "", n), 1)
 	r1 := SMA(CLOSE, 7, 1)
-	s2 := pandas.NewSeries(stat.SERIES_TYPE_FLOAT32, "sma", r1)
+	s2 := pandas.NewSeries(pandas.SERIES_TYPE_FLOAT32, "sma", r1)
 	df2 := pandas.NewDataFrame(s2)
 	fmt.Println(df2)
 }
