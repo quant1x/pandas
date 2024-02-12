@@ -54,19 +54,19 @@ func NewSeriesWithType(_type stat.Type, name string, values ...any) stat.Series 
 }
 
 // NewSeries 指定类型创建序列
-func NewSeries(t stat.Type, name string, vals any) stat.Series {
+func NewSeries(t stat.Type, name string, values any) stat.Series {
 	var series stat.Series
 	if t == stat.SERIES_TYPE_BOOL {
-		series = NewSeriesWithType(stat.SERIES_TYPE_BOOL, name, vals)
+		series = NewSeriesWithType(stat.SERIES_TYPE_BOOL, name, values)
 	} else if t == stat.SERIES_TYPE_INT64 {
-		series = NewSeriesWithType(stat.SERIES_TYPE_INT64, name, vals)
+		series = NewSeriesWithType(stat.SERIES_TYPE_INT64, name, values)
 	} else if t == stat.SERIES_TYPE_STRING {
-		series = NewSeriesWithType(stat.SERIES_TYPE_STRING, name, vals)
+		series = NewSeriesWithType(stat.SERIES_TYPE_STRING, name, values)
 	} else if t == stat.SERIES_TYPE_FLOAT64 {
-		series = NewSeriesWithType(stat.SERIES_TYPE_FLOAT64, name, vals)
+		series = NewSeriesWithType(stat.SERIES_TYPE_FLOAT64, name, values)
 	} else {
 		// 默认全部强制转换成float32
-		series = NewSeriesWithType(stat.SERIES_TYPE_FLOAT32, name, vals)
+		series = NewSeriesWithType(stat.SERIES_TYPE_FLOAT32, name, values)
 	}
 	return series
 }
