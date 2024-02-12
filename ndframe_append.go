@@ -31,19 +31,19 @@ func (this *NDFrame) Reverse() stat.Series {
 func (this *NDFrame) insert(idx, size int, v any) {
 	if this.type_ == stat.SERIES_TYPE_BOOL {
 		val := stat.AnyToBool(v)
-		assign[bool](this, idx, size, val)
+		ndFrameAssign[bool](this, idx, size, val)
 	} else if this.type_ == stat.SERIES_TYPE_INT64 {
 		val := stat.AnyToInt64(v)
-		assign[int64](this, idx, size, val)
+		ndFrameAssign[int64](this, idx, size, val)
 	} else if this.type_ == stat.SERIES_TYPE_FLOAT32 {
 		val := stat.AnyToFloat32(v)
-		assign[float32](this, idx, size, val)
+		ndFrameAssign[float32](this, idx, size, val)
 	} else if this.type_ == stat.SERIES_TYPE_FLOAT64 {
 		val := stat.AnyToFloat64(v)
-		assign[float64](this, idx, size, val)
+		ndFrameAssign[float64](this, idx, size, val)
 	} else {
 		val := stat.AnyToString(v)
-		assign[string](this, idx, size, val)
+		ndFrameAssign[string](this, idx, size, val)
 	}
 }
 
@@ -60,7 +60,7 @@ func (this *NDFrame) Append(values ...any) stat.Series {
 			vk := vv.Kind()
 			switch vk {
 			//case reflect.Invalid: // {interface} nil
-			//	series.assign(idx, size, Nil2Float64)
+			//	series.ndFrameAssign(idx, size, Nil2Float64)
 			case reflect.Slice, reflect.Array: // 切片或数组
 				for i := 0; i < vv.Len(); i++ {
 					tv := vv.Index(i).Interface()

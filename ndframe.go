@@ -43,14 +43,14 @@ func NewNDFrame[E stat.GenericType](name string, rows ...E) *NDFrame {
 	// 这个地方可以放心的强制转换, E已经做了类型约束
 	size := len(frame.values.([]E))
 	for idx, v := range rows {
-		assign(&frame, idx, size, v)
+		ndFrameAssign(&frame, idx, size, v)
 	}
 
 	return &frame
 }
 
 // 赋值
-func assign[T stat.GenericType](frame *NDFrame, idx, size int, v T) {
+func ndFrameAssign[T stat.GenericType](frame *NDFrame, idx, size int, v T) {
 	// 检测类型
 	if frame.type_ == stat.SERIES_TYPE_INVAILD {
 		_type, _ := detectTypes(v)
