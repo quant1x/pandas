@@ -21,6 +21,6 @@ func MAX(S1 stat.Series, S2 any) stat.Series {
 		panic(stat.Throw(S2))
 	}
 	d := stat.Maximum(S1.DTypes(), b)
-	return stat.NewSeries[stat.DType](d...)
+	return stat.ToSeries(d...)
 
 }

@@ -9,13 +9,13 @@ import "gitee.com/quant1x/pandas/stat"
 //	go实现暂时不支持N为序列, 意义不大
 func BARSLASTS(S stat.Series, N int) stat.Series {
 	v := __bars_lasts(S, N)
-	x := stat.NewSeries[stat.DType](v...)
+	x := stat.ToSeries(v...)
 	return x
 }
 
 func __bars_lasts(S stat.Series, N int) []stat.DType {
 	v := __bars_last(S)
-	x := stat.NewSeries[stat.DType](v...)
+	x := stat.ToSeries(v...)
 	m := x
 	for i := 1; i < N; i++ {
 		//第二次位置:=REF(BARSLAST(条件),第一次位置+1)+第一次位置+1;{倒数第二次条件距今位置}
@@ -33,16 +33,7 @@ func __bars_last(S stat.Series) []stat.DType {
 	x := stat.Where(fs, as, bs)
 	M := []stat.DType{0}
 	M = append(M, x...)
-	//found := false
 	for i := 1; i < len(M); i++ {
-		//if int(M[i]) != 0 {
-		//	M[i] = 0
-		//	found = true
-		//} else if found {
-		//	M[i] = M[i-1] + 1
-		//} else {
-		//	M[i] = stat.NaN()
-		//}
 		if int(M[i]) != 0 {
 			M[i] = 0
 		} else {

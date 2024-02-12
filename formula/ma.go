@@ -17,6 +17,7 @@ func MA(S stat.Series, N any) stat.Series {
 }
 
 // MAx 增量MA
+// Deprecated: 错误的 [wangfeng on 2024/2/11 16:44]
 func MAx(n int, old, new stat.DType) stat.DType {
 	if n < 1 {
 		return new

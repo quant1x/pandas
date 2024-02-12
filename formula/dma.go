@@ -37,14 +37,11 @@ func DMA(S stat.Series, A any) []stat.DType {
 		Y := stat.Repeat(stat.DType(0), len(s))
 		Y[0] = s[0]
 		for i := 1; i < len(s); i++ {
-			//fmt.Println("M[i] =", M[i])
 			a := 1 / M[i]
 			if stat.DTypeIsNaN(a) {
 				a = 1
 			}
-			//fmt.Println("a =", a)
 			Y[i] = a*s[i] + (1-a)*Y[i-1]
-			//fmt.Println(Y[i])
 		}
 		return Y
 	}

@@ -17,7 +17,7 @@ func IFF(S stat.Series, A, B any) stat.Series {
 	a := stat.Align2Series(A, length).DTypes()
 	b := stat.Align2Series(B, length).DTypes()
 	ret := stat.Where(s, a, b)
-	return stat.NewSeries[stat.DType](ret...)
+	return stat.ToSeries(ret...)
 }
 
 // IFN 序列布尔判断 return=A  if S==False  else  B
