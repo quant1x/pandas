@@ -3,6 +3,30 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.3.2] - 2024-02-12
+### Changed
+- 调整包路径.
+- 优化部分代码.
+- 拆分stat中计算类函数.
+- 调整入参名.
+- 优化部分函数的内存开销.
+- 优化检测泛型any的元素类型函数.
+- 统一NDArray接收器名.
+- 修订Rename方法参数未使用的告警信息.
+- 调整NDFrame赋值函数名.
+- 调整函数名.
+- 补充公开方法的注释.
+- 删除废弃的代码.
+- 删除废弃的代码.
+- 删除废弃的代码.
+- 优化部分函数的切片内存.
+- 切片到series.
+- 移除gonum.org代码.
+- 修订max作为局部变量名和内置函数max的冲突.
+- Interface{}改为any.
+- 调整函数名.
+- 调整NDFrame源文件名前缀.
+
 ## [1.3.1] - 2024-02-08
 ### Changed
 - 统一结构体方法接收器.
@@ -638,7 +662,8 @@ All notable changes to this project will be documented in this file.
 - 引入github.com/WinPooh32/series代码.
 - Initial commit.
 
-[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.3.1...HEAD
+[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.3.2...HEAD
+[1.3.2]: https://gitee.com/quant1x/pandas/compare/v1.3.1...v1.3.2
 [1.3.1]: https://gitee.com/quant1x/pandas/compare/v1.3.0...v1.3.1
 [1.3.0]: https://gitee.com/quant1x/pandas/compare/v1.2.9...v1.3.0
 [1.2.9]: https://gitee.com/quant1x/pandas/compare/v1.2.8...v1.2.9
