@@ -5,7 +5,7 @@ func (self NDArray[T]) Name() string {
 }
 
 func (self NDArray[T]) Rename(name string) {
-
+	_ = name
 }
 
 func (self NDArray[T]) Type() Type {
