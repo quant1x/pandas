@@ -6,6 +6,7 @@ type RollingAndExpandingMixin struct {
 	Series Series
 }
 
+// GetBlocks series分块
 func (r RollingAndExpandingMixin) GetBlocks() (blocks []Series) {
 	for i := 0; i < r.Series.Len(); i++ {
 		N := r.Window[i]
