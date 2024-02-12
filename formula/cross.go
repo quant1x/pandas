@@ -1,7 +1,7 @@
 package formula
 
 import (
-	"gitee.com/quant1x/gox/num"
+	"gitee.com/quant1x/num"
 	"gitee.com/quant1x/pandas/stat"
 )
 
@@ -16,7 +16,7 @@ func CROSS(S1, S2 stat.Series) stat.Series {
 	return b1.And(b2)
 }
 
-func V2CROSS(S1, S2 []stat.DType) []bool {
+func V2CROSS(S1, S2 []num.DType) []bool {
 	r1 := S1
 	r2 := S2
 	r11 := REF2(S1, 1)

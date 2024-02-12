@@ -1,10 +1,11 @@
 package stat
 
 import (
+	"gitee.com/quant1x/num"
 	"math"
 )
 
-func __min_n_go[T Number](a, b T) T {
+func __min_n_go[T num.Number](a, b T) T {
 	if a < b {
 		return a
 	}

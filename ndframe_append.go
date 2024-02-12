@@ -1,6 +1,8 @@
 package pandas
 
 import (
+	"gitee.com/quant1x/gox/api"
+	"gitee.com/quant1x/num"
 	"gitee.com/quant1x/pandas/stat"
 	"reflect"
 )
@@ -9,19 +11,19 @@ func (this *NDFrame) Reverse() stat.Series {
 	s := this.Empty()
 
 	if this.type_ == stat.SERIES_TYPE_BOOL {
-		values := stat.Reverse(this.values.([]bool))
+		values := api.Reverse(this.values.([]bool))
 		s = s.Append(values)
 	} else if this.type_ == stat.SERIES_TYPE_INT64 {
-		values := stat.Reverse(this.values.([]int64))
+		values := api.Reverse(this.values.([]int64))
 		s = s.Append(values)
 	} else if this.type_ == stat.SERIES_TYPE_FLOAT32 {
-		values := stat.Reverse(this.values.([]float32))
+		values := api.Reverse(this.values.([]float32))
 		s = s.Append(values)
 	} else if this.type_ == stat.SERIES_TYPE_FLOAT64 {
-		values := stat.Reverse(this.values.([]float64))
+		values := api.Reverse(this.values.([]float64))
 		s = s.Append(values)
 	} else {
-		values := stat.Reverse(this.values.([]string))
+		values := api.Reverse(this.values.([]string))
 		s = s.Append(values)
 	}
 	return s
@@ -30,19 +32,19 @@ func (this *NDFrame) Reverse() stat.Series {
 // 插入一条记录
 func (this *NDFrame) insert(idx, size int, v any) {
 	if this.type_ == stat.SERIES_TYPE_BOOL {
-		val := stat.AnyToBool(v)
+		val := num.AnyToBool(v)
 		ndFrameAssign[bool](this, idx, size, val)
 	} else if this.type_ == stat.SERIES_TYPE_INT64 {
-		val := stat.AnyToInt64(v)
+		val := num.AnyToInt64(v)
 		ndFrameAssign[int64](this, idx, size, val)
 	} else if this.type_ == stat.SERIES_TYPE_FLOAT32 {
-		val := stat.AnyToFloat32(v)
+		val := num.AnyToFloat32(v)
 		ndFrameAssign[float32](this, idx, size, val)
 	} else if this.type_ == stat.SERIES_TYPE_FLOAT64 {
-		val := stat.AnyToFloat64(v)
+		val := num.AnyToFloat64(v)
 		ndFrameAssign[float64](this, idx, size, val)
 	} else {
-		val := stat.AnyToString(v)
+		val := num.AnyToString(v)
 		ndFrameAssign[string](this, idx, size, val)
 	}
 }

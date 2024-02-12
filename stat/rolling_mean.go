@@ -1,8 +1,10 @@
 package stat
 
+import "gitee.com/quant1x/num"
+
 // Mean returns the rolling mean.
 func (r RollingAndExpandingMixin) Mean() (s Series) {
-	var d []DType
+	var d []num.DType
 	for _, block := range r.GetBlocks() {
 		d = append(d, block.Mean())
 	}

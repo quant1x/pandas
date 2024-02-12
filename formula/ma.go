@@ -1,6 +1,7 @@
 package formula
 
 import (
+	"gitee.com/quant1x/num"
 	"gitee.com/quant1x/pandas/stat"
 )
 
@@ -8,7 +9,7 @@ import (
 //
 //	求序列的N日简单移动平均值, 返回序列
 //	Deprecated: 推荐 MA
-func MAV1(S stat.Series, N any) []stat.DType {
+func MAV1(S stat.Series, N any) []num.DType {
 	return S.Rolling(N).Mean().DTypes()
 }
 
@@ -18,11 +19,11 @@ func MA(S stat.Series, N any) stat.Series {
 
 // MAx 增量MA
 // Deprecated: 错误的 [wangfeng on 2024/2/11 16:44]
-func MAx(n int, old, new stat.DType) stat.DType {
+func MAx(n int, old, new num.DType) num.DType {
 	if n < 1 {
 		return new
 	}
-	x := old * stat.DType(n-1)
-	x = (x + new) / stat.DType(n)
+	x := old * num.DType(n-1)
+	x = (x + new) / num.DType(n)
 	return x
 }

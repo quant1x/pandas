@@ -1,8 +1,10 @@
 package stat
 
+import "gitee.com/quant1x/num"
+
 // RollingAndExpandingMixin 滚动和扩展静态横切
 type RollingAndExpandingMixin struct {
-	Window []DType
+	Window []num.DType
 	Series Series
 }
 
@@ -10,7 +12,7 @@ type RollingAndExpandingMixin struct {
 func (r RollingAndExpandingMixin) GetBlocks() (blocks []Series) {
 	for i := 0; i < r.Series.Len(); i++ {
 		N := r.Window[i]
-		if DTypeIsNaN(N) || int(N) > i+1 {
+		if num.DTypeIsNaN(N) || int(N) > i+1 {
 			blocks = append(blocks, r.Series.Empty())
 			continue
 		}
@@ -24,11 +26,11 @@ func (r RollingAndExpandingMixin) GetBlocks() (blocks []Series) {
 }
 
 // Apply 接受一个回调
-func (r RollingAndExpandingMixin) Apply(f func(S Series, N DType) DType) (s Series) {
-	values := make([]DType, r.Series.Len())
+func (r RollingAndExpandingMixin) Apply(f func(S Series, N num.DType) num.DType) (s Series) {
+	values := make([]num.DType, r.Series.Len())
 	for i, block := range r.GetBlocks() {
 		if block.Len() == 0 {
-			values[i] = DTypeNaN
+			values[i] = num.DTypeNaN
 			continue
 		}
 		v := f(block, r.Window[i])

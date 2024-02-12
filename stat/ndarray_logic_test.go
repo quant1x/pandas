@@ -2,6 +2,7 @@ package stat
 
 import (
 	"fmt"
+	"gitee.com/quant1x/num"
 	"testing"
 )
 
@@ -16,13 +17,13 @@ func TestNDArray_Gt(t *testing.T) {
 	fmt.Println(s1.Gt(s2))
 	fmt.Println(s1.Gt(13))
 	fmt.Println("----------<Gte>----------")
-	fmt.Println(Gte(d1, d2))
-	fmt.Println(Gte(d1, 13))
+	fmt.Println(num.Gte(d1, d2))
+	fmt.Println(num.Gte(d1, 13))
 	fmt.Println("----------<Lt>----------")
-	fmt.Println(Lt(d1, d2))
-	fmt.Println(Lt(d1, 13))
+	fmt.Println(num.Lt(d1, d2))
+	fmt.Println(num.Lt(d1, 13))
 	fmt.Println("----------<Lte>----------")
-	fmt.Println(Lte(d1, d2))
-	fmt.Println(And(d1, 13))
-	fmt.Println(Or(d1, 13))
+	fmt.Println(num.Lte(d1, d2))
+	fmt.Println(num.And(d1, 13))
+	fmt.Println(num.Or(d1, 13))
 }

@@ -1,6 +1,9 @@
 package formula
 
-import "gitee.com/quant1x/pandas/stat"
+import (
+	"gitee.com/quant1x/num"
+	"gitee.com/quant1x/pandas/stat"
+)
 
 // BARSLASTS 倒数第N次成立时距今的周期数.
 //
@@ -13,7 +16,7 @@ func BARSLASTS(S stat.Series, N int) stat.Series {
 	return x
 }
 
-func __bars_lasts(S stat.Series, N int) []stat.DType {
+func __bars_lasts(S stat.Series, N int) []num.DType {
 	v := __bars_last(S)
 	x := stat.ToSeries(v...)
 	m := x
@@ -26,12 +29,12 @@ func __bars_lasts(S stat.Series, N int) []stat.DType {
 	return m.DTypes()
 }
 
-func __bars_last(S stat.Series) []stat.DType {
+func __bars_last(S stat.Series) []num.DType {
 	fs := S.DTypes()
-	as := stat.Repeat[stat.DType](1, S.Len())
-	bs := stat.Repeat[stat.DType](0, S.Len())
-	x := stat.Where(fs, as, bs)
-	M := []stat.DType{0}
+	as := num.Repeat[num.DType](1, S.Len())
+	bs := num.Repeat[num.DType](0, S.Len())
+	x := num.Where(fs, as, bs)
+	M := []num.DType{0}
 	M = append(M, x...)
 	for i := 1; i < len(M); i++ {
 		if int(M[i]) != 0 {

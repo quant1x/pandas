@@ -2,6 +2,7 @@ package formula
 
 import (
 	"fmt"
+	"gitee.com/quant1x/num"
 	"gitee.com/quant1x/pandas"
 	"gitee.com/quant1x/pandas/stat"
 	"testing"
@@ -14,7 +15,7 @@ func TestBARSSINCEN(t *testing.T) {
 	fmt.Println(df)
 
 	b1 := s1.Logic(func(idx int, v any) bool {
-		f := v.(stat.DType)
+		f := v.(num.DType)
 		return f > 3
 	})
 	df = df.Join(pandas.NewSeries(stat.SERIES_TYPE_BOOL, "r", b1))

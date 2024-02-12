@@ -1,8 +1,10 @@
 package pandas
 
-import "gitee.com/quant1x/pandas/stat"
+import (
+	"gitee.com/quant1x/num"
+)
 
-func (this *NDFrame) Sum() stat.DType {
+func (this *NDFrame) Sum() num.DType {
 	fs := this.DTypes()
-	return stat.Sum(fs)
+	return num.Sum(fs)
 }

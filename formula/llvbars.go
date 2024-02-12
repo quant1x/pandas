@@ -1,6 +1,9 @@
 package formula
 
-import "gitee.com/quant1x/pandas/stat"
+import (
+	"gitee.com/quant1x/num"
+	"gitee.com/quant1x/pandas/stat"
+)
 
 // LLVBARS 求上一低点到当前的周期数.
 //
@@ -9,8 +12,8 @@ import "gitee.com/quant1x/pandas/stat"
 //	例如:
 //	LLVBARS(HIGH,20)求得20日最低点到当前的周期数
 func LLVBARS(S stat.Series, N any) stat.Series {
-	x := S.Rolling(N).Apply(func(X stat.Series, W stat.DType) stat.DType {
-		return stat.Any2DType(X.Reverse().ArgMin())
+	x := S.Rolling(N).Apply(func(X stat.Series, W num.DType) num.DType {
+		return num.Any2DType(X.Reverse().ArgMin())
 	})
 	return x
 }

@@ -2,6 +2,7 @@ package formula
 
 import (
 	"fmt"
+	"gitee.com/quant1x/num"
 	"gitee.com/quant1x/pandas"
 	"gitee.com/quant1x/pandas/stat"
 	"testing"
@@ -16,6 +17,6 @@ func TestBARSLASTS(t *testing.T) {
 	s0 := stat.NewSeries[bool](i0...)
 	v := BARSLASTS(s0, 3)
 	fmt.Println(v)
-	df := pandas.NewDataFrame(stat.NewSeries[stat.DType](f0...), v)
+	df := pandas.NewDataFrame(stat.NewSeries[num.DType](f0...), v)
 	fmt.Println(df)
 }

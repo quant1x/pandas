@@ -2,6 +2,7 @@ package stat
 
 import (
 	"fmt"
+	"gitee.com/quant1x/num"
 	"reflect"
 	"testing"
 	"unsafe"
@@ -61,7 +62,7 @@ func TestNDArray_Rolling(t *testing.T) {
 	r1 := s.Rolling(5).Mean()
 	fmt.Println(r1)
 
-	d2 := []float64{1, 2, 3, 4, 3, 3, 2, 1, Nil2Float64, Nil2Float64, Nil2Float64, Nil2Float64}
+	d2 := []float64{1, 2, 3, 4, 3, 3, 2, 1, num.Nil2Float64, num.Nil2Float64, num.Nil2Float64, num.Nil2Float64}
 	r2 := s.Rolling(d2).Mean()
 	fmt.Println(r2)
 }
@@ -72,7 +73,7 @@ func TestNDArray_Apply(t *testing.T) {
 	fmt.Println(s1)
 	s2 := s1.(NDArray[float64])
 	s2.Apply2(func(idx int, v any) any {
-		f := anyToGeneric[float64](v)
+		f := num.AnyToGeneric[float64](v)
 		return f * f
 	}, true)
 	fmt.Println(s2)

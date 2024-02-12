@@ -3,6 +3,7 @@ package stat
 import (
 	"fmt"
 	"gitee.com/quant1x/gox/api"
+	"gitee.com/quant1x/num"
 	"reflect"
 )
 
@@ -25,10 +26,10 @@ type Series interface {
 
 	// Floats 强制转成[]float32
 	Floats() []float32
-	// DTypes 强制转[]stat.DType
-	DTypes() []DType
+	// DTypes 强制转[]num.DType
+	DTypes() []num.DType
 	// Ints 强制转换成整型
-	Ints() []Int
+	Ints() []num.Int
 	// Strings 强制转换string切片
 	Strings() []string
 	// Bools 强制转换成bool切片
@@ -47,7 +48,7 @@ type Series interface {
 	Empty(t ...Type) Series
 	// Copy 复制
 	Copy() Series
-	// Reverse 序列反转
+	// CloneAndReverse 序列反转
 	Reverse() Series
 	// Select 选取一段记录
 	Select(r api.ScopeLimit) Series
@@ -89,9 +90,9 @@ type Series interface {
 	EWM(alpha EW) ExponentialMovingWindow
 
 	// Mean calculates the average value of a series
-	Mean() DType
+	Mean() num.DType
 	// StdDev calculates the standard deviation of a series
-	StdDev() DType
+	StdDev() num.DType
 	// Max 找出最大值
 	Max() any
 	// ArgMax Returns the indices of the maximum values along an axis
@@ -103,9 +104,9 @@ type Series interface {
 	// Diff 元素的第一个离散差
 	Diff(param any) (s Series)
 	// Std 计算标准差
-	Std() DType
+	Std() num.DType
 	// Sum 计算累和
-	Sum() DType
+	Sum() num.DType
 	// Add 加
 	Add(x any) Series
 	// Sub 减
@@ -191,7 +192,7 @@ func DetectTypeBySlice(arr ...any) (Type, error) {
 }
 
 // NewSeries 构建一个新的Series
-func NewSeries[T BaseType](data ...T) Series {
+func NewSeries[T num.BaseType](data ...T) Series {
 	var S Series
 	values := []T{}
 	if len(data) > 0 {
@@ -202,6 +203,6 @@ func NewSeries[T BaseType](data ...T) Series {
 }
 
 // ToSeries 转换切片为Series
-func ToSeries[T BaseType](data ...T) Series {
+func ToSeries[T num.BaseType](data ...T) Series {
 	return NDArray[T](data)
 }

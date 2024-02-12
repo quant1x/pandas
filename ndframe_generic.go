@@ -2,6 +2,7 @@ package pandas
 
 import (
 	"fmt"
+	"gitee.com/quant1x/num"
 	"gitee.com/quant1x/pandas/stat"
 	"reflect"
 )
@@ -18,7 +19,7 @@ func NewSeriesWithoutType(name string, values ...any) stat.Series {
 // NewSeriesWithType 通过类型创新一个新series
 func NewSeriesWithType(_type stat.Type, name string, values ...any) stat.Series {
 	frame := NDFrame{
-		formatter: stat.DefaultFormatter,
+		formatter: num.DefaultFormatter,
 		name:      name,
 		type_:     stat.SERIES_TYPE_INVAILD,
 		nilCount:  0,
@@ -72,7 +73,7 @@ func NewSeries(t stat.Type, name string, values any) stat.Series {
 }
 
 // GenericSeries 泛型方法, 构造序列, 比其它方式对类型的统一性要求更严格
-func GenericSeries[T stat.GenericType](name string, values ...T) stat.Series {
+func GenericSeries[T num.GenericType](name string, values ...T) stat.Series {
 	// 第一遍, 确定类型, 找到第一个非nil的值
 	var _type stat.Type = stat.SERIES_TYPE_STRING
 	for _, v := range values {

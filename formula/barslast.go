@@ -1,6 +1,7 @@
 package formula
 
 import (
+	"gitee.com/quant1x/num"
 	"gitee.com/quant1x/pandas/stat"
 )
 
@@ -12,12 +13,12 @@ func BARSLAST(S stat.Series) stat.Series {
 	return stat.ToSeries(ns...)
 }
 
-func BARSLAST2(S stat.Series) []stat.DType {
+func BARSLAST2(S stat.Series) []num.DType {
 	fs := S.DTypes()
-	as := stat.Repeat[stat.DType](1, S.Len())
-	bs := stat.Repeat[stat.DType](0, S.Len())
-	x := stat.Where(fs, as, bs)
-	M := []stat.DType{0}
+	as := num.Repeat[num.DType](1, S.Len())
+	bs := num.Repeat[num.DType](0, S.Len())
+	x := num.Where(fs, as, bs)
+	M := []num.DType{0}
 	M = append(M, x...)
 	for i := 1; i < len(M); i++ {
 		if int(M[i]) != 0 {

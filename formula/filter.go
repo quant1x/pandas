@@ -2,6 +2,7 @@ package formula
 
 import (
 	"gitee.com/quant1x/gox/exception"
+	"gitee.com/quant1x/num"
 	"gitee.com/quant1x/pandas/stat"
 )
 
@@ -12,13 +13,13 @@ import (
 //	例如:
 //	FILTER(CLOSE>OPEN,5)查找阳线,5天内再次出现的阳线不被记录在内
 func FILTER(S stat.Series, N any) stat.Series {
-	var W []stat.DType
+	var W []num.DType
 	switch v := N.(type) {
 	case int:
-		W = stat.Repeat[stat.DType](stat.DType(v), S.Len())
+		W = num.Repeat[num.DType](num.DType(v), S.Len())
 	case stat.Series:
 		vs := v.DTypes()
-		W = stat.Align(vs, stat.DTypeNaN, S.Len())
+		W = num.Align(vs, num.DTypeNaN, S.Len())
 	default:
 		panic(exception.New(1, "error window"))
 	}
@@ -39,5 +40,5 @@ func FILTER(S stat.Series, N any) stat.Series {
 			}
 		}
 	}
-	return stat.NDArray[stat.DType](x)
+	return stat.NDArray[num.DType](x)
 }

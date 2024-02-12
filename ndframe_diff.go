@@ -1,6 +1,7 @@
 package pandas
 
 import (
+	"gitee.com/quant1x/num"
 	"gitee.com/quant1x/pandas/stat"
 	"reflect"
 )
@@ -13,37 +14,37 @@ func (this *NDFrame) Diff(param any) (s stat.Series) {
 	if !(this.type_ == stat.SERIES_TYPE_INT64 || this.type_ == stat.SERIES_TYPE_FLOAT32 || this.type_ == stat.SERIES_TYPE_FLOAT64) {
 		return NewSeries(stat.SERIES_TYPE_INVAILD, "", "")
 	}
-	var N []stat.DType
+	var N []num.DType
 	switch v := param.(type) {
 	case int:
-		N = stat.Repeat[stat.DType](stat.DType(v), this.Len())
+		N = num.Repeat[num.DType](num.DType(v), this.Len())
 	case stat.Series:
 		vs := v.DTypes()
-		N = stat.Align(vs, stat.DTypeNaN, this.Len())
+		N = num.Align(vs, num.DTypeNaN, this.Len())
 	default:
 		//periods = 1
-		N = stat.Repeat[stat.DType](stat.DType(1), this.Len())
+		N = num.Repeat[num.DType](num.DType(1), this.Len())
 	}
 	r := stat.RollingAndExpandingMixin{
 		Window: N,
 		Series: this,
 	}
-	var d []stat.DType
-	var front = stat.DTypeNaN
+	var d []num.DType
+	var front = num.DTypeNaN
 	for _, block := range r.GetBlocks() {
 		vs := reflect.ValueOf(block.Values())
 		vl := vs.Len()
 		if vl == 0 {
-			d = append(d, stat.DTypeNaN)
+			d = append(d, num.DTypeNaN)
 			continue
 		}
 		vf := vs.Index(0).Interface()
 		vc := vs.Index(vl - 1).Interface()
-		cu := stat.Any2DType(vc)
-		cf := stat.Any2DType(vf)
-		if stat.DTypeIsNaN(cu) || stat.DTypeIsNaN(front) {
+		cu := num.Any2DType(vc)
+		cf := num.Any2DType(vf)
+		if num.DTypeIsNaN(cu) || num.DTypeIsNaN(front) {
 			front = cf
-			d = append(d, stat.DTypeNaN)
+			d = append(d, num.DTypeNaN)
 			continue
 		}
 		diff := cu - front

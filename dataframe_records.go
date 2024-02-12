@@ -2,6 +2,7 @@ package pandas
 
 import (
 	"fmt"
+	"gitee.com/quant1x/num"
 	"gitee.com/quant1x/pandas/stat"
 )
 
@@ -13,7 +14,7 @@ func LoadRecords(records [][]string, options ...LoadOption) DataFrame {
 		defaultType: stat.SERIES_TYPE_STRING,
 		detectTypes: true,
 		hasHeader:   true,
-		nanValues:   stat.PossibleNaOfString,
+		nanValues:   num.PossibleNaOfString,
 	}
 
 	// Set any custom load options

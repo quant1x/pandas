@@ -1,6 +1,8 @@
 package pandas
 
-import "gitee.com/quant1x/pandas/stat"
+import (
+	"gitee.com/quant1x/num"
+)
 
 func (this *NDFrame) Min() any {
 	values := this.Values()
@@ -24,7 +26,7 @@ func (this *NDFrame) Min() any {
 		hasNaN := false
 		i := 0
 		for idx, iv := range rows {
-			if stat.StringIsNaN(iv) {
+			if num.StringIsNaN(iv) {
 				hasNaN = true
 				break
 			} else if i < 1 {
@@ -38,16 +40,16 @@ func (this *NDFrame) Min() any {
 			_ = idx
 		}
 		if hasNaN {
-			return stat.StringNaN
+			return num.StringNaN
 		} else if i > 0 {
 			return min
 		}
-		return stat.StringNaN
+		return num.StringNaN
 	case []int64:
-		min := stat.MaxInt64
+		min := num.MaxInt64
 		i := 0
 		for idx, iv := range rows {
-			if stat.Float64IsNaN(float64(iv)) {
+			if num.Float64IsNaN(float64(iv)) {
 				continue
 			} else if i < 1 {
 				min = iv
@@ -61,11 +63,11 @@ func (this *NDFrame) Min() any {
 		}
 		return min
 	case []float32:
-		min := stat.MaxFloat32
+		min := num.MaxFloat32
 		hasNan := false
 		i := 0
 		for idx, iv := range rows {
-			if stat.Float32IsNaN(iv) {
+			if num.Float32IsNaN(iv) {
 				hasNan = true
 				break
 			}
@@ -76,22 +78,22 @@ func (this *NDFrame) Min() any {
 			_ = idx
 		}
 		if hasNan {
-			return stat.Nil2Float32
+			return num.Nil2Float32
 		} else if i > 0 {
 			return min
 		}
-		return stat.Nil2Float32
+		return num.Nil2Float32
 	//case []float32:
 	//	if this.Len() == 0 {
 	//		return Nil2Float32
 	//	}
 	//	return stat.Min(rows)
 	case []float64:
-		min := stat.MaxFloat64
+		min := num.MaxFloat64
 		hasNaN := false
 		i := 0
 		for idx, iv := range rows {
-			if stat.Float64IsNaN(iv) {
+			if num.Float64IsNaN(iv) {
 				hasNaN = true
 				break
 			}
@@ -102,11 +104,11 @@ func (this *NDFrame) Min() any {
 			_ = idx
 		}
 		if hasNaN {
-			return stat.Nil2Float64
+			return num.Nil2Float64
 		} else if i > 0 {
 			return min
 		}
-		return stat.Nil2Float64
+		return num.Nil2Float64
 	//case []float64:
 	//	if this.Len() == 0 {
 	//		return Nil2Float64
@@ -115,9 +117,9 @@ func (this *NDFrame) Min() any {
 	default:
 		panic(ErrUnsupportedType)
 	}
-	return stat.Nil2Float64
+	return num.Nil2Float64
 }
 
 func (this *NDFrame) ArgMin() int {
-	return stat.ArgMin2(this.DTypes())
+	return num.ArgMin2(this.DTypes())
 }

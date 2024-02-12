@@ -1,5 +1,7 @@
 package stat
 
+import "gitee.com/quant1x/num"
+
 func (self NDArray[T]) Len() int {
 	return len(self)
 }
@@ -35,7 +37,7 @@ func (self NDArray[T]) Less(i, j int) bool {
 	} else {
 		// SERIES_TYPE_INVAILD
 		// 应该到不了这里, Len()会返回0
-		panic(ErrUnsupportedType)
+		panic(num.ErrUnsupportedType)
 	}
 	return false
 
@@ -62,6 +64,6 @@ func (self NDArray[T]) Swap(i, j int) {
 	} else {
 		// SERIES_TYPE_INVAILD
 		// 应该到不了这里, Len()会返回0
-		panic(ErrUnsupportedType)
+		panic(num.ErrUnsupportedType)
 	}
 }

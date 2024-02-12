@@ -1,6 +1,7 @@
 package pandas
 
 import (
+	"gitee.com/quant1x/num"
 	"gitee.com/quant1x/pandas/stat"
 	"reflect"
 	"sync"
@@ -8,14 +9,14 @@ import (
 
 // NDFrame 这里本意是想做一个父类, 实际的效果是一个抽象类
 type NDFrame struct {
-	lock      sync.RWMutex         // 读写锁
-	formatter stat.StringFormatter // 字符串格式化工具
-	name      string               // 帧名称
-	type_     stat.Type            // values元素类型
-	copy_     bool                 // 是否副本
-	nilCount  int                  // nil和nan的元素有多少, 这种统计在bool和int64类型中不会大于0, 只对float64及string有效
-	rows      int                  // 行数
-	values    any                  // 只能是一个一维slice, 在所有的运算中, values强制转换成float64切片
+	lock      sync.RWMutex        // 读写锁
+	formatter num.StringFormatter // 字符串格式化工具
+	name      string              // 帧名称
+	type_     stat.Type           // values元素类型
+	copy_     bool                // 是否副本
+	nilCount  int                 // nil和nan的元素有多少, 这种统计在bool和int64类型中不会大于0, 只对float64及string有效
+	rows      int                 // 行数
+	values    any                 // 只能是一个一维slice, 在所有的运算中, values强制转换成float64切片
 }
 
 //"""
@@ -29,9 +30,9 @@ type NDFrame struct {
 //copy : bool, default False
 //"""
 
-func NewNDFrame[E stat.GenericType](name string, rows ...E) *NDFrame {
+func NewNDFrame[E num.GenericType](name string, rows ...E) *NDFrame {
 	frame := NDFrame{
-		formatter: stat.DefaultFormatter,
+		formatter: num.DefaultFormatter,
 		name:      name,
 		type_:     stat.SERIES_TYPE_INVAILD,
 		nilCount:  0,
@@ -50,7 +51,7 @@ func NewNDFrame[E stat.GenericType](name string, rows ...E) *NDFrame {
 }
 
 // 赋值
-func ndFrameAssign[T stat.GenericType](frame *NDFrame, idx, size int, v T) {
+func ndFrameAssign[T num.GenericType](frame *NDFrame, idx, size int, v T) {
 	// 检测类型
 	if frame.type_ == stat.SERIES_TYPE_INVAILD {
 		_type, _ := detectTypes(v)
@@ -61,11 +62,11 @@ func ndFrameAssign[T stat.GenericType](frame *NDFrame, idx, size int, v T) {
 	_vv := reflect.ValueOf(v)
 	_vi := _vv.Interface()
 	// float和string类型有可能是NaN, 对nil和NaN进行计数
-	if frame.Type() == stat.SERIES_TYPE_FLOAT32 && stat.Float32IsNaN(_vi.(float32)) {
+	if frame.Type() == stat.SERIES_TYPE_FLOAT32 && num.Float32IsNaN(_vi.(float32)) {
 		frame.nilCount++
-	} else if frame.Type() == stat.SERIES_TYPE_FLOAT64 && stat.Float64IsNaN(_vi.(float64)) {
+	} else if frame.Type() == stat.SERIES_TYPE_FLOAT64 && num.Float64IsNaN(_vi.(float64)) {
 		frame.nilCount++
-	} else if frame.Type() == stat.SERIES_TYPE_STRING && stat.StringIsNaN(_vi.(string)) {
+	} else if frame.Type() == stat.SERIES_TYPE_STRING && num.StringIsNaN(_vi.(string)) {
 		frame.nilCount++
 		// 以下修正string的NaN值, 统一为"NaN"
 		//_rv := reflect.ValueOf(StringNaN)
@@ -79,7 +80,7 @@ func ndFrameAssign[T stat.GenericType](frame *NDFrame, idx, size int, v T) {
 		// 判断_vv是否能被修改
 		if _vv.CanSet() {
 			// 修改v的值为新值
-			_vv.SetString(stat.StringNaN)
+			_vv.SetString(num.StringNaN)
 			// 执行之后, 通过debug可以看到assign入参的v已经变成了"NaN"
 		}
 	}
@@ -113,39 +114,39 @@ func (this *NDFrame) Values() any {
 func (this *NDFrame) NaN() any {
 	switch this.values.(type) {
 	case []bool:
-		return stat.BoolNaN
+		return num.BoolNaN
 	case []string:
-		return stat.StringNaN
+		return num.StringNaN
 	case []int64:
-		return stat.Nil2Int64
+		return num.Nil2Int64
 	case []float32:
-		return stat.Nil2Float32
+		return num.Nil2Float32
 	case []float64:
-		return stat.Nil2Float64
+		return num.Nil2Float64
 	default:
 		panic(ErrUnsupportedType)
 	}
 }
 
 func (this *NDFrame) Floats() []float32 {
-	return stat.SliceToFloat32(this.values)
+	return num.SliceToFloat32(this.values)
 }
 
 // DTypes 计算以这个函数为主
-func (this *NDFrame) DTypes() []stat.DType {
-	return stat.Slice2DType(this.Values())
+func (this *NDFrame) DTypes() []num.DType {
+	return num.Slice2DType(this.Values())
 }
 
 // AsInt 强制转换成整型
-func (this *NDFrame) Ints() []stat.Int {
+func (this *NDFrame) Ints() []num.Int {
 	values := this.DTypes()
-	fs := stat.Fill[stat.DType](values, stat.DType(0))
-	ns := stat.DType2Int(fs)
+	fs := num.Fill[num.DType](values, num.DType(0))
+	ns := num.DType2Int(fs)
 	return ns
 }
 
 func (this *NDFrame) Strings() []string {
-	return stat.SliceToString(this.Values())
+	return num.SliceToString(this.Values())
 }
 
 func (this *NDFrame) Bools() []bool {
@@ -218,9 +219,9 @@ func (this *NDFrame) Records(round ...bool) []string {
 	this.Apply(func(idx int, v any) {
 		val := v
 		if needRound && (t == stat.SERIES_TYPE_FLOAT32 || t == stat.SERIES_TYPE_FLOAT64) {
-			ret[idx] = stat.PrintString(val)
+			ret[idx] = num.PrintString(val)
 		} else {
-			ret[idx] = stat.AnyToString(val)
+			ret[idx] = num.AnyToString(val)
 		}
 	})
 	return ret
@@ -230,19 +231,19 @@ func (this *NDFrame) Repeat(x any, repeats int) stat.Series {
 	switch values := this.values.(type) {
 	case []bool:
 		_ = values
-		vs := stat.Repeat(stat.AnyToBool(x), repeats)
+		vs := num.Repeat(num.AnyToBool(x), repeats)
 		return NewNDFrame(this.name, vs...)
 	case []string:
-		vs := stat.Repeat(stat.AnyToString(x), repeats)
+		vs := num.Repeat(num.AnyToString(x), repeats)
 		return NewNDFrame(this.name, vs...)
 	case []int64:
-		vs := stat.Repeat(stat.AnyToInt64(x), repeats)
+		vs := num.Repeat(num.AnyToInt64(x), repeats)
 		return NewNDFrame(this.name, vs...)
 	case []float32:
-		vs := stat.Repeat(stat.AnyToFloat32(x), repeats)
+		vs := num.Repeat(num.AnyToFloat32(x), repeats)
 		return NewNDFrame(this.name, vs...)
 	default: //case []float64:
-		vs := stat.Repeat(stat.AnyToFloat64(x), repeats)
+		vs := num.Repeat(num.AnyToFloat64(x), repeats)
 		return NewNDFrame(this.name, vs...)
 	}
 }
@@ -250,49 +251,49 @@ func (this *NDFrame) Repeat(x any, repeats int) stat.Series {
 func (this *NDFrame) Shift(periods int) stat.Series {
 	switch values := this.values.(type) {
 	case []bool:
-		d := stat.Shift[bool](values, periods)
+		d := num.Shift[bool](values, periods)
 		return NewSeries(stat.SERIES_TYPE_BOOL, this.Name(), d)
 	case []string:
-		d := stat.Shift[string](values, periods)
+		d := num.Shift[string](values, periods)
 		return NewSeries(stat.SERIES_TYPE_STRING, this.Name(), d)
 	case []int64:
-		d := stat.Shift[int64](values, periods)
+		d := num.Shift[int64](values, periods)
 		return NewSeries(stat.SERIES_TYPE_INT64, this.Name(), d)
 	case []float32:
-		d := stat.Shift[float32](values, periods)
+		d := num.Shift[float32](values, periods)
 		return NewSeries(stat.SERIES_TYPE_FLOAT32, this.Name(), d)
 	default: //case []float64:
-		d := stat.Shift[float64](values.([]float64), periods)
+		d := num.Shift[float64](values.([]float64), periods)
 		return NewSeries(stat.SERIES_TYPE_FLOAT64, this.Name(), d)
 	}
 }
 
-func (this *NDFrame) Mean() stat.DType {
+func (this *NDFrame) Mean() num.DType {
 	if this.Len() < 1 {
-		return stat.NaN()
+		return num.NaN()
 	}
-	fs := make([]stat.DType, 0)
+	fs := make([]num.DType, 0)
 	this.Apply(func(idx int, v any) {
-		f := stat.Any2DType(v)
+		f := num.Any2DType(v)
 		fs = append(fs, f)
 	})
-	stdDev := stat.Mean(fs)
+	stdDev := num.Mean(fs)
 	return stdDev
 }
 
-func (this *NDFrame) StdDev() stat.DType {
+func (this *NDFrame) StdDev() num.DType {
 	return this.Std()
 }
 
-func (this *NDFrame) Std() stat.DType {
+func (this *NDFrame) Std() num.DType {
 	if this.Len() < 1 {
-		return stat.NaN()
+		return num.NaN()
 	}
-	values := make([]stat.DType, this.Len())
+	values := make([]num.DType, this.Len())
 	this.Apply(func(idx int, v any) {
-		values[idx] = stat.Any2DType(v)
+		values[idx] = num.Any2DType(v)
 	})
-	stdDev := stat.Std(values)
+	stdDev := num.Std(values)
 	return stdDev
 }
 
@@ -301,26 +302,26 @@ func (this *NDFrame) FillNa(v any, inplace bool) stat.Series {
 	switch rows := values.(type) {
 	case []string:
 		for idx, iv := range rows {
-			if stat.StringIsNaN(iv) && inplace {
-				rows[idx] = stat.AnyToString(v)
+			if num.StringIsNaN(iv) && inplace {
+				rows[idx] = num.AnyToString(v)
 			}
 		}
 	case []int64:
 		for idx, iv := range rows {
-			if stat.Float64IsNaN(float64(iv)) && inplace {
-				rows[idx] = stat.AnyToInt64(v)
+			if num.Float64IsNaN(float64(iv)) && inplace {
+				rows[idx] = num.AnyToInt64(v)
 			}
 		}
 	case []float32:
 		for idx, iv := range rows {
-			if stat.Float32IsNaN(iv) && inplace {
-				rows[idx] = stat.AnyToFloat32(v)
+			if num.Float32IsNaN(iv) && inplace {
+				rows[idx] = num.AnyToFloat32(v)
 			}
 		}
 	case []float64:
 		for idx, iv := range rows {
-			if stat.Float64IsNaN(iv) && inplace {
-				rows[idx] = stat.AnyToFloat64(v)
+			if num.Float64IsNaN(iv) && inplace {
+				rows[idx] = num.AnyToFloat64(v)
 			}
 		}
 	}

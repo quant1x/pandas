@@ -3,14 +3,14 @@ package pandas
 import (
 	"fmt"
 	"gitee.com/quant1x/gox/util/homedir"
-	"gitee.com/quant1x/pandas/stat"
+	"gitee.com/quant1x/num"
 	"github.com/tealeg/xlsx/v3"
 	"strings"
 )
 
 // ReadExcel 读取excel文件
 func ReadExcel(filename string, options ...LoadOption) DataFrame {
-	if stat.IsEmpty(filename) {
+	if num.IsEmpty(filename) {
 		return DataFrame{Err: fmt.Errorf("filaname is empty")}
 	}
 

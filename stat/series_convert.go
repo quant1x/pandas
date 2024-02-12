@@ -1,12 +1,13 @@
 package stat
 
 import (
-	"gitee.com/quant1x/gox/num"
-	"gitee.com/quant1x/gox/num/num32"
+	"gitee.com/quant1x/num"
+	"gitee.com/quant1x/num/x32"
+	"gitee.com/quant1x/num/x64"
 )
 
 // 这里做数组统一转换
-func convert[T GenericType](s Series, v T) {
+func convert[T num.GenericType](s Series, v T) {
 	values := s.Values()
 	rawType := checkoutRawType(values)
 	values, ok := values.([]T)
@@ -22,16 +23,16 @@ func ToFloat32(s Series) []float32 {
 	case SERIES_TYPE_FLOAT32:
 		return values.([]float32) // TODO:是否复制
 	case SERIES_TYPE_FLOAT64:
-		return num32.FromFloat64(values.([]float64))
+		return x32.FromFloat64(values.([]float64))
 	case SERIES_TYPE_INT32:
-		return num32.FromInt32(values.([]int32))
+		return x32.FromInt32(values.([]int32))
 	case SERIES_TYPE_INT64:
-		return num32.FromInt64(values.([]int64))
+		return x32.FromInt64(values.([]int64))
 	case SERIES_TYPE_BOOL:
-		return num32.FromBool(values.([]bool))
+		return x32.FromBool(values.([]bool))
 	default:
 		length := s.Len()
-		defaultSlice := num32.Repeat(Nil2Float32, length)
+		defaultSlice := x32.Repeat(num.Nil2Float32, length)
 		return defaultSlice
 	}
 }
@@ -41,18 +42,18 @@ func ToFloat64(s Series) []float64 {
 	__type := s.Type()
 	switch __type {
 	case SERIES_TYPE_FLOAT32:
-		return num.FromFloat32(values.([]float32))
+		return x64.FromFloat32(values.([]float32))
 	case SERIES_TYPE_FLOAT64:
 		return values.([]float64) // TODO:是否复制
 	case SERIES_TYPE_INT32:
-		return num.FromInt32(values.([]int32))
+		return x64.FromInt32(values.([]int32))
 	case SERIES_TYPE_INT64:
-		return num.FromInt64(values.([]int64))
+		return x64.FromInt64(values.([]int64))
 	case SERIES_TYPE_BOOL:
-		return num.FromBool(values.([]bool))
+		return x64.FromBool(values.([]bool))
 	default:
 		length := s.Len()
-		defaultSlice := num.Repeat(Nil2Float64, length)
+		defaultSlice := num.Repeat(num.Nil2Float64, length)
 		return defaultSlice
 	}
 }
@@ -80,7 +81,7 @@ func ToBool(s Series) []bool {
 	}
 }
 
-func __NumberToBool_S[T Number](values []T) []bool {
+func __NumberToBool_S[T num.Number](values []T) []bool {
 	length := len(values)
 	vs := make([]bool, length)
 	for i, v := range values {
@@ -97,7 +98,7 @@ func __StringToBool_S(values []string) []bool {
 	length := len(values)
 	vs := make([]bool, length)
 	for i, v := range values {
-		if StringIsTrue(v) {
+		if num.StringIsTrue(v) {
 			vs[i] = true
 		} else {
 			vs[i] = false
@@ -106,7 +107,7 @@ func __StringToBool_S(values []string) []bool {
 	return vs
 }
 
-func __NumberToSeries[T Number](x T, n int) Series {
-	s := Repeat[T](x, n)
+func __NumberToSeries[T num.Number](x T, n int) Series {
+	s := num.Repeat[T](x, n)
 	return NDArray[T](s)
 }

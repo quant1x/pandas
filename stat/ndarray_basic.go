@@ -1,5 +1,9 @@
 package stat
 
+import (
+	"gitee.com/quant1x/gox/api"
+)
+
 func (self NDArray[T]) Name() string {
 	return "x"
 }
@@ -17,5 +21,5 @@ func (self NDArray[T]) Values() any {
 }
 
 func (self NDArray[T]) Reverse() Series {
-	return Reverse(self)
+	return api.Reverse(self)
 }

@@ -1,6 +1,7 @@
 package formula
 
 import (
+	"gitee.com/quant1x/num"
 	"gitee.com/quant1x/pandas/stat"
 	"reflect"
 )
@@ -16,7 +17,7 @@ func COUNT(S any, N any) stat.Series {
 		//fmt.Println(sh)
 		v := reflect.ValueOf(s)
 		length := v.Len()
-		ds = stat.AnyToSlice[bool](s, length)
+		ds = num.AnyToSlice[bool](s, length)
 	}
 	s := V1COUNT(ds, N)
 	return stat.NDArray[int](s)
@@ -30,7 +31,7 @@ func V1COUNT(S []bool, N any) []int {
 	for i := 0; i < len(x); i++ {
 		n := 0
 		for _, v := range x[i] {
-			if stat.AnyToBool(v) {
+			if num.AnyToBool(v) {
 				n++
 			}
 		}

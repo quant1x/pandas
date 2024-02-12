@@ -1,17 +1,20 @@
 package stat
 
-import "reflect"
+import (
+	"gitee.com/quant1x/num"
+	"reflect"
+)
 
 // 赋值
-func ndArrayAssign[T BaseType](type_ Type, array Series, idx, size int, v T) Series {
+func ndArrayAssign[T num.BaseType](type_ Type, array Series, idx, size int, v T) Series {
 	_vv := reflect.ValueOf(v)
 	_vi := _vv.Interface()
 	// float和string类型有可能是NaN, 对nil和NaN进行计数
-	if type_ == SERIES_TYPE_FLOAT32 && Float32IsNaN(_vi.(float32)) {
+	if type_ == SERIES_TYPE_FLOAT32 && num.Float32IsNaN(_vi.(float32)) {
 		//array.nilCount++
-	} else if type_ == SERIES_TYPE_FLOAT64 && Float64IsNaN(_vi.(float64)) {
+	} else if type_ == SERIES_TYPE_FLOAT64 && num.Float64IsNaN(_vi.(float64)) {
 		//array.nilCount++
-	} else if type_ == SERIES_TYPE_STRING && StringIsNaN(_vi.(string)) {
+	} else if type_ == SERIES_TYPE_STRING && num.StringIsNaN(_vi.(string)) {
 		//array.nilCount++
 		// 以下修正string的NaN值, 统一为"NaN"
 		//_rv := reflect.ValueOf(StringNaN)
@@ -25,7 +28,7 @@ func ndArrayAssign[T BaseType](type_ Type, array Series, idx, size int, v T) Ser
 		// 判断_vv是否能被修改
 		if _vv.CanSet() {
 			// 修改v的值为新值
-			_vv.SetString(StringNaN)
+			_vv.SetString(num.StringNaN)
 			// 执行之后, 通过debug可以看到assign入参的v已经变成了"NaN"
 		}
 	}
@@ -45,23 +48,23 @@ func ndArrayAssign[T BaseType](type_ Type, array Series, idx, size int, v T) Ser
 func (self NDArray[T]) insert(idx, size int, v any) NDArray[T] {
 	type_ := checkoutRawType(self)
 	if type_ == SERIES_TYPE_BOOL {
-		val := AnyToBool(v)
+		val := num.AnyToBool(v)
 		an := ndArrayAssign[bool](type_, self, idx, size, val)
 		self = an.(NDArray[T])
 	} else if type_ == SERIES_TYPE_INT64 {
-		val := AnyToInt64(v)
+		val := num.AnyToInt64(v)
 		an := ndArrayAssign[int64](type_, self, idx, size, val)
 		self = an.(NDArray[T])
 	} else if type_ == SERIES_TYPE_FLOAT32 {
-		val := AnyToFloat32(v)
+		val := num.AnyToFloat32(v)
 		an := ndArrayAssign[float32](type_, self, idx, size, val)
 		self = an.(NDArray[T])
 	} else if type_ == SERIES_TYPE_FLOAT64 {
-		val := AnyToFloat64(v)
+		val := num.AnyToFloat64(v)
 		an := ndArrayAssign[float64](type_, self, idx, size, val)
 		self = an.(NDArray[T])
 	} else {
-		val := AnyToString(v)
+		val := num.AnyToString(v)
 		an := ndArrayAssign[string](type_, self, idx, size, val)
 		self = an.(NDArray[T])
 	}

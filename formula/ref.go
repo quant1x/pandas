@@ -1,6 +1,7 @@
 package formula
 
 import (
+	"gitee.com/quant1x/num"
 	"gitee.com/quant1x/pandas/stat"
 )
 
@@ -9,6 +10,6 @@ func REF(S stat.Series, N any) stat.Series {
 	return S.Ref(N)
 }
 
-func REF2[T stat.BaseType](S []T, N any) []T {
-	return stat.Shift[T](S, N)
+func REF2[T num.BaseType](S []T, N any) []T {
+	return num.Shift[T](S, N)
 }

@@ -1,10 +1,13 @@
 package stat
 
-import "gitee.com/quant1x/gox/exception"
+import (
+	"gitee.com/quant1x/gox/exception"
+	"gitee.com/quant1x/num"
+)
 
 // Align2Series any转换成series
 func Align2Series(x any, N int) Series {
-	ds := []DType{}
+	ds := []num.DType{}
 	switch v := x.(type) {
 	//case int:
 	//	ds = Repeat(DType(v), N)
@@ -18,17 +21,17 @@ func Align2Series(x any, N int) Series {
 	//	vd := Slice2DType(v)
 	//	ds = Align[DType](vd, DTypeNaN, N)
 	case nil:
-		ds = Repeat[DType](DTypeNaN, N)
+		ds = num.Repeat[num.DType](num.DTypeNaN, N)
 	case /*nil, */ int8, uint8, int16, uint16, int32, uint32, int64, uint64, int, uint, float32, float64, bool, string:
-		ds = Repeat[DType](Any2DType(v), N)
+		ds = num.Repeat[num.DType](num.Any2DType(v), N)
 	case []int8, []uint8, []int16, []uint16, []int32, []uint32, []int64, []uint64, []int, []uint, []uintptr, []float32, []float64, []bool, []string:
-		vd := Slice2DType(v)
-		ds = Align[DType](vd, DTypeNaN, N)
+		vd := num.Slice2DType(v)
+		ds = num.Align[num.DType](vd, num.DTypeNaN, N)
 	case Series:
 		vd := v.DTypes()
-		ds = Align[DType](vd, DTypeNaN, N)
+		ds = num.Align[num.DType](vd, num.DTypeNaN, N)
 	default:
 		panic(exception.New(1, "error window"))
 	}
-	return NDArray[DType](ds)
+	return NDArray[num.DType](ds)
 }

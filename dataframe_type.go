@@ -3,6 +3,7 @@ package pandas
 import (
 	"fmt"
 	"gitee.com/quant1x/gox/exception"
+	"gitee.com/quant1x/num"
 	"gitee.com/quant1x/pandas/stat"
 	"reflect"
 	"strconv"
@@ -52,7 +53,7 @@ func findTypeByString(arr []string) (stat.Type, error) {
 		}
 		if f, err := strconv.ParseFloat(str, 64); err == nil {
 			hasFloats = true
-			if float32(f) < stat.MaxFloat32 {
+			if float32(f) < num.MaxFloat32 {
 				if mustFloat64(float32(f)) {
 					useFloat64 = true
 				} else {
@@ -106,7 +107,7 @@ func parseType(s string) (stat.Type, error) {
 	return stat.SERIES_TYPE_INVAILD, fmt.Errorf("type (%s) is not supported", s)
 }
 
-func detectTypes[T stat.GenericType](v T) (stat.Type, any) {
+func detectTypes[T num.GenericType](v T) (stat.Type, any) {
 	var _type = stat.SERIES_TYPE_STRING
 	vv := reflect.ValueOf(v)
 	vk := vv.Kind()

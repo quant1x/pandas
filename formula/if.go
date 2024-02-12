@@ -1,6 +1,7 @@
 package formula
 
 import (
+	"gitee.com/quant1x/num"
 	"gitee.com/quant1x/pandas/stat"
 )
 
@@ -16,7 +17,7 @@ func IFF(S stat.Series, A, B any) stat.Series {
 
 	a := stat.Align2Series(A, length).DTypes()
 	b := stat.Align2Series(B, length).DTypes()
-	ret := stat.Where(s, a, b)
+	ret := num.Where(s, a, b)
 	return stat.ToSeries(ret...)
 }
 

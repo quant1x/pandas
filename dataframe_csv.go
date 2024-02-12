@@ -5,7 +5,7 @@ import (
 	"gitee.com/quant1x/gox/api"
 	"gitee.com/quant1x/gox/exception"
 	"gitee.com/quant1x/gox/util/homedir"
-	"gitee.com/quant1x/pandas/stat"
+	"gitee.com/quant1x/num"
 	"io"
 	"os"
 )
@@ -26,7 +26,7 @@ func ReadCSV(in any, options ...LoadOption) DataFrame {
 		filename = param
 	}
 
-	if !stat.IsEmpty(filename) {
+	if !num.IsEmpty(filename) {
 		filepath, err := homedir.Expand(filename)
 		if err != nil {
 			return DataFrame{Err: err}
@@ -78,7 +78,7 @@ func (self DataFrame) WriteCSV(out any, options ...WriteOption) error {
 		filename = param
 	}
 
-	if !stat.IsEmpty(filename) {
+	if !num.IsEmpty(filename) {
 		filepath, err := homedir.Expand(filename)
 		if err != nil {
 			return err

@@ -1,7 +1,9 @@
 package stat
 
+import "gitee.com/quant1x/num"
+
 func (r RollingAndExpandingMixin) Sum() Series {
-	var d []DType
+	var d []num.DType
 	for _, block := range r.GetBlocks() {
 		d = append(d, block.Sum())
 	}

@@ -2,45 +2,46 @@ package stat
 
 import (
 	"gitee.com/quant1x/gox/exception"
+	"gitee.com/quant1x/num"
 )
 
-type NDArray[T BaseType] []T
+type NDArray[T num.BaseType] []T
 
 func (self NDArray[T]) NaN() any {
 	switch any(self).(type) {
 	case []bool:
-		return BoolNaN
+		return num.BoolNaN
 	case []string:
-		return StringNaN
+		return num.StringNaN
 	case []int64:
-		return Nil2Int64
+		return num.Nil2Int64
 	case []float32:
-		return Nil2Float32
+		return num.Nil2Float32
 	case []float64:
-		return Nil2Float64
+		return num.Nil2Float64
 	default:
-		panic(ErrUnsupportedType)
+		panic(num.ErrUnsupportedType)
 	}
 }
 
 func (self NDArray[T]) Floats() []float32 {
-	return SliceToFloat32([]T(self))
+	return num.SliceToFloat32([]T(self))
 }
 
-func (self NDArray[T]) DTypes() []DType {
-	return SliceToFloat64([]T(self))
+func (self NDArray[T]) DTypes() []num.DType {
+	return num.SliceToFloat64([]T(self))
 }
 
-func (self NDArray[T]) Ints() []Int {
-	d := make([]Int, self.Len())
+func (self NDArray[T]) Ints() []num.Int {
+	d := make([]num.Int, self.Len())
 	for i, v := range self {
-		d[i] = AnyToInt32(v)
+		d[i] = num.AnyToInt32(v)
 	}
 	return d
 }
 
 func (self NDArray[T]) Strings() []string {
-	return SliceToString(self.Values())
+	return num.SliceToString(self.Values())
 }
 
 func (self NDArray[T]) Bools() []bool {
@@ -68,7 +69,7 @@ func (self NDArray[T]) Empty(tv ...Type) Series {
 	case SERIES_TYPE_FLOAT64:
 		return NewSeries[float64]()
 	default:
-		panic(ErrUnsupportedType)
+		panic(num.ErrUnsupportedType)
 	}
 }
 
@@ -87,9 +88,9 @@ func (self NDArray[T]) Records(round ...bool) []string {
 	self.Apply(func(idx int, v any) {
 		val := v
 		if needRound && (t == SERIES_TYPE_FLOAT32 || t == SERIES_TYPE_FLOAT64) {
-			ret[idx] = PrintString(val)
+			ret[idx] = num.PrintString(val)
 		} else {
-			ret[idx] = AnyToString(val)
+			ret[idx] = num.AnyToString(val)
 		}
 	})
 	return ret
@@ -101,52 +102,52 @@ func (self NDArray[T]) Repeat(x any, repeats int) Series {
 	switch values := self.Values().(type) {
 	case []bool:
 		_ = values
-		d = Repeat(AnyToBool(x), repeats)
+		d = num.Repeat(num.AnyToBool(x), repeats)
 	case []string:
-		d = Repeat(AnyToString(x), repeats)
+		d = num.Repeat(num.AnyToString(x), repeats)
 	case []int64:
-		d = Repeat(AnyToInt64(x), repeats)
+		d = num.Repeat(num.AnyToInt64(x), repeats)
 	case []float32:
-		d = Repeat(AnyToFloat32(x), repeats)
+		d = num.Repeat(num.AnyToFloat32(x), repeats)
 	default: //case []float64:
-		d = Repeat(AnyToFloat64(x), repeats)
+		d = num.Repeat(num.AnyToFloat64(x), repeats)
 	}
 	return NDArray[T](d.([]T))
 }
 
 func (self NDArray[T]) FillNa(v any, inplace bool) Series {
-	d := FillNa(self, v, inplace)
+	d := num.FillNa(self, v, inplace)
 	return NDArray[T](d)
 }
 
 func (self NDArray[T]) Shift(periods int) Series {
 	values := self.Values().([]T)
-	d := Shift(values, periods)
+	d := num.Shift(values, periods)
 	return NDArray[T](d)
 }
 
-func (self NDArray[T]) Mean() DType {
+func (self NDArray[T]) Mean() num.DType {
 	if self.Len() < 1 {
-		return NaN()
+		return num.NaN()
 	}
-	d := Mean2(self)
-	return Any2DType(d)
+	d := num.Mean2(self)
+	return num.Any2DType(d)
 }
 
-func (self NDArray[T]) StdDev() DType {
+func (self NDArray[T]) StdDev() num.DType {
 	if self.Len() < 1 {
-		return NaN()
+		return num.NaN()
 	}
 	return self.Std()
 }
 
 func (self NDArray[T]) Max() any {
-	d := Max2(self)
+	d := num.Max2(self)
 	return d
 }
 
 func (self NDArray[T]) Min() any {
-	d := Min2(self)
+	d := num.Min2(self)
 	return d
 }
 
@@ -166,50 +167,50 @@ func (self NDArray[T]) Apply2(f func(idx int, v any) any, args ...bool) Series {
 	for i, v := range self {
 		r := f(i, v)
 		if inplace {
-			self[i] = anyToGeneric[T](r)
+			self[i] = num.AnyToGeneric[T](r)
 		}
 	}
 	return self
 }
 
 func (self NDArray[T]) Diff(n any) Series {
-	d := Diff2(self, n)
+	d := num.Diff2(self, n)
 	return NDArray[T](d)
 }
 
 func (self NDArray[T]) Ref(n any) Series {
 	values := self.Values().([]T)
-	d := Shift(values, n)
+	d := num.Shift(values, n)
 	return NDArray[T](d)
 }
 
-func (self NDArray[T]) Std() DType {
+func (self NDArray[T]) Std() num.DType {
 	if self.Len() < 1 {
-		return NaN()
+		return num.NaN()
 	}
-	d := Std(self)
-	return Any2DType(d)
+	d := num.Std(self)
+	return num.Any2DType(d)
 }
 
-func (self NDArray[T]) Sum() DType {
+func (self NDArray[T]) Sum() num.DType {
 	if self.Len() < 1 {
-		return NaN()
+		return num.NaN()
 	}
-	values := Slice2DType(self.Values())
-	d := Sum(values)
-	return Any2DType(d)
+	values := num.Slice2DType(self.Values())
+	d := num.Sum(values)
+	return num.Any2DType(d)
 }
 
 func (self NDArray[T]) Rolling(param any) RollingAndExpandingMixin {
-	var N []DType
+	var N []num.DType
 	switch v := param.(type) {
 	case int:
-		N = Repeat[DType](DType(v), self.Len())
-	case []DType:
-		N = Align(v, DTypeNaN, self.Len())
+		N = num.Repeat[num.DType](num.DType(v), self.Len())
+	case []num.DType:
+		N = num.Align(v, num.DTypeNaN, self.Len())
 	case Series:
 		vs := v.DTypes()
-		N = Align(vs, DTypeNaN, self.Len())
+		N = num.Align(vs, num.DTypeNaN, self.Len())
 	default:
 		panic(exception.New(1, "error window"))
 	}
@@ -239,7 +240,7 @@ func (self NDArray[T]) EWM(alpha EW) ExponentialMovingWindow {
 		param = alpha.Alpha
 	}
 
-	dest := NewSeries[DType]()
+	dest := NewSeries[num.DType]()
 	dest = dest.Append(self)
 	return ExponentialMovingWindow{
 		Data:     dest,

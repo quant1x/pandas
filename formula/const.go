@@ -1,6 +1,7 @@
 package formula
 
 import (
+	"gitee.com/quant1x/num"
 	"gitee.com/quant1x/pandas"
 	"gitee.com/quant1x/pandas/stat"
 )
@@ -9,6 +10,6 @@ import (
 func CONST(S stat.Series) stat.Series {
 	length := S.Len()
 	s := S.Floats()
-	s = stat.Repeat(s[length-1], S.Len())
+	s = num.Repeat(s[length-1], S.Len())
 	return pandas.NewSeries(stat.SERIES_TYPE_FLOAT32, "", s)
 }

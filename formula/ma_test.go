@@ -2,6 +2,7 @@ package formula
 
 import (
 	"fmt"
+	"gitee.com/quant1x/num"
 	"gitee.com/quant1x/pandas"
 	"gitee.com/quant1x/pandas/stat"
 	"testing"
@@ -40,6 +41,6 @@ func TestMAx(t *testing.T) {
 	arr := ma5.DTypes()
 	old := arr[len(arr)-2]
 	new := s.IndexOf(-1)
-	n := MAx(5, old, stat.AnyToFloat64(new))
+	n := MAx(5, old, num.AnyToFloat64(new))
 	fmt.Println(n)
 }
