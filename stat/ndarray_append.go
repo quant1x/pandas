@@ -3,7 +3,7 @@ package stat
 import "reflect"
 
 // 赋值
-func assign[T BaseType](type_ Type, array Series, idx, size int, v T) Series {
+func ndArrayAssign[T BaseType](type_ Type, array Series, idx, size int, v T) Series {
 	_vv := reflect.ValueOf(v)
 	_vi := _vv.Interface()
 	// float和string类型有可能是NaN, 对nil和NaN进行计数
@@ -46,23 +46,23 @@ func (self NDArray[T]) insert(idx, size int, v any) NDArray[T] {
 	type_ := checkoutRawType(self)
 	if type_ == SERIES_TYPE_BOOL {
 		val := AnyToBool(v)
-		an := assign[bool](type_, self, idx, size, val)
+		an := ndArrayAssign[bool](type_, self, idx, size, val)
 		self = an.(NDArray[T])
 	} else if type_ == SERIES_TYPE_INT64 {
 		val := AnyToInt64(v)
-		an := assign[int64](type_, self, idx, size, val)
+		an := ndArrayAssign[int64](type_, self, idx, size, val)
 		self = an.(NDArray[T])
 	} else if type_ == SERIES_TYPE_FLOAT32 {
 		val := AnyToFloat32(v)
-		an := assign[float32](type_, self, idx, size, val)
+		an := ndArrayAssign[float32](type_, self, idx, size, val)
 		self = an.(NDArray[T])
 	} else if type_ == SERIES_TYPE_FLOAT64 {
 		val := AnyToFloat64(v)
-		an := assign[float64](type_, self, idx, size, val)
+		an := ndArrayAssign[float64](type_, self, idx, size, val)
 		self = an.(NDArray[T])
 	} else {
 		val := AnyToString(v)
-		an := assign[string](type_, self, idx, size, val)
+		an := ndArrayAssign[string](type_, self, idx, size, val)
 		self = an.(NDArray[T])
 	}
 	return self
