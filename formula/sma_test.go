@@ -36,7 +36,7 @@ func TestSMA(t *testing.T) {
 	//x := stat.Where(v2, as, bs)
 	n := BARSLAST2(pandas.NewSeries(stat.SERIES_TYPE_FLOAT32, "", x))
 	fmt.Println(n[len(n)-10:])
-	//r1 := SMA(CLOSE, pandas.NewSeries(pandas.SERIES_TYPE_FLOAT32, "", n), 1)
+	//r1 := SMA(CLOSE, pandas.NewNDArray(pandas.SERIES_TYPE_FLOAT32, "", n), 1)
 	r1 := SMA(CLOSE, 7, 1)
 	s2 := pandas.NewSeries(stat.SERIES_TYPE_FLOAT32, "sma", r1)
 	df2 := pandas.NewDataFrame(s2)

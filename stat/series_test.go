@@ -9,6 +9,6 @@ import (
 func TestNewSeries(t *testing.T) {
 	d1 := []num.DType{}
 	fmt.Println(d1)
-	s1 := NewSeries[num.DType]()
+	s1 := NewNDArray[num.DType]()
 	fmt.Println(s1)
 }

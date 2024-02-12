@@ -191,8 +191,8 @@ func DetectTypeBySlice(arr ...any) (Type, error) {
 	}
 }
 
-// NewSeries 构建一个新的Series
-func NewSeries[T num.BaseType](data ...T) Series {
+// NewNDArray 构建一个新的Series
+func NewNDArray[T num.BaseType](data ...T) Series {
 	var S Series
 	values := []T{}
 	if len(data) > 0 {

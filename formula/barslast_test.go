@@ -9,6 +9,6 @@ import (
 func TestBARSLAST(t *testing.T) {
 	f0 := []float64{1, 2, 3, 4, 5, 6, 0, 8, 9, 10, 11, 12}
 	i0 := CompareGt(f0, 10)
-	s0 := stat.NewSeries[bool](i0...)
+	s0 := stat.NewNDArray[bool](i0...)
 	fmt.Println(BARSLAST(s0))
 }

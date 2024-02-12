@@ -45,7 +45,7 @@ func TestEMA(t *testing.T) {
 
 func TestEmaIncr(t *testing.T) {
 	f0 := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9}
-	s := stat.NewSeries[float64](f0...)
+	s := stat.NewNDArray[float64](f0...)
 	v0 := EMA(s, 7)
 	fmt.Println(v0)
 	v1 := EMA(s, 7)

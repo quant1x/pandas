@@ -22,12 +22,6 @@ func TestSeriesFrame(t *testing.T) {
 	// s3 = NewSeriesBool("x", data)
 	s3 = NewSeries(stat.SERIES_TYPE_BOOL, "x", data)
 	fmt.Printf("%+v\n", s3.Values())
-
-	var s4 stat.Series
-	ts4 := GenericSeries[float64]("x", data...)
-	ts4 = NewSeries(stat.SERIES_TYPE_FLOAT64, "x", data)
-	s4 = ts4
-	fmt.Printf("%+v\n", s4.Values())
 }
 
 func TestNDFrameNew(t *testing.T) {

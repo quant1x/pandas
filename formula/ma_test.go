@@ -35,7 +35,7 @@ func TestMA(t *testing.T) {
 }
 
 func TestMAx(t *testing.T) {
-	s := stat.NewSeries(1, 2, 3, 4, 5, 6)
+	s := stat.NewNDArray(1, 2, 3, 4, 5, 6)
 	ma5 := MA(s, 5)
 	fmt.Println(ma5)
 	arr := ma5.DTypes()

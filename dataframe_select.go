@@ -29,15 +29,15 @@ func (self DataFrame) Col(colname string, args ...bool) stat.Series {
 
 func (self DataFrame) ColAsNDArray(colname string) stat.Series {
 	if self.Err != nil {
-		return stat.NewSeries[num.DType]()
+		return stat.NewNDArray[num.DType]()
 	}
 	// Check that colname exist on dataframe
 	idx := findInStringSlice(colname, self.Names())
 	if idx < 0 {
-		return stat.NewSeries[num.DType]()
+		return stat.NewNDArray[num.DType]()
 	}
 	vs := self.columns[idx].DTypes()
-	return stat.NewSeries[num.DType](vs...)
+	return stat.NewNDArray[num.DType](vs...)
 }
 
 // SetNames changes the column names of a DataFrame to the ones passed as an

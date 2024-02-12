@@ -57,17 +57,17 @@ func (self NDArray[T]) Empty(tv ...Type) Series {
 	__type := tv[0]
 	switch __type {
 	case SERIES_TYPE_STRING:
-		return NewSeries[string]()
+		return NewNDArray[string]()
 	case SERIES_TYPE_BOOL:
-		return NewSeries[bool]()
+		return NewNDArray[bool]()
 	case SERIES_TYPE_INT32:
-		return NewSeries[int32]()
+		return NewNDArray[int32]()
 	case SERIES_TYPE_INT64:
-		return NewSeries[int64]()
+		return NewNDArray[int64]()
 	case SERIES_TYPE_FLOAT32:
-		return NewSeries[float32]()
+		return NewNDArray[float32]()
 	case SERIES_TYPE_FLOAT64:
-		return NewSeries[float64]()
+		return NewNDArray[float64]()
 	default:
 		panic(num.ErrUnsupportedType)
 	}
@@ -240,7 +240,7 @@ func (self NDArray[T]) EWM(alpha EW) ExponentialMovingWindow {
 		param = alpha.Alpha
 	}
 
-	dest := NewSeries[num.DType]()
+	dest := NewNDArray[num.DType]()
 	dest = dest.Append(self)
 	return ExponentialMovingWindow{
 		Data:     dest,

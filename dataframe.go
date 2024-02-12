@@ -26,15 +26,15 @@ func NewDataFrame(se ...stat.Series) DataFrame {
 	for i, s := range se {
 		var d stat.Series
 		if s.Type() == stat.SERIES_TYPE_INT64 {
-			d = NewSeries(stat.SERIES_TYPE_INT64, s.Name(), s.Values())
+			d = NewSeriesWithType(stat.SERIES_TYPE_INT64, s.Name(), s.Values())
 		} else if s.Type() == stat.SERIES_TYPE_BOOL {
-			d = NewSeries(stat.SERIES_TYPE_BOOL, s.Name(), s.Values())
+			d = NewSeriesWithType(stat.SERIES_TYPE_BOOL, s.Name(), s.Values())
 		} else if s.Type() == stat.SERIES_TYPE_STRING {
-			d = NewSeries(stat.SERIES_TYPE_STRING, s.Name(), s.Values())
+			d = NewSeriesWithType(stat.SERIES_TYPE_STRING, s.Name(), s.Values())
 		} else if s.Type() == stat.SERIES_TYPE_FLOAT32 {
-			d = NewSeries(stat.SERIES_TYPE_FLOAT32, s.Name(), s.Values())
+			d = NewSeriesWithType(stat.SERIES_TYPE_FLOAT32, s.Name(), s.Values())
 		} else {
-			d = NewSeries(stat.SERIES_TYPE_FLOAT64, s.Name(), s.Values())
+			d = NewSeriesWithType(stat.SERIES_TYPE_FLOAT64, s.Name(), s.Values())
 		}
 		columns[i] = d
 	}

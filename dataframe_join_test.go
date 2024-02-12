@@ -18,9 +18,4 @@ func TestDataFrame_Join(t *testing.T) {
 	}
 	df1 := LoadStructs(data)
 	fmt.Println(df1)
-
-	// 增加1列
-	s_e := GenericSeries[string]("", "a0", "a1", "a2", "a3")
-	df2 := df1.Join(s_e, s_e)
-	fmt.Println(df2)
 }

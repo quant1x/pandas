@@ -18,6 +18,6 @@ func BARSLASTCOUNT(S stat.Series) stat.Series {
 		}
 	}
 	ns := rt[1:]
-	//return stat.NewSeries[stat.Int](rt[1:]...)
+	//return stat.NewNDArray[stat.Int](rt[1:]...)
 	return stat.ToSeries(ns...)
 }

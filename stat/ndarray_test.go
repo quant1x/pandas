@@ -58,7 +58,7 @@ func TestNDArrayAll(t *testing.T) {
 
 func TestNDArray_Rolling(t *testing.T) {
 	d1 := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
-	s := NewSeries(d1...)
+	s := NewNDArray(d1...)
 	r1 := s.Rolling(5).Mean()
 	fmt.Println(r1)
 
@@ -69,7 +69,7 @@ func TestNDArray_Rolling(t *testing.T) {
 
 func TestNDArray_Apply(t *testing.T) {
 	d1 := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
-	s1 := NewSeries(d1...)
+	s1 := NewNDArray(d1...)
 	fmt.Println(s1)
 	s2 := s1.(NDArray[float64])
 	s2.Apply2(func(idx int, v any) any {
@@ -81,28 +81,28 @@ func TestNDArray_Apply(t *testing.T) {
 
 func TestNDArray_Strings(t *testing.T) {
 	d1 := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
-	s1 := NewSeries[float64](d1...)
+	s1 := NewNDArray[float64](d1...)
 	ss := s1.Strings()
 	fmt.Println(ss)
 }
 
 func TestNDArray_Bools(t *testing.T) {
 	d1 := []float64{1, 2, 3, 4, 5, 0, 7, 8, 9, 10, 11, 12}
-	s1 := NewSeries[float64](d1...)
+	s1 := NewNDArray[float64](d1...)
 	ss := s1.Bools()
 	fmt.Println(ss)
 }
 
 func TestNDArray_Neq(t *testing.T) {
 	d1 := []float64{1, 2, 3, 4, 5, 0, 7, 8, 9, 10, 11, 12}
-	s1 := NewSeries[float64](d1...)
+	s1 := NewNDArray[float64](d1...)
 	ss := s1.Neq(0)
 	fmt.Println(ss)
 }
 
 func TestNDArray_Not(t *testing.T) {
 	d1 := []float64{1, 2, 3, 4, 5, 0, 7, 8, 9, 10, 11, 12}
-	s1 := NewSeries[float64](d1...)
+	s1 := NewNDArray[float64](d1...)
 	ss := s1.Not()
 	fmt.Println(ss)
 }
