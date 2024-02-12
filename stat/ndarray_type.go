@@ -95,7 +95,7 @@ var (
 )
 
 // 从泛型检测出类型
-func checkoutRawType(frame any) reflect.Kind {
+func v1checkoutRawType(frame any) reflect.Kind {
 	ft := reflect.TypeOf(frame)
 	strType := ft.String()
 	pos := strings.LastIndexByte(strType, '[')
@@ -118,5 +118,15 @@ func checkoutRawType(frame any) reflect.Kind {
 	if t, ok := mapKind[rawType]; ok {
 		return t
 	}
-	return reflect.Invalid
+	return SERIES_TYPE_INVAILD
+}
+
+// CheckoutRawType 从泛型检测出类型
+func checkoutRawType(frame any) reflect.Kind {
+	typ := reflect.TypeOf(frame)
+	switch typ.Kind() {
+	case reflect.Slice, reflect.Array:
+		return typ.Elem().Kind()
+	}
+	return SERIES_TYPE_INVAILD
 }
