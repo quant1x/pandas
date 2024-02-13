@@ -48,7 +48,7 @@ type Series interface {
 	Empty(t ...Type) Series
 	// Copy 复制
 	Copy() Series
-	// CloneAndReverse 序列反转
+	// Reverse 序列反转
 	Reverse() Series
 	// Select 选取一段记录
 	Select(r api.ScopeLimit) Series
