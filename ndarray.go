@@ -1,7 +1,6 @@
 package pandas
 
 import (
-	"gitee.com/quant1x/gox/exception"
 	"gitee.com/quant1x/num"
 )
 
@@ -212,7 +211,7 @@ func (self NDArray[T]) Rolling(param any) RollingAndExpandingMixin {
 		vs := v.DTypes()
 		N = num.Align(vs, num.DTypeNaN, self.Len())
 	default:
-		panic(exception.New(1, "error window"))
+		panic(num.ErrInvalidWindow)
 	}
 	w := RollingAndExpandingMixin{
 		Window: N,
