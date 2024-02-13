@@ -3,12 +3,10 @@ package pandas
 import (
 	"gitee.com/quant1x/num"
 	"reflect"
-	"sync"
 )
 
 // NDFrame 这里本意是想做一个父类, 实际的效果是一个抽象类
 type NDFrame struct {
-	lock      sync.RWMutex        // 读写锁
 	formatter num.StringFormatter // 字符串格式化工具
 	name      string              // 帧名称
 	type_     Type                // values元素类型
