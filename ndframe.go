@@ -6,6 +6,8 @@ import (
 )
 
 // NDFrame 这里本意是想做一个父类, 实际的效果是一个抽象类
+//
+// Deprecated: 冗余的代码, 不推荐 [wangfeng on 2024/2/13 10:11]
 type NDFrame struct {
 	formatter num.StringFormatter // 字符串格式化工具
 	name      string              // 帧名称
@@ -134,7 +136,7 @@ func (this *NDFrame) DTypes() []num.DType {
 	return num.Slice2DType(this.Values())
 }
 
-// AsInt 强制转换成整型
+// Ints 强制转换成整型
 func (this *NDFrame) Ints() []num.Int {
 	values := this.DTypes()
 	fs := num.Fill[num.DType](values, num.DType(0))
