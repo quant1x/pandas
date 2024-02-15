@@ -42,7 +42,7 @@ golang版本的pandas
 ### 3.1. dataframe
 ### 3.2. series
 
-## 4. 参考的的代码:
+## 4. 参考的代码:
 - https://github.com/go-gota/gota
 - https://github.com/WinPooh32/series
 - https://github.com/rocketlaunchr/dataframe-go.git
