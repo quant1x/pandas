@@ -3,6 +3,24 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.3.3] - 2024-02-18
+### Changed
+- 更新num版本.
+- 优化部分底层公式函数.
+- Dataframe适配series.
+- 调整series方法.
+- 抽象series接口.
+- 重构vector.
+- 重构NDArray.
+- 修订.gitignore.
+- 修订README.
+- 删除废弃的测试数据.
+- 增加上证指数的测试数据.
+- 修订Rolling参数类型错误.
+- NDFrame标记为不推荐.
+- NDFrame结构体删除锁.
+- 修正series接口Reverse函数的注释.
+
 ## [1.3.2] - 2024-02-12
 ### Changed
 - 调整包路径.
@@ -662,7 +680,8 @@ All notable changes to this project will be documented in this file.
 - 引入github.com/WinPooh32/series代码.
 - Initial commit.
 
-[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.3.2...HEAD
+[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.3.3...HEAD
+[1.3.3]: https://gitee.com/quant1x/pandas/compare/v1.3.2...v1.3.3
 [1.3.2]: https://gitee.com/quant1x/pandas/compare/v1.3.1...v1.3.2
 [1.3.1]: https://gitee.com/quant1x/pandas/compare/v1.3.0...v1.3.1
 [1.3.0]: https://gitee.com/quant1x/pandas/compare/v1.2.9...v1.3.0
