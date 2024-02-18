@@ -5,18 +5,18 @@ import (
 )
 
 // Group 分组
-func (self DataFrame) Group(columnName string, filter func(kind Type, e any) bool) DataFrame {
-	return self.Filter(columnName, filter)
+func (this DataFrame) Group(columnName string, filter func(kind Type, e any) bool) DataFrame {
+	return this.Filter(columnName, filter)
 }
 
 // Filter 过滤
-func (self DataFrame) Filter(columnName string, filter func(kind Type, e any) bool) DataFrame {
-	series := self.Col(columnName)
+func (this DataFrame) Filter(columnName string, filter func(kind Type, e any) bool) DataFrame {
+	series := this.Col(columnName)
 	if series.Len() == 0 {
-		return self
+		return this
 	}
 	t := series.Type()
-	indexes := []int{}
+	var indexes []int
 	series.Apply(func(idx int, v any) {
 		ok := filter(t, v)
 		if ok {
@@ -26,7 +26,7 @@ func (self DataFrame) Filter(columnName string, filter func(kind Type, e any) bo
 	ranges := api.IntsToRanges(indexes)
 	df := DataFrame{}
 	for _, r := range ranges {
-		tmp := self.SelectRows(r)
+		tmp := this.SelectRows(r)
 		df = df.Concat(tmp)
 	}
 	return df

@@ -66,7 +66,7 @@ func ReadCSV(in any, options ...LoadOption) DataFrame {
 // WriteCSV writes the DataFrame to the given io.Writer as a CSV file.
 //
 //	支持文件名和io两种方式写入数据
-func (self DataFrame) WriteCSV(out any, options ...WriteOption) error {
+func (this DataFrame) WriteCSV(out any, options ...WriteOption) error {
 	var (
 		writer   io.Writer
 		filename string
@@ -102,7 +102,7 @@ func (self DataFrame) WriteCSV(out any, options ...WriteOption) error {
 		option(&cfg)
 	}
 
-	records := self.Records()
+	records := this.Records()
 	if !cfg.writeHeader {
 		records = records[1:]
 	}

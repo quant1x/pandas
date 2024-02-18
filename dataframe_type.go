@@ -1,8 +1,8 @@
 package pandas
 
 import (
+	"errors"
 	"fmt"
-	"gitee.com/quant1x/gox/exception"
 	"gitee.com/quant1x/num"
 	"reflect"
 	"strconv"
@@ -15,7 +15,8 @@ const (
 )
 
 var (
-	ErrUnsupportedType = exception.New(0, "Unsupported type")
+	ErrUnsupportedType    = errors.New("unsupported type")
+	ErrCouldNotDetectType = errors.New("couldn't detect type")
 )
 
 func mustFloat64(f float32) bool {
@@ -27,6 +28,7 @@ func mustFloat64(f float32) bool {
 
 func findTypeByString(arr []string) (Type, error) {
 	var hasFloats, hasInts, hasBools, hasStrings bool
+	var useInt32, useInt64 bool
 	var useFloat32, useFloat64 bool
 	var stringLengthEqual = -1
 	var stringLenth = -1
@@ -45,11 +47,18 @@ func findTypeByString(arr []string) (Type, error) {
 		} else if stringLengthEqual >= 0 && tLen != stringLenth {
 			stringLengthEqual += 1
 		}
-
-		if _, err := strconv.Atoi(str); err == nil {
+		// 整型
+		if d, err := strconv.ParseInt(str, 10, 64); err == nil {
 			hasInts = true
-			continue
+			//if int32(d) <= num.MaxInt32 {
+			//	useInt32 = true
+			//} else {
+			//	useInt64 = true
+			//}
+			_ = d
 		}
+
+		// 浮点
 		if f, err := strconv.ParseFloat(str, 64); err == nil {
 			hasFloats = true
 			if float32(f) < num.MaxFloat32 {
@@ -80,12 +89,13 @@ func findTypeByString(arr []string) (Type, error) {
 		return SERIES_TYPE_FLOAT32, nil
 	case hasFloats:
 		return SERIES_TYPE_FLOAT64, nil
+	case useInt32 && !useInt64:
+		return SERIES_TYPE_INT32, nil
 	case hasInts:
 		return SERIES_TYPE_INT64, nil
 	default:
-		return SERIES_TYPE_STRING, fmt.Errorf("couldn't detect type")
+		return SERIES_TYPE_STRING, ErrCouldNotDetectType
 	}
-
 }
 
 func parseType(s string) (Type, error) {

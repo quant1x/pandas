@@ -142,16 +142,16 @@ func LoadStructs(i any, options ...LoadOption) DataFrame {
 				fieldName = ""
 			}
 			if t == SERIES_TYPE_STRING {
-				columns = append(columns, NewSeries(SERIES_TYPE_STRING, fieldName, elements))
+				columns = append(columns, NewSeriesWithType(SERIES_TYPE_STRING, fieldName, elements))
 			} else if t == SERIES_TYPE_BOOL {
-				columns = append(columns, NewSeries(SERIES_TYPE_BOOL, fieldName, elements))
+				columns = append(columns, NewSeriesWithType(SERIES_TYPE_BOOL, fieldName, elements))
 			} else if t == SERIES_TYPE_INT64 {
-				columns = append(columns, NewSeries(SERIES_TYPE_INT64, fieldName, elements))
+				columns = append(columns, NewSeriesWithType(SERIES_TYPE_INT64, fieldName, elements))
 			} else if t == SERIES_TYPE_FLOAT32 {
-				columns = append(columns, NewSeries(SERIES_TYPE_FLOAT32, fieldName, elements))
+				columns = append(columns, NewSeriesWithType(SERIES_TYPE_FLOAT32, fieldName, elements))
 			} else {
 				// 默认float
-				columns = append(columns, NewSeries(SERIES_TYPE_FLOAT64, fieldName, elements))
+				columns = append(columns, NewSeriesWithType(SERIES_TYPE_FLOAT64, fieldName, elements))
 			}
 		}
 		return NewDataFrame(columns...)

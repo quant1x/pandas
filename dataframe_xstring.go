@@ -8,11 +8,11 @@ import (
 )
 
 // String implements the Stringer interface for DataFrame
-func (self DataFrame) String() (str string) {
-	return self.print(true, false, true, true, 10, 70, "DataFrame")
+func (this DataFrame) String() (str string) {
+	return this.print(true, false, true, true, 10, 70, "DataFrame")
 }
 
-func (self DataFrame) print(
+func (this DataFrame) print(
 	shortRows, shortCols, showDims, showTypes bool,
 	maxRows int,
 	maxCharsTotal int,
@@ -32,13 +32,13 @@ func (self DataFrame) print(
 		return s
 	}
 
-	if self.Err != nil {
-		str = fmt.Sprintf("%s error: %v", class, self.Err)
+	if this.Err != nil {
+		str = fmt.Sprintf("%s error: %v", class, this.Err)
 		return
 	}
 	nMinRows := maxRows / 2
 	nTotal := 0
-	nrows, ncols := self.Dims()
+	nrows, ncols := this.Dims()
 	if nrows == 0 || ncols == 0 {
 		str = fmt.Sprintf("Empty %s", class)
 		return
@@ -47,7 +47,7 @@ func (self DataFrame) print(
 	shortening := false
 	if shortRows && nrows > maxRows {
 		shortening = true
-		dfHead := self.Subset(0, nMinRows)
+		dfHead := this.Subset(0, nMinRows)
 		records = dfHead.Records(true)
 		nTotal += dfHead.Nrow()
 		if shortening {
@@ -58,13 +58,13 @@ func (self DataFrame) print(
 			records = append(records, dots)
 		}
 		nTotal += 1
-		dfTail := self.Subset(nrows-nMinRows, nrows)
+		dfTail := this.Subset(nrows-nMinRows, nrows)
 		tails := dfTail.Records(true)
 		nTotal += dfTail.Nrow()
 		records = append(records, tails[1:]...)
 	} else {
-		records = self.Records(true)
-		nTotal += self.Nrow()
+		records = this.Records(true)
+		nTotal += this.Nrow()
 	}
 
 	if showDims {
@@ -73,7 +73,7 @@ func (self DataFrame) print(
 
 	// Add the row numbers
 	rowNumbersOffset := 0
-	for i := 0; i < nTotal+1; /*self.nrows+1*/ i++ {
+	for i := 0; i < nTotal+1; /*this.nrows+1*/ i++ {
 		add := ""
 		if i == 0 {
 			// 跳过
@@ -95,7 +95,7 @@ func (self DataFrame) print(
 	//	}
 	//	records = append(records, dots)
 	//}
-	types := self.Types()
+	types := this.Types()
 	typesrow := make([]string, ncols)
 	for i := 0; i < ncols; i++ {
 		typesrow[i] = fmt.Sprintf("<%v>", types[i])
@@ -106,9 +106,9 @@ func (self DataFrame) print(
 		records = append(records, typesrow)
 	}
 
-	maxChars := make([]int, self.ncols+1)
+	maxChars := make([]int, this.ncols+1)
 	for i := 0; i < len(records); i++ {
-		for j := 0; j < self.ncols+1; j++ {
+		for j := 0; j < this.ncols+1; j++ {
 			// Escape special characters
 			records[i][j] = strconv.Quote(records[i][j])
 			records[i][j] = records[i][j][1 : len(records[i][j])-1]
@@ -140,7 +140,7 @@ func (self DataFrame) print(
 	for i := 0; i < len(records); i++ {
 		// Add right padding to all elements
 		records[i][0] = addLeftPadding(records[i][0], maxChars[0]+1)
-		for j := 1; j < self.ncols; j++ {
+		for j := 1; j < this.ncols; j++ {
 			records[i][j] = addRightPadding(records[i][j], maxChars[j])
 		}
 		records[i] = records[i][0:maxCols]

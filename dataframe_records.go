@@ -72,11 +72,7 @@ func LoadRecords(records [][]string, options ...LoadOption) DataFrame {
 	columns := make([]Series, len(headers))
 	for i, colname := range headers {
 		cols := rawcols[i]
-		col := NewSeries(types[i], colname, cols)
-		//col := NewSeriesWithType(types[i], colname, cols)
-		//if col.Err != nil {
-		//	return DataFrame{Err: col.Err}
-		//}
+		col := NewSeriesWithType(types[i], colname, cols)
 		columns[i] = col
 	}
 	nrows, ncols, err := checkColumnsDimensions(columns...)

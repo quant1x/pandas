@@ -5,7 +5,7 @@ import (
 	"slices"
 )
 
-func (self DataFrame) align(ss ...Series) []Series {
+func (this DataFrame) align(ss ...Series) []Series {
 	defaultValue := []Series{}
 	sLen := len(ss)
 	if sLen == 0 {
@@ -39,19 +39,19 @@ func (self DataFrame) align(ss ...Series) []Series {
 		} else if vt == SERIES_TYPE_FLOAT64 {
 			ns = num.Align(vs.([]float64), num.Nil2Float64, int(maxLength))
 		}
-		cols[i] = NewSeries(vt, vn, ns)
+		cols[i] = NewSeriesWithType(vt, vn, ns)
 	}
 	return cols
 }
 
 // Join 默认右连接, 加入一个series
-func (self DataFrame) Join(S ...Series) DataFrame {
+func (this DataFrame) Join(S ...Series) DataFrame {
 	sNum := len(S)
 	if sNum == 0 {
-		return self
+		return this
 	}
 
-	cols := slices.Clone(self.columns)
+	cols := slices.Clone(this.columns)
 	for _, series := range S {
 		if series.Len() < 0 {
 			continue
@@ -59,8 +59,8 @@ func (self DataFrame) Join(S ...Series) DataFrame {
 		cols = append(cols, series)
 	}
 
-	cols = self.align(cols...)
+	cols = this.align(cols...)
 	df := NewDataFrame(cols...)
-	self = df
-	return self
+	this = df
+	return this
 }

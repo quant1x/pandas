@@ -47,7 +47,7 @@ func parseSelectIndexes(l int, indexes SelectIndexes, colnames []string) ([]int,
 	//	//}
 	//	switch s.Type() {
 	//	case SERIES_TYPE_INT64:
-	//		return s.Ints()
+	//		return s.Int32s()
 	//	case series.Bool:
 	//		bools, err := s.Bool()
 	//		if err != nil {
@@ -79,34 +79,34 @@ func parseSelectIndexes(l int, indexes SelectIndexes, colnames []string) ([]int,
 type SelectIndexes any
 
 // Select the given DataFrame columns
-func (df DataFrame) Select(indexes SelectIndexes) DataFrame {
-	if df.Err != nil {
-		return df
+func (this DataFrame) Select(indexes SelectIndexes) DataFrame {
+	if this.Err != nil {
+		return this
 	}
-	idx, err := parseSelectIndexes(df.ncols, indexes, df.Names())
+	idx, err := parseSelectIndexes(this.ncols, indexes, this.Names())
 	if err != nil {
 		return DataFrame{Err: fmt.Errorf("can't select columns: %v", err)}
 	}
 	columns := make([]Series, len(idx))
 	for k, i := range idx {
-		if i < 0 || i >= df.ncols {
+		if i < 0 || i >= this.ncols {
 			return DataFrame{Err: fmt.Errorf("can't select columns: index out of range")}
 		}
-		columns[k] = df.columns[i].Copy()
+		columns[k] = this.columns[i].Copy()
 	}
 	nrows, ncols, err := checkColumnsDimensions(columns...)
 	if err != nil {
 		return DataFrame{Err: err}
 	}
-	df = DataFrame{
+	this = DataFrame{
 		columns: columns,
 		ncols:   ncols,
 		nrows:   nrows,
 	}
-	colnames := df.Names()
+	colnames := this.Names()
 	fixColnames(colnames)
 	for i, colname := range colnames {
-		df.columns[i].Rename(colname)
+		this.columns[i].Rename(colname)
 	}
-	return df
+	return this
 }

@@ -62,7 +62,7 @@ func ReadExcel(filename string, options ...LoadOption) DataFrame {
 }
 
 // WriteExcel 支持文件名和io两种方式写入数据
-func (self DataFrame) WriteExcel(filename string, options ...WriteOption) error {
+func (this DataFrame) WriteExcel(filename string, options ...WriteOption) error {
 	filepath, err := homedir.Expand(filename)
 	if err != nil {
 		return err
@@ -82,7 +82,7 @@ func (self DataFrame) WriteExcel(filename string, options ...WriteOption) error 
 		option(&cfg)
 	}
 
-	records := self.Records()
+	records := this.Records()
 	if !cfg.writeHeader {
 		records = records[1:]
 	}

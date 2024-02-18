@@ -5,16 +5,16 @@ import (
 )
 
 // Remove 删除一段范围内的记录
-func (self DataFrame) Remove(p api.ScopeLimit) DataFrame {
-	rowLen := self.Nrow()
+func (this DataFrame) Remove(p api.ScopeLimit) DataFrame {
+	rowLen := this.Nrow()
 	start, end, err := p.Limits(rowLen)
 	if err != nil {
-		return self
+		return this
 	}
 	columns := []Series{}
-	for i := range self.columns {
-		ht := self.columns[i].Subset(0, start, true)
-		tail := self.columns[i].Subset(end+1, rowLen).Values()
+	for i := range this.columns {
+		ht := this.columns[i].Subset(0, start, true)
+		tail := this.columns[i].Subset(end+1, rowLen).Values()
 		ht.Append(tail)
 		columns = append(columns, ht)
 	}

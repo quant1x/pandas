@@ -57,23 +57,23 @@ func NewDataFrame(se ...Series) DataFrame {
 }
 
 // Dims retrieves the dimensions of a DataFrame.
-func (self DataFrame) Dims() (int, int) {
-	return self.Nrow(), self.Ncol()
+func (this DataFrame) Dims() (int, int) {
+	return this.Nrow(), this.Ncol()
 }
 
 // Nrow returns the number of rows on a DataFrame.
-func (self DataFrame) Nrow() int {
-	return self.nrows
+func (this DataFrame) Nrow() int {
+	return this.nrows
 }
 
 // Ncol returns the number of columns on a DataFrame.
-func (self DataFrame) Ncol() int {
-	return self.ncols
+func (this DataFrame) Ncol() int {
+	return this.ncols
 }
 
 // Returns error or nil if no error occured
-func (self DataFrame) Error() error {
-	return self.Err
+func (this DataFrame) Error() error {
+	return this.Err
 }
 
 // 检查列的尺寸
@@ -102,27 +102,27 @@ func checkColumnsDimensions(se ...Series) (nrows, ncols int, err error) {
 }
 
 // Types returns the types of the columns on a DataFrame.
-func (self DataFrame) Types() []string {
-	coltypes := make([]string, self.ncols)
-	for i, s := range self.columns {
+func (this DataFrame) Types() []string {
+	coltypes := make([]string, this.ncols)
+	for i, s := range this.columns {
 		coltypes[i] = s.Type().String()
 	}
 	return coltypes
 }
 
 // Records return the string record representation of a DataFrame.
-func (self DataFrame) Records(round ...bool) [][]string {
+func (this DataFrame) Records(round ...bool) [][]string {
 	needRound := false
 	if len(round) > 0 {
 		needRound = round[0]
 	}
 	var records [][]string
-	records = append(records, self.Names())
-	if self.ncols == 0 || self.nrows == 0 {
+	records = append(records, this.Names())
+	if this.ncols == 0 || this.nrows == 0 {
 		return records
 	}
 	var tRecords [][]string
-	for _, col := range self.columns {
+	for _, col := range this.columns {
 		tRecords = append(tRecords, col.Records(needRound))
 	}
 	records = append(records, transposeRecords(tRecords)...)
@@ -133,9 +133,9 @@ func (self DataFrame) Records(round ...bool) [][]string {
 // ====================================
 
 // Names returns the name of the columns on a DataFrame.
-func (self DataFrame) Names() []string {
-	colnames := make([]string, self.ncols)
-	for i, s := range self.columns {
+func (this DataFrame) Names() []string {
+	colnames := make([]string, this.ncols)
+	for i, s := range this.columns {
 		colnames[i] = s.Name()
 	}
 	return colnames
@@ -160,24 +160,24 @@ func transposeRecords(x [][]string) [][]string {
 
 // fixColnames assigns a name to the missing column names and makes it so that the
 // column names are unique.
-func fixColnames(colnames []string) {
-	// Find duplicated and missing colnames
-	dupnamesidx := make(map[string][]int)
+func fixColnames(colNames []string) {
+	// Find duplicated and missing colNames
+	dupNamesIdx := make(map[string][]int)
 	var missingnames []int
-	for i := 0; i < len(colnames); i++ {
-		a := colnames[i]
+	for i := 0; i < len(colNames); i++ {
+		a := colNames[i]
 		if a == "" {
 			missingnames = append(missingnames, i)
 			continue
 		}
-		// for now, dupnamesidx contains the indices of *all* the columns
+		// for now, dupNamesIdx contains the indices of *all* the columns
 		// the columns with unique locations will be removed after this loop
-		dupnamesidx[a] = append(dupnamesidx[a], i)
+		dupNamesIdx[a] = append(dupNamesIdx[a], i)
 	}
 	// NOTE: deleting a map key in a range is legal and correct in Go.
-	for k, places := range dupnamesidx {
+	for k, places := range dupNamesIdx {
 		if len(places) < 2 {
-			delete(dupnamesidx, k)
+			delete(dupNamesIdx, k)
 		}
 	}
 	// Now: dupnameidx contains only keys that appeared more than once
@@ -186,35 +186,35 @@ func fixColnames(colnames []string) {
 	counter := 0
 	for _, i := range missingnames {
 		proposedName := fmt.Sprintf("X%d", counter)
-		for findInStringSlice(proposedName, colnames) != -1 {
+		for findInStringSlice(proposedName, colNames) != -1 {
 			counter++
 			proposedName = fmt.Sprintf("X%d", counter)
 		}
-		colnames[i] = proposedName
+		colNames[i] = proposedName
 		counter++
 	}
 
 	// Sort map keys to make sure it always follows the same order
 	var keys []string
-	for k := range dupnamesidx {
+	for k := range dupNamesIdx {
 		keys = append(keys, k)
 	}
 	sort.Strings(keys)
 
-	// Add a suffix to the duplicated colnames
+	// Add a suffix to the duplicated colNames
 	for _, name := range keys {
-		idx := dupnamesidx[name]
+		idx := dupNamesIdx[name]
 		if name == "" {
 			name = "X"
 		}
 		counter := 0
 		for _, i := range idx {
 			proposedName := fmt.Sprintf("%s_%d", name, counter)
-			for findInStringSlice(proposedName, colnames) != -1 {
+			for findInStringSlice(proposedName, colNames) != -1 {
 				counter++
 				proposedName = fmt.Sprintf("%s_%d", name, counter)
 			}
-			colnames[i] = proposedName
+			colNames[i] = proposedName
 			counter++
 		}
 	}
