@@ -6,11 +6,11 @@ import (
 	"slices"
 )
 
-func (self NDArray[T]) IndexOf(index int, opt ...any) any {
+func (this Vector[T]) IndexOf(index int, opt ...any) any {
 	if index < 0 {
-		index = self.Len() + index
-	} else if index >= self.Len() {
-		index = self.Len() - 1
+		index = this.Len() + index
+	} else if index >= this.Len() {
+		index = this.Len() - 1
 	}
 	var __optInplace = false
 	if len(opt) > 0 {
@@ -19,16 +19,16 @@ func (self NDArray[T]) IndexOf(index int, opt ...any) any {
 			__optInplace = _opt
 		}
 	}
-	value := self[index]
+	value := this[index]
 	if __optInplace {
-		mv := reflect.ValueOf(self.Values())
+		mv := reflect.ValueOf(this.Values())
 		return mv.Index(index)
 	}
 	return value
 
 }
 
-func (self NDArray[T]) Subset(start, end int, opt ...any) Series {
+func (this Vector[T]) Subset(start, end int, opt ...any) Series {
 	// 默认不copy
 	var __optCopy = false
 	if len(opt) > 0 {
@@ -37,22 +37,22 @@ func (self NDArray[T]) Subset(start, end int, opt ...any) Series {
 			__optCopy = _cp
 		}
 	}
-	values := []T(self)
-	rows := self.Len()
+	values := []T(this)
+	rows := this.Len()
 	vvs := values[start:end]
 	if __optCopy && rows > 0 {
 		vvs = slices.Clone(vvs)
 	}
 	var d Series
-	d = NDArray[T](vvs)
+	d = Vector[T](vvs)
 	return d
 }
 
-func (self NDArray[T]) Select(r api.ScopeLimit) Series {
-	start, end, err := r.Limits(self.Len())
+func (this Vector[T]) Select(r api.ScopeLimit) Series {
+	start, end, err := r.Limits(this.Len())
 	if err != nil {
 		return nil
 	}
-	series := self.Subset(start, end+1)
+	series := this.Subset(start, end+1)
 	return series
 }

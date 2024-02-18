@@ -2,16 +2,16 @@ package pandas
 
 import "gitee.com/quant1x/num"
 
-func (self NDArray[T]) ArgMax() int {
-	return num.ArgMax2(self)
+func (this Vector[T]) ArgMax() int {
+	return num.ArgMax2(this)
 }
 
-func (self NDArray[T]) ArgMin() int {
-	return num.ArgMin2(self)
+func (this Vector[T]) ArgMin() int {
+	return num.ArgMin2(this)
 }
 
-func (self NDArray[T]) Add(x any) Series {
-	length := self.Len()
+func (this Vector[T]) Add(x any) Series {
+	length := this.Len()
 	var b []num.DType
 	switch sx := x.(type) {
 	case Series:
@@ -27,13 +27,13 @@ func (self NDArray[T]) Add(x any) Series {
 	default:
 		panic(num.TypeError(x))
 	}
-	a := self.DTypes()
+	a := this.DTypes()
 	s := num.Add(a, b)
-	return NDArray[num.DType](s)
+	return Vector[num.DType](s)
 }
 
-func (self NDArray[T]) Sub(x any) Series {
-	length := self.Len()
+func (this Vector[T]) Sub(x any) Series {
+	length := this.Len()
 	var b []num.DType
 	switch sx := x.(type) {
 	case Series:
@@ -49,13 +49,13 @@ func (self NDArray[T]) Sub(x any) Series {
 	default:
 		panic(num.TypeError(x))
 	}
-	a := self.DTypes()
+	a := this.DTypes()
 	s := num.Sub(a, b)
-	return NDArray[num.DType](s)
+	return Vector[num.DType](s)
 }
 
-func (self NDArray[T]) Mul(x any) Series {
-	length := self.Len()
+func (this Vector[T]) Mul(x any) Series {
+	length := this.Len()
 	var b []num.DType
 	switch sx := x.(type) {
 	case Series:
@@ -71,13 +71,13 @@ func (self NDArray[T]) Mul(x any) Series {
 	default:
 		panic(num.TypeError(x))
 	}
-	a := self.DTypes()
+	a := this.DTypes()
 	s := num.Mul(a, b)
-	return NDArray[num.DType](s)
+	return Vector[num.DType](s)
 }
 
-func (self NDArray[T]) Div(x any) Series {
-	length := self.Len()
+func (this Vector[T]) Div(x any) Series {
+	length := this.Len()
 	var b []num.DType
 	switch sx := x.(type) {
 	case Series:
@@ -93,7 +93,7 @@ func (self NDArray[T]) Div(x any) Series {
 	default:
 		panic(num.TypeError(x))
 	}
-	a := self.DTypes()
+	a := this.DTypes()
 	s := num.Div(a, b)
-	return NDArray[num.DType](s)
+	return Vector[num.DType](s)
 }

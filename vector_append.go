@@ -41,43 +41,43 @@ func ndArrayAssign[T num.BaseType](type_ Type, array Series, idx, size int, v T)
 	}
 	// 行数+1
 	//array.rows += 1
-	return NDArray[T](values)
+	return Vector[T](values)
 }
 
 // 插入一条记录
-func (self NDArray[T]) insert(idx, size int, v any) NDArray[T] {
-	type_ := num.CheckoutRawType(self)
+func (this Vector[T]) insert(idx, size int, v any) Vector[T] {
+	type_ := num.CheckoutRawType(this)
 	if type_ == SERIES_TYPE_BOOL {
 		val := num.AnyToBool(v)
-		an := ndArrayAssign[bool](type_, self, idx, size, val)
-		self = an.(NDArray[T])
+		an := ndArrayAssign[bool](type_, this, idx, size, val)
+		this = an.(Vector[T])
 	} else if type_ == SERIES_TYPE_INT64 {
 		val := num.AnyToInt64(v)
-		an := ndArrayAssign[int64](type_, self, idx, size, val)
-		self = an.(NDArray[T])
+		an := ndArrayAssign[int64](type_, this, idx, size, val)
+		this = an.(Vector[T])
 	} else if type_ == SERIES_TYPE_FLOAT32 {
 		val := num.AnyToFloat32(v)
-		an := ndArrayAssign[float32](type_, self, idx, size, val)
-		self = an.(NDArray[T])
+		an := ndArrayAssign[float32](type_, this, idx, size, val)
+		this = an.(Vector[T])
 	} else if type_ == SERIES_TYPE_FLOAT64 {
 		val := num.AnyToFloat64(v)
-		an := ndArrayAssign[float64](type_, self, idx, size, val)
-		self = an.(NDArray[T])
+		an := ndArrayAssign[float64](type_, this, idx, size, val)
+		this = an.(Vector[T])
 	} else {
 		val := num.AnyToString(v)
-		an := ndArrayAssign[string](type_, self, idx, size, val)
-		self = an.(NDArray[T])
+		an := ndArrayAssign[string](type_, this, idx, size, val)
+		this = an.(Vector[T])
 	}
-	return self
+	return this
 }
 
-func (self NDArray[T]) Append(values ...any) Series {
+func (this Vector[T]) Append(values ...any) Series {
 	size := 0
 	for idx, v := range values {
 		switch val := v.(type) {
 		case nil, int8, uint8, int16, uint16, int32, uint32, int64, uint64, int, uint, float32, float64, bool, string:
 			// 基础类型
-			self = self.insert(idx, size, val)
+			this = this.insert(idx, size, val)
 		default:
 			vv := reflect.ValueOf(val)
 			vk := vv.Kind()
@@ -85,20 +85,20 @@ func (self NDArray[T]) Append(values ...any) Series {
 			case reflect.Slice, reflect.Array: // 切片或数组
 				for i := 0; i < vv.Len(); i++ {
 					tv := vv.Index(i).Interface()
-					self = self.insert(idx, size, tv)
+					this = this.insert(idx, size, tv)
 				}
 			case reflect.Struct: // 忽略结构体
 				continue
 			default:
-				self = self.insert(idx, size, nil)
+				this = this.insert(idx, size, nil)
 			}
 		}
 	}
-	return self
+	return this
 }
 
-func (self NDArray[T]) Concat(x Series) Series {
-	y := self.Copy()
+func (this Vector[T]) Concat(x Series) Series {
+	y := this.Copy()
 	y = y.Append(x.Values())
 	return y
 }

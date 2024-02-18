@@ -2,16 +2,16 @@ package pandas
 
 import "gitee.com/quant1x/num"
 
-func (self NDArray[T]) Logic(f func(idx int, v any) bool) []bool {
-	d := make([]bool, self.Len())
-	for i, v := range self {
+func (this Vector[T]) Logic(f func(idx int, v any) bool) []bool {
+	d := make([]bool, this.Len())
+	for i, v := range this {
 		d[i] = f(i, v)
 	}
 	return d
 }
 
-func (self NDArray[T]) Eq(x any) Series {
-	length := self.Len()
+func (this Vector[T]) Eq(x any) Series {
+	length := this.Len()
 	var b []num.DType
 	switch sx := x.(type) {
 	case Series:
@@ -27,13 +27,13 @@ func (self NDArray[T]) Eq(x any) Series {
 	default:
 		panic(num.TypeError(x))
 	}
-	a := self.DTypes()
+	a := this.DTypes()
 	s := num.Equal(a, b)
-	return NDArray[bool](s)
+	return Vector[bool](s)
 }
 
-func (self NDArray[T]) Neq(x any) Series {
-	length := self.Len()
+func (this Vector[T]) Neq(x any) Series {
+	length := this.Len()
 	var b []num.DType
 	switch sx := x.(type) {
 	case Series:
@@ -49,49 +49,49 @@ func (self NDArray[T]) Neq(x any) Series {
 	default:
 		panic(num.TypeError(x))
 	}
-	a := self.DTypes()
+	a := this.DTypes()
 	s := num.NotEqual(a, b)
-	return NDArray[bool](s)
+	return Vector[bool](s)
 }
 
-func (self NDArray[T]) Gt(x any) Series {
-	values := self.Values().([]T)
+func (this Vector[T]) Gt(x any) Series {
+	values := this.Values().([]T)
 	bs := num.Gt(values, x)
-	return NDArray[bool](bs)
+	return Vector[bool](bs)
 }
 
-func (self NDArray[T]) Gte(x any) Series {
-	values := self.Values().([]T)
+func (this Vector[T]) Gte(x any) Series {
+	values := this.Values().([]T)
 	bs := num.Gte(values, x)
-	return NDArray[bool](bs)
+	return Vector[bool](bs)
 }
 
-func (self NDArray[T]) Lt(x any) Series {
-	values := self.Values().([]T)
+func (this Vector[T]) Lt(x any) Series {
+	values := this.Values().([]T)
 	bs := num.Lt(values, x)
-	return NDArray[bool](bs)
+	return Vector[bool](bs)
 }
 
-func (self NDArray[T]) Lte(x any) Series {
-	values := self.Values().([]T)
+func (this Vector[T]) Lte(x any) Series {
+	values := this.Values().([]T)
 	bs := num.Lte(values, x)
-	return NDArray[bool](bs)
+	return Vector[bool](bs)
 }
 
-func (self NDArray[T]) And(x any) Series {
-	values := self.Values().([]T)
+func (this Vector[T]) And(x any) Series {
+	values := this.Values().([]T)
 	bs := num.And(values, x)
-	return NDArray[bool](bs)
+	return Vector[bool](bs)
 }
 
-func (self NDArray[T]) Or(x any) Series {
-	values := self.Values().([]T)
+func (this Vector[T]) Or(x any) Series {
+	values := this.Values().([]T)
 	bs := num.Or(values, x)
-	return NDArray[bool](bs)
+	return Vector[bool](bs)
 }
 
-func (self NDArray[T]) Not() Series {
-	values := self.Values().([]T)
+func (this Vector[T]) Not() Series {
+	values := this.Values().([]T)
 	bs := num.Not(values)
-	return NDArray[bool](bs)
+	return Vector[bool](bs)
 }

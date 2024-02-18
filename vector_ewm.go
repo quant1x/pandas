@@ -1,7 +1,8 @@
 package pandas
 
-// EWM provides exponential weighted calculations.
-func (this *NDFrame) EWM(alpha EW) ExponentialMovingWindow {
+import "gitee.com/quant1x/num"
+
+func (this Vector[T]) EWM(alpha EW) ExponentialMovingWindow {
 	atype := AlphaAlpha
 	param := 0.00
 	adjust := alpha.Adjust
@@ -20,7 +21,8 @@ func (this *NDFrame) EWM(alpha EW) ExponentialMovingWindow {
 		param = alpha.Alpha
 	}
 
-	dest := NewSeries(SERIES_TYPE_FLOAT64, this.name, this.Values())
+	dest := ToSeries[num.DType]()
+	dest = dest.Append(this)
 	return ExponentialMovingWindow{
 		Data:     dest,
 		AType:    atype,
