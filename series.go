@@ -5,6 +5,23 @@ import (
 	"gitee.com/quant1x/gox/api"
 	"gitee.com/quant1x/num"
 	"reflect"
+	"strings"
+)
+
+// Type is a convenience alias that can be used for a more type safe way of
+// reason and use Series types.
+type Type = reflect.Kind
+
+// Supported Series Types
+const (
+	SERIES_TYPE_INVAILD = reflect.Invalid // 无效类型
+	SERIES_TYPE_BOOL    = reflect.Bool    // 布尔类型
+	SERIES_TYPE_INT32   = reflect.Int32   // int64
+	SERIES_TYPE_INT64   = reflect.Int64   // int64
+	SERIES_TYPE_FLOAT32 = reflect.Float32 // float32
+	SERIES_TYPE_FLOAT64 = reflect.Float64 // float64
+	SERIES_TYPE_DTYPE   = SERIES_TYPE_FLOAT64
+	SERIES_TYPE_STRING  = reflect.String // string
 )
 
 // Series
@@ -12,6 +29,7 @@ import (
 //	Data structure for 1-dimensional cross-sectional and time series data
 //	一维横截面和时间序列数据的数据结构
 type Series interface {
+	String() string
 	// Name 取得series名称
 	Name() string
 	// Rename renames the series.
@@ -24,12 +42,18 @@ type Series interface {
 	// NaN 输出默认的NaN
 	NaN() any
 
-	// Floats 强制转成[]float32
-	Floats() []float32
 	// DTypes 强制转[]num.DType
 	DTypes() []num.DType
-	// Ints 强制转换成整型
-	Ints() []num.Int
+	// Float32s 强制转成[]float32
+	Float32s() []float32
+	// Float64s 强制转成[]float64
+	Float64s() []float64
+	// Ints 强制转换成[]int
+	Ints() []int
+	// Int32s 强制转换成[]int32
+	Int32s() []int32
+	// Int64s 强制转换成[]int64
+	Int64s() []int64
 	// Strings 强制转换string切片
 	Strings() []string
 	// Bools 强制转换成bool切片
@@ -135,6 +159,22 @@ type Series interface {
 	Not() Series
 }
 
+const (
+	seriesDefaultName = "x"
+)
+
+// 默认series名称
+func defaultSeriesName(name ...string) string {
+	if len(name) == 0 {
+		return seriesDefaultName
+	}
+	name_ := strings.TrimSpace(name[0])
+	if len(name_) == 0 {
+		return seriesDefaultName
+	}
+	return name_
+}
+
 // DetectTypeBySlice 检测类型
 func DetectTypeBySlice(arr ...any) (Type, error) {
 	var hasFloat32s, hasFloat64s, hasInts, hasBools, hasStrings bool
@@ -191,18 +231,80 @@ func DetectTypeBySlice(arr ...any) (Type, error) {
 	}
 }
 
-// NewNDArray 构建一个新的Series
-func NewNDArray[T num.BaseType](data ...T) Series {
-	var S Series
-	values := []T{}
-	if len(data) > 0 {
-		values = append(values, data...)
-	}
-	S = NDArray[T](values)
-	return S
-}
+//+----------------------------------------------------------------+
+//| 切片转换的一组series函数, 数据类型确定                              |
+//+----------------------------------------------------------------+
 
 // ToSeries 转换切片为Series
 func ToSeries[T num.BaseType](data ...T) Series {
-	return NDArray[T](data)
+	return Vector[T](data)
+}
+
+// NewSeries 模糊匹配泛型切片的匿名series
+func NewSeries[T num.BaseType](values ...T) Series {
+	return SeriesWithName[T](defaultSeriesName(), values...)
+}
+
+// SeriesWithName 构建一个新的Series
+//
+//	指定类型T和名称
+func SeriesWithName[T num.BaseType](name string, data ...T) Series {
+	var values []T
+	if len(data) > 0 {
+		values = append(values, data...)
+	}
+	array := NDArray{
+		typ:      num.CheckoutRawType(values),
+		rows:     len(values),
+		nilCount: 0,
+		name:     defaultSeriesName(name),
+		data:     Vector[T](values),
+	}
+	return &array
+}
+
+//+----------------------------------------------------------------+
+//| 加载数据文件时需要强制转换的一组series函数, 数据类型不确定性            |
+//+----------------------------------------------------------------+
+
+// NewSeriesWithoutType 不带类型, 创建一个新series
+//
+//	推导values中最适合的类型
+func NewSeriesWithoutType(name string, values ...any) Series {
+	_type, err := DetectTypeBySlice(values...)
+	if err != nil {
+		return nil
+	}
+	return NewSeriesWithType(_type, name, values...)
+}
+
+// NewSeriesWithType 指定series类型, 强制导入values
+//
+//	推导values中最适合的类型
+func NewSeriesWithType(typ Type, name string, values ...any) Series {
+	var vector Series
+	switch typ {
+	case SERIES_TYPE_BOOL:
+		vector = ToSeries[bool]()
+	case SERIES_TYPE_INT32:
+		vector = ToSeries[int32]()
+	case SERIES_TYPE_INT64:
+		vector = ToSeries[int64]()
+	case SERIES_TYPE_FLOAT32:
+		vector = ToSeries[float32]()
+	case SERIES_TYPE_FLOAT64:
+		vector = ToSeries[float64]()
+	default:
+		vector = ToSeries[string]()
+	}
+	vector = vector.Append(values...)
+	series := NDArray{
+		name:     name,
+		typ:      typ,
+		nilCount: 0,
+		rows:     vector.Len(),
+		data:     vector,
+	}
+
+	return &series
 }

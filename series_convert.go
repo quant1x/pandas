@@ -109,5 +109,5 @@ func __StringToBool_S(values []string) []bool {
 
 func __NumberToSeries[T num.Number](x T, n int) Series {
 	s := num.Repeat[T](x, n)
-	return NDArray[T](s)
+	return Vector[T](s)
 }
