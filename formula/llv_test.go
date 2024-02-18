@@ -22,7 +22,7 @@ func TestLLV(t *testing.T) {
 	// 修改列名
 	_ = df1.SetNames("a", "b", "c", "d")
 	// 增加1列
-	s_e := pandas.GenericSeries[string]("", "a0", "a1", "a2", "a3")
+	s_e := pandas.NewSeriesWithoutType("", "a0", "a1", "a2", "a3")
 	df2 := df1.Join(s_e)
 	fmt.Println(df2)
 	A := df2.Col("a")

@@ -8,7 +8,7 @@ import (
 // CONST 取S最后的值为常量
 func CONST(S pandas.Series) pandas.Series {
 	length := S.Len()
-	s := S.Floats()
+	s := S.Float32s()
 	s = num.Repeat(s[length-1], S.Len())
-	return pandas.NewSeries(pandas.SERIES_TYPE_FLOAT32, "", s)
+	return pandas.NewSeriesWithType(pandas.SERIES_TYPE_FLOAT32, "", s)
 }

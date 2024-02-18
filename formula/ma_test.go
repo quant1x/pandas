@@ -23,7 +23,7 @@ func TestMA(t *testing.T) {
 	// 修改列名
 	_ = df1.SetNames("a", "b", "c", "d")
 	// 增加1列
-	s_e := pandas.GenericSeries[string]("", "a0", "a1", "a2", "a3")
+	s_e := pandas.NewSeriesWithoutType("", "a0", "a1", "a2", "a3")
 	df2 := df1.Join(s_e)
 	fmt.Println(df2)
 	B := df2.Col("b")
@@ -34,7 +34,7 @@ func TestMA(t *testing.T) {
 }
 
 func TestMAx(t *testing.T) {
-	s := pandas.NewNDArray(1, 2, 3, 4, 5, 6)
+	s := pandas.NewSeries(1, 2, 3, 4, 5, 6)
 	ma5 := MA(s, 5)
 	fmt.Println(ma5)
 	arr := ma5.DTypes()

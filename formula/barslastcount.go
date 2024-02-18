@@ -9,7 +9,7 @@ import (
 func BARSLASTCOUNT(S pandas.Series) pandas.Series {
 	s := S.DTypes()
 	slen := len(s)
-	rt := num.Repeat[num.Int](0, slen+1)
+	rt := num.Repeat[int](0, slen+1)
 	for i := 0; i < slen; i++ {
 		if s[i] != 0 {
 			rt[i+1] = rt[i] + 1
@@ -18,6 +18,6 @@ func BARSLASTCOUNT(S pandas.Series) pandas.Series {
 		}
 	}
 	ns := rt[1:]
-	//return stat.NewNDArray[stat.Int](rt[1:]...)
+	//return stat.SeriesWithoutName[stat.Int](rt[1:]...)
 	return pandas.ToSeries(ns...)
 }

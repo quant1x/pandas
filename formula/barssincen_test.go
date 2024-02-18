@@ -9,7 +9,7 @@ import (
 
 func TestBARSSINCEN(t *testing.T) {
 	f1 := []int64{1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4}
-	s1 := pandas.NewSeries(pandas.SERIES_TYPE_DTYPE, "", f1)
+	s1 := pandas.NewSeriesWithType(pandas.SERIES_TYPE_DTYPE, "", f1)
 	df := pandas.NewDataFrame(s1)
 	fmt.Println(df)
 
@@ -17,7 +17,7 @@ func TestBARSSINCEN(t *testing.T) {
 		f := v.(num.DType)
 		return f > 3
 	})
-	df = df.Join(pandas.NewSeries(pandas.SERIES_TYPE_BOOL, "r", b1))
+	df = df.Join(pandas.NewSeriesWithType(pandas.SERIES_TYPE_BOOL, "r", b1))
 	fmt.Println(df)
 	//c1 = df > 3
 	r1 := BARSSINCEN(df.Col("r"), 4)

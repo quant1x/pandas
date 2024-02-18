@@ -21,7 +21,7 @@ func TestEMA(t *testing.T) {
 	cs := CLOSE
 	REF10 := REF(CLOSE, 10)
 	d1 := cs.Div(REF10)
-	df01 := pandas.NewSeries(pandas.SERIES_TYPE_FLOAT32, "x", d1)
+	df01 := pandas.NewSeriesWithType(pandas.SERIES_TYPE_FLOAT32, "x", d1)
 	x0 := make([]num.DType, CLOSE.Len())
 	df01.Apply(func(idx int, v any) {
 		f := v.(float32)
@@ -32,19 +32,19 @@ func TestEMA(t *testing.T) {
 		x0[idx] = t
 	})
 	//x := stat.Where(v2, as, bs)
-	n := BARSLAST2(pandas.NewSeries(pandas.SERIES_TYPE_FLOAT32, "", x0))
+	n := BARSLAST2(pandas.NewSeriesWithType(pandas.SERIES_TYPE_FLOAT32, "", x0))
 	fmt.Println(n[len(n)-10:])
-	x := EMA(CLOSE, pandas.NewSeries(pandas.SERIES_TYPE_DTYPE, "", n))
+	x := EMA(CLOSE, pandas.NewSeriesWithType(pandas.SERIES_TYPE_DTYPE, "", n))
 
 	//x := EMA(CLOSE, 7)
-	sx := pandas.NewSeries(pandas.SERIES_TYPE_DTYPE, "x", x)
+	sx := pandas.NewSeriesWithType(pandas.SERIES_TYPE_DTYPE, "x", x)
 	df = pandas.NewDataFrame(CLOSE, sx)
 	fmt.Println(df)
 }
 
 func TestEmaIncr(t *testing.T) {
 	f0 := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9}
-	s := pandas.NewNDArray[float64](f0...)
+	s := pandas.NewSeries[float64](f0...)
 	v0 := EMA(s, 7)
 	fmt.Println(v0)
 	v1 := EMA(s, 7)

@@ -20,13 +20,13 @@ func COUNT(S any, N any) pandas.Series {
 		ds = num.AnyToSlice[bool](s, length)
 	}
 	s := V1COUNT(ds, N)
-	return pandas.NDArray[int](s)
+	return pandas.Vector[int](s)
 }
 
 // V1COUNT 统计S为真的天数
 func V1COUNT(S []bool, N any) []int {
 	xLen := len(S)
-	x := pandas.Rolling(S, N)
+	x := num.Rolling(S, N)
 	ret := make([]int, xLen)
 	for i := 0; i < len(x); i++ {
 		n := 0
