@@ -13,6 +13,7 @@ assembly/version.properties
 .settings/
 
 # go.test.sh
+profile.out
 coverage.txt
 coverage.out
 
