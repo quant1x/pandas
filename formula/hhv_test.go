@@ -1,49 +1,40 @@
 package formula
 
 import (
-	"fmt"
+	"gitee.com/quant1x/num"
+	"gitee.com/quant1x/num/labs"
 	"gitee.com/quant1x/pandas"
 	"testing"
 )
 
+func TestHHV_basic(t *testing.T) {
+
+}
+
 func TestHHV(t *testing.T) {
-	type testStruct struct {
-		A string
-		B int
-		C bool
-		D float32
+	type args struct {
+		S pandas.Series
+		N any
 	}
-	data := []testStruct{
-		{"a", 1, true, 0.0},
-		{"b", 2, false, 0.5},
+	tests := []struct {
+		name string
+		args args
+		want pandas.Series
+	}{
+		{
+			name: "hhv",
+			args: args{
+				S: pandas.NewSeriesWithType(pandas.SERIES_TYPE_FLOAT64, "x", []float64{2, 1, 3, 4, 5, 2}),
+				N: 3,
+			},
+			want: pandas.NewSeriesWithType(pandas.SERIES_TYPE_FLOAT64, "x", []float64{num.Float64NaN(), num.Float64NaN(), 3, 4, 5, 5}),
+		},
 	}
-	df1 := pandas.LoadStructs(data)
-	fmt.Println(df1)
-	// 修改列名
-	_ = df1.SetNames("a", "b", "c", "d")
-	// 增加1列
-	s_e := pandas.NewSeriesWithoutType("", "a0", "a1", "a2", "a3")
-	df2 := df1.Join(s_e)
-	fmt.Println(df2)
-	A := df2.Col("a")
-	B := df2.Col("b")
-	C := df2.Col("c")
-	D := df2.Col("d")
-
-	r2 := HHV(D, 4)
-	fmt.Println(r2)
-
-	r2 = HHV(A, 2)
-	fmt.Println(r2)
-
-	r2 = HHV(df2.Col("X0"), 2)
-	fmt.Println(r2)
-
-	r2 = HHV(C, 2)
-	fmt.Println(r2)
-
-	_ = A
-	_ = B
-	_ = C
-	_ = D
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := HHV(tt.args.S, tt.args.N); !labs.DeepEqual(got.Values(), tt.want.Values()) {
+				t.Errorf("HHV() = %v, want %v", got, tt.want)
+			}
+		})
+	}
 }
