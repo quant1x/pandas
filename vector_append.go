@@ -71,6 +71,20 @@ func (this vector[T]) insert(idx, size int, v any) vector[T] {
 	return this
 }
 
+// 追加切片
+func (this vector[T]) appendSlice(s any) vector[T] {
+	v := reflect.ValueOf(s)
+	k := v.Kind()
+	if k != reflect.Slice && k != reflect.Array {
+		return this
+	}
+	vs := this.Values().([]T)
+	n := v.Len()
+	tmp := num.AnyToSlice[T](s, n)
+	vs = append(vs, tmp...)
+	return vs
+}
+
 func (this vector[T]) Append(values ...any) Series {
 	size := 0
 	for idx, v := range values {
@@ -78,6 +92,8 @@ func (this vector[T]) Append(values ...any) Series {
 		case nil, int8, uint8, int16, uint16, int32, uint32, int64, uint64, int, uint, float32, float64, bool, string:
 			// 基础类型
 			this = this.insert(idx, size, val)
+		case Series:
+			this = this.appendSlice(val.Values())
 		default:
 			vv := reflect.ValueOf(val)
 			vk := vv.Kind()
