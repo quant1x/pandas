@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestNDArray_Copy(t *testing.T) {
+func TestNDFrame_Copy(t *testing.T) {
 	type fields struct {
 		typ      Type
 		rows     int
