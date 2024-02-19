@@ -14,20 +14,21 @@ type Type = reflect.Kind
 
 // Supported Series Types
 const (
-	SERIES_TYPE_INVAILD = reflect.Invalid // 无效类型
-	SERIES_TYPE_BOOL    = reflect.Bool    // 布尔类型
-	SERIES_TYPE_INT32   = reflect.Int32   // int64
-	SERIES_TYPE_INT64   = reflect.Int64   // int64
-	SERIES_TYPE_FLOAT32 = reflect.Float32 // float32
-	SERIES_TYPE_FLOAT64 = reflect.Float64 // float64
-	SERIES_TYPE_DTYPE   = SERIES_TYPE_FLOAT64
-	SERIES_TYPE_STRING  = reflect.String // string
+	SERIES_TYPE_INVAILD = reflect.Invalid     // 无效类型
+	SERIES_TYPE_BOOL    = reflect.Bool        // 布尔类型
+	SERIES_TYPE_INT32   = reflect.Int32       // int64
+	SERIES_TYPE_INT64   = reflect.Int64       // int64
+	SERIES_TYPE_FLOAT32 = reflect.Float32     // float32
+	SERIES_TYPE_FLOAT64 = reflect.Float64     // float64
+	SERIES_TYPE_STRING  = reflect.String      // string
+	SERIES_TYPE_DTYPE   = SERIES_TYPE_FLOAT64 // link float64
 )
 
 // Series
 //
 //	Data structure for 1-dimensional cross-sectional and time series data
 //	一维横截面和时间序列数据的数据结构
+//	pandas中Series无法确定类型的情况下会使用string保存切片
 type Series interface {
 	String() string
 	// Name 取得series名称
@@ -103,14 +104,14 @@ type Series interface {
 	// Apply 接受一个回调函数
 	Apply(f func(idx int, v any))
 	// Apply2 增加替换功能, 默认不替换
-	Apply2(f func(idx int, v any) any, args ...bool) Series
+	Apply2(f func(idx int, v any) any, inplace ...bool) Series
 	// Logic 逻辑处理
 	Logic(f func(idx int, v any) bool) []bool
 	// EWM Provide exponentially weighted (EW) calculations.
 	//
-	//	Exactly one of ``com``, ``span``, ``halflife``, or ``alpha`` must be
-	//	provided if ``times`` is not provided. If ``times`` is provided,
-	//	``halflife`` and one of ``com``, ``span`` or ``alpha`` may be provided.
+	//	Exactly one of `com`, `span`, `halflife`, or `alpha` must be
+	//	provided if `times` is not provided. If `times` is provided,
+	//	`halflife` and one of `com`, `span` or `alpha` may be provided.
 	EWM(alpha EW) ExponentialMovingWindow
 
 	// Mean calculates the average value of a series
@@ -236,10 +237,15 @@ func DetectTypeBySlice(arr ...any) (Type, error) {
 //+----------------------------------------------------------------+
 
 // ToSeries 转换切片为Series
-//
-// Deprecated: 推荐使用 Vector [wangfeng on 2024/2/19 12:07]
 func ToSeries[T num.BaseType](data ...T) Series {
 	return slice2series[T](data)
+}
+
+// ToVector 转成单一切片
+//
+//	这种用法潜在的意图是类型明确, data可能是长度为0的切片, 但是又不想传入参数, 故而实用了默认参数的用法
+func ToVector[E num.BaseType](data ...E) Series {
+	return slice2series[E](data)
 }
 
 // Vector 切片转Series
@@ -248,8 +254,18 @@ func Vector[E num.BaseType](data []E) Series {
 }
 
 // SliceToSeries 切片转Series
+//
+//	data大概率是长度大于0的切片, 这样的函数签名是为了泛型函数不写数据类型
 func SliceToSeries[E num.BaseType](data []E) Series {
 	return slice2series[E](data)
+}
+
+// Convect 切片转series
+//
+//	存在可能的强制转换类型
+func Convect[T num.BaseType, F num.BaseType](data []F) Series {
+	values := num.AnyToSlice[T](data, len(data))
+	return slice2series(values)
 }
 
 // 切片转Series, 这样封装的目的是在调用时不用在函数名后写类型, 由data指定类型
@@ -260,17 +276,18 @@ func slice2series[E num.BaseType](data []E) Series {
 
 // NewSeries 模糊匹配泛型切片的匿名series, NDFrame
 func NewSeries[T num.BaseType](values ...T) Series {
-	return SeriesWithName[T](defaultSeriesName(), values...)
+	return SeriesWithName[T](defaultSeriesName(), values)
+}
+
+// SeriesWithoutName 创建一个新的匿名Series
+func SeriesWithoutName[E num.BaseType](values ...E) Series {
+	return SeriesWithName(defaultSeriesName(), values)
 }
 
 // SeriesWithName 构建一个新的Series, NDFrame
 //
 //	指定类型T和名称
-func SeriesWithName[T num.BaseType](name string, data ...T) Series {
-	var values []T
-	if len(data) > 0 {
-		values = append(values, data...)
-	}
+func SeriesWithName[T num.BaseType](name string, values []T) Series {
 	frame := NDFrame{
 		typ:      num.CheckoutRawType(values),
 		rows:     len(values),
@@ -287,7 +304,7 @@ func SeriesWithName[T num.BaseType](name string, data ...T) Series {
 
 // NewSeriesWithoutType 不带类型, 创建一个新series
 //
-//	推导values中最适合的类型
+//	推导values中最适合的类型, DataFrame内部调用
 func NewSeriesWithoutType(name string, values ...any) Series {
 	_type, err := DetectTypeBySlice(values...)
 	if err != nil {
@@ -298,7 +315,7 @@ func NewSeriesWithoutType(name string, values ...any) Series {
 
 // NewSeriesWithType 指定series类型, 强制导入values
 //
-//	推导values中最适合的类型 DataFrame调用
+//	推导values中最适合的类型, DataFrame内部调用
 func NewSeriesWithType(typ Type, name string, values ...any) Series {
 	var vector Series
 	switch typ {
