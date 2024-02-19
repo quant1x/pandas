@@ -40,5 +40,5 @@ func FILTER(S pandas.Series, N any) pandas.Series {
 			}
 		}
 	}
-	return pandas.Vector[num.DType](x)
+	return pandas.SliceToSeries(x)
 }

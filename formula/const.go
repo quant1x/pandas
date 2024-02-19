@@ -10,5 +10,5 @@ func CONST(S pandas.Series) pandas.Series {
 	length := S.Len()
 	s := S.Float32s()
 	s = num.Repeat(s[length-1], S.Len())
-	return pandas.NewSeriesWithType(pandas.SERIES_TYPE_FLOAT32, "", s)
+	return pandas.SliceToSeries(s)
 }

@@ -2,7 +2,6 @@ package formula
 
 import (
 	"fmt"
-	"gitee.com/quant1x/num"
 	"gitee.com/quant1x/pandas"
 	"testing"
 )
@@ -29,17 +28,6 @@ func TestMA(t *testing.T) {
 	B := df2.Col("b")
 
 	// 2日均线
-	r2 := MAV1(B, 2)
+	r2 := MA(B, 2)
 	fmt.Println(r2)
-}
-
-func TestMAx(t *testing.T) {
-	s := pandas.NewSeries(1, 2, 3, 4, 5, 6)
-	ma5 := MA(s, 5)
-	fmt.Println(ma5)
-	arr := ma5.DTypes()
-	old := arr[len(arr)-2]
-	new := s.IndexOf(-1)
-	n := MAx(5, old, num.AnyToFloat64(new))
-	fmt.Println(n)
 }

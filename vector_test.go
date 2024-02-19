@@ -11,7 +11,7 @@ import (
 func TestVectorV1(t *testing.T) {
 	f1 := []float64{1, 2, 3, 4, 5}
 	//a1 := ToSeries[float64](f1...)
-	a1 := Vector[float64](f1)
+	a1 := vector[float64](f1)
 	a1.DTypes()
 	//_, ok := any(a1).(num.DTypeArray)
 	_, ok := any(a1).(num.DTypeArray)
@@ -22,7 +22,7 @@ func TestVectorV1(t *testing.T) {
 
 func TestNDArray_Len(t *testing.T) {
 	f1 := []float64{1, 2, 3, 4, 5}
-	a1 := Vector[float64](f1)
+	a1 := vector[float64](f1)
 	fmt.Println(a1)
 	fmt.Println(a1.Len())
 }
@@ -38,7 +38,7 @@ func TestNDArrayAll(t *testing.T) {
 	sh1 := (*reflect.SliceHeader)(unsafe.Pointer(&d))
 	fmt.Printf("s : %#v\n", sh1)
 	var s Series
-	s = Vector[float32](d)
+	s = vector[float32](d)
 	//s3 := []float32(s)
 	//fmt.Println(s3)
 	sh2 := (*reflect.SliceHeader)(unsafe.Pointer(&s))
@@ -70,7 +70,7 @@ func TestNDArrayAll(t *testing.T) {
 
 func TestNDArray_Rolling(t *testing.T) {
 	d1 := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
-	s := NewVector(d1...)
+	s := Vector(d1)
 	r1 := s.Rolling(5).Mean()
 	fmt.Println(r1)
 
@@ -81,9 +81,9 @@ func TestNDArray_Rolling(t *testing.T) {
 
 func TestNDArray_Apply(t *testing.T) {
 	d1 := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
-	s1 := NewVector(d1...)
+	s1 := Vector(d1)
 	fmt.Println(s1)
-	s2 := s1.(Vector[float64])
+	s2 := s1.(vector[float64])
 	s2.Apply2(func(idx int, v any) any {
 		f := num.AnyToGeneric[float64](v)
 		return f * f
@@ -93,28 +93,28 @@ func TestNDArray_Apply(t *testing.T) {
 
 func TestNDArray_Strings(t *testing.T) {
 	d1 := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
-	s1 := NewVector[float64](d1...)
+	s1 := Vector(d1)
 	ss := s1.Strings()
 	fmt.Println(ss)
 }
 
 func TestNDArray_Bools(t *testing.T) {
 	d1 := []float64{1, 2, 3, 4, 5, 0, 7, 8, 9, 10, 11, 12}
-	s1 := NewVector[float64](d1...)
+	s1 := Vector(d1)
 	ss := s1.Bools()
 	fmt.Println(ss)
 }
 
 func TestNDArray_Neq(t *testing.T) {
 	d1 := []float64{1, 2, 3, 4, 5, 0, 7, 8, 9, 10, 11, 12}
-	s1 := NewVector[float64](d1...)
+	s1 := Vector(d1)
 	ss := s1.Neq(0)
 	fmt.Println(ss)
 }
 
 func TestNDArray_Not(t *testing.T) {
 	d1 := []float64{1, 2, 3, 4, 5, 0, 7, 8, 9, 10, 11, 12}
-	s1 := NewVector[float64](d1...)
+	s1 := Vector(d1)
 	ss := s1.Not()
 	fmt.Println(ss)
 }

@@ -2,15 +2,15 @@ package pandas
 
 import "gitee.com/quant1x/num"
 
-func (this Vector[T]) ArgMax() int {
+func (this vector[T]) ArgMax() int {
 	return num.ArgMax2(this)
 }
 
-func (this Vector[T]) ArgMin() int {
+func (this vector[T]) ArgMin() int {
 	return num.ArgMin2(this)
 }
 
-func (this Vector[T]) Add(x any) Series {
+func (this vector[T]) Add(x any) Series {
 	length := this.Len()
 	var b []num.DType
 	switch sx := x.(type) {
@@ -29,10 +29,10 @@ func (this Vector[T]) Add(x any) Series {
 	}
 	a := this.DTypes()
 	s := num.Add(a, b)
-	return Vector[num.DType](s)
+	return vector[num.DType](s)
 }
 
-func (this Vector[T]) Sub(x any) Series {
+func (this vector[T]) Sub(x any) Series {
 	length := this.Len()
 	var b []num.DType
 	switch sx := x.(type) {
@@ -51,10 +51,10 @@ func (this Vector[T]) Sub(x any) Series {
 	}
 	a := this.DTypes()
 	s := num.Sub(a, b)
-	return Vector[num.DType](s)
+	return vector[num.DType](s)
 }
 
-func (this Vector[T]) Mul(x any) Series {
+func (this vector[T]) Mul(x any) Series {
 	length := this.Len()
 	var b []num.DType
 	switch sx := x.(type) {
@@ -73,10 +73,10 @@ func (this Vector[T]) Mul(x any) Series {
 	}
 	a := this.DTypes()
 	s := num.Mul(a, b)
-	return Vector[num.DType](s)
+	return vector[num.DType](s)
 }
 
-func (this Vector[T]) Div(x any) Series {
+func (this vector[T]) Div(x any) Series {
 	length := this.Len()
 	var b []num.DType
 	switch sx := x.(type) {
@@ -95,5 +95,5 @@ func (this Vector[T]) Div(x any) Series {
 	}
 	a := this.DTypes()
 	s := num.Div(a, b)
-	return Vector[num.DType](s)
+	return vector[num.DType](s)
 }

@@ -6,7 +6,7 @@ import (
 	"slices"
 )
 
-func (this Vector[T]) IndexOf(index int, opt ...any) any {
+func (this vector[T]) IndexOf(index int, opt ...any) any {
 	if index < 0 {
 		index = this.Len() + index
 	} else if index >= this.Len() {
@@ -28,7 +28,7 @@ func (this Vector[T]) IndexOf(index int, opt ...any) any {
 
 }
 
-func (this Vector[T]) Subset(start, end int, opt ...any) Series {
+func (this vector[T]) Subset(start, end int, opt ...any) Series {
 	// 默认不copy
 	var __optCopy = false
 	if len(opt) > 0 {
@@ -44,11 +44,11 @@ func (this Vector[T]) Subset(start, end int, opt ...any) Series {
 		vvs = slices.Clone(vvs)
 	}
 	var d Series
-	d = Vector[T](vvs)
+	d = vector[T](vvs)
 	return d
 }
 
-func (this Vector[T]) Select(r api.ScopeLimit) Series {
+func (this vector[T]) Select(r api.ScopeLimit) Series {
 	start, end, err := r.Limits(this.Len())
 	if err != nil {
 		return nil

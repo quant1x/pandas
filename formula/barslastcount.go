@@ -18,6 +18,5 @@ func BARSLASTCOUNT(S pandas.Series) pandas.Series {
 		}
 	}
 	ns := rt[1:]
-	//return stat.SeriesWithoutName[stat.Int](rt[1:]...)
-	return pandas.ToSeries(ns...)
+	return pandas.SliceToSeries(ns)
 }

@@ -41,37 +41,37 @@ func ndArrayAssign[T num.BaseType](type_ Type, array Series, idx, size int, v T)
 	}
 	// 行数+1
 	//array.rows += 1
-	return Vector[T](values)
+	return vector[T](values)
 }
 
 // 插入一条记录
-func (this Vector[T]) insert(idx, size int, v any) Vector[T] {
+func (this vector[T]) insert(idx, size int, v any) vector[T] {
 	type_ := num.CheckoutRawType(this)
 	if type_ == SERIES_TYPE_BOOL {
 		val := num.AnyToBool(v)
 		an := ndArrayAssign[bool](type_, this, idx, size, val)
-		this = an.(Vector[T])
+		this = an.(vector[T])
 	} else if type_ == SERIES_TYPE_INT64 {
 		val := num.AnyToInt64(v)
 		an := ndArrayAssign[int64](type_, this, idx, size, val)
-		this = an.(Vector[T])
+		this = an.(vector[T])
 	} else if type_ == SERIES_TYPE_FLOAT32 {
 		val := num.AnyToFloat32(v)
 		an := ndArrayAssign[float32](type_, this, idx, size, val)
-		this = an.(Vector[T])
+		this = an.(vector[T])
 	} else if type_ == SERIES_TYPE_FLOAT64 {
 		val := num.AnyToFloat64(v)
 		an := ndArrayAssign[float64](type_, this, idx, size, val)
-		this = an.(Vector[T])
+		this = an.(vector[T])
 	} else {
 		val := num.AnyToString(v)
 		an := ndArrayAssign[string](type_, this, idx, size, val)
-		this = an.(Vector[T])
+		this = an.(vector[T])
 	}
 	return this
 }
 
-func (this Vector[T]) Append(values ...any) Series {
+func (this vector[T]) Append(values ...any) Series {
 	size := 0
 	for idx, v := range values {
 		switch val := v.(type) {
@@ -97,7 +97,7 @@ func (this Vector[T]) Append(values ...any) Series {
 	return this
 }
 
-func (this Vector[T]) Concat(x Series) Series {
+func (this vector[T]) Concat(x Series) Series {
 	y := this.Copy()
 	y = y.Append(x.Values())
 	return y

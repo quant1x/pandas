@@ -35,7 +35,22 @@ func TestRollingAndExpandingMixin_GetBlocks(t *testing.T) {
 			name: "string-const",
 			fields: fields{
 				Window: num.Window[num.DType]{
-					//V: []num.DType{2, 2, 2},
+					V: []num.DType{2, 2, 2, 2},
+				},
+				Series: ToSeries[string]("1", "2", "2", "3"),
+			},
+			wantBlocks: []Series{
+				ToSeries[string](),
+				ToSeries[string]("1", "2"),
+				ToSeries[string]("2", "2"),
+				ToSeries[string]("2", "3"),
+			},
+		},
+		{
+			name: "string-vector-and-const",
+			fields: fields{
+				Window: num.Window[num.DType]{
+					V: []num.DType{2, 2, 2},
 					C: 2,
 				},
 				Series: ToSeries[string]("1", "2", "3", "a"),
@@ -48,7 +63,7 @@ func TestRollingAndExpandingMixin_GetBlocks(t *testing.T) {
 			},
 		},
 		{
-			name: "string-vector-and-const",
+			name: "string-vector-error",
 			fields: fields{
 				Window: num.Window[num.DType]{
 					V: []num.DType{2, 2, 2},
@@ -145,7 +160,7 @@ func TestRollingAndExpandingMixin_Min(t *testing.T) {
 			name: "string",
 			fields: fields{
 				Window: num.Window[num.DType]{
-					V: []num.DType{2, 2, 2},
+					V: []num.DType{2, 2, 2, 2},
 				},
 				Series: ToSeries[string]("1", "2", "2", "3"),
 			},

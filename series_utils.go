@@ -40,5 +40,5 @@ func Align2Series(x any, N int) Series {
 	default:
 		panic(num.TypeError(v))
 	}
-	return Vector[num.DType](ds)
+	return vector[num.DType](ds)
 }

@@ -9,8 +9,5 @@ import (
 func ABS(S pandas.Series) pandas.Series {
 	s := S.DTypes()
 	d := num.Abs(s)
-	//fmt.Printf("%p\n", d)
-	//return pandas.SeriesWithoutName(stat.SERIES_TYPE_DTYPE, "", d)
-	//return stat.SeriesWithoutName(d...)
-	return pandas.ToSeries(d...)
+	return pandas.SliceToSeries(d)
 }

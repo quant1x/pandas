@@ -2,7 +2,7 @@ package pandas
 
 import "gitee.com/quant1x/num"
 
-func (this Vector[T]) EWM(alpha EW) ExponentialMovingWindow {
+func (this vector[T]) EWM(alpha EW) ExponentialMovingWindow {
 	atype := AlphaAlpha
 	param := 0.00
 	adjust := alpha.Adjust

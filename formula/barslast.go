@@ -10,7 +10,7 @@ import (
 //	为了测试SMA,BARSLAST必须要先实现, 给SMA提供序列换参数, 以便验证, python那边还没实现
 func BARSLAST(S pandas.Series) pandas.Series {
 	ns := BARSLAST2(S)
-	return pandas.ToSeries(ns...)
+	return pandas.SliceToSeries(ns)
 }
 
 func BARSLAST2(S pandas.Series) []num.DType {

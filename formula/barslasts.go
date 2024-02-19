@@ -12,13 +12,13 @@ import (
 //	go实现暂时不支持N为序列, 意义不大
 func BARSLASTS(S pandas.Series, N int) pandas.Series {
 	v := __bars_lasts(S, N)
-	x := pandas.ToSeries(v...)
+	x := pandas.SliceToSeries(v)
 	return x
 }
 
 func __bars_lasts(S pandas.Series, N int) []num.DType {
 	v := __bars_last(S)
-	x := pandas.ToSeries(v...)
+	x := pandas.SliceToSeries(v)
 	m := x
 	for i := 1; i < N; i++ {
 		//第二次位置:=REF(BARSLAST(条件),第一次位置+1)+第一次位置+1;{倒数第二次条件距今位置}

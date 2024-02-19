@@ -20,7 +20,7 @@ func COUNT(S any, N any) pandas.Series {
 		ds = num.AnyToSlice[bool](s, length)
 	}
 	s := V1COUNT(ds, N)
-	return pandas.Vector[int](s)
+	return pandas.SliceToSeries(s)
 }
 
 // V1COUNT 统计S为真的天数

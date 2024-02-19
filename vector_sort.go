@@ -2,12 +2,12 @@ package pandas
 
 import "gitee.com/quant1x/num"
 
-func (this Vector[T]) Len() int {
+func (this vector[T]) Len() int {
 	return len(this)
 }
 
 // Less 实现sort.Interface接口的比较元素方法
-func (this Vector[T]) Less(i, j int) bool {
+func (this vector[T]) Less(i, j int) bool {
 	type_ := this.Type()
 	if type_ == SERIES_TYPE_BOOL {
 		values := this.Values().([]bool)
@@ -44,7 +44,7 @@ func (this Vector[T]) Less(i, j int) bool {
 }
 
 // Swap 实现sort.Interface接口的交换元素方法
-func (this Vector[T]) Swap(i, j int) {
+func (this vector[T]) Swap(i, j int) {
 	type_ := this.Type()
 	if type_ == SERIES_TYPE_BOOL {
 		values := this.Values().([]bool)

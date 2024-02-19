@@ -12,7 +12,7 @@ type NDFrame struct {
 	rows     int    // 行数
 	nilCount int    // nil和nan的元素有多少, 这种统计在bool和int64类型中不会大于0, 只对float64及string有效
 	name     string // 名称
-	data     any    // for Vector
+	data     any    // for vector
 }
 
 func (this *NDFrame) String() string {

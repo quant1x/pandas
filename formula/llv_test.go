@@ -39,9 +39,6 @@ func TestLLV(t *testing.T) {
 	r2 = LLV(df2.Col("X0"), 2)
 	fmt.Println(r2)
 
-	r2 = LLV(C, 2)
-	fmt.Println(r2)
-
 	_ = A
 	_ = B
 	_ = C

@@ -236,16 +236,34 @@ func DetectTypeBySlice(arr ...any) (Type, error) {
 //+----------------------------------------------------------------+
 
 // ToSeries 转换切片为Series
+//
+// Deprecated: 推荐使用 Vector [wangfeng on 2024/2/19 12:07]
 func ToSeries[T num.BaseType](data ...T) Series {
-	return Vector[T](data)
+	return slice2series[T](data)
 }
 
-// NewSeries 模糊匹配泛型切片的匿名series
+// Vector 切片转Series
+func Vector[E num.BaseType](data []E) Series {
+	return slice2series[E](data)
+}
+
+// SliceToSeries 切片转Series
+func SliceToSeries[E num.BaseType](data []E) Series {
+	return slice2series[E](data)
+}
+
+// 切片转Series, 这样封装的目的是在调用时不用在函数名后写类型, 由data指定类型
+// eg: slice2series([]float32{1,2,3,4,5})
+func slice2series[E num.BaseType](data []E) Series {
+	return vector[E](data)
+}
+
+// NewSeries 模糊匹配泛型切片的匿名series, NDFrame
 func NewSeries[T num.BaseType](values ...T) Series {
 	return SeriesWithName[T](defaultSeriesName(), values...)
 }
 
-// SeriesWithName 构建一个新的Series
+// SeriesWithName 构建一个新的Series, NDFrame
 //
 //	指定类型T和名称
 func SeriesWithName[T num.BaseType](name string, data ...T) Series {
@@ -253,14 +271,14 @@ func SeriesWithName[T num.BaseType](name string, data ...T) Series {
 	if len(data) > 0 {
 		values = append(values, data...)
 	}
-	array := NDFrame{
+	frame := NDFrame{
 		typ:      num.CheckoutRawType(values),
 		rows:     len(values),
 		nilCount: 0,
 		name:     defaultSeriesName(name),
-		data:     Vector[T](values),
+		data:     vector[T](values),
 	}
-	return &array
+	return &frame
 }
 
 //+----------------------------------------------------------------+
@@ -280,7 +298,7 @@ func NewSeriesWithoutType(name string, values ...any) Series {
 
 // NewSeriesWithType 指定series类型, 强制导入values
 //
-//	推导values中最适合的类型
+//	推导values中最适合的类型 DataFrame调用
 func NewSeriesWithType(typ Type, name string, values ...any) Series {
 	var vector Series
 	switch typ {

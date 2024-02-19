@@ -25,7 +25,7 @@ func TestNDFrame_Copy(t *testing.T) {
 				rows:     1,
 				nilCount: 0,
 				name:     "a",
-				data:     Vector[string]{"1"},
+				data:     vector[string]{"1"},
 			},
 			want: &NDFrame{
 				typ:      SERIES_TYPE_STRING,

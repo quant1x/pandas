@@ -7,24 +7,20 @@ import (
 	"strings"
 )
 
-// Vector 泛型向量
-type Vector[T num.BaseType] []T
+// vector 泛型向量
+//
+//	私有结构, 不对外开放
+//	没有name, 默认是x
+type vector[T num.BaseType] []T
 
-// NewVector 创建一个新的向量
-func NewVector[T num.BaseType](values ...T) Series {
-	v := make([]T, 0, len(values))
-	v = append(v, values...)
-	return Vector[T](v)
-}
-
-func (this Vector[T]) v1String() string {
+func (this vector[T]) v1String() string {
 	var t0 T
 	records := this.Records(true)
 	records = append(records, fmt.Sprintf("dtype: %T", t0))
 	return strings.Join(records, "\n")
 }
 
-func (this Vector[T]) String() string {
+func (this vector[T]) String() string {
 	var t0 T
 	records := this.Records(true)
 	//records = append(records, fmt.Sprintf("dtype: %T", t0))
@@ -32,7 +28,7 @@ func (this Vector[T]) String() string {
 	return fmt.Sprintf("dtype[%T]: %s", t0, text)
 }
 
-func (this Vector[T]) elementDefaultValue() any {
+func (this vector[T]) elementDefaultValue() any {
 	kind := num.CheckoutRawType(this)
 	switch kind {
 	case reflect.Bool:
@@ -52,12 +48,12 @@ func (this Vector[T]) elementDefaultValue() any {
 	}
 }
 
-func (this Vector[T]) emptySlice() []T {
+func (this vector[T]) emptySlice() []T {
 	s := make([]T, 0)
 	return s
 }
 
-func (this Vector[T]) NaN() any {
+func (this vector[T]) NaN() any {
 	switch this.Values().(type) {
 	case []bool:
 		return num.BoolNaN
@@ -80,41 +76,41 @@ func (this Vector[T]) NaN() any {
 	}
 }
 
-func (this Vector[T]) Empty(tv ...Type) Series {
+func (this vector[T]) Empty(tv ...Type) Series {
 	if len(tv) == 0 {
 		// goland提示 Empty slice declaration using a literal
 		// 不可以转成 var empty []T, 这样的结果是empty = nil, 无法断言
 		// 当然, 也可以传入var empty []T, 后续所有设计引用的地方都需要对vector[T]=nil和ndarray.data进行判断
 		//empty := []T{}
 		var empty []T
-		return Vector[T](empty)
+		return vector[T](empty)
 	}
 
 	__type := tv[0]
 	switch __type {
 	case SERIES_TYPE_STRING:
-		return Vector[string]([]string{})
+		return vector[string]([]string{})
 	case SERIES_TYPE_BOOL:
-		return Vector[bool]([]bool{})
+		return vector[bool]([]bool{})
 	case SERIES_TYPE_INT32:
-		return Vector[int32]([]int32{})
+		return vector[int32]([]int32{})
 	case SERIES_TYPE_INT64:
-		return Vector[int64]([]int64{})
+		return vector[int64]([]int64{})
 	case SERIES_TYPE_FLOAT32:
-		return Vector[float32]([]float32{})
+		return vector[float32]([]float32{})
 	case SERIES_TYPE_FLOAT64:
-		return Vector[float64]([]float64{})
+		return vector[float64]([]float64{})
 	default:
 		panic(num.ErrUnsupportedType)
 	}
 }
 
-func (this Vector[T]) Copy() Series {
+func (this vector[T]) Copy() Series {
 	vlen := this.Len()
 	return this.Subset(0, vlen, true)
 }
 
-func (this Vector[T]) Records(round ...bool) []string {
+func (this vector[T]) Records(round ...bool) []string {
 	ret := make([]string, this.Len())
 	needRound := false
 	if len(round) > 0 {
@@ -133,7 +129,7 @@ func (this Vector[T]) Records(round ...bool) []string {
 
 }
 
-func (this Vector[T]) Repeat(x any, repeats int) Series {
+func (this vector[T]) Repeat(x any, repeats int) Series {
 	var d any
 	switch values := this.Values().(type) {
 	case []bool:
@@ -148,21 +144,21 @@ func (this Vector[T]) Repeat(x any, repeats int) Series {
 	default: //case []float64:
 		d = num.Repeat(num.AnyToFloat64(x), repeats)
 	}
-	return Vector[T](d.([]T))
+	return vector[T](d.([]T))
 }
 
-func (this Vector[T]) FillNa(v any, inplace bool) Series {
+func (this vector[T]) FillNa(v any, inplace bool) Series {
 	d := num.FillNa(this, v, inplace)
-	return Vector[T](d)
+	return vector[T](d)
 }
 
-func (this Vector[T]) Shift(periods int) Series {
+func (this vector[T]) Shift(periods int) Series {
 	values := this.Values().([]T)
 	d := num.Shift(values, periods)
-	return Vector[T](d)
+	return vector[T](d)
 }
 
-func (this Vector[T]) Mean() num.DType {
+func (this vector[T]) Mean() num.DType {
 	if this.Len() < 1 {
 		return num.NaN()
 	}
@@ -170,31 +166,31 @@ func (this Vector[T]) Mean() num.DType {
 	return num.Any2DType(d)
 }
 
-func (this Vector[T]) StdDev() num.DType {
+func (this vector[T]) StdDev() num.DType {
 	if this.Len() < 1 {
 		return num.NaN()
 	}
 	return this.Std()
 }
 
-func (this Vector[T]) Max() any {
+func (this vector[T]) Max() any {
 	d := num.Max2(this)
 	return d
 }
 
-func (this Vector[T]) Min() any {
+func (this vector[T]) Min() any {
 	d := num.Min2(this)
 	return d
 }
 
-func (this Vector[T]) Apply(f func(idx int, v any)) {
+func (this vector[T]) Apply(f func(idx int, v any)) {
 	for i, v := range this {
 		f(i, v)
 	}
 }
 
 // Apply2 提供可替换功能的apply方法, 默认不替换
-func (this Vector[T]) Apply2(f func(idx int, v any) any, args ...bool) Series {
+func (this vector[T]) Apply2(f func(idx int, v any) any, args ...bool) Series {
 	inplace := false
 	if len(args) >= 1 {
 		inplace = args[0]
@@ -208,18 +204,18 @@ func (this Vector[T]) Apply2(f func(idx int, v any) any, args ...bool) Series {
 	return this
 }
 
-func (this Vector[T]) Diff(n any) Series {
+func (this vector[T]) Diff(n any) Series {
 	d := num.Diff2(this, n)
-	return Vector[T](d)
+	return vector[T](d)
 }
 
-func (this Vector[T]) Ref(n any) Series {
+func (this vector[T]) Ref(n any) Series {
 	values := this.Values().([]T)
 	d := num.Shift(values, n)
-	return Vector[T](d)
+	return vector[T](d)
 }
 
-func (this Vector[T]) Std() num.DType {
+func (this vector[T]) Std() num.DType {
 	if this.Len() < 1 {
 		return num.NaN()
 	}
@@ -227,7 +223,7 @@ func (this Vector[T]) Std() num.DType {
 	return num.Any2DType(d)
 }
 
-func (this Vector[T]) Sum() num.DType {
+func (this vector[T]) Sum() num.DType {
 	if this.Len() < 1 {
 		return num.NaN()
 	}

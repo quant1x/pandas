@@ -22,6 +22,6 @@ func MIN(S1 pandas.Series, S2 any) pandas.Series {
 		panic(num.TypeError(S2))
 	}
 	d := num.Minimum(S1.DTypes(), b)
-	return pandas.ToSeries(d...)
+	return pandas.SliceToSeries(d)
 
 }

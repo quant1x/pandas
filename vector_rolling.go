@@ -2,7 +2,7 @@ package pandas
 
 import "gitee.com/quant1x/num"
 
-func (this Vector[T]) Rolling(param any) RollingAndExpandingMixin {
+func (this vector[T]) Rolling(param any) RollingAndExpandingMixin {
 	window := num.Window[num.DType]{C: num.DTypeNaN}
 	switch v := param.(type) {
 	case int:
@@ -25,7 +25,7 @@ func (this Vector[T]) Rolling(param any) RollingAndExpandingMixin {
 	return w
 }
 
-//func (this Vector[T]) Rolling(param any) RollingAndExpandingMixin {
+//func (this vector[T]) Rolling(param any) RollingAndExpandingMixin {
 //	var N []num.DType
 //	switch v := param.(type) {
 //	case int:
