@@ -291,12 +291,12 @@ func (this *NDFrame) Apply(f func(idx int, v any)) {
 	s.Apply(f)
 }
 
-func (this *NDFrame) Apply2(f func(idx int, v any) any, args ...bool) Series {
+func (this *NDFrame) Apply2(f func(idx int, v any) any, inplace ...bool) Series {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
 	}
-	v := s.Apply2(f, args...)
+	v := s.Apply2(f, inplace...)
 	return this.toSeries(v)
 }
 

@@ -190,14 +190,14 @@ func (this vector[T]) Apply(f func(idx int, v any)) {
 }
 
 // Apply2 提供可替换功能的apply方法, 默认不替换
-func (this vector[T]) Apply2(f func(idx int, v any) any, args ...bool) Series {
-	inplace := false
-	if len(args) >= 1 {
-		inplace = args[0]
+func (this vector[T]) Apply2(f func(idx int, v any) any, inplace ...bool) Series {
+	hasInplace := false
+	if len(inplace) >= 1 {
+		hasInplace = inplace[0]
 	}
 	for i, v := range this {
 		r := f(i, v)
-		if inplace {
+		if hasInplace {
 			this[i] = num.AnyToGeneric[T](r)
 		}
 	}
