@@ -3,6 +3,17 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.3.5] - 2024-02-19
+### Changed
+- 新增多种不同需求的切片转Series函数.
+- 调整部分测试代码.
+- Vector追加any类型数据, 允许传入Series.
+- 微调dataframe部分方法.
+- 调整dataframe string类方法的源文件名.
+- 更新README中go版本的提示.
+- 调整Apply2函数的第二个参数名为inplace, 明确用法.
+- 新增example_test.go代码示例源文件, example_test.go是相同package下示例代码的固定文件名.
+
 ## [1.3.4] - 2024-02-19
 ### Changed
 - 调整vector为私有结构体,对外只提供Series接口.
@@ -687,7 +698,8 @@ All notable changes to this project will be documented in this file.
 - 引入github.com/WinPooh32/series代码.
 - Initial commit.
 
-[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.3.4...HEAD
+[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.3.5...HEAD
+[1.3.5]: https://gitee.com/quant1x/pandas/compare/v1.3.4...v1.3.5
 [1.3.4]: https://gitee.com/quant1x/pandas/compare/v1.3.3...v1.3.4
 [1.3.3]: https://gitee.com/quant1x/pandas/compare/v1.3.2...v1.3.3
 [1.3.2]: https://gitee.com/quant1x/pandas/compare/v1.3.1...v1.3.2
