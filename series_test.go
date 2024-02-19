@@ -9,6 +9,9 @@ import (
 func TestSeriesString(t *testing.T) {
 	s := NewSeriesWithType(reflect.String, "a", 1)
 	fmt.Println(s)
+	v1 := []float64{1.1, 2.2, 3.3}
+	v2 := Convect[int](v1)
+	fmt.Println(v2)
 }
 
 func TestNewSeries(t *testing.T) {
