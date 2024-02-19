@@ -106,8 +106,8 @@ func LoadStructs(i any, options ...LoadOption) DataFrame {
 
 			// Handle `types` option
 			var t Type
-			if cfgtype, ok := cfg.types[fieldName]; ok {
-				t = cfgtype
+			if cfgType, ok := cfg.types[fieldName]; ok {
+				t = cfgType
 			} else {
 				// Handle `detectTypes` option
 				if cfg.detectTypes {
@@ -141,17 +141,19 @@ func LoadStructs(i any, options ...LoadOption) DataFrame {
 				elements = append(tmp, elements...)
 				fieldName = ""
 			}
-			if t == SERIES_TYPE_STRING {
-				columns = append(columns, NewSeriesWithType(SERIES_TYPE_STRING, fieldName, elements))
-			} else if t == SERIES_TYPE_BOOL {
-				columns = append(columns, NewSeriesWithType(SERIES_TYPE_BOOL, fieldName, elements))
+			if t == SERIES_TYPE_BOOL {
+				columns = append(columns, NewSeriesWithType(SERIES_TYPE_BOOL, fieldName, elements...))
+			} else if t == SERIES_TYPE_INT32 {
+				columns = append(columns, NewSeriesWithType(SERIES_TYPE_INT32, fieldName, elements...))
 			} else if t == SERIES_TYPE_INT64 {
-				columns = append(columns, NewSeriesWithType(SERIES_TYPE_INT64, fieldName, elements))
+				columns = append(columns, NewSeriesWithType(SERIES_TYPE_INT64, fieldName, elements...))
 			} else if t == SERIES_TYPE_FLOAT32 {
-				columns = append(columns, NewSeriesWithType(SERIES_TYPE_FLOAT32, fieldName, elements))
+				columns = append(columns, NewSeriesWithType(SERIES_TYPE_FLOAT32, fieldName, elements...))
+			} else if t == SERIES_TYPE_FLOAT64 {
+				columns = append(columns, NewSeriesWithType(SERIES_TYPE_FLOAT64, fieldName, elements...))
 			} else {
-				// 默认float
-				columns = append(columns, NewSeriesWithType(SERIES_TYPE_FLOAT64, fieldName, elements))
+				// 默认string
+				columns = append(columns, NewSeriesWithType(SERIES_TYPE_STRING, fieldName, elements...))
 			}
 		}
 		return NewDataFrame(columns...)
