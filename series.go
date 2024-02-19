@@ -253,7 +253,7 @@ func SeriesWithName[T num.BaseType](name string, data ...T) Series {
 	if len(data) > 0 {
 		values = append(values, data...)
 	}
-	array := NDArray{
+	array := NDFrame{
 		typ:      num.CheckoutRawType(values),
 		rows:     len(values),
 		nilCount: 0,
@@ -298,7 +298,7 @@ func NewSeriesWithType(typ Type, name string, values ...any) Series {
 		vector = ToSeries[string]()
 	}
 	vector = vector.Append(values...)
-	series := NDArray{
+	series := NDFrame{
 		name:     name,
 		typ:      typ,
 		nilCount: 0,

@@ -18,7 +18,7 @@ func EMA(S pandas.Series, N any) pandas.Series {
 		vs := v.DTypes()
 		X = num.Align(vs, num.DTypeNaN, S.Len())
 	default:
-		panic(exception.New(1, "error window"))
+		panic(num.ErrInvalidWindow)
 	}
 	k := X[0]
 	x := S.EWM(pandas.EW{Span: num.DTypeNaN, Callback: func(idx int) num.DType {
