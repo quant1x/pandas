@@ -6,8 +6,8 @@ import (
 	"strings"
 )
 
-// NDArray series多属性封装实现
-type NDArray struct {
+// NDFrame series多属性封装实现
+type NDFrame struct {
 	typ      Type   // values元素类型
 	rows     int    // 行数
 	nilCount int    // nil和nan的元素有多少, 这种统计在bool和int64类型中不会大于0, 只对float64及string有效
@@ -15,7 +15,7 @@ type NDArray struct {
 	data     any    // for Vector
 }
 
-func (this *NDArray) String() string {
+func (this *NDFrame) String() string {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -23,26 +23,26 @@ func (this *NDArray) String() string {
 	return s.String()
 }
 
-func (this *NDArray) Name() string {
+func (this *NDFrame) Name() string {
 	this.name = defaultSeriesName(this.name)
 	return this.name
 }
 
-func (this *NDArray) Rename(name string) {
+func (this *NDFrame) Rename(name string) {
 	this.name = strings.TrimSpace(name)
 }
 
-func (this *NDArray) Type() Type {
+func (this *NDFrame) Type() Type {
 	return this.typ
 }
 
 // 转成vector
-func (this *NDArray) asSeries() (Series, bool) {
+func (this *NDFrame) asSeries() (Series, bool) {
 	s, ok := this.data.(Series)
 	return s, ok
 }
 
-func (this *NDArray) Values() any {
+func (this *NDFrame) Values() any {
 	//return this.data
 	s, ok := this.asSeries()
 	if !ok {
@@ -51,8 +51,8 @@ func (this *NDArray) Values() any {
 	return s.Values()
 }
 
-func (this *NDArray) toSeries(v Series) Series {
-	return &NDArray{
+func (this *NDFrame) toSeries(v Series) Series {
+	return &NDFrame{
 		typ:      v.Type(),
 		rows:     v.Len(),
 		nilCount: 0,
@@ -61,7 +61,7 @@ func (this *NDArray) toSeries(v Series) Series {
 	}
 }
 
-func (this *NDArray) NaN() any {
+func (this *NDFrame) NaN() any {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -69,7 +69,7 @@ func (this *NDArray) NaN() any {
 	return s.NaN()
 }
 
-func (this *NDArray) Float32s() []float32 {
+func (this *NDFrame) Float32s() []float32 {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -77,7 +77,7 @@ func (this *NDArray) Float32s() []float32 {
 	return s.Float32s()
 }
 
-func (this *NDArray) Float64s() []float64 {
+func (this *NDFrame) Float64s() []float64 {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -85,7 +85,7 @@ func (this *NDArray) Float64s() []float64 {
 	return s.Float64s()
 }
 
-func (this *NDArray) DTypes() []num.DType {
+func (this *NDFrame) DTypes() []num.DType {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -93,7 +93,7 @@ func (this *NDArray) DTypes() []num.DType {
 	return s.DTypes()
 }
 
-func (this *NDArray) Ints() []int {
+func (this *NDFrame) Ints() []int {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -101,7 +101,7 @@ func (this *NDArray) Ints() []int {
 	return s.Ints()
 }
 
-func (this *NDArray) Int32s() []int32 {
+func (this *NDFrame) Int32s() []int32 {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -109,7 +109,7 @@ func (this *NDArray) Int32s() []int32 {
 	return s.Int32s()
 }
 
-func (this *NDArray) Int64s() []int64 {
+func (this *NDFrame) Int64s() []int64 {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -117,7 +117,7 @@ func (this *NDArray) Int64s() []int64 {
 	return s.Int64s()
 }
 
-func (this *NDArray) Strings() []string {
+func (this *NDFrame) Strings() []string {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -125,7 +125,7 @@ func (this *NDArray) Strings() []string {
 	return s.Strings()
 }
 
-func (this *NDArray) Bools() []bool {
+func (this *NDFrame) Bools() []bool {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -133,7 +133,7 @@ func (this *NDArray) Bools() []bool {
 	return s.Bools()
 }
 
-func (this *NDArray) Len() int {
+func (this *NDFrame) Len() int {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -141,7 +141,7 @@ func (this *NDArray) Len() int {
 	return s.Len()
 }
 
-func (this *NDArray) Less(i, j int) bool {
+func (this *NDFrame) Less(i, j int) bool {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -149,7 +149,7 @@ func (this *NDArray) Less(i, j int) bool {
 	return s.Less(i, j)
 }
 
-func (this *NDArray) Swap(i, j int) {
+func (this *NDFrame) Swap(i, j int) {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -157,7 +157,7 @@ func (this *NDArray) Swap(i, j int) {
 	s.Swap(i, j)
 }
 
-func (this *NDArray) Empty(t ...Type) Series {
+func (this *NDFrame) Empty(t ...Type) Series {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -166,7 +166,7 @@ func (this *NDArray) Empty(t ...Type) Series {
 	return this.toSeries(v)
 }
 
-func (this *NDArray) Copy() Series {
+func (this *NDFrame) Copy() Series {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -175,7 +175,7 @@ func (this *NDArray) Copy() Series {
 	return this.toSeries(v)
 }
 
-func (this *NDArray) Reverse() Series {
+func (this *NDFrame) Reverse() Series {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -184,7 +184,7 @@ func (this *NDArray) Reverse() Series {
 	return this.toSeries(v)
 }
 
-func (this *NDArray) Select(r api.ScopeLimit) Series {
+func (this *NDFrame) Select(r api.ScopeLimit) Series {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -193,7 +193,7 @@ func (this *NDArray) Select(r api.ScopeLimit) Series {
 	return this.toSeries(v)
 }
 
-func (this *NDArray) Append(values ...any) Series {
+func (this *NDFrame) Append(values ...any) Series {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -202,7 +202,7 @@ func (this *NDArray) Append(values ...any) Series {
 	return this.toSeries(v)
 }
 
-func (this *NDArray) Concat(x Series) Series {
+func (this *NDFrame) Concat(x Series) Series {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -211,7 +211,7 @@ func (this *NDArray) Concat(x Series) Series {
 	return this.toSeries(v)
 }
 
-func (this *NDArray) Records(round ...bool) []string {
+func (this *NDFrame) Records(round ...bool) []string {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -220,7 +220,7 @@ func (this *NDArray) Records(round ...bool) []string {
 	return v
 }
 
-func (this *NDArray) IndexOf(index int, opt ...any) any {
+func (this *NDFrame) IndexOf(index int, opt ...any) any {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -229,7 +229,7 @@ func (this *NDArray) IndexOf(index int, opt ...any) any {
 	return v
 }
 
-func (this *NDArray) Subset(start, end int, opt ...any) Series {
+func (this *NDFrame) Subset(start, end int, opt ...any) Series {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -238,7 +238,7 @@ func (this *NDArray) Subset(start, end int, opt ...any) Series {
 	return this.toSeries(v)
 }
 
-func (this *NDArray) Repeat(x any, repeats int) Series {
+func (this *NDFrame) Repeat(x any, repeats int) Series {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -247,7 +247,7 @@ func (this *NDArray) Repeat(x any, repeats int) Series {
 	return this.toSeries(v)
 }
 
-func (this *NDArray) FillNa(x any, inplace bool) Series {
+func (this *NDFrame) FillNa(x any, inplace bool) Series {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -256,7 +256,7 @@ func (this *NDArray) FillNa(x any, inplace bool) Series {
 	return this.toSeries(v)
 }
 
-func (this *NDArray) Ref(periods any) (s Series) {
+func (this *NDFrame) Ref(periods any) (s Series) {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -265,7 +265,7 @@ func (this *NDArray) Ref(periods any) (s Series) {
 	return this.toSeries(v)
 }
 
-func (this *NDArray) Shift(periods int) Series {
+func (this *NDFrame) Shift(periods int) Series {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -274,7 +274,7 @@ func (this *NDArray) Shift(periods int) Series {
 	return this.toSeries(v)
 }
 
-func (this *NDArray) Rolling(param any) RollingAndExpandingMixin {
+func (this *NDFrame) Rolling(param any) RollingAndExpandingMixin {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -283,7 +283,7 @@ func (this *NDArray) Rolling(param any) RollingAndExpandingMixin {
 	return v
 }
 
-func (this *NDArray) Apply(f func(idx int, v any)) {
+func (this *NDFrame) Apply(f func(idx int, v any)) {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -291,7 +291,7 @@ func (this *NDArray) Apply(f func(idx int, v any)) {
 	s.Apply(f)
 }
 
-func (this *NDArray) Apply2(f func(idx int, v any) any, args ...bool) Series {
+func (this *NDFrame) Apply2(f func(idx int, v any) any, args ...bool) Series {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -300,7 +300,7 @@ func (this *NDArray) Apply2(f func(idx int, v any) any, args ...bool) Series {
 	return this.toSeries(v)
 }
 
-func (this *NDArray) Logic(f func(idx int, v any) bool) []bool {
+func (this *NDFrame) Logic(f func(idx int, v any) bool) []bool {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -309,7 +309,7 @@ func (this *NDArray) Logic(f func(idx int, v any) bool) []bool {
 	return v
 }
 
-func (this *NDArray) EWM(alpha EW) ExponentialMovingWindow {
+func (this *NDFrame) EWM(alpha EW) ExponentialMovingWindow {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -318,7 +318,7 @@ func (this *NDArray) EWM(alpha EW) ExponentialMovingWindow {
 	return v
 }
 
-func (this *NDArray) Mean() num.DType {
+func (this *NDFrame) Mean() num.DType {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -327,7 +327,7 @@ func (this *NDArray) Mean() num.DType {
 	return v
 }
 
-func (this *NDArray) StdDev() num.DType {
+func (this *NDFrame) StdDev() num.DType {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -336,7 +336,7 @@ func (this *NDArray) StdDev() num.DType {
 	return v
 }
 
-func (this *NDArray) Max() any {
+func (this *NDFrame) Max() any {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -345,7 +345,7 @@ func (this *NDArray) Max() any {
 	return v
 }
 
-func (this *NDArray) ArgMax() int {
+func (this *NDFrame) ArgMax() int {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -354,7 +354,7 @@ func (this *NDArray) ArgMax() int {
 	return v
 }
 
-func (this *NDArray) Min() any {
+func (this *NDFrame) Min() any {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -363,7 +363,7 @@ func (this *NDArray) Min() any {
 	return v
 }
 
-func (this *NDArray) ArgMin() int {
+func (this *NDFrame) ArgMin() int {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -372,7 +372,7 @@ func (this *NDArray) ArgMin() int {
 	return v
 }
 
-func (this *NDArray) Diff(param any) (s Series) {
+func (this *NDFrame) Diff(param any) (s Series) {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -381,7 +381,7 @@ func (this *NDArray) Diff(param any) (s Series) {
 	return this.toSeries(v)
 }
 
-func (this *NDArray) Std() num.DType {
+func (this *NDFrame) Std() num.DType {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -390,7 +390,7 @@ func (this *NDArray) Std() num.DType {
 	return v
 }
 
-func (this *NDArray) Sum() num.DType {
+func (this *NDFrame) Sum() num.DType {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -399,7 +399,7 @@ func (this *NDArray) Sum() num.DType {
 	return v
 }
 
-func (this *NDArray) Add(x any) Series {
+func (this *NDFrame) Add(x any) Series {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -408,7 +408,7 @@ func (this *NDArray) Add(x any) Series {
 	return this.toSeries(v)
 }
 
-func (this *NDArray) Sub(x any) Series {
+func (this *NDFrame) Sub(x any) Series {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -417,7 +417,7 @@ func (this *NDArray) Sub(x any) Series {
 	return this.toSeries(v)
 }
 
-func (this *NDArray) Mul(x any) Series {
+func (this *NDFrame) Mul(x any) Series {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -426,7 +426,7 @@ func (this *NDArray) Mul(x any) Series {
 	return this.toSeries(v)
 }
 
-func (this *NDArray) Div(x any) Series {
+func (this *NDFrame) Div(x any) Series {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -435,7 +435,7 @@ func (this *NDArray) Div(x any) Series {
 	return this.toSeries(v)
 }
 
-func (this *NDArray) Eq(x any) Series {
+func (this *NDFrame) Eq(x any) Series {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -444,7 +444,7 @@ func (this *NDArray) Eq(x any) Series {
 	return this.toSeries(v)
 }
 
-func (this *NDArray) Neq(x any) Series {
+func (this *NDFrame) Neq(x any) Series {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -453,7 +453,7 @@ func (this *NDArray) Neq(x any) Series {
 	return this.toSeries(v)
 }
 
-func (this *NDArray) Gt(x any) Series {
+func (this *NDFrame) Gt(x any) Series {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -462,7 +462,7 @@ func (this *NDArray) Gt(x any) Series {
 	return this.toSeries(v)
 }
 
-func (this *NDArray) Gte(x any) Series {
+func (this *NDFrame) Gte(x any) Series {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -471,7 +471,7 @@ func (this *NDArray) Gte(x any) Series {
 	return this.toSeries(v)
 }
 
-func (this *NDArray) Lt(x any) Series {
+func (this *NDFrame) Lt(x any) Series {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -480,7 +480,7 @@ func (this *NDArray) Lt(x any) Series {
 	return this.toSeries(v)
 }
 
-func (this *NDArray) Lte(x any) Series {
+func (this *NDFrame) Lte(x any) Series {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -489,7 +489,7 @@ func (this *NDArray) Lte(x any) Series {
 	return this.toSeries(v)
 }
 
-func (this *NDArray) And(x any) Series {
+func (this *NDFrame) And(x any) Series {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -498,7 +498,7 @@ func (this *NDArray) And(x any) Series {
 	return this.toSeries(v)
 }
 
-func (this *NDArray) Or(x any) Series {
+func (this *NDFrame) Or(x any) Series {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))
@@ -507,7 +507,7 @@ func (this *NDArray) Or(x any) Series {
 	return this.toSeries(v)
 }
 
-func (this *NDArray) Not() Series {
+func (this *NDFrame) Not() Series {
 	s, ok := this.asSeries()
 	if !ok {
 		panic(num.TypeError(this.data))

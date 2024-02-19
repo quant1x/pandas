@@ -27,7 +27,7 @@ func TestNDArray_Copy(t *testing.T) {
 				name:     "a",
 				data:     Vector[string]{"1"},
 			},
-			want: &NDArray{
+			want: &NDFrame{
 				typ:      SERIES_TYPE_STRING,
 				rows:     1,
 				nilCount: 0,
@@ -38,7 +38,7 @@ func TestNDArray_Copy(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			this := &NDArray{
+			this := &NDFrame{
 				typ:      tt.fields.typ,
 				rows:     tt.fields.rows,
 				nilCount: tt.fields.nilCount,
