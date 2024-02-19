@@ -3,7 +3,7 @@ pandas
 [![Sourcegraph](https://sourcegraph.com/github.com/quant1x/pandas/-/badge.svg)](https://sourcegraph.com/github.com/quant1x/pandas?badge)
 [![Build Status](https://api.travis-ci.com/repos/quant1x/pandas.png)](https://travis-ci.com/quant1x/pandas)
 [![codecov](https://codecov.io/gh/quant1x/pandas/branch/master/graph/badge.svg)](https://codecov.io/gh/quant1x/pandas)
-![Golang 1.11.4+](https://img.shields.io/badge/Golang-1.20+-orange.svg?style=flat)
+![Golang 1.21.6+](https://img.shields.io/badge/Golang-1.21+-orange.svg?style=flat)
 ![tag](https://img.shields.io/github/tag/quant1x/pandas.svg?style=flat)
 ![license](https://img.shields.io/github/license/quant1x/pandas.svg)
 
