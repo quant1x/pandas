@@ -16,12 +16,12 @@ func EMA(S pandas.Series, N any) pandas.Series {
 		X = num.Repeat[num.DType](num.DType(v), S.Len())
 	case pandas.Series:
 		vs := v.DTypes()
-		X = num.Align(vs, num.DTypeNaN, S.Len())
+		X = num.Align(vs, num.NaN(), S.Len())
 	default:
 		panic(num.ErrInvalidWindow)
 	}
 	k := X[0]
-	x := S.EWM(pandas.EW{Span: num.DTypeNaN, Callback: func(idx int) num.DType {
+	x := S.EWM(pandas.EW{Span: num.NaN(), Callback: func(idx int) num.DType {
 		j := X[idx]
 		if j == 0 {
 			j = 1
@@ -74,7 +74,7 @@ func EMA_v1(S pandas.Series, N any) any {
 	x := S.Rolling(N).Apply(func(S pandas.Series, N num.DType) num.DType {
 		r := S.EWM(pandas.EW{Span: N, Adjust: false}).Mean().DTypes()
 		if len(r) == 0 {
-			return num.DTypeNaN
+			return num.NaN()
 		}
 		return r[len(r)-1]
 	}).Values()

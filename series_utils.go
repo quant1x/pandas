@@ -22,7 +22,7 @@ func Align2Series(x any, N int) Series {
 	//	vd := Slice2DType(v)
 	//	ds = Align[DType](vd, DTypeNaN, N)
 	case nil:
-		ds = num.Repeat[num.DType](num.DTypeNaN, N)
+		ds = num.Repeat[num.DType](num.NaN(), N)
 	case /*nil, */ int8, uint8, int16, uint16, int32, uint32, int64, uint64, int, uint, float32, float64, bool, string:
 		ds = num.Repeat[num.DType](num.Any2DType(v), N)
 	case []int8, []uint8, []int16, []uint16, []int32, []uint32, []int64, []uint64, []int, []uint, []uintptr, []float32, []float64, []bool, []string:
@@ -30,13 +30,13 @@ func Align2Series(x any, N int) Series {
 		if N == -1 {
 			N = len(vd)
 		}
-		ds = num.Align[num.DType](vd, num.DTypeNaN, N)
+		ds = num.Align[num.DType](vd, num.NaN(), N)
 	case Series:
 		vd := v.DTypes()
 		if N == -1 {
 			N = len(vd)
 		}
-		ds = num.Align[num.DType](vd, num.DTypeNaN, N)
+		ds = num.Align[num.DType](vd, num.NaN(), N)
 	default:
 		panic(num.TypeError(v))
 	}

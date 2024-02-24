@@ -39,12 +39,12 @@ func SMA_v5(S pandas.Series, N any, M int) any {
 	case pandas.Series:
 		vs := v.Values()
 		X = num.SliceToFloat32(vs)
-		X = num.Align(X, num.Nil2Float32, S.Len())
+		X = num.Align(X, num.Float32NaN(), S.Len())
 	default:
 		panic(exception.New(1, "error window"))
 	}
 	k := X[0]
-	x := S.EWM(pandas.EW{Alpha: num.Nil2Float64, Callback: func(idx int) num.DType {
+	x := S.EWM(pandas.EW{Alpha: num.Float64NaN(), Callback: func(idx int) num.DType {
 		j := X[idx]
 		if j == 0 {
 			j = 1
@@ -66,7 +66,7 @@ func SMA_v4(S pandas.Series, N any, M int) any {
 	case pandas.Series:
 		vs := v.Values()
 		X = num.SliceToFloat32(vs)
-		X = num.Align(X, num.Nil2Float32, S.Len())
+		X = num.Align(X, num.Float32NaN(), S.Len())
 	default:
 		panic(exception.New(1, "error window"))
 	}
@@ -81,7 +81,7 @@ func SMA_v3(S pandas.Series, N any, M int) any {
 	x := S.Rolling(N).Apply(func(S pandas.Series, N num.DType) num.DType {
 		r := S.EWM(pandas.EW{Alpha: float64(M) / float64(N), Adjust: false}).Mean().Values().([]float64)
 		if len(r) == 0 {
-			return num.DTypeNaN
+			return num.NaN()
 		}
 		return num.DType(r[len(r)-1])
 	}).Values()

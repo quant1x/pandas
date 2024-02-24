@@ -36,13 +36,13 @@ func (this vector[T]) elementDefaultValue() any {
 	case reflect.String:
 		return num.StringNaN
 	case reflect.Int32:
-		return num.Nil2Int32
+		return num.Int32NaN
 	case reflect.Int64:
-		return num.Nil2Int64
+		return num.Int64NaN
 	case reflect.Float32:
-		return num.Nil2Float32
+		return num.Float32NaN()
 	case reflect.Float64:
-		return num.Nil2Float64
+		return num.Float64NaN()
 	default:
 		panic(num.TypeError(this))
 	}

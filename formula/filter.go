@@ -19,7 +19,7 @@ func FILTER(S pandas.Series, N any) pandas.Series {
 		W = num.Repeat[num.DType](num.DType(v), S.Len())
 	case pandas.Series:
 		vs := v.DTypes()
-		W = num.Align(vs, num.DTypeNaN, S.Len())
+		W = num.Align(vs, num.NaN(), S.Len())
 	default:
 		panic(exception.New(1, "error window"))
 	}

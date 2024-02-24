@@ -35,9 +35,9 @@ func (this DataFrame) align(ss ...Series) []Series {
 		} else if vt == SERIES_TYPE_STRING {
 			ns = num.Align(vs.([]string), num.Nil2String, int(maxLength))
 		} else if vt == SERIES_TYPE_FLOAT32 {
-			ns = num.Align(vs.([]float32), num.Nil2Float32, int(maxLength))
+			ns = num.Align(vs.([]float32), num.Float32NaN(), int(maxLength))
 		} else if vt == SERIES_TYPE_FLOAT64 {
-			ns = num.Align(vs.([]float64), num.Nil2Float64, int(maxLength))
+			ns = num.Align(vs.([]float64), num.Float64NaN(), int(maxLength))
 		}
 		cols[i] = NewSeriesWithType(vt, vn, ns)
 	}

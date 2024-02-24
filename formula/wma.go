@@ -15,13 +15,13 @@ func WMA(S pandas.Series, N any) pandas.Series {
 		X = num.Repeat[num.DType](num.DType(v), S.Len())
 	case pandas.Series:
 		vs := v.DTypes()
-		X = num.Align(vs, num.DTypeNaN, S.Len())
+		X = num.Align(vs, num.NaN(), S.Len())
 	default:
 		panic(exception.New(1, "error window"))
 	}
 	d := S.Rolling(X).Apply(func(S pandas.Series, N num.DType) num.DType {
 		if S.Len() == 0 {
-			return num.DTypeNaN
+			return num.NaN()
 		}
 		x := S.DTypes()
 		x = api.Reverse(x)
@@ -29,7 +29,7 @@ func WMA(S pandas.Series, N any) pandas.Series {
 		v1 := num.Sum(v)
 		v2 := v1 * 2 / N / (N + 1)
 		if num.DTypeIsNaN(v2) {
-			v2 = num.DTypeNaN
+			v2 = num.NaN()
 		}
 		return v2
 	})

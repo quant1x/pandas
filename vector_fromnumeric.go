@@ -23,7 +23,7 @@ func (this vector[T]) Add(x any) Series {
 	//case int8, uint8, int16, uint16, int32, uint32, int64, uint64, int, uint, uintptr, float32, float64:
 	//	b = Repeat[DType](DType(sx), length)
 	case []num.DType:
-		b = num.Align[num.DType](sx, num.DTypeNaN, length)
+		b = num.Align[num.DType](sx, num.NaN(), length)
 	default:
 		panic(num.TypeError(x))
 	}
@@ -45,7 +45,7 @@ func (this vector[T]) Sub(x any) Series {
 	//case int8, uint8, int16, uint16, int32, uint32, int64, uint64, int, uint, uintptr, float32, float64:
 	//	b = Repeat[DType](DType(sx), length)
 	case []num.DType:
-		b = num.Align[num.DType](sx, num.DTypeNaN, length)
+		b = num.Align[num.DType](sx, num.NaN(), length)
 	default:
 		panic(num.TypeError(x))
 	}
@@ -67,7 +67,7 @@ func (this vector[T]) Mul(x any) Series {
 	//case int8, uint8, int16, uint16, int32, uint32, int64, uint64, int, uint, uintptr, float32, float64:
 	//	b = Repeat[DType](DType(sx), length)
 	case []num.DType:
-		b = num.Align[num.DType](sx, num.DTypeNaN, length)
+		b = num.Align[num.DType](sx, num.NaN(), length)
 	default:
 		panic(num.TypeError(x))
 	}
@@ -89,7 +89,7 @@ func (this vector[T]) Div(x any) Series {
 	//case int8, uint8, int16, uint16, int32, uint32, int64, uint64, int, uint, uintptr, float32, float64:
 	//	b = Repeat[DType](DType(sx), length)
 	case []num.DType:
-		b = num.Align[num.DType](sx, num.DTypeNaN, length)
+		b = num.Align[num.DType](sx, num.NaN(), length)
 	default:
 		panic(num.TypeError(x))
 	}

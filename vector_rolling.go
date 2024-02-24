@@ -3,7 +3,7 @@ package pandas
 import "gitee.com/quant1x/num"
 
 func (this vector[T]) Rolling(param any) RollingAndExpandingMixin {
-	window := num.Window[num.DType]{C: num.DTypeNaN}
+	window := num.Window[num.DType]{C: num.NaN()}
 	switch v := param.(type) {
 	case int:
 		//N = num.Repeat[num.DType](num.DType(v), this.Len())

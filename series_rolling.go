@@ -32,7 +32,7 @@ func (r RollingAndExpandingMixin) Apply(f func(S Series, N num.DType) num.DType)
 	values := make([]num.DType, r.Series.Len())
 	for i, block := range r.GetBlocks() {
 		if block.Len() == 0 {
-			values[i] = num.DTypeNaN
+			values[i] = num.NaN()
 			continue
 		}
 		N := r.Window.At(i)

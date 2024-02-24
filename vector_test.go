@@ -74,7 +74,7 @@ func TestNDArray_Rolling(t *testing.T) {
 	r1 := s.Rolling(5).Mean()
 	fmt.Println(r1)
 
-	d2 := []float64{1, 2, 3, 4, 3, 3, 2, 1, num.Nil2Float64, num.Nil2Float64, num.Nil2Float64, num.Nil2Float64}
+	d2 := []float64{1, 2, 3, 4, 3, 3, 2, 1, num.Float64NaN(), num.Float64NaN(), num.Float64NaN(), num.Float64NaN()}
 	r2 := s.Rolling(d2).Mean()
 	fmt.Println(r2)
 }

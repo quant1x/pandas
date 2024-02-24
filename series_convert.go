@@ -32,7 +32,7 @@ func ToFloat32(s Series) []float32 {
 		return x32.FromBool(values.([]bool))
 	default:
 		length := s.Len()
-		defaultSlice := x32.Repeat(num.Nil2Float32, length)
+		defaultSlice := x32.Repeat(num.Float32NaN(), length)
 		return defaultSlice
 	}
 }
@@ -53,7 +53,7 @@ func ToFloat64(s Series) []float64 {
 		return x64.FromBool(values.([]bool))
 	default:
 		length := s.Len()
-		defaultSlice := num.Repeat(num.Nil2Float64, length)
+		defaultSlice := num.Repeat(num.Float64NaN(), length)
 		return defaultSlice
 	}
 }

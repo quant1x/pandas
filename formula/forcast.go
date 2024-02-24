@@ -17,7 +17,7 @@ func FORCAST(S pandas.Series, N any) any {
 		if W > 1 {
 			return vs[0]
 		} else {
-			return num.DTypeNaN
+			return num.NaN()
 		}
 	}).Values()
 }
