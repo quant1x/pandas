@@ -4,9 +4,11 @@ go 1.21.5
 
 require (
 	gitee.com/quant1x/gox v1.20.1
-	gitee.com/quant1x/num v0.1.1
+	gitee.com/quant1x/num v0.1.4
 	github.com/tealeg/xlsx/v3 v3.3.5
 )
+
+//replace gitee.com/quant1x/num v0.1.3 => ../num
 
 require (
 	gitee.com/quant1x/pkg v0.2.6 // indirect

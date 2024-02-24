@@ -6,6 +6,19 @@ import (
 	"testing"
 )
 
+func TestREF_basic(t *testing.T) {
+	C := pandas.Vector([]float64{1, 2, 3, 4, 5})
+	fmt.Println(C)
+	P := 1
+	fmt.Println("常量 =", P)
+	s1 := REF(C, P)
+	fmt.Println("\t=>", s1)
+	N := []int{1, 2, 3, 2, 1}
+	fmt.Println("可变参数 =", N)
+	s2 := REF(C, N)
+	fmt.Println("\t=>", s2)
+}
+
 func TestREF(t *testing.T) {
 	type testStruct struct {
 		A string

@@ -2,9 +2,17 @@ package formula
 
 import (
 	"fmt"
+	"gitee.com/quant1x/num"
 	"gitee.com/quant1x/pandas"
 	"testing"
 )
+
+func TestMa_basic(t *testing.T) {
+	x := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	s := pandas.Vector(x)
+	r := MA(s, 5)
+	fmt.Println(r)
+}
 
 func TestMA(t *testing.T) {
 	type testStruct struct {
@@ -30,4 +38,22 @@ func TestMA(t *testing.T) {
 	// 2日均线
 	r2 := MA(B, 2)
 	fmt.Println(r2)
+}
+
+func BenchmarkMA_release(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		x := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+		s := pandas.Vector(x)
+		r := MA(s, 5)
+		_ = r
+	}
+}
+
+func BenchmarkMA_v3Rolling(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		x := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+		num.RollingV1(x, 5, func(N num.DType, values ...float64) float64 {
+			return num.Mean2(values)
+		})
+	}
 }

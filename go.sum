@@ -1,7 +1,7 @@
 gitee.com/quant1x/gox v1.20.1 h1:Anowzijr00lG88E07a1KSr6KurQI47ok7r1xRGEpce4=
 gitee.com/quant1x/gox v1.20.1/go.mod h1:7EoGDJOof8kQ/k3YbBhu442P3U/ZehKGLHG1dyLF5CY=
-gitee.com/quant1x/num v0.1.1 h1:SRGp6XgkrvgsfqM33sdFjo0JS4TwD/X9fUwI+Z+VVuQ=
-gitee.com/quant1x/num v0.1.1/go.mod h1:wkBxe7YzmNw78RvOc78nBOW/VCriw2vtGzCPtycEp3Q=
+gitee.com/quant1x/num v0.1.4 h1:T6gtKleTQICA7C27eXTiUxAYI8U5Ff7k/xWVY/oJv9c=
+gitee.com/quant1x/num v0.1.4/go.mod h1:wkBxe7YzmNw78RvOc78nBOW/VCriw2vtGzCPtycEp3Q=
 gitee.com/quant1x/pkg v0.2.6 h1:u5IXv7pBIAByU4QwBtct0zINeso89yG76iaSK+vQKHU=
 gitee.com/quant1x/pkg v0.2.6/go.mod h1:PxsmEZX9MfFtVYt5mn6lKd0SJ/dRVn39kElUOJo4dKs=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=

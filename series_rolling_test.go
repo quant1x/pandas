@@ -179,3 +179,37 @@ func TestRollingAndExpandingMixin_Min(t *testing.T) {
 		})
 	}
 }
+
+func TestRollingAndExpandingMixin_Mean(t *testing.T) {
+	type fields struct {
+		Window num.Window[num.DType]
+		Series Series
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   Series
+	}{
+		{
+			name: "float64",
+			fields: fields{
+				Window: num.Window[num.DType]{
+					C: 5,
+				},
+				Series: ToSeries[float32](1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+			},
+			want: ToSeries[float64](num.Float64NaN(), num.Float64NaN(), num.Float64NaN(), num.Float64NaN(), 3, 4, 5, 6, 7, 8),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			r := RollingAndExpandingMixin{
+				Window: tt.fields.Window,
+				Series: tt.fields.Series,
+			}
+			if got := r.Mean(); !labs.DeepEqual(got.Values(), tt.want.Values()) {
+				t.Errorf("Mean() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

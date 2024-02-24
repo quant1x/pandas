@@ -60,18 +60,17 @@ func (this vector[T]) NaN() any {
 	case []string:
 		return num.StringNaN
 	case []int32:
-		return num.Nil2Int32
+		return num.Int32NaN
 	case []int64:
-		return num.Nil2Int64
+		return num.Int64NaN
 	case []float32:
-		return num.Nil2Float32
+		return num.Float32NaN()
 	case []float64:
-		return num.Nil2Float64
+		return num.Float64NaN()
 	default:
 		// 流程走到这里, 有两种情况
 		// 1. 切片类型超出了布尔, 整型, 浮点和字符串
 		// 2. this是nil
-		panic("error type")
 		return this.elementDefaultValue()
 	}
 }
@@ -205,7 +204,7 @@ func (this vector[T]) Apply2(f func(idx int, v any) any, inplace ...bool) Series
 }
 
 func (this vector[T]) Diff(n any) Series {
-	d := num.Diff2(this, n)
+	d := num.V2Diff(this, n)
 	return vector[T](d)
 }
 
