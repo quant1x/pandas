@@ -1,6 +1,6 @@
 package pandas
 
-import "gitee.com/quant1x/num"
+import "slices"
 
 func (this vector[T]) EWM(alpha EW) ExponentialMovingWindow {
 	atype := AlphaAlpha
@@ -20,9 +20,8 @@ func (this vector[T]) EWM(alpha EW) ExponentialMovingWindow {
 		atype = AlphaAlpha
 		param = alpha.Alpha
 	}
-
-	dest := ToSeries[num.DType]()
-	dest = dest.Append(this)
+	values := slices.Clone(this.DTypes())
+	dest := SliceToSeries(values)
 	return ExponentialMovingWindow{
 		Data:     dest,
 		AType:    atype,
