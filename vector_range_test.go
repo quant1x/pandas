@@ -15,4 +15,6 @@ func TestNDArray_IndexOf(t *testing.T) {
 		mv.SetString("1")
 		fmt.Println(s1)
 	}
+	s1.Set(3, "3")
+	fmt.Println(s1)
 }

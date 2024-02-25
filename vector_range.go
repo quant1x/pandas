@@ -2,6 +2,7 @@ package pandas
 
 import (
 	"gitee.com/quant1x/gox/api"
+	"gitee.com/quant1x/num"
 	"reflect"
 	"slices"
 )
@@ -28,6 +29,11 @@ func (this vector[T]) IndexOf(index int, opt ...any) any {
 
 }
 
+func (this vector[T]) Set(index int, v any) {
+	tmp := num.AnyToGeneric[T](v)
+	this[index] = tmp
+}
+
 func (this vector[T]) Subset(start, end int, opt ...any) Series {
 	// 默认不copy
 	var __optCopy = false
@@ -39,13 +45,11 @@ func (this vector[T]) Subset(start, end int, opt ...any) Series {
 	}
 	values := []T(this)
 	rows := this.Len()
-	vvs := values[start:end]
+	vs := values[start:end]
 	if __optCopy && rows > 0 {
-		vvs = slices.Clone(vvs)
+		vs = slices.Clone(vs)
 	}
-	var d Series
-	d = vector[T](vvs)
-	return d
+	return vector[T](vs)
 }
 
 func (this vector[T]) Select(r api.ScopeLimit) Series {

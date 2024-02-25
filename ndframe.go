@@ -229,6 +229,14 @@ func (this *NDFrame) IndexOf(index int, opt ...any) any {
 	return v
 }
 
+func (this *NDFrame) Set(index int, v any) {
+	s, ok := this.asSeries()
+	if !ok {
+		panic(num.TypeError(this.data))
+	}
+	s.Set(index, v)
+}
+
 func (this *NDFrame) Subset(start, end int, opt ...any) Series {
 	s, ok := this.asSeries()
 	if !ok {

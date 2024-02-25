@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gitee.com/quant1x/num"
 	"reflect"
+	"slices"
 	"strings"
 )
 
@@ -105,6 +106,11 @@ func (this vector[T]) Empty(tv ...Type) Series {
 }
 
 func (this vector[T]) Copy() Series {
+	tmp := slices.Clone(this)
+	return tmp
+}
+
+func (this vector[T]) v1Copy() Series {
 	vlen := this.Len()
 	return this.Subset(0, vlen, true)
 }

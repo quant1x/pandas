@@ -87,6 +87,8 @@ type Series interface {
 	Records(round ...bool) []string
 	// IndexOf 取一条记录, index<0时, 从后往前取值
 	IndexOf(index int, opt ...any) any
+	// Set 赋值
+	Set(index int, v any)
 	// Subset 获取子集
 	Subset(start, end int, opt ...any) Series
 	// Repeat elements of an array.
