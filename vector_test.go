@@ -3,10 +3,32 @@ package pandas
 import (
 	"fmt"
 	"gitee.com/quant1x/num"
+	"math/rand"
 	"reflect"
+	"sync"
 	"testing"
 	"unsafe"
 )
+
+const (
+	benchAlignLength  = 5000
+	benchAlignInitNum = 5000
+)
+
+var (
+	testDataOnce    sync.Once
+	testDataFloat32 []float32
+	testDataFloat64 []float64
+)
+
+func initTestData() {
+	testDataFloat32 = make([]float32, benchAlignInitNum)
+	testDataFloat64 = make([]float64, benchAlignInitNum)
+	for i := 0; i < benchAlignInitNum; i++ {
+		testDataFloat32[i] = rand.Float32()
+		testDataFloat64[i] = rand.Float64()
+	}
+}
 
 func TestVectorV1(t *testing.T) {
 	f1 := []float64{1, 2, 3, 4, 5}
