@@ -92,7 +92,6 @@ func (w ExponentialMovingWindow) adjustedMean(data Series, alpha num.DType, igno
 
 	alpha = 1 - alpha
 	for t := 1; t < len(values); t++ {
-
 		w := alpha*weight + 1
 		x := values[t]
 		if num.DTypeIsNaN(x) {
