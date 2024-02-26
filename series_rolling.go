@@ -160,10 +160,47 @@ func (r RollingAndExpandingMixin) v2Aggregation(f func(S Series) any) Series {
 
 // Max 最大值
 func (r RollingAndExpandingMixin) Max() Series {
+	return r.v2Max()
+}
+
+func (r RollingAndExpandingMixin) v1Max() Series {
 	s := r.Aggregation(func(S Series) any {
 		return S.Max()
 	})
 	return s
+}
+
+func (r RollingAndExpandingMixin) v2Max() Series {
+	x := r.Series.Values()
+	switch vs := x.(type) {
+	case []int32:
+		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...int32) int32 {
+			return num.Max2(values)
+		})
+		return SliceToSeries(d)
+	case []int64:
+		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...int64) int64 {
+			return num.Max2(values)
+		})
+		return SliceToSeries(d)
+	case []float32:
+		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...float32) float32 {
+			return num.Max2(values)
+		})
+		return SliceToSeries(d)
+	case []float64:
+		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...float64) float64 {
+			return num.Max2(values)
+		})
+		return SliceToSeries(d)
+	case []string:
+		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...string) string {
+			return num.Max2(values)
+		})
+		return SliceToSeries(d)
+	}
+
+	panic(num.ErrUnsupportedType)
 }
 
 // Min 最小值
