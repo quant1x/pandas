@@ -14,7 +14,7 @@ func (this DataFrame) Remove(p api.ScopeLimit) DataFrame {
 	columns := []Series{}
 	for i := range this.columns {
 		ht := this.columns[i].Subset(0, start, true)
-		tail := this.columns[i].Subset(end+1, rowLen).Values()
+		tail := this.columns[i].Subset(end+1, rowLen, false).Values()
 		ht.Append(tail)
 		columns = append(columns, ht)
 	}

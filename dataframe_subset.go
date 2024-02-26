@@ -12,7 +12,7 @@ func (this DataFrame) Subset(start, end int) DataFrame {
 	}
 	columns := make([]Series, this.ncols)
 	for i, column := range this.columns {
-		s := column.Subset(start, end)
+		s := column.Subset(start, end, false)
 		columns[i] = s
 	}
 	nrows, ncols, err := checkColumnsDimensions(columns...)
