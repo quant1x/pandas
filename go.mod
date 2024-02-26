@@ -4,7 +4,7 @@ go 1.21.5
 
 require (
 	gitee.com/quant1x/gox v1.20.1
-	gitee.com/quant1x/num v0.1.5
+	gitee.com/quant1x/num v0.1.6
 	github.com/tealeg/xlsx/v3 v3.3.5
 )
 
