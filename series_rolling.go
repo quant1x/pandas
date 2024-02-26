@@ -197,14 +197,40 @@ func (r RollingAndExpandingMixin) Mean() (s Series) {
 }
 
 func (r RollingAndExpandingMixin) Std() Series {
-	//s := r.Series.Empty()
-	//for _, block := range r.GetBlocks() {
-	//	s = s.Append(block.Std())
-	//}
-	//return s
+	return r.v2Std()
+}
+
+func (r RollingAndExpandingMixin) v1Std() Series {
 	return r.Aggregation(func(S Series) any {
 		return S.Std()
 	})
+}
+
+func (r RollingAndExpandingMixin) v2Std() Series {
+	x := r.Series.Values()
+	switch vs := x.(type) {
+	case []int32:
+		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...int32) int32 {
+			return num.Std(values)
+		})
+		return SliceToSeries(d)
+	case []int64:
+		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...int64) int64 {
+			return num.Std(values)
+		})
+		return SliceToSeries(d)
+	case []float32:
+		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...float32) float32 {
+			return num.Std(values)
+		})
+		return SliceToSeries(d)
+	case []float64:
+		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...float64) float64 {
+			return num.Std(values)
+		})
+		return SliceToSeries(d)
+	}
+	panic(num.ErrUnsupportedType)
 }
 
 func (r RollingAndExpandingMixin) Sum() Series {

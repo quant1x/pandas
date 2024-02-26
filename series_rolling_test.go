@@ -258,3 +258,34 @@ func BenchmarkRollingAndExpandingMixin_Sum_v3(b *testing.B) {
 		s.Rolling(rollingAndExpandingMixinPeriod).v3Sum()
 	}
 }
+
+func BenchmarkRollingAndExpandingMixin_Std_init(b *testing.B) {
+	testDataOnce.Do(initTestData)
+}
+
+func BenchmarkRollingAndExpandingMixin_Std_release(b *testing.B) {
+	testDataOnce.Do(initTestData)
+	f64s := slices.Clone(testDataFloat64)
+	s := SliceToSeries(f64s)
+	for i := 0; i < b.N; i++ {
+		s.Rolling(rollingAndExpandingMixinPeriod).Std()
+	}
+}
+
+func BenchmarkRollingAndExpandingMixin_Std_v1(b *testing.B) {
+	testDataOnce.Do(initTestData)
+	f64s := slices.Clone(testDataFloat64)
+	s := SliceToSeries(f64s)
+	for i := 0; i < b.N; i++ {
+		s.Rolling(rollingAndExpandingMixinPeriod).v1Std()
+	}
+}
+
+func BenchmarkRollingAndExpandingMixin_Std_v2(b *testing.B) {
+	testDataOnce.Do(initTestData)
+	f64s := slices.Clone(testDataFloat64)
+	s := SliceToSeries(f64s)
+	for i := 0; i < b.N; i++ {
+		s.Rolling(rollingAndExpandingMixinPeriod).v2Std()
+	}
+}
