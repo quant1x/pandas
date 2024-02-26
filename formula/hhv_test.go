@@ -4,6 +4,7 @@ import (
 	"gitee.com/quant1x/num"
 	"gitee.com/quant1x/num/labs"
 	"gitee.com/quant1x/pandas"
+	"slices"
 	"testing"
 )
 
@@ -36,5 +37,36 @@ func TestHHV(t *testing.T) {
 				t.Errorf("HHV() = %v, want %v", got, tt.want)
 			}
 		})
+	}
+}
+
+func BenchmarkHHV_init(b *testing.B) {
+	testDataOnce.Do(initTestData)
+}
+
+func BenchmarkHHV_release(b *testing.B) {
+	testDataOnce.Do(initTestData)
+	f64s := slices.Clone(testDataFloat64)
+	s := pandas.SliceToSeries(f64s)
+	for i := 0; i < b.N; i++ {
+		HHV(s, 10)
+	}
+}
+
+func BenchmarkHHV_v1(b *testing.B) {
+	testDataOnce.Do(initTestData)
+	f64s := slices.Clone(testDataFloat64)
+	s := pandas.SliceToSeries(f64s)
+	for i := 0; i < b.N; i++ {
+		v1HHV(s, 10)
+	}
+}
+
+func BenchmarkHHV_v2(b *testing.B) {
+	testDataOnce.Do(initTestData)
+	f64s := slices.Clone(testDataFloat64)
+	s := pandas.SliceToSeries(f64s)
+	for i := 0; i < b.N; i++ {
+		v2HHV(s, 10)
 	}
 }
