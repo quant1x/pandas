@@ -104,6 +104,16 @@ func TestRollingAndExpandingMixin_Count(t *testing.T) {
 		wantS  Series
 	}{
 		{
+			name: "DType",
+			fields: fields{
+				Window: num.Window[num.DType]{
+					V: []num.DType{2, 2, 2},
+				},
+				Series: ToSeries[num.DType](1, 2, 3),
+			},
+			wantS: ToSeries[num.DType](num.NaN(), 2, 2),
+		},
+		{
 			name: "float32",
 			fields: fields{
 				Window: num.Window[num.DType]{
@@ -111,7 +121,17 @@ func TestRollingAndExpandingMixin_Count(t *testing.T) {
 				},
 				Series: ToSeries[float32](1, 2, 3),
 			},
-			wantS: ToSeries[num.DType](num.Float64NaN(), 2, 2),
+			wantS: ToSeries[float32](num.Float32NaN(), 2, 2),
+		},
+		{
+			name: "float64",
+			fields: fields{
+				Window: num.Window[num.DType]{
+					V: []num.DType{2, 2, 2},
+				},
+				Series: ToSeries[float64](1, 2, 3),
+			},
+			wantS: ToSeries[float64](num.Float64NaN(), 2, 2),
 		},
 	}
 	for _, tt := range tests {
@@ -390,5 +410,36 @@ func BenchmarkRollingAndExpandingMixin_Max_v2(b *testing.B) {
 	s := SliceToSeries(f64s)
 	for i := 0; i < b.N; i++ {
 		s.Rolling(rollingAndExpandingMixinPeriod).v2Max()
+	}
+}
+
+func BenchmarkRollingAndExpandingMixin_Count_init(b *testing.B) {
+	testDataOnce.Do(initTestData)
+}
+
+func BenchmarkRollingAndExpandingMixin_Count_release(b *testing.B) {
+	testDataOnce.Do(initTestData)
+	f64s := slices.Clone(testDataFloat64)
+	s := SliceToSeries(f64s)
+	for i := 0; i < b.N; i++ {
+		s.Rolling(rollingAndExpandingMixinPeriod).Count()
+	}
+}
+
+func BenchmarkRollingAndExpandingMixin_Count_v1(b *testing.B) {
+	testDataOnce.Do(initTestData)
+	f64s := slices.Clone(testDataFloat64)
+	s := SliceToSeries(f64s)
+	for i := 0; i < b.N; i++ {
+		s.Rolling(rollingAndExpandingMixinPeriod).v1Count()
+	}
+}
+
+func BenchmarkRollingAndExpandingMixin_Count_v2(b *testing.B) {
+	testDataOnce.Do(initTestData)
+	f64s := slices.Clone(testDataFloat64)
+	s := SliceToSeries(f64s)
+	for i := 0; i < b.N; i++ {
+		s.Rolling(rollingAndExpandingMixinPeriod).v2Count()
 	}
 }

@@ -102,11 +102,63 @@ func (r RollingAndExpandingMixin) Apply(f func(S Series, N num.DType) num.DType)
 }
 
 func (r RollingAndExpandingMixin) Count() Series {
+	return r.v2Count()
+}
+
+func (r RollingAndExpandingMixin) v1Count() Series {
 	s := r.Apply(func(S Series, N num.DType) num.DType {
 		bs := S.Bools()
 		return num.DType(num.Count(bs))
 	})
 	return s
+}
+
+func (r RollingAndExpandingMixin) v2Count() Series {
+	x := r.Series.Values()
+	switch vs := x.(type) {
+	case []int32:
+		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...int32) int32 {
+			return int32(num.Count(values))
+		})
+		return SliceToSeries(d)
+	case []int64:
+		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...int64) int64 {
+			return int64(num.Count(values))
+		})
+		return SliceToSeries(d)
+	case []float32:
+		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...float32) float32 {
+			return float32(num.Count(values))
+		})
+		return SliceToSeries(d)
+	case []float64:
+		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...float64) float64 {
+			return float64(num.Count(values))
+		})
+		return SliceToSeries(d)
+	case []bool:
+		length := len(vs)
+		periods := num.Periods{Array: r.Window.V, N: r.Window.C}
+		array := make([]num.DType, length)
+		defaultValue := num.TypeDefault[num.DType]()
+		for i := 0; i < length; i++ {
+			n, ok := periods.At(i)
+			if !ok {
+				array[i] = defaultValue
+				continue
+			}
+			shift := int(n)
+			offset := i + 1
+			start := offset - shift
+			end := offset
+			block := vs[start:end]
+			result := num.Count(block)
+			array[i] = num.DType(result)
+		}
+		return SliceToSeries(array)
+	}
+
+	panic(num.ErrUnsupportedType)
 }
 
 // Aggregation 接受一个聚合回调
