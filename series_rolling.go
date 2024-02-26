@@ -4,13 +4,12 @@ import "gitee.com/quant1x/num"
 
 // RollingAndExpandingMixin 滚动和扩展静态横切
 type RollingAndExpandingMixin struct {
-	//Window []num.DType
 	Window num.Window[num.DType]
 	Series Series
 }
 
 // GetBlocks series分块
-func (r RollingAndExpandingMixin) GetBlocks() (blocks []Series) {
+func (r RollingAndExpandingMixin) v1GetBlocks() (blocks []Series) {
 	for i := 0; i < r.Series.Len(); i++ {
 		//N := r.Window[i]
 		N := r.Window.At(i)
@@ -27,8 +26,48 @@ func (r RollingAndExpandingMixin) GetBlocks() (blocks []Series) {
 	return
 }
 
+func (r RollingAndExpandingMixin) GetBlocks() (blocks []Series) {
+	blocks = make([]Series, r.Series.Len())
+	for i := 0; i < r.Series.Len(); i++ {
+		N := r.Window.At(i)
+		if num.DTypeIsNaN(N) || int(N) > i+1 {
+			blocks[i] = r.Series.Empty()
+			continue
+		}
+		window := int(N)
+		start := i + 1 - window
+		end := i + 1
+		blocks[i] = r.Series.Subset(start, end, false)
+	}
+
+	return
+}
+
+//go:noinline
+func (r RollingAndExpandingMixin) block(index int) Series {
+	N := r.Window.At(index)
+	if num.DTypeIsNaN(N) || int(N) > index+1 {
+		return r.Series.Empty()
+	}
+	window := int(N)
+	start := index + 1 - window
+	end := index + 1
+	return r.Series.Subset(start, end, false)
+}
+
+func (r RollingAndExpandingMixin) v1block(index int) Series {
+	N := r.Window.At(index)
+	if num.DTypeIsNaN(N) || int(N) > index+1 {
+		return r.Series.Empty()
+	}
+	window := int(N)
+	start := index + 1 - window
+	end := index + 1
+	return r.Series.Subset(start, end, false)
+}
+
 // Apply 接受一个返回DType计算类回调函数
-func (r RollingAndExpandingMixin) Apply(f func(S Series, N num.DType) num.DType) (s Series) {
+func (r RollingAndExpandingMixin) v1Apply(f func(S Series, N num.DType) num.DType) (s Series) {
 	values := make([]num.DType, r.Series.Len())
 	for i, block := range r.GetBlocks() {
 		if block.Len() == 0 {
@@ -45,23 +84,24 @@ func (r RollingAndExpandingMixin) Apply(f func(S Series, N num.DType) num.DType)
 	return
 }
 
+func (r RollingAndExpandingMixin) Apply(f func(S Series, N num.DType) num.DType) (s Series) {
+	length := r.Series.Len()
+	values := make([]num.DType, length)
+	for i := 0; i < length; i++ {
+		block := r.block(i)
+		if block.Len() == 0 {
+			values[i] = num.NaN()
+			continue
+		}
+		N := r.Window.At(i)
+		v := f(block, N)
+		values[i] = v
+	}
+	s = SeriesWithName(r.Series.Name(), values)
+	return
+}
+
 func (r RollingAndExpandingMixin) Count() Series {
-	//if r.Series.Type() != SERIES_TYPE_BOOL {
-	//	panic("不支持非bool序列")
-	//}
-	//values := make([]num.DType, r.Series.Len())
-	//for i, block := range r.GetBlocks() {
-	//	if block.Len() == 0 {
-	//		values[i] = 0
-	//		continue
-	//	}
-	//	bs := block.Values().([]bool)
-	//	values[i] = num.DType(num.Count(bs))
-	//}
-	//s = r.Series.Empty(SERIES_TYPE_DTYPE)
-	//s.Rename(r.Series.Name())
-	//s = s.Append(values)
-	//return
 	s := r.Apply(func(S Series, N num.DType) num.DType {
 		bs := S.Bools()
 		return num.DType(num.Count(bs))
@@ -71,6 +111,23 @@ func (r RollingAndExpandingMixin) Count() Series {
 
 // Aggregation 接受一个聚合回调
 func (r RollingAndExpandingMixin) Aggregation(f func(S Series) any) Series {
+	s := r.Series.Copy()
+	length := r.Series.Len()
+	for i := 0; i < length; i++ {
+		block := r.block(i)
+		var value any
+		if block.Len() == 0 {
+			value = block.NaN()
+		} else {
+			value = f(block)
+		}
+		s.Set(i, value)
+	}
+	return s
+}
+
+// Aggregation 接受一个聚合回调
+func (r RollingAndExpandingMixin) v1Aggregation(f func(S Series) any) Series {
 	s := r.Series.Empty()
 	for _, block := range r.GetBlocks() {
 		var value any
@@ -80,6 +137,34 @@ func (r RollingAndExpandingMixin) Aggregation(f func(S Series) any) Series {
 			value = f(block)
 		}
 		s = s.Append(value)
+	}
+	return s
+}
+
+// Aggregation 接受一个聚合回调
+func (r RollingAndExpandingMixin) v2Aggregation(f func(S Series) any) Series {
+	//s := r.Series.Empty()
+	//for _, block := range r.GetBlocks() {
+	//	var value any
+	//	if block.Len() == 0 {
+	//		value = block.NaN()
+	//	} else {
+	//		value = f(block)
+	//	}
+	//	s = s.Append(value)
+	//}
+	//return s
+	s := r.Series.Empty()
+	for i := 0; i < r.Series.Len(); i++ {
+		N := r.Window.At(i)
+		if num.DTypeIsNaN(N) || int(N) > i+1 {
+			s = s.Append(r.Series.NaN())
+			continue
+		}
+		window := int(N)
+		start := i + 1 - window
+		end := i + 1
+		s = s.Append(f(r.Series.Subset(start, end, false)))
 	}
 	return s
 }
@@ -123,15 +208,55 @@ func (r RollingAndExpandingMixin) Std() Series {
 }
 
 func (r RollingAndExpandingMixin) Sum() Series {
-	//var d []num.DType
-	//for _, block := range r.GetBlocks() {
-	//	d = append(d, block.Sum())
-	//}
-	//s := r.Series.Empty(SERIES_TYPE_DTYPE)
-	//s.Rename(r.Series.Name())
-	//s = s.Append(d)
-	//return s
+	return r.v3Sum()
+}
+
+func (r RollingAndExpandingMixin) v1Sum() Series {
 	return r.Apply(func(S Series, N num.DType) num.DType {
 		return S.Sum()
 	})
+}
+
+func (r RollingAndExpandingMixin) v2Sum() Series {
+	length := r.Series.Len()
+	values := make([]num.DType, length)
+	for i := 0; i < length; i++ {
+		block := r.block(i)
+		if block.Len() == 0 {
+			values[i] = num.NaN()
+			continue
+		}
+		//N := r.Window.At(i)
+		v := num.Sum(block.DTypes())
+		values[i] = v
+	}
+	s := SeriesWithName(r.Series.Name(), values)
+	return s
+}
+
+func (r RollingAndExpandingMixin) v3Sum() Series {
+	x := r.Series.Values()
+	switch vs := x.(type) {
+	case []int32:
+		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...int32) int32 {
+			return num.Sum(values)
+		})
+		return SliceToSeries(d)
+	case []int64:
+		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...int64) int64 {
+			return num.Sum(values)
+		})
+		return SliceToSeries(d)
+	case []float32:
+		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...float32) float32 {
+			return num.Sum(values)
+		})
+		return SliceToSeries(d)
+	case []float64:
+		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...float64) float64 {
+			return num.Sum(values)
+		})
+		return SliceToSeries(d)
+	}
+	panic(num.ErrUnsupportedType)
 }

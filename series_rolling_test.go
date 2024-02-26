@@ -3,6 +3,7 @@ package pandas
 import (
 	"gitee.com/quant1x/num"
 	"gitee.com/quant1x/num/labs"
+	"slices"
 	"testing"
 )
 
@@ -211,5 +212,49 @@ func TestRollingAndExpandingMixin_Mean(t *testing.T) {
 				t.Errorf("Mean() = %v, want %v", got, tt.want)
 			}
 		})
+	}
+}
+
+const (
+	rollingAndExpandingMixinPeriod = 5
+)
+
+func BenchmarkRollingAndExpandingMixin_Sum_init(b *testing.B) {
+	testDataOnce.Do(initTestData)
+}
+
+func BenchmarkRollingAndExpandingMixin_Sum_release(b *testing.B) {
+	testDataOnce.Do(initTestData)
+	f64s := slices.Clone(testDataFloat64)
+	s := SliceToSeries(f64s)
+	for i := 0; i < b.N; i++ {
+		s.Rolling(rollingAndExpandingMixinPeriod).Sum()
+	}
+}
+
+func BenchmarkRollingAndExpandingMixin_Sum_v1(b *testing.B) {
+	testDataOnce.Do(initTestData)
+	f64s := slices.Clone(testDataFloat64)
+	s := SliceToSeries(f64s)
+	for i := 0; i < b.N; i++ {
+		s.Rolling(rollingAndExpandingMixinPeriod).v1Sum()
+	}
+}
+
+func BenchmarkRollingAndExpandingMixin_Sum_v2(b *testing.B) {
+	testDataOnce.Do(initTestData)
+	f64s := slices.Clone(testDataFloat64)
+	s := SliceToSeries(f64s)
+	for i := 0; i < b.N; i++ {
+		s.Rolling(rollingAndExpandingMixinPeriod).v2Sum()
+	}
+}
+
+func BenchmarkRollingAndExpandingMixin_Sum_v3(b *testing.B) {
+	testDataOnce.Do(initTestData)
+	f64s := slices.Clone(testDataFloat64)
+	s := SliceToSeries(f64s)
+	for i := 0; i < b.N; i++ {
+		s.Rolling(rollingAndExpandingMixinPeriod).v3Sum()
 	}
 }
