@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gitee.com/quant1x/num"
 	"gitee.com/quant1x/pandas"
+	"slices"
 	"testing"
 )
 
@@ -40,20 +41,62 @@ func TestMA(t *testing.T) {
 	fmt.Println(r2)
 }
 
+func BenchmarkMA_init(b *testing.B) {
+	testDataOnce.Do(initTestData)
+}
+
 func BenchmarkMA_release(b *testing.B) {
+	testDataOnce.Do(initTestData)
+	f64s := slices.Clone(testDataFloat64)
+	s := pandas.SliceToSeries(f64s)
 	for i := 0; i < b.N; i++ {
-		x := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
-		s := pandas.Vector(x)
 		r := MA(s, 5)
 		_ = r
 	}
 }
 
-func BenchmarkMA_v3Rolling(b *testing.B) {
+func BenchmarkMA_v1(b *testing.B) {
+	testDataOnce.Do(initTestData)
+	f64s := slices.Clone(testDataFloat64)
+	s := pandas.SliceToSeries(f64s)
 	for i := 0; i < b.N; i++ {
-		x := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
-		num.RollingV1(x, 5, func(N num.DType, values ...float64) float64 {
+		r := v1MA(s, 5)
+		_ = r
+	}
+}
+
+func BenchmarkMA_v2(b *testing.B) {
+	testDataOnce.Do(initTestData)
+	f64s := slices.Clone(testDataFloat64)
+	s := pandas.SliceToSeries(f64s)
+	for i := 0; i < b.N; i++ {
+		r := v2MA(s, 5)
+		_ = r
+	}
+}
+
+func BenchmarkMA_v3Rolling_raw(b *testing.B) {
+	testDataOnce.Do(initTestData)
+	f64s := slices.Clone(testDataFloat64)
+	s := pandas.SliceToSeries(f64s)
+	for i := 0; i < b.N; i++ {
+		d := num.RollingV1(s.DTypes(), 5, func(N num.DType, values ...float64) float64 {
 			return num.Mean2(values)
 		})
+		s := pandas.SliceToSeries(d)
+		_ = s
+	}
+}
+
+func BenchmarkMA_v3Rolling(b *testing.B) {
+	testDataOnce.Do(initTestData)
+	f64s := slices.Clone(testDataFloat64)
+	s := pandas.SliceToSeries(f64s)
+	for i := 0; i < b.N; i++ {
+		d := num.RollingV1(s.DTypes(), 5, func(N num.DType, values ...float64) float64 {
+			return num.Mean2(values)
+		})
+		r := pandas.SliceToSeries(d)
+		_ = r
 	}
 }
