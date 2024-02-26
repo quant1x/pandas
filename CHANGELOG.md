@@ -3,6 +3,33 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.3.8] - 2024-02-26
+### Changed
+- 更新num版本.
+- 优化cross函数.
+- 优化ema函数.
+- 优化hhv函数.
+- 优化llv函数.
+- 优化ma函数.
+- 优化Ref函数.
+- 调整sma各阶段实现函数的名称.
+- 优化std函数.
+- 优化sum函数.
+- 优化series子集的处理方式.
+- 优化RollingAndExpandingMixin的Count函数.
+- 优化RollingAndExpandingMixin的Max函数.
+- 优化RollingAndExpandingMixin的Min函数.
+- 优化RollingAndExpandingMixin的Mean函数.
+- 优化RollingAndExpandingMixin的Std函数.
+- 优化RollingAndExpandingMixin的Sum函数.
+- 优化Series的Sum方法.
+- 优化Series的Rolling函数.
+- 增加测试数据.
+- 调整EWM数据为clone.
+- 删除多余的空白行.
+- 调整copy内部为clone, 增加按照索引赋值的函数.
+- 增加测试数据.
+
 ## [1.3.7] - 2024-02-24
 ### Changed
 - 适配num新版本0.1.5.
@@ -706,7 +733,8 @@ All notable changes to this project will be documented in this file.
 - 引入github.com/WinPooh32/series代码.
 - Initial commit.
 
-[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.3.7...HEAD
+[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.3.8...HEAD
+[1.3.8]: https://gitee.com/quant1x/pandas/compare/v1.3.7...v1.3.8
 [1.3.7]: https://gitee.com/quant1x/pandas/compare/v1.3.6...v1.3.7
 [1.3.6]: https://gitee.com/quant1x/pandas/compare/v1.3.5...v1.3.6
 [1.3.5]: https://gitee.com/quant1x/pandas/compare/v1.3.4...v1.3.5
