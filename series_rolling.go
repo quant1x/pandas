@@ -168,9 +168,46 @@ func (r RollingAndExpandingMixin) Max() Series {
 
 // Min 最小值
 func (r RollingAndExpandingMixin) Min() Series {
+	return r.v2Min()
+}
+
+func (r RollingAndExpandingMixin) v1Min() Series {
 	return r.Aggregation(func(S Series) any {
 		return S.Min()
 	})
+}
+
+func (r RollingAndExpandingMixin) v2Min() Series {
+	x := r.Series.Values()
+	switch vs := x.(type) {
+	case []int32:
+		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...int32) int32 {
+			return num.Min2(values)
+		})
+		return SliceToSeries(d)
+	case []int64:
+		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...int64) int64 {
+			return num.Min2(values)
+		})
+		return SliceToSeries(d)
+	case []float32:
+		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...float32) float32 {
+			return num.Min2(values)
+		})
+		return SliceToSeries(d)
+	case []float64:
+		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...float64) float64 {
+			return num.Min2(values)
+		})
+		return SliceToSeries(d)
+	case []string:
+		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...string) string {
+			return num.Min2(values)
+		})
+		return SliceToSeries(d)
+	}
+
+	panic(num.ErrUnsupportedType)
 }
 
 // Mean returns the rolling mean.
@@ -195,22 +232,22 @@ func (r RollingAndExpandingMixin) v2Mean() Series {
 	switch vs := x.(type) {
 	case []int32:
 		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...int32) int32 {
-			return num.Mean(values)
+			return num.Mean2(values)
 		})
 		return SliceToSeries(d)
 	case []int64:
 		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...int64) int64 {
-			return num.Mean(values)
+			return num.Mean2(values)
 		})
 		return SliceToSeries(d)
 	case []float32:
 		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...float32) float32 {
-			return num.Mean(values)
+			return num.Mean2(values)
 		})
 		return SliceToSeries(d)
 	case []float64:
 		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...float64) float64 {
-			return num.Mean(values)
+			return num.Mean2(values)
 		})
 		return SliceToSeries(d)
 	}
