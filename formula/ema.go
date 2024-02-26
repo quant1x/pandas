@@ -7,9 +7,14 @@ import (
 )
 
 // EMA 指数移动平均,为了精度 S>4*N  EMA至少需要120周期
-// alpha=2/(span+1)
-// TODO:这个版本是对的, 通达信EMA居然实现了真的序列, 那为啥SMA不是呢?!
+//
+//	alpha=2/(span+1)
 func EMA(S pandas.Series, N any) pandas.Series {
+	return v2EMA(S, N)
+}
+
+// TODO:这个版本是对的, 通达信EMA居然实现了真的序列, 那为啥SMA不是呢?!
+func v1EMA(S pandas.Series, N any) pandas.Series {
 	var X []num.DType
 	switch v := N.(type) {
 	case int:
@@ -34,8 +39,20 @@ func EMA(S pandas.Series, N any) pandas.Series {
 	return x
 }
 
-// EMA_v2 通达信公式管理器上提示, EMA(S, N) 相当于SMA(S, N + 1, M=2), 骗子, 根本不对
-func EMA_v2(S pandas.Series, N any) any {
+func v2EMA(S pandas.Series, N any) pandas.Series {
+	w := num.Any2Window[num.DType](N)
+	x := S.EWM(pandas.EW{Span: num.NaN(), Callback: func(idx int) num.DType {
+		j := w.At(idx)
+		if j == 0 {
+			j = 1
+		}
+		return num.DType(2) / (j + 1)
+	}, Adjust: false}).Mean()
+	return x
+}
+
+// errorV2EMA 通达信公式管理器上提示, EMA(S, N) 相当于SMA(S, N + 1, M=2), 骗子, 根本不对
+func errorV2EMA(S pandas.Series, N any) any {
 	M := 2
 	var X float32
 	switch v := N.(type) {
@@ -52,8 +69,8 @@ func EMA_v2(S pandas.Series, N any) any {
 	return x
 }
 
-// EMA_v0 仿SMA实现, 错误
-func EMA_v0(S pandas.Series, N any) any {
+// errorV3EMA 仿SMA实现, 错误
+func errorV3EMA(S pandas.Series, N any) any {
 	var X float32
 	switch v := N.(type) {
 	case int:
@@ -69,8 +86,8 @@ func EMA_v0(S pandas.Series, N any) any {
 	return x
 }
 
-// EMA_v1 Rolling(N), 每个都取最后一个, 错误
-func EMA_v1(S pandas.Series, N any) any {
+// errorV4EMA Rolling(N), 每个都取最后一个, 错误
+func errorV4EMA(S pandas.Series, N any) any {
 	x := S.Rolling(N).Apply(func(S pandas.Series, N num.DType) num.DType {
 		r := S.EWM(pandas.EW{Span: N, Adjust: false}).Mean().DTypes()
 		if len(r) == 0 {
@@ -79,7 +96,6 @@ func EMA_v1(S pandas.Series, N any) any {
 		return r[len(r)-1]
 	}).Values()
 	return x
-
 }
 
 // AlphaOfEMA 根据周期是计算α值

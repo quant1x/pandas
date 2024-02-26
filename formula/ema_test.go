@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gitee.com/quant1x/num/labs"
 	"gitee.com/quant1x/pandas"
+	"slices"
 	"testing"
 )
 
@@ -55,5 +56,36 @@ func TestEMA(t *testing.T) {
 				t.Errorf("EMA() = %v, want %v", got, tt.want)
 			}
 		})
+	}
+}
+
+func BenchmarkEMA_init(b *testing.B) {
+	testDataOnce.Do(initTestData)
+}
+
+func BenchmarkEMA_release(b *testing.B) {
+	testDataOnce.Do(initTestData)
+	f64s := slices.Clone(testDataFloat64)
+	s := pandas.SliceToSeries(f64s)
+	for i := 0; i < b.N; i++ {
+		EMA(s, 10)
+	}
+}
+
+func BenchmarkEMA_v1(b *testing.B) {
+	testDataOnce.Do(initTestData)
+	f64s := slices.Clone(testDataFloat64)
+	s := pandas.SliceToSeries(f64s)
+	for i := 0; i < b.N; i++ {
+		v1EMA(s, 10)
+	}
+}
+
+func BenchmarkEMA_v2(b *testing.B) {
+	testDataOnce.Do(initTestData)
+	f64s := slices.Clone(testDataFloat64)
+	s := pandas.SliceToSeries(f64s)
+	for i := 0; i < b.N; i++ {
+		v2EMA(s, 10)
 	}
 }
