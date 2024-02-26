@@ -232,7 +232,7 @@ func (this vector[T]) Sum() num.DType {
 	if this.Len() < 1 {
 		return num.NaN()
 	}
-	values := num.Slice2DType(this.Values())
+	values := this.DTypes()
 	d := num.Sum(values)
-	return num.Any2DType(d)
+	return d
 }
