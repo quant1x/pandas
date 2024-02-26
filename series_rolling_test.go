@@ -192,12 +192,22 @@ func TestRollingAndExpandingMixin_Mean(t *testing.T) {
 		want   Series
 	}{
 		{
-			name: "float64",
+			name: "float32",
 			fields: fields{
 				Window: num.Window[num.DType]{
 					C: 5,
 				},
 				Series: ToSeries[float32](1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+			},
+			want: ToSeries[float32](num.Float32NaN(), num.Float32NaN(), num.Float32NaN(), num.Float32NaN(), 3, 4, 5, 6, 7, 8),
+		},
+		{
+			name: "float64",
+			fields: fields{
+				Window: num.Window[num.DType]{
+					C: 5,
+				},
+				Series: ToSeries[float64](1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
 			},
 			want: ToSeries[float64](num.Float64NaN(), num.Float64NaN(), num.Float64NaN(), num.Float64NaN(), 3, 4, 5, 6, 7, 8),
 		},
@@ -287,5 +297,36 @@ func BenchmarkRollingAndExpandingMixin_Std_v2(b *testing.B) {
 	s := SliceToSeries(f64s)
 	for i := 0; i < b.N; i++ {
 		s.Rolling(rollingAndExpandingMixinPeriod).v2Std()
+	}
+}
+
+func BenchmarkRollingAndExpandingMixin_Mean_init(b *testing.B) {
+	testDataOnce.Do(initTestData)
+}
+
+func BenchmarkRollingAndExpandingMixin_Mean_release(b *testing.B) {
+	testDataOnce.Do(initTestData)
+	f64s := slices.Clone(testDataFloat64)
+	s := SliceToSeries(f64s)
+	for i := 0; i < b.N; i++ {
+		s.Rolling(rollingAndExpandingMixinPeriod).Mean()
+	}
+}
+
+func BenchmarkRollingAndExpandingMixin_Mean_v1(b *testing.B) {
+	testDataOnce.Do(initTestData)
+	f64s := slices.Clone(testDataFloat64)
+	s := SliceToSeries(f64s)
+	for i := 0; i < b.N; i++ {
+		s.Rolling(rollingAndExpandingMixinPeriod).v1Mean()
+	}
+}
+
+func BenchmarkRollingAndExpandingMixin_Mean_v2(b *testing.B) {
+	testDataOnce.Do(initTestData)
+	f64s := slices.Clone(testDataFloat64)
+	s := SliceToSeries(f64s)
+	for i := 0; i < b.N; i++ {
+		s.Rolling(rollingAndExpandingMixinPeriod).v2Mean()
 	}
 }

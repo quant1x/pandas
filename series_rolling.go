@@ -143,17 +143,6 @@ func (r RollingAndExpandingMixin) v1Aggregation(f func(S Series) any) Series {
 
 // Aggregation 接受一个聚合回调
 func (r RollingAndExpandingMixin) v2Aggregation(f func(S Series) any) Series {
-	//s := r.Series.Empty()
-	//for _, block := range r.GetBlocks() {
-	//	var value any
-	//	if block.Len() == 0 {
-	//		value = block.NaN()
-	//	} else {
-	//		value = f(block)
-	//	}
-	//	s = s.Append(value)
-	//}
-	//return s
 	s := r.Series.Empty()
 	for i := 0; i < r.Series.Len(); i++ {
 		N := r.Window.At(i)
@@ -186,6 +175,11 @@ func (r RollingAndExpandingMixin) Min() Series {
 
 // Mean returns the rolling mean.
 func (r RollingAndExpandingMixin) Mean() (s Series) {
+	return r.v2Mean()
+}
+
+// Mean returns the rolling mean.
+func (r RollingAndExpandingMixin) v1Mean() (s Series) {
 	var d []num.DType
 	for _, block := range r.GetBlocks() {
 		d = append(d, block.Mean())
@@ -194,6 +188,33 @@ func (r RollingAndExpandingMixin) Mean() (s Series) {
 	s.Rename(r.Series.Name())
 	s = s.Append(d)
 	return
+}
+
+func (r RollingAndExpandingMixin) v2Mean() Series {
+	x := r.Series.Values()
+	switch vs := x.(type) {
+	case []int32:
+		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...int32) int32 {
+			return num.Mean(values)
+		})
+		return SliceToSeries(d)
+	case []int64:
+		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...int64) int64 {
+			return num.Mean(values)
+		})
+		return SliceToSeries(d)
+	case []float32:
+		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...float32) float32 {
+			return num.Mean(values)
+		})
+		return SliceToSeries(d)
+	case []float64:
+		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...float64) float64 {
+			return num.Mean(values)
+		})
+		return SliceToSeries(d)
+	}
+	panic(num.ErrUnsupportedType)
 }
 
 func (r RollingAndExpandingMixin) Std() Series {
