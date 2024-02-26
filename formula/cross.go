@@ -19,8 +19,8 @@ func CROSS(S1, S2 pandas.Series) pandas.Series {
 func V2CROSS(S1, S2 []num.DType) []bool {
 	r1 := S1
 	r2 := S2
-	r11 := REF2(S1, 1)
-	r12 := REF2(S2, 1)
+	r11 := v2REF(S1, 1)
+	r12 := v2REF(S2, 1)
 
 	b1 := CompareLt(r11, r12)
 	b2 := CompareGt(r1, r2)
