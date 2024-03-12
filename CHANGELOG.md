@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.4.0] - 2024-03-12
+### Changed
+- 更新gox版本及go版本.
+
 ## [1.3.9] - 2024-03-12
 ### Changed
 - 更新num版本, 删除对excel的支持, 精简功能.
@@ -737,7 +741,8 @@ All notable changes to this project will be documented in this file.
 - 引入github.com/WinPooh32/series代码.
 - Initial commit.
 
-[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.3.9...HEAD
+[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.4.0...HEAD
+[1.4.0]: https://gitee.com/quant1x/pandas/compare/v1.3.9...v1.4.0
 [1.3.9]: https://gitee.com/quant1x/pandas/compare/v1.3.8...v1.3.9
 [1.3.8]: https://gitee.com/quant1x/pandas/compare/v1.3.7...v1.3.8
 [1.3.7]: https://gitee.com/quant1x/pandas/compare/v1.3.6...v1.3.7
