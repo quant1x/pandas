@@ -1,7 +1,7 @@
 gitee.com/quant1x/gox v1.20.9 h1:XvfBR7pL0GFsyseTK/iv9by/07KreFtGC47NmCakaY4=
 gitee.com/quant1x/gox v1.20.9/go.mod h1:pOKpVu/ZW8emgPC7KSsVbAXOjSSQm9CxSz24FvnV7ng=
-gitee.com/quant1x/num v0.2.5 h1:yOngKm3IDbAZvO+o5bY58ttysreum+JzqpXPRIhezTU=
-gitee.com/quant1x/num v0.2.5/go.mod h1:36QpF25wRcCIg339BYb+BRhd5BXL2vmeDcR+HMqc5hQ=
+gitee.com/quant1x/num v0.2.6 h1:qwhVS7MQ1y6bG2lJCsXEDysq3EQeBTzOwXJjknShN1U=
+gitee.com/quant1x/num v0.2.6/go.mod h1:36QpF25wRcCIg339BYb+BRhd5BXL2vmeDcR+HMqc5hQ=
 gitee.com/quant1x/pkg v0.2.7 h1:iec/4OXRHS4xEwBGWCzyiTv0PQ9gOPlED55cYhnTxtI=
 gitee.com/quant1x/pkg v0.2.7/go.mod h1:mA7c9xM8jPEqc04vHkd3yxS/OeALIPLUfwjmVvfIC5g=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
