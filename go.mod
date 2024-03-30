@@ -3,7 +3,7 @@ module gitee.com/quant1x/pandas
 go 1.21.8
 
 require (
-	gitee.com/quant1x/gox v1.20.9
+	gitee.com/quant1x/gox v1.21.0
 	gitee.com/quant1x/num v0.2.6
 )
 
