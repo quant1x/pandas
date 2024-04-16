@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.4.5] - 2024-04-16
+### Changed
+- 更新依赖库版本num到0.2.9.
+- 更新依赖库版本num到0.2.8.
+
 ## [1.4.4] - 2024-03-30
 ### Changed
 - 更新依赖库版本.
@@ -757,7 +762,8 @@ All notable changes to this project will be documented in this file.
 - 引入github.com/WinPooh32/series代码.
 - Initial commit.
 
-[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.4.4...HEAD
+[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.4.5...HEAD
+[1.4.5]: https://gitee.com/quant1x/pandas/compare/v1.4.4...v1.4.5
 [1.4.4]: https://gitee.com/quant1x/pandas/compare/v1.4.3...v1.4.4
 [1.4.3]: https://gitee.com/quant1x/pandas/compare/v1.4.2...v1.4.3
 [1.4.2]: https://gitee.com/quant1x/pandas/compare/v1.4.1...v1.4.2
