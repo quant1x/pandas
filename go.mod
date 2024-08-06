@@ -1,13 +1,13 @@
 module gitee.com/quant1x/pandas
 
-go 1.21.8
+go 1.21.12
 
 require (
-	gitee.com/quant1x/gox v1.21.5
-	gitee.com/quant1x/num v0.3.5
+	gitee.com/quant1x/gox v1.21.9
+	gitee.com/quant1x/num v0.3.6
 )
 
 require (
-	gitee.com/quant1x/pkg v0.2.10 // indirect
-	golang.org/x/sys v0.22.0 // indirect
+	gitee.com/quant1x/pkg v0.3.1 // indirect
+	golang.org/x/sys v0.23.0 // indirect
 )
