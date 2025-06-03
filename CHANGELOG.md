@@ -3,9 +3,15 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.5.1] - 2025-06-03
+### Changed
+- 调整测试代码
+- 修复不满足条件时周期计算的bug
+
 ## [1.5.0] - 2025-02-15
 ### Changed
 - 更新依赖库num版本到0.4.0
+- update changelog
 
 ## [1.4.12] - 2024-08-06
 ### Changed
@@ -1271,7 +1277,8 @@ Merge pull request !5 from 王布衣/rolling
 - 优化package引入
 
 
-[Unreleased]: https://gitee.com/quant1x/pandas.git/compare/v1.5.0...HEAD
+[Unreleased]: https://gitee.com/quant1x/pandas.git/compare/v1.5.1...HEAD
+[1.5.1]: https://gitee.com/quant1x/pandas.git/compare/v1.5.0...v1.5.1
 [1.5.0]: https://gitee.com/quant1x/pandas.git/compare/v1.4.12...v1.5.0
 [1.4.12]: https://gitee.com/quant1x/pandas.git/compare/v1.4.11...v1.4.12
 [1.4.11]: https://gitee.com/quant1x/pandas.git/compare/v1.4.10...v1.4.11
