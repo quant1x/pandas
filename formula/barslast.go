@@ -20,11 +20,18 @@ func BARSLAST2(S pandas.Series) []num.DType {
 	x := num.Where(fs, as, bs)
 	M := []num.DType{0}
 	M = append(M, x...)
+	last_true_pos := -1
 	for i := 1; i < len(M); i++ {
-		if int(M[i]) != 0 {
+		current := int(M[i]) != 0
+		if current {
 			M[i] = 0
+			last_true_pos = i
 		} else {
-			M[i] = M[i-1] + 1
+			if last_true_pos >= 0 {
+				M[i] = num.DType(i - last_true_pos)
+			} else {
+				M[i] = -1
+			}
 		}
 	}
 	return M[1:]
