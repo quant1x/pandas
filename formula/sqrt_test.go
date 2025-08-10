@@ -2,8 +2,9 @@ package formula
 
 import (
 	"fmt"
-	"gitee.com/quant1x/pandas"
 	"testing"
+
+	"gitee.com/quant1x/pandas"
 )
 
 func TestSQRT(t *testing.T) {

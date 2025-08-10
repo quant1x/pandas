@@ -2,10 +2,11 @@ package formula
 
 import (
 	"fmt"
-	"gitee.com/quant1x/num/labs"
-	"gitee.com/quant1x/pandas"
 	"slices"
 	"testing"
+
+	"gitee.com/quant1x/num/labs"
+	"gitee.com/quant1x/pandas"
 )
 
 func TestEmaIncr_basic(t *testing.T) {

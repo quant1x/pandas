@@ -1,10 +1,11 @@
 package pandas
 
 import (
-	"gitee.com/quant1x/num"
-	"gitee.com/quant1x/num/labs"
 	"slices"
 	"testing"
+
+	"gitee.com/quant1x/num"
+	"gitee.com/quant1x/num/labs"
 )
 
 func TestRollingAndExpandingMixin_GetBlocks(t *testing.T) {

@@ -2,8 +2,9 @@ package pandas
 
 import (
 	"fmt"
-	"gitee.com/quant1x/num"
 	"testing"
+
+	"gitee.com/quant1x/num"
 )
 
 func TestNDArray_Gt(t *testing.T) {

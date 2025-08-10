@@ -2,9 +2,10 @@ package formula
 
 import (
 	"fmt"
-	"gitee.com/quant1x/pandas"
 	"math"
 	"testing"
+
+	"gitee.com/quant1x/pandas"
 )
 
 func TestMAX(t *testing.T) {

@@ -2,10 +2,11 @@ package pandas
 
 import (
 	"fmt"
-	"gitee.com/quant1x/gox/api"
-	"gitee.com/quant1x/num"
 	"reflect"
 	"strings"
+
+	"gitee.com/quant1x/gox/api"
+	"gitee.com/quant1x/num"
 )
 
 var (

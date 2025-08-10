@@ -2,10 +2,11 @@ package formula
 
 import (
 	"fmt"
-	"gitee.com/quant1x/pandas"
 	"reflect"
 	"testing"
 	"unsafe"
+
+	"gitee.com/quant1x/pandas"
 )
 
 func TestCOUNT(t *testing.T) {

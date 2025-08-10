@@ -2,10 +2,11 @@ package pandas
 
 import (
 	"fmt"
-	"gitee.com/quant1x/gox/api"
-	"gitee.com/quant1x/num"
 	"reflect"
 	"strings"
+
+	"gitee.com/quant1x/gox/api"
+	"gitee.com/quant1x/num"
 )
 
 // Type is a convenience alias that can be used for a more type safe way of

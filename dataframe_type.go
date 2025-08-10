@@ -3,10 +3,11 @@ package pandas
 import (
 	"errors"
 	"fmt"
-	"gitee.com/quant1x/num"
 	"reflect"
 	"strconv"
 	"strings"
+
+	"gitee.com/quant1x/num"
 )
 
 const (

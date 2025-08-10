@@ -2,12 +2,13 @@ package pandas
 
 import (
 	"encoding/csv"
+	"io"
+	"os"
+
 	"gitee.com/quant1x/gox/api"
 	"gitee.com/quant1x/gox/exception"
 	"gitee.com/quant1x/gox/util/homedir"
 	"gitee.com/quant1x/num"
-	"io"
-	"os"
 )
 
 // ReadCSV reads a CSV file from a io.Reader and builds a DataFrame with the

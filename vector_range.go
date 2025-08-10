@@ -1,10 +1,11 @@
 package pandas
 
 import (
-	"gitee.com/quant1x/gox/api"
-	"gitee.com/quant1x/num"
 	"reflect"
 	"slices"
+
+	"gitee.com/quant1x/gox/api"
+	"gitee.com/quant1x/num"
 )
 
 func (this vector[T]) IndexOf(index int, opt ...any) any {

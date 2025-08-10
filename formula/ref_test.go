@@ -2,10 +2,11 @@ package formula
 
 import (
 	"fmt"
+	"testing"
+
 	"gitee.com/quant1x/num"
 	"gitee.com/quant1x/num/labs"
 	"gitee.com/quant1x/pandas"
-	"testing"
 )
 
 func TestREF_basic(t *testing.T) {

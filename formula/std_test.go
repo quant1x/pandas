@@ -2,11 +2,12 @@ package formula
 
 import (
 	"fmt"
+	"slices"
+	"testing"
+
 	"gitee.com/quant1x/num"
 	"gitee.com/quant1x/num/labs"
 	"gitee.com/quant1x/pandas"
-	"slices"
-	"testing"
 )
 
 func TestSTD_basic(t *testing.T) {

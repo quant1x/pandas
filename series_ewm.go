@@ -1,8 +1,9 @@
 package pandas
 
 import (
-	"gitee.com/quant1x/num"
 	"math"
+
+	"gitee.com/quant1x/num"
 )
 
 type AlphaType int

@@ -1,9 +1,10 @@
 package formula
 
 import (
+	"reflect"
+
 	"gitee.com/quant1x/num"
 	"gitee.com/quant1x/pandas"
-	"reflect"
 )
 
 // COUNT 统计S为真的天数
