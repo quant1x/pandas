@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"gitee.com/quant1x/num"
+	"github.com/quant1x/num"
 )
 
 func TestNDArray_Gt(t *testing.T) {

@@ -3,8 +3,8 @@ package pandas
 import (
 	"strings"
 
-	"gitee.com/quant1x/gox/api"
-	"gitee.com/quant1x/num"
+	"github.com/quant1x/num"
+	"github.com/quant1x/x/api"
 )
 
 // NDFrame series多属性封装实现

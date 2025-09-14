@@ -4,8 +4,8 @@ import (
 	"reflect"
 	"slices"
 
-	"gitee.com/quant1x/gox/api"
-	"gitee.com/quant1x/num"
+	"github.com/quant1x/num"
+	"github.com/quant1x/x/api"
 )
 
 func (this vector[T]) IndexOf(index int, opt ...any) any {

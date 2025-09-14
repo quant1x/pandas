@@ -3,7 +3,7 @@ package pandas
 import (
 	"reflect"
 
-	"gitee.com/quant1x/num"
+	"github.com/quant1x/num"
 )
 
 // 赋值

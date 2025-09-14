@@ -1,14 +1,17 @@
-module gitee.com/quant1x/pandas
+module github.com/quant1x/pandas
 
 go 1.25
 
 require (
-	gitee.com/quant1x/gox v1.23.1
-	gitee.com/quant1x/num v0.6.0
+	github.com/quant1x/num v0.7.0
+	github.com/quant1x/x v0.1.13
 )
 
 require (
-	gitee.com/quant1x/pkg v0.7.0 // indirect
-	github.com/petermattis/goid v0.0.0-20250813065127-a731cc31b4fe // indirect
-	golang.org/x/sys v0.35.0 // indirect
+	github.com/gocarina/gocsv v0.0.0-20240520201108-78e41c74b4b1 // indirect
+	github.com/lestrrat-go/strftime v1.1.1 // indirect
+	github.com/pkg/errors v0.9.1 // indirect
+	go.uber.org/multierr v1.11.0 // indirect
+	go.uber.org/zap v1.27.0 // indirect
+	golang.org/x/sys v0.36.0 // indirect
 )

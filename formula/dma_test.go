@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	"gitee.com/quant1x/num"
-	"gitee.com/quant1x/pandas"
+	"github.com/quant1x/num"
+	"github.com/quant1x/pandas"
 )
 
 func TestDMA(t *testing.T) {

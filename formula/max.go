@@ -1,8 +1,8 @@
 package formula
 
 import (
-	"gitee.com/quant1x/num"
-	"gitee.com/quant1x/pandas"
+	"github.com/quant1x/num"
+	"github.com/quant1x/pandas"
 )
 
 // MAX 两个序列横向对比

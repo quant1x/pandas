@@ -1,9 +1,9 @@
 package formula
 
 import (
-	"gitee.com/quant1x/gox/api"
-	"gitee.com/quant1x/num"
-	"gitee.com/quant1x/pandas"
+	"github.com/quant1x/num"
+	"github.com/quant1x/pandas"
+	"github.com/quant1x/x/api"
 )
 
 // LAST LAST(X,A,B):持续存在.

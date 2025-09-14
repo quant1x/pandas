@@ -3,8 +3,8 @@ package formula
 import (
 	"reflect"
 
-	"gitee.com/quant1x/num"
-	"gitee.com/quant1x/pandas"
+	"github.com/quant1x/num"
+	"github.com/quant1x/pandas"
 )
 
 // COUNT 统计S为真的天数

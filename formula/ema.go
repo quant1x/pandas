@@ -1,9 +1,9 @@
 package formula
 
 import (
-	"gitee.com/quant1x/gox/exception"
-	"gitee.com/quant1x/num"
-	"gitee.com/quant1x/pandas"
+	"github.com/quant1x/num"
+	"github.com/quant1x/pandas"
+	"github.com/quant1x/x/exception"
 )
 
 // EMA 指数移动平均,为了精度 S>4*N  EMA至少需要120周期

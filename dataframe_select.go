@@ -3,7 +3,7 @@ package pandas
 import (
 	"fmt"
 
-	"gitee.com/quant1x/num"
+	"github.com/quant1x/num"
 )
 
 // Col returns a copy of the Series with the given column name contained in the DataFrame.

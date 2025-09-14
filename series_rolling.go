@@ -1,6 +1,6 @@
 package pandas
 
-import "gitee.com/quant1x/num"
+import "github.com/quant1x/num"
 
 // RollingAndExpandingMixin 滚动和扩展静态横切
 type RollingAndExpandingMixin struct {

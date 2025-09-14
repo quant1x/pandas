@@ -4,8 +4,8 @@ import (
 	"slices"
 	"testing"
 
-	"gitee.com/quant1x/num"
-	"gitee.com/quant1x/num/labs"
+	"github.com/quant1x/num"
+	"github.com/quant1x/num/labs"
 )
 
 func TestRollingAndExpandingMixin_GetBlocks(t *testing.T) {

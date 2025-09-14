@@ -1,9 +1,9 @@
 package formula
 
 import (
-	"gitee.com/quant1x/gox/exception"
-	"gitee.com/quant1x/num"
-	"gitee.com/quant1x/pandas"
+	"github.com/quant1x/num"
+	"github.com/quant1x/pandas"
+	"github.com/quant1x/x/exception"
 )
 
 // FILTER 过滤连续出现的信号

@@ -746,7 +746,7 @@ All notable changes to this project will be documented in this file.
 * 删除早期的测试代码
 * 删除早期的测试代码
 * 删除tdx和v1版本的dataframe
-* 删除data包, 引入gitee.com/quant1x/data工具包
+* 删除data包, 引入github.com/quant1x/data工具包
 * 更新gox版本
 * 更新gitee脚本, 只做pull相关操作, 方便在github脚本中同步
 * 调整部分函数的判断逻辑

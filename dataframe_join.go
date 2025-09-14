@@ -3,7 +3,7 @@ package pandas
 import (
 	"slices"
 
-	"gitee.com/quant1x/num"
+	"github.com/quant1x/num"
 )
 
 func (this DataFrame) align(ss ...Series) []Series {

@@ -2,7 +2,7 @@
 
 set -e
 
-git remote set-url origin https://gitee.com/quant1x/pandas.git
+git remote set-url origin https://github.com/quant1x/pandas.git
 git checkout master
 git fetch --all
 git pull --all

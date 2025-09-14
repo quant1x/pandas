@@ -5,8 +5,8 @@ import (
 	"reflect"
 	"strings"
 
-	"gitee.com/quant1x/gox/api"
-	"gitee.com/quant1x/num"
+	"github.com/quant1x/num"
+	"github.com/quant1x/x/api"
 )
 
 var (
