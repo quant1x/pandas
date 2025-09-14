@@ -12,7 +12,6 @@ func TestABS(t *testing.T) {
 	s := pandas.NewSeriesWithType(pandas.SERIES_TYPE_FLOAT64, "", d1)
 	fmt.Println(s)
 	s1 := ABS(s)
-	//fmt.Printf("%p\n", s1)
 	fmt.Println(s1)
 	fmt.Println(s)
 }
