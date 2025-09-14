@@ -12,14 +12,4 @@ func TestFILTER(t *testing.T) {
 	fmt.Println(n1)
 	s1 := pandas.SliceToSeries(n1)
 	fmt.Println(FILTER(s1, 5))
-
-	//w := 2
-	//for i := 0; i < len(n1); i++ {
-	//	if n1[i] != 0 {
-	//		for j := i + 1; j < i+1+w; j++ {
-	//			n1[j] = 0
-	//		}
-	//	}
-	//}
-	//fmt.Println(n1)
 }
