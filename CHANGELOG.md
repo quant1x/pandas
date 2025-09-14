@@ -3,9 +3,15 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.6.1] - 2025-09-14
+### Changed
+- 仓库改为github
+- 仓库改为github
+
 ## [1.6.0] - 2025-08-14
 ### Changed
 - go版本最低要求1.25
+- update changelog
 
 ## [1.5.3] - 2025-08-11
 ### Changed
@@ -746,7 +752,7 @@ All notable changes to this project will be documented in this file.
 * 删除早期的测试代码
 * 删除早期的测试代码
 * 删除tdx和v1版本的dataframe
-* 删除data包, 引入github.com/quant1x/data工具包
+* 删除data包, 引入gitee.com/quant1x/data工具包
 * 更新gox版本
 * 更新gitee脚本, 只做pull相关操作, 方便在github脚本中同步
 * 调整部分函数的判断逻辑
@@ -1292,7 +1298,8 @@ Merge pull request !5 from 王布衣/rolling
 - 优化package引入
 
 
-[Unreleased]: https://gitee.com/quant1x/pandas.git/compare/v1.6.0...HEAD
+[Unreleased]: https://gitee.com/quant1x/pandas.git/compare/v1.6.1...HEAD
+[1.6.1]: https://gitee.com/quant1x/pandas.git/compare/v1.6.0...v1.6.1
 [1.6.0]: https://gitee.com/quant1x/pandas.git/compare/v1.5.3...v1.6.0
 [1.5.3]: https://gitee.com/quant1x/pandas.git/compare/v1.5.2...v1.5.3
 [1.5.2]: https://gitee.com/quant1x/pandas.git/compare/v1.5.1...v1.5.2
