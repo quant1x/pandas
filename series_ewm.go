@@ -3,7 +3,7 @@ package pandas
 import (
 	"math"
 
-	"github.com/quant1x/num"
+	"gitee.com/quant1x/num"
 )
 
 type AlphaType int

@@ -1,8 +1,8 @@
 package formula
 
 import (
-	"github.com/quant1x/num"
-	"github.com/quant1x/pandas"
+	"gitee.com/quant1x/num"
+	"gitee.com/quant1x/pandas"
 )
 
 // REF 引用前N的序列

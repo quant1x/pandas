@@ -1,7 +1,7 @@
 package pandas
 
 import (
-	"github.com/quant1x/num"
+	"gitee.com/quant1x/num"
 )
 
 // Align2Series any转换成series

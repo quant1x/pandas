@@ -6,7 +6,7 @@ import (
 	"testing"
 	"unsafe"
 
-	"github.com/quant1x/pandas"
+	"gitee.com/quant1x/pandas"
 )
 
 func TestCOUNT(t *testing.T) {

@@ -4,9 +4,9 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/quant1x/num"
-	"github.com/quant1x/num/labs"
-	"github.com/quant1x/pandas"
+	"gitee.com/quant1x/num"
+	"gitee.com/quant1x/num/labs"
+	"gitee.com/quant1x/pandas"
 )
 
 func TestHHV_basic(t *testing.T) {

@@ -1,9 +1,9 @@
 package formula
 
 import (
-	"github.com/quant1x/num"
-	"github.com/quant1x/num/x64"
-	"github.com/quant1x/pandas"
+	"gitee.com/quant1x/num"
+	"gitee.com/quant1x/num/x64"
+	"gitee.com/quant1x/pandas"
 )
 
 // EQ 相等

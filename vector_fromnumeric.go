@@ -1,6 +1,6 @@
 package pandas
 
-import "github.com/quant1x/num"
+import "gitee.com/quant1x/num"
 
 func (this vector[T]) ArgMax() int {
 	return num.ArgMax2(this)

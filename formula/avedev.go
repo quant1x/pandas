@@ -1,8 +1,8 @@
 package formula
 
 import (
-	"github.com/quant1x/num"
-	"github.com/quant1x/pandas"
+	"gitee.com/quant1x/num"
+	"gitee.com/quant1x/pandas"
 )
 
 // AVEDEV 平均绝对偏差, (序列与其平均值的绝对差的平均值)

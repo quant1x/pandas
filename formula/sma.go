@@ -1,9 +1,9 @@
 package formula
 
 import (
-	"github.com/quant1x/num"
-	"github.com/quant1x/pandas"
-	"github.com/quant1x/x/exception"
+	"gitee.com/quant1x/gox/exception"
+	"gitee.com/quant1x/num"
+	"gitee.com/quant1x/pandas"
 )
 
 // SMA 中国式的SMA,至少需要120周期才精确 (雪球180周期)    alpha=1/(1+com)

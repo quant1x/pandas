@@ -1,8 +1,8 @@
 package formula
 
 import (
-	"github.com/quant1x/num"
-	"github.com/quant1x/pandas"
+	"gitee.com/quant1x/num"
+	"gitee.com/quant1x/pandas"
 )
 
 // FORCAST 返回S序列N周期回线性回归后的预测值

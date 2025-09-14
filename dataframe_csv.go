@@ -5,10 +5,10 @@ import (
 	"io"
 	"os"
 
-	"github.com/quant1x/num"
-	"github.com/quant1x/x/api"
-	"github.com/quant1x/x/exception"
-	"github.com/quant1x/x/util/homedir"
+	"gitee.com/quant1x/gox/api"
+	"gitee.com/quant1x/gox/exception"
+	"gitee.com/quant1x/gox/util/homedir"
+	"gitee.com/quant1x/num"
 )
 
 // ReadCSV reads a CSV file from a io.Reader and builds a DataFrame with the

@@ -1,6 +1,6 @@
 package pandas
 
-import "github.com/quant1x/num"
+import "gitee.com/quant1x/num"
 
 func (this vector[T]) Rolling(param any) RollingAndExpandingMixin {
 	window := num.Any2Window[num.DType](param)

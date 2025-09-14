@@ -1,7 +1,7 @@
 package pandas
 
 import (
-	"github.com/quant1x/x/api"
+	"gitee.com/quant1x/gox/api"
 )
 
 // Subset returns a subset of the rows of the original DataFrame based on the

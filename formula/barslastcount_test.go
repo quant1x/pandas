@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/quant1x/pandas"
+	"gitee.com/quant1x/pandas"
 )
 
 func TestBARSLASTCOUNT(t *testing.T) {

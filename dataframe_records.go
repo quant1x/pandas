@@ -3,7 +3,7 @@ package pandas
 import (
 	"fmt"
 
-	"github.com/quant1x/num"
+	"gitee.com/quant1x/num"
 )
 
 // LoadRecords creates a new DataFrame based on the given records.

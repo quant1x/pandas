@@ -8,7 +8,7 @@ import (
 	"testing"
 	"unsafe"
 
-	"github.com/quant1x/num"
+	"gitee.com/quant1x/num"
 )
 
 const (

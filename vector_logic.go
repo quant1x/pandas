@@ -1,6 +1,6 @@
 package pandas
 
-import "github.com/quant1x/num"
+import "gitee.com/quant1x/num"
 
 func (this vector[T]) Logic(f func(idx int, v any) bool) []bool {
 	d := make([]bool, this.Len())

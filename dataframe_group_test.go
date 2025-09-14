@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/quant1x/num"
+	"gitee.com/quant1x/num"
 )
 
 func TestDataFrame_Group(t *testing.T) {

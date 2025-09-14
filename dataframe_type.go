@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/quant1x/num"
+	"gitee.com/quant1x/num"
 )
 
 const (

@@ -5,7 +5,7 @@ import (
 	"math"
 	"testing"
 
-	"github.com/quant1x/pandas"
+	"gitee.com/quant1x/pandas"
 )
 
 func TestMAX(t *testing.T) {

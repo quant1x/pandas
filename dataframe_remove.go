@@ -1,7 +1,7 @@
 package pandas
 
 import (
-	"github.com/quant1x/x/api"
+	"gitee.com/quant1x/gox/api"
 )
 
 // Remove 删除一段范围内的记录

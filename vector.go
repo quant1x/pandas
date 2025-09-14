@@ -6,7 +6,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/quant1x/num"
+	"gitee.com/quant1x/num"
 )
 
 // vector 泛型向量
