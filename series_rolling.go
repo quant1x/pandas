@@ -117,22 +117,22 @@ func (r RollingAndExpandingMixin) v2Count() Series {
 	x := r.Series.Values()
 	switch vs := x.(type) {
 	case []int32:
-		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...int32) int32 {
+		d := num.RollingApply(vs, r.Window, func(N num.DType, values ...int32) int32 {
 			return int32(num.Count(values))
 		})
 		return SliceToSeries(d)
 	case []int64:
-		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...int64) int64 {
+		d := num.RollingApply(vs, r.Window, func(N num.DType, values ...int64) int64 {
 			return int64(num.Count(values))
 		})
 		return SliceToSeries(d)
 	case []float32:
-		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...float32) float32 {
+		d := num.RollingApply(vs, r.Window, func(N num.DType, values ...float32) float32 {
 			return float32(num.Count(values))
 		})
 		return SliceToSeries(d)
 	case []float64:
-		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...float64) float64 {
+		d := num.RollingApply(vs, r.Window, func(N num.DType, values ...float64) float64 {
 			return float64(num.Count(values))
 		})
 		return SliceToSeries(d)
@@ -226,27 +226,27 @@ func (r RollingAndExpandingMixin) v2Max() Series {
 	x := r.Series.Values()
 	switch vs := x.(type) {
 	case []int32:
-		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...int32) int32 {
+		d := num.RollingApply(vs, r.Window, func(N num.DType, values ...int32) int32 {
 			return num.Max2(values)
 		})
 		return SliceToSeries(d)
 	case []int64:
-		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...int64) int64 {
+		d := num.RollingApply(vs, r.Window, func(N num.DType, values ...int64) int64 {
 			return num.Max2(values)
 		})
 		return SliceToSeries(d)
 	case []float32:
-		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...float32) float32 {
+		d := num.RollingApply(vs, r.Window, func(N num.DType, values ...float32) float32 {
 			return num.Max2(values)
 		})
 		return SliceToSeries(d)
 	case []float64:
-		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...float64) float64 {
+		d := num.RollingApply(vs, r.Window, func(N num.DType, values ...float64) float64 {
 			return num.Max2(values)
 		})
 		return SliceToSeries(d)
 	case []string:
-		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...string) string {
+		d := num.RollingApply(vs, r.Window, func(N num.DType, values ...string) string {
 			return num.Max2(values)
 		})
 		return SliceToSeries(d)
@@ -270,27 +270,27 @@ func (r RollingAndExpandingMixin) v2Min() Series {
 	x := r.Series.Values()
 	switch vs := x.(type) {
 	case []int32:
-		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...int32) int32 {
+		d := num.RollingApply(vs, r.Window, func(N num.DType, values ...int32) int32 {
 			return num.Min2(values)
 		})
 		return SliceToSeries(d)
 	case []int64:
-		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...int64) int64 {
+		d := num.RollingApply(vs, r.Window, func(N num.DType, values ...int64) int64 {
 			return num.Min2(values)
 		})
 		return SliceToSeries(d)
 	case []float32:
-		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...float32) float32 {
+		d := num.RollingApply(vs, r.Window, func(N num.DType, values ...float32) float32 {
 			return num.Min2(values)
 		})
 		return SliceToSeries(d)
 	case []float64:
-		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...float64) float64 {
+		d := num.RollingApply(vs, r.Window, func(N num.DType, values ...float64) float64 {
 			return num.Min2(values)
 		})
 		return SliceToSeries(d)
 	case []string:
-		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...string) string {
+		d := num.RollingApply(vs, r.Window, func(N num.DType, values ...string) string {
 			return num.Min2(values)
 		})
 		return SliceToSeries(d)
@@ -320,22 +320,22 @@ func (r RollingAndExpandingMixin) v2Mean() Series {
 	x := r.Series.Values()
 	switch vs := x.(type) {
 	case []int32:
-		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...int32) int32 {
+		d := num.RollingApply(vs, r.Window, func(N num.DType, values ...int32) int32 {
 			return num.Mean2(values)
 		})
 		return SliceToSeries(d)
 	case []int64:
-		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...int64) int64 {
+		d := num.RollingApply(vs, r.Window, func(N num.DType, values ...int64) int64 {
 			return num.Mean2(values)
 		})
 		return SliceToSeries(d)
 	case []float32:
-		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...float32) float32 {
+		d := num.RollingApply(vs, r.Window, func(N num.DType, values ...float32) float32 {
 			return num.Mean2(values)
 		})
 		return SliceToSeries(d)
 	case []float64:
-		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...float64) float64 {
+		d := num.RollingApply(vs, r.Window, func(N num.DType, values ...float64) float64 {
 			return num.Mean2(values)
 		})
 		return SliceToSeries(d)
@@ -357,22 +357,22 @@ func (r RollingAndExpandingMixin) v2Std() Series {
 	x := r.Series.Values()
 	switch vs := x.(type) {
 	case []int32:
-		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...int32) int32 {
+		d := num.RollingApply(vs, r.Window, func(N num.DType, values ...int32) int32 {
 			return num.Std(values)
 		})
 		return SliceToSeries(d)
 	case []int64:
-		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...int64) int64 {
+		d := num.RollingApply(vs, r.Window, func(N num.DType, values ...int64) int64 {
 			return num.Std(values)
 		})
 		return SliceToSeries(d)
 	case []float32:
-		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...float32) float32 {
+		d := num.RollingApply(vs, r.Window, func(N num.DType, values ...float32) float32 {
 			return num.Std(values)
 		})
 		return SliceToSeries(d)
 	case []float64:
-		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...float64) float64 {
+		d := num.RollingApply(vs, r.Window, func(N num.DType, values ...float64) float64 {
 			return num.Std(values)
 		})
 		return SliceToSeries(d)
@@ -411,22 +411,22 @@ func (r RollingAndExpandingMixin) v3Sum() Series {
 	x := r.Series.Values()
 	switch vs := x.(type) {
 	case []int32:
-		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...int32) int32 {
+		d := num.RollingApply(vs, r.Window, func(N num.DType, values ...int32) int32 {
 			return num.Sum(values)
 		})
 		return SliceToSeries(d)
 	case []int64:
-		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...int64) int64 {
+		d := num.RollingApply(vs, r.Window, func(N num.DType, values ...int64) int64 {
 			return num.Sum(values)
 		})
 		return SliceToSeries(d)
 	case []float32:
-		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...float32) float32 {
+		d := num.RollingApply(vs, r.Window, func(N num.DType, values ...float32) float32 {
 			return num.Sum(values)
 		})
 		return SliceToSeries(d)
 	case []float64:
-		d := num.RollingV1(vs, r.Window, func(N num.DType, values ...float64) float64 {
+		d := num.RollingApply(vs, r.Window, func(N num.DType, values ...float64) float64 {
 			return num.Sum(values)
 		})
 		return SliceToSeries(d)
