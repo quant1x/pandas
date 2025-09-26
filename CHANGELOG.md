@@ -3,9 +3,14 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.6.8] - 2025-09-26
+### Changed
+- 适配新版本num
+
 ## [1.6.7] - 2025-09-22
 ### Changed
 - 更新依赖库版本
+- update changelog
 
 ## [1.6.6] - 2025-09-14
 ### Changed
@@ -1328,7 +1333,8 @@ Merge pull request !5 from 王布衣/rolling
 - 优化package引入
 
 
-[Unreleased]: https://gitee.com/quant1x/pandas.git/compare/v1.6.7...HEAD
+[Unreleased]: https://gitee.com/quant1x/pandas.git/compare/v1.6.8...HEAD
+[1.6.8]: https://gitee.com/quant1x/pandas.git/compare/v1.6.7...v1.6.8
 [1.6.7]: https://gitee.com/quant1x/pandas.git/compare/v1.6.6...v1.6.7
 [1.6.6]: https://gitee.com/quant1x/pandas.git/compare/v1.6.5...v1.6.6
 [1.6.5]: https://gitee.com/quant1x/pandas.git/compare/v1.6.4...v1.6.5
