@@ -17,7 +17,7 @@ func TestSTD_basic(t *testing.T) {
 	r1 := STD(s, 5)
 	fmt.Println(r1)
 
-	r2 := num.RollingV1(x, 5, func(N num.DType, values ...float64) float64 {
+	r2 := num.RollingApply(x, 5, func(N num.DType, values ...float64) float64 {
 		fmt.Println(values)
 		return num.Std(values)
 	})
@@ -34,7 +34,7 @@ func TestSTD_basic_dynamic(t *testing.T) {
 	r1 := STD(s, w)
 	fmt.Println(r1)
 
-	r2 := num.RollingV1(x, 5, func(N num.DType, values ...float64) float64 {
+	r2 := num.RollingApply(x, 5, func(N num.DType, values ...float64) float64 {
 		fmt.Println(values)
 		return num.Std(values)
 	})

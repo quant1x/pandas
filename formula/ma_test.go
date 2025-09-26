@@ -81,7 +81,7 @@ func BenchmarkMA_v3Rolling_raw(b *testing.B) {
 	f64s := slices.Clone(testDataFloat64)
 	s := pandas.SliceToSeries(f64s)
 	for i := 0; i < b.N; i++ {
-		d := num.RollingV1(s.DTypes(), 5, func(N num.DType, values ...float64) float64 {
+		d := num.RollingApply(s.DTypes(), 5, func(N num.DType, values ...float64) float64 {
 			return num.Mean2(values)
 		})
 		s := pandas.SliceToSeries(d)
@@ -94,7 +94,7 @@ func BenchmarkMA_v3Rolling(b *testing.B) {
 	f64s := slices.Clone(testDataFloat64)
 	s := pandas.SliceToSeries(f64s)
 	for i := 0; i < b.N; i++ {
-		d := num.RollingV1(s.DTypes(), 5, func(N num.DType, values ...float64) float64 {
+		d := num.RollingApply(s.DTypes(), 5, func(N num.DType, values ...float64) float64 {
 			return num.Mean2(values)
 		})
 		r := pandas.SliceToSeries(d)

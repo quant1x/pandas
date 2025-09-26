@@ -18,7 +18,7 @@ func v1MA(S pandas.Series, N any) pandas.Series {
 
 func v2MA(S pandas.Series, N any) pandas.Series {
 	x := S.DTypes()
-	d := num.RollingV1(x, N, func(N num.DType, values ...float64) float64 {
+	d := num.RollingApply(x, N, func(N num.DType, values ...float64) float64 {
 		return num.Mean2(values)
 	})
 	return pandas.SliceToSeries(d)
