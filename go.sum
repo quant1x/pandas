@@ -1,9 +1,9 @@
-gitee.com/quant1x/gox v1.25.1 h1:daOlQK8I7iXcaZNFXHj1PYq7TwEcLVM+LjeUQiSRtg8=
-gitee.com/quant1x/gox v1.25.1/go.mod h1:5KDJRyeY2tnAmqe4OOVRBEW6j/cB40PfDISTB3wThuQ=
-gitee.com/quant1x/num v0.7.13 h1:tn5m1JmvMAh8EFT2LwhRftV/HwZ/9401obELUFhvAH4=
-gitee.com/quant1x/num v0.7.13/go.mod h1:vSXTdXpwD2zDieH17LA5elGf4WhIjMaGHNKCt0MAbHs=
-gitee.com/quant1x/pkg v0.8.3 h1:npJkpNvhfbe7uwAs+kAODz0POd1HVSlLzYT/hPPM46o=
-gitee.com/quant1x/pkg v0.8.3/go.mod h1:NwWkHtUEV+UePFVbFPwbf/Y2kO1UDT3M9GWe+PF0NrY=
+gitee.com/quant1x/gox v1.25.2 h1:J6Fov023KD763S0Ogglr39PkMmMy1Apr8Y6vA/CiQ+A=
+gitee.com/quant1x/gox v1.25.2/go.mod h1:IUeeJxvqibkZHRZCET1qo+7f2v+7eGhrxa4NYhB+kMA=
+gitee.com/quant1x/num v0.7.15 h1:iO0suggsFfWV+IEpprzb7SKHf7jLUZJhHDrEdCIlZUg=
+gitee.com/quant1x/num v0.7.15/go.mod h1:o6oZCL7GZvJp6yg7vO9Pvq/ql2IimJ0B2ktFdJOcCkE=
+gitee.com/quant1x/pkg v0.9.1 h1:OIgVTL5G4xwP4tvHP+PRv+u3Fcay/LcE68KHhiZiIK4=
+gitee.com/quant1x/pkg v0.9.1/go.mod h1:pfDx6S5Eq6tVT5txko6uh4XPdqMP/ALtrT34LAv4ghc=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/kr/pretty v0.3.1 h1:flRD4NNwYAUpkphVc1HcthR4KEIFJ65n8Mw5qdRn3LE=
@@ -18,8 +18,8 @@ github.com/rogpeppe/go-internal v1.14.1 h1:UQB4HGPB6osV0SQTLymcB4TgvyWu6ZyliaW0t
 github.com/rogpeppe/go-internal v1.14.1/go.mod h1:MaRKkUm5W0goXpeCfT7UZI6fk/L7L7so1lCWt35ZSgc=
 github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu7U=
 github.com/stretchr/testify v1.11.1/go.mod h1:wZwfW3scLgRK+23gO65QZefKpKQRnfz6sD981Nm4B6U=
-golang.org/x/sys v0.36.0 h1:KVRy2GtZBrk1cBYA7MKu5bEZFxQk4NIDV6RLVcC8o0k=
-golang.org/x/sys v0.36.0/go.mod h1:OgkHotnGiDImocRcuBABYBEXf8A9a87e/uXjp9XT3ks=
+golang.org/x/sys v0.37.0 h1:fdNQudmxPjkdUTPnLn5mdQv7Zwvbvpaxqs831goi9kQ=
+golang.org/x/sys v0.37.0/go.mod h1:OgkHotnGiDImocRcuBABYBEXf8A9a87e/uXjp9XT3ks=
 gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c h1:Hei/4ADfdWqJk1ZMxUNpqntNwaWcugrBjAiHlqqRiVk=
 gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c/go.mod h1:JHkPIbrfpd72SG/EVd6muEfDQjcINNoR0C8j2r3qZ4Q=
 gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=
