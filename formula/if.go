@@ -1,8 +1,8 @@
 package formula
 
 import (
-	"gitee.com/quant1x/num"
-	"gitee.com/quant1x/pandas"
+	"github.com/quant1x/num"
+	"github.com/quant1x/pandas"
 )
 
 // IF 序列布尔判断 return=A  if S==True  else  B

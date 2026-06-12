@@ -1,6 +1,6 @@
 package pandas
 
-import "gitee.com/quant1x/num"
+import "github.com/quant1x/num"
 
 func (this vector[T]) Len() int {
 	return len(this)

@@ -1,6 +1,6 @@
 package pandas
 
-import "gitee.com/quant1x/num"
+import "github.com/quant1x/num"
 
 // ScalarAggregation 标量聚合接口
 type ScalarAggregation interface {

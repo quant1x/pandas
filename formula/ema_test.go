@@ -5,8 +5,8 @@ import (
 	"slices"
 	"testing"
 
-	"gitee.com/quant1x/num/labs"
-	"gitee.com/quant1x/pandas"
+	"github.com/quant1x/num/labs"
+	"github.com/quant1x/pandas"
 )
 
 func TestEmaIncr_basic(t *testing.T) {

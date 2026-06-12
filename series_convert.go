@@ -1,9 +1,9 @@
 package pandas
 
 import (
-	"gitee.com/quant1x/num"
-	"gitee.com/quant1x/num/x32"
-	"gitee.com/quant1x/num/x64"
+	"github.com/quant1x/num"
+	"github.com/quant1x/num/x32"
+	"github.com/quant1x/num/x64"
 )
 
 // 这里做数组统一转换

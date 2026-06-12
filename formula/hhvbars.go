@@ -1,8 +1,8 @@
 package formula
 
 import (
-	"gitee.com/quant1x/num"
-	"gitee.com/quant1x/pandas"
+	"github.com/quant1x/num"
+	"github.com/quant1x/pandas"
 )
 
 // HHVBARS 求上一高点到当前的周期数.

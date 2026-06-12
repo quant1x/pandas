@@ -5,8 +5,8 @@ import (
 	"slices"
 	"testing"
 
-	"gitee.com/quant1x/num"
-	"gitee.com/quant1x/pandas"
+	"github.com/quant1x/num"
+	"github.com/quant1x/pandas"
 )
 
 func TestMa_basic(t *testing.T) {
