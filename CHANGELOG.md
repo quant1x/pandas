@@ -3,9 +3,14 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.7.0] - 2026-06-12
+### Changed
+- 调整包仓库
+
 ## [1.6.11] - 2025-10-29
 ### Changed
 - 更新依赖库num版本号到0.7.15
+- update changelog
 
 ## [1.6.10] - 2025-10-29
 ### Changed
@@ -802,7 +807,7 @@ All notable changes to this project will be documented in this file.
 * 删除早期的测试代码
 * 删除早期的测试代码
 * 删除tdx和v1版本的dataframe
-* 删除data包, 引入github.com/quant1x/data工具包
+* 删除data包, 引入gitee.com/quant1x/data工具包
 * 更新gox版本
 * 更新gitee脚本, 只做pull相关操作, 方便在github脚本中同步
 * 调整部分函数的判断逻辑
@@ -996,7 +1001,7 @@ All notable changes to this project will be documented in this file.
 * 从变量名上明确int是64位的int64
 * 删除废弃的代码
 - !25 #I6CXOV 增加float32类型的series, 增加REF函数
-* Merge branch 'ref' of https://github.com/quant1x/pandas into ref
+* Merge branch 'ref' of https://gitee.com/quant1x/pandas into ref
 * 实现REF函数
 * 实现REF函数
 * 新增float32数据类型
@@ -1009,7 +1014,7 @@ All notable changes to this project will be documented in this file.
 - 调整功能归属
 - 调整功能归属
 - !26 #I6CYOP 实现了HHV函数
-* Merge branch 'hhv' of https://github.com/quant1x/pandas into hhv
+* Merge branch 'hhv' of https://gitee.com/quant1x/pandas into hhv
 * #I6CYOP 增加HHV函数
 * #I6CYPC 增加HHV函数
 * rolling增加max方法
@@ -1148,7 +1153,7 @@ All notable changes to this project will be documented in this file.
 * 添加range的视线代码
 - 增加注释, 注明导入数据时的优先级
 - 实现一个泛型帧
-- Merge branch '0.6.x' of https://github.com/quant1x/pandas into 0.6.x
+- Merge branch '0.6.x' of https://gitee.com/quant1x/pandas into 0.6.x
 - !17 #I6BMTE 实现了rolling的序列化版本
 * #I6BMTE 实现序列换的rolling
 * where函数调整为public函数
@@ -1173,7 +1178,7 @@ All notable changes to this project will be documented in this file.
 * 补充功能实现列表
 - !20 #I6CC11 暴露apply方法私有方法为公共方法
 * #I6CC11 暴露apply方法为公共方法
-- Merge branch '0.6.x' of https://github.com/quant1x/pandas into 0.6.x
+- Merge branch '0.6.x' of https://gitee.com/quant1x/pandas into 0.6.x
 - !21 #I6CC1K 实现DIFF功能
 * #I6CC1K 实现DIFF功能, 包括固定参数和序列化参数
 * 独立mean方法
@@ -1276,8 +1281,8 @@ Merge pull request !1 from 王布衣/csv
 * 增加Mean的一般用法
 * !2 #I6C2X4实现string的series
 * #I6C2X4实现string的series
-- Merge branch 'frame' of https://github.com/quant1x/pandas into frame
-- Merge branch 'ewm' of https://github.com/quant1x/pandas into ewm
+- Merge branch 'frame' of https://gitee.com/quant1x/pandas into frame
+- Merge branch 'ewm' of https://gitee.com/quant1x/pandas into ewm
 - !4  #I6C6UU 实现series复制功能
 * 增加copy功能
 * 增加泛型序列的实现
@@ -1348,164 +1353,165 @@ Merge pull request !5 from 王布衣/rolling
 - 优化package引入
 
 
-[Unreleased]: https://github.com/quant1x/pandas.git/compare/v1.6.11...HEAD
-[1.6.11]: https://github.com/quant1x/pandas.git/compare/v1.6.10...v1.6.11
-[1.6.10]: https://github.com/quant1x/pandas.git/compare/v1.6.9...v1.6.10
-[1.6.9]: https://github.com/quant1x/pandas.git/compare/v1.6.8...v1.6.9
-[1.6.8]: https://github.com/quant1x/pandas.git/compare/v1.6.7...v1.6.8
-[1.6.7]: https://github.com/quant1x/pandas.git/compare/v1.6.6...v1.6.7
-[1.6.6]: https://github.com/quant1x/pandas.git/compare/v1.6.5...v1.6.6
-[1.6.5]: https://github.com/quant1x/pandas.git/compare/v1.6.4...v1.6.5
-[1.6.4]: https://github.com/quant1x/pandas.git/compare/v1.6.3...v1.6.4
-[1.6.3]: https://github.com/quant1x/pandas.git/compare/v1.6.2...v1.6.3
-[1.6.2]: https://github.com/quant1x/pandas.git/compare/v1.6.1...v1.6.2
-[1.6.1]: https://github.com/quant1x/pandas.git/compare/v1.6.0...v1.6.1
-[1.6.0]: https://github.com/quant1x/pandas.git/compare/v1.5.3...v1.6.0
-[1.5.3]: https://github.com/quant1x/pandas.git/compare/v1.5.2...v1.5.3
-[1.5.2]: https://github.com/quant1x/pandas.git/compare/v1.5.1...v1.5.2
-[1.5.1]: https://github.com/quant1x/pandas.git/compare/v1.5.0...v1.5.1
-[1.5.0]: https://github.com/quant1x/pandas.git/compare/v1.4.12...v1.5.0
-[1.4.12]: https://github.com/quant1x/pandas.git/compare/v1.4.11...v1.4.12
-[1.4.11]: https://github.com/quant1x/pandas.git/compare/v1.4.10...v1.4.11
-[1.4.10]: https://github.com/quant1x/pandas.git/compare/v1.4.9...v1.4.10
-[1.4.9]: https://github.com/quant1x/pandas.git/compare/v1.4.8...v1.4.9
-[1.4.8]: https://github.com/quant1x/pandas.git/compare/v1.4.7...v1.4.8
-[1.4.7]: https://github.com/quant1x/pandas.git/compare/v1.4.6...v1.4.7
-[1.4.6]: https://github.com/quant1x/pandas.git/compare/v1.4.5...v1.4.6
-[1.4.5]: https://github.com/quant1x/pandas.git/compare/v1.4.4...v1.4.5
-[1.4.4]: https://github.com/quant1x/pandas.git/compare/v1.4.3...v1.4.4
-[1.4.3]: https://github.com/quant1x/pandas.git/compare/v1.4.2...v1.4.3
-[1.4.2]: https://github.com/quant1x/pandas.git/compare/v1.4.1...v1.4.2
-[1.4.1]: https://github.com/quant1x/pandas.git/compare/v1.4.0...v1.4.1
-[1.4.0]: https://github.com/quant1x/pandas.git/compare/v1.3.9...v1.4.0
-[1.3.9]: https://github.com/quant1x/pandas.git/compare/v1.3.8...v1.3.9
-[1.3.8]: https://github.com/quant1x/pandas.git/compare/v1.3.7...v1.3.8
-[1.3.7]: https://github.com/quant1x/pandas.git/compare/v1.3.6...v1.3.7
-[1.3.6]: https://github.com/quant1x/pandas.git/compare/v1.3.5...v1.3.6
-[1.3.5]: https://github.com/quant1x/pandas.git/compare/v1.3.4...v1.3.5
-[1.3.4]: https://github.com/quant1x/pandas.git/compare/v1.3.3...v1.3.4
-[1.3.3]: https://github.com/quant1x/pandas.git/compare/v1.3.2...v1.3.3
-[1.3.2]: https://github.com/quant1x/pandas.git/compare/v1.3.1...v1.3.2
-[1.3.1]: https://github.com/quant1x/pandas.git/compare/v1.3.0...v1.3.1
-[1.3.0]: https://github.com/quant1x/pandas.git/compare/v1.2.9...v1.3.0
-[1.2.9]: https://github.com/quant1x/pandas.git/compare/v1.2.8...v1.2.9
-[1.2.8]: https://github.com/quant1x/pandas.git/compare/v1.2.7...v1.2.8
-[1.2.7]: https://github.com/quant1x/pandas.git/compare/v1.2.6...v1.2.7
-[1.2.6]: https://github.com/quant1x/pandas.git/compare/v1.2.5...v1.2.6
-[1.2.5]: https://github.com/quant1x/pandas.git/compare/v1.2.4...v1.2.5
-[1.2.4]: https://github.com/quant1x/pandas.git/compare/v1.2.3...v1.2.4
-[1.2.3]: https://github.com/quant1x/pandas.git/compare/v1.2.2...v1.2.3
-[1.2.2]: https://github.com/quant1x/pandas.git/compare/v1.2.1...v1.2.2
-[1.2.1]: https://github.com/quant1x/pandas.git/compare/v1.2.0...v1.2.1
-[1.2.0]: https://github.com/quant1x/pandas.git/compare/v1.1.9...v1.2.0
-[1.1.9]: https://github.com/quant1x/pandas.git/compare/v1.1.8...v1.1.9
-[1.1.8]: https://github.com/quant1x/pandas.git/compare/v1.1.7...v1.1.8
-[1.1.7]: https://github.com/quant1x/pandas.git/compare/v1.1.6...v1.1.7
-[1.1.6]: https://github.com/quant1x/pandas.git/compare/v1.1.5...v1.1.6
-[1.1.5]: https://github.com/quant1x/pandas.git/compare/v1.1.4...v1.1.5
-[1.1.4]: https://github.com/quant1x/pandas.git/compare/v1.1.3...v1.1.4
-[1.1.3]: https://github.com/quant1x/pandas.git/compare/v1.1.2...v1.1.3
-[1.1.2]: https://github.com/quant1x/pandas.git/compare/v1.1.1...v1.1.2
-[1.1.1]: https://github.com/quant1x/pandas.git/compare/v1.1.0...v1.1.1
-[1.1.0]: https://github.com/quant1x/pandas.git/compare/v1.0.9...v1.1.0
-[1.0.9]: https://github.com/quant1x/pandas.git/compare/v1.0.8...v1.0.9
-[1.0.8]: https://github.com/quant1x/pandas.git/compare/v1.0.7...v1.0.8
-[1.0.7]: https://github.com/quant1x/pandas.git/compare/v1.0.6...v1.0.7
-[1.0.6]: https://github.com/quant1x/pandas.git/compare/v1.0.5...v1.0.6
-[1.0.5]: https://github.com/quant1x/pandas.git/compare/v1.0.4...v1.0.5
-[1.0.4]: https://github.com/quant1x/pandas.git/compare/v1.0.3...v1.0.4
-[1.0.3]: https://github.com/quant1x/pandas.git/compare/v1.0.2...v1.0.3
-[1.0.2]: https://github.com/quant1x/pandas.git/compare/v1.0.1...v1.0.2
-[1.0.1]: https://github.com/quant1x/pandas.git/compare/v1.0.0...v1.0.1
-[1.0.0]: https://github.com/quant1x/pandas.git/compare/v0.9.37...v1.0.0
-[0.9.37]: https://github.com/quant1x/pandas.git/compare/v0.9.36...v0.9.37
-[0.9.36]: https://github.com/quant1x/pandas.git/compare/v0.9.35...v0.9.36
-[0.9.35]: https://github.com/quant1x/pandas.git/compare/v0.9.34...v0.9.35
-[0.9.34]: https://github.com/quant1x/pandas.git/compare/v0.9.33...v0.9.34
-[0.9.33]: https://github.com/quant1x/pandas.git/compare/v0.9.32...v0.9.33
-[0.9.32]: https://github.com/quant1x/pandas.git/compare/v0.9.31...v0.9.32
-[0.9.31]: https://github.com/quant1x/pandas.git/compare/v0.9.30...v0.9.31
-[0.9.30]: https://github.com/quant1x/pandas.git/compare/v0.9.29...v0.9.30
-[0.9.29]: https://github.com/quant1x/pandas.git/compare/v0.9.28...v0.9.29
-[0.9.28]: https://github.com/quant1x/pandas.git/compare/v0.9.27...v0.9.28
-[0.9.27]: https://github.com/quant1x/pandas.git/compare/v0.9.26...v0.9.27
-[0.9.26]: https://github.com/quant1x/pandas.git/compare/v0.9.25...v0.9.26
-[0.9.25]: https://github.com/quant1x/pandas.git/compare/v0.9.24...v0.9.25
-[0.9.24]: https://github.com/quant1x/pandas.git/compare/v0.9.23...v0.9.24
-[0.9.23]: https://github.com/quant1x/pandas.git/compare/v0.9.22...v0.9.23
-[0.9.22]: https://github.com/quant1x/pandas.git/compare/v0.9.21...v0.9.22
-[0.9.21]: https://github.com/quant1x/pandas.git/compare/v0.9.20...v0.9.21
-[0.9.20]: https://github.com/quant1x/pandas.git/compare/v0.9.19...v0.9.20
-[0.9.19]: https://github.com/quant1x/pandas.git/compare/v0.9.18...v0.9.19
-[0.9.18]: https://github.com/quant1x/pandas.git/compare/v0.9.17...v0.9.18
-[0.9.17]: https://github.com/quant1x/pandas.git/compare/v0.9.16...v0.9.17
-[0.9.16]: https://github.com/quant1x/pandas.git/compare/v0.9.15...v0.9.16
-[0.9.15]: https://github.com/quant1x/pandas.git/compare/v0.9.14...v0.9.15
-[0.9.14]: https://github.com/quant1x/pandas.git/compare/v0.9.13...v0.9.14
-[0.9.13]: https://github.com/quant1x/pandas.git/compare/v0.9.12...v0.9.13
-[0.9.12]: https://github.com/quant1x/pandas.git/compare/v0.9.11...v0.9.12
-[0.9.11]: https://github.com/quant1x/pandas.git/compare/v0.9.10...v0.9.11
-[0.9.10]: https://github.com/quant1x/pandas.git/compare/v0.9.9...v0.9.10
-[0.9.9]: https://github.com/quant1x/pandas.git/compare/v0.9.8...v0.9.9
-[0.9.8]: https://github.com/quant1x/pandas.git/compare/v0.9.7...v0.9.8
-[0.9.7]: https://github.com/quant1x/pandas.git/compare/v0.9.6...v0.9.7
-[0.9.6]: https://github.com/quant1x/pandas.git/compare/v0.9.5...v0.9.6
-[0.9.5]: https://github.com/quant1x/pandas.git/compare/v0.9.4...v0.9.5
-[0.9.4]: https://github.com/quant1x/pandas.git/compare/v0.9.3...v0.9.4
-[0.9.3]: https://github.com/quant1x/pandas.git/compare/v0.9.2...v0.9.3
-[0.9.2]: https://github.com/quant1x/pandas.git/compare/v0.9.1...v0.9.2
-[0.9.1]: https://github.com/quant1x/pandas.git/compare/v0.9.0...v0.9.1
-[0.9.0]: https://github.com/quant1x/pandas.git/compare/v0.8.9...v0.9.0
-[0.8.9]: https://github.com/quant1x/pandas.git/compare/v0.8.8...v0.8.9
-[0.8.8]: https://github.com/quant1x/pandas.git/compare/v0.8.7...v0.8.8
-[0.8.7]: https://github.com/quant1x/pandas.git/compare/v0.8.6...v0.8.7
-[0.8.6]: https://github.com/quant1x/pandas.git/compare/v0.8.5...v0.8.6
-[0.8.5]: https://github.com/quant1x/pandas.git/compare/v0.8.4...v0.8.5
-[0.8.4]: https://github.com/quant1x/pandas.git/compare/v0.8.3...v0.8.4
-[0.8.3]: https://github.com/quant1x/pandas.git/compare/v0.8.2...v0.8.3
-[0.8.2]: https://github.com/quant1x/pandas.git/compare/v0.8.1...v0.8.2
-[0.8.1]: https://github.com/quant1x/pandas.git/compare/v0.8.0...v0.8.1
-[0.8.0]: https://github.com/quant1x/pandas.git/compare/v0.7.10...v0.8.0
-[0.7.10]: https://github.com/quant1x/pandas.git/compare/v0.7.9...v0.7.10
-[0.7.9]: https://github.com/quant1x/pandas.git/compare/v0.7.8...v0.7.9
-[0.7.8]: https://github.com/quant1x/pandas.git/compare/v0.7.7...v0.7.8
-[0.7.7]: https://github.com/quant1x/pandas.git/compare/v0.7.6...v0.7.7
-[0.7.6]: https://github.com/quant1x/pandas.git/compare/v0.7.5...v0.7.6
-[0.7.5]: https://github.com/quant1x/pandas.git/compare/v0.7.4...v0.7.5
-[0.7.4]: https://github.com/quant1x/pandas.git/compare/v0.7.3...v0.7.4
-[0.7.3]: https://github.com/quant1x/pandas.git/compare/v0.7.2...v0.7.3
-[0.7.2]: https://github.com/quant1x/pandas.git/compare/v0.7.1...v0.7.2
-[0.7.1]: https://github.com/quant1x/pandas.git/compare/v0.7.0...v0.7.1
-[0.7.0]: https://github.com/quant1x/pandas.git/compare/v0.6.23...v0.7.0
-[0.6.23]: https://github.com/quant1x/pandas.git/compare/v0.6.22...v0.6.23
-[0.6.22]: https://github.com/quant1x/pandas.git/compare/v0.6.21...v0.6.22
-[0.6.21]: https://github.com/quant1x/pandas.git/compare/v0.6.20...v0.6.21
-[0.6.20]: https://github.com/quant1x/pandas.git/compare/v0.6.19...v0.6.20
-[0.6.19]: https://github.com/quant1x/pandas.git/compare/v0.6.18...v0.6.19
-[0.6.18]: https://github.com/quant1x/pandas.git/compare/v0.6.17...v0.6.18
-[0.6.17]: https://github.com/quant1x/pandas.git/compare/v0.6.16...v0.6.17
-[0.6.16]: https://github.com/quant1x/pandas.git/compare/v0.6.15...v0.6.16
-[0.6.15]: https://github.com/quant1x/pandas.git/compare/v0.6.14...v0.6.15
-[0.6.14]: https://github.com/quant1x/pandas.git/compare/v0.6.13...v0.6.14
-[0.6.13]: https://github.com/quant1x/pandas.git/compare/v0.6.12...v0.6.13
-[0.6.12]: https://github.com/quant1x/pandas.git/compare/v0.6.11...v0.6.12
-[0.6.11]: https://github.com/quant1x/pandas.git/compare/v0.6.10...v0.6.11
-[0.6.10]: https://github.com/quant1x/pandas.git/compare/v0.6.9...v0.6.10
-[0.6.9]: https://github.com/quant1x/pandas.git/compare/v0.6.8...v0.6.9
-[0.6.8]: https://github.com/quant1x/pandas.git/compare/v0.6.7...v0.6.8
-[0.6.7]: https://github.com/quant1x/pandas.git/compare/v0.6.6...v0.6.7
-[0.6.6]: https://github.com/quant1x/pandas.git/compare/v0.6.5...v0.6.6
-[0.6.5]: https://github.com/quant1x/pandas.git/compare/v0.6.4...v0.6.5
-[0.6.4]: https://github.com/quant1x/pandas.git/compare/v0.6.3...v0.6.4
-[0.6.3]: https://github.com/quant1x/pandas.git/compare/v0.6.2...v0.6.3
-[0.6.2]: https://github.com/quant1x/pandas.git/compare/v0.6.1...v0.6.2
-[0.6.1]: https://github.com/quant1x/pandas.git/compare/v0.6.0...v0.6.1
-[0.6.0]: https://github.com/quant1x/pandas.git/compare/v0.5.2...v0.6.0
-[0.5.2]: https://github.com/quant1x/pandas.git/compare/v0.5.1...v0.5.2
-[0.5.1]: https://github.com/quant1x/pandas.git/compare/v0.5.0...v0.5.1
-[0.5.0]: https://github.com/quant1x/pandas.git/compare/v0.2.2...v0.5.0
-[0.2.2]: https://github.com/quant1x/pandas.git/compare/v0.2.1...v0.2.2
-[0.2.1]: https://github.com/quant1x/pandas.git/compare/v0.2.0...v0.2.1
-[0.2.0]: https://github.com/quant1x/pandas.git/compare/v0.1.0...v0.2.0
+[Unreleased]: https://gitee.com/quant1x/pandas.git/compare/v1.7.0...HEAD
+[1.7.0]: https://gitee.com/quant1x/pandas.git/compare/v1.6.11...v1.7.0
+[1.6.11]: https://gitee.com/quant1x/pandas.git/compare/v1.6.10...v1.6.11
+[1.6.10]: https://gitee.com/quant1x/pandas.git/compare/v1.6.9...v1.6.10
+[1.6.9]: https://gitee.com/quant1x/pandas.git/compare/v1.6.8...v1.6.9
+[1.6.8]: https://gitee.com/quant1x/pandas.git/compare/v1.6.7...v1.6.8
+[1.6.7]: https://gitee.com/quant1x/pandas.git/compare/v1.6.6...v1.6.7
+[1.6.6]: https://gitee.com/quant1x/pandas.git/compare/v1.6.5...v1.6.6
+[1.6.5]: https://gitee.com/quant1x/pandas.git/compare/v1.6.4...v1.6.5
+[1.6.4]: https://gitee.com/quant1x/pandas.git/compare/v1.6.3...v1.6.4
+[1.6.3]: https://gitee.com/quant1x/pandas.git/compare/v1.6.2...v1.6.3
+[1.6.2]: https://gitee.com/quant1x/pandas.git/compare/v1.6.1...v1.6.2
+[1.6.1]: https://gitee.com/quant1x/pandas.git/compare/v1.6.0...v1.6.1
+[1.6.0]: https://gitee.com/quant1x/pandas.git/compare/v1.5.3...v1.6.0
+[1.5.3]: https://gitee.com/quant1x/pandas.git/compare/v1.5.2...v1.5.3
+[1.5.2]: https://gitee.com/quant1x/pandas.git/compare/v1.5.1...v1.5.2
+[1.5.1]: https://gitee.com/quant1x/pandas.git/compare/v1.5.0...v1.5.1
+[1.5.0]: https://gitee.com/quant1x/pandas.git/compare/v1.4.12...v1.5.0
+[1.4.12]: https://gitee.com/quant1x/pandas.git/compare/v1.4.11...v1.4.12
+[1.4.11]: https://gitee.com/quant1x/pandas.git/compare/v1.4.10...v1.4.11
+[1.4.10]: https://gitee.com/quant1x/pandas.git/compare/v1.4.9...v1.4.10
+[1.4.9]: https://gitee.com/quant1x/pandas.git/compare/v1.4.8...v1.4.9
+[1.4.8]: https://gitee.com/quant1x/pandas.git/compare/v1.4.7...v1.4.8
+[1.4.7]: https://gitee.com/quant1x/pandas.git/compare/v1.4.6...v1.4.7
+[1.4.6]: https://gitee.com/quant1x/pandas.git/compare/v1.4.5...v1.4.6
+[1.4.5]: https://gitee.com/quant1x/pandas.git/compare/v1.4.4...v1.4.5
+[1.4.4]: https://gitee.com/quant1x/pandas.git/compare/v1.4.3...v1.4.4
+[1.4.3]: https://gitee.com/quant1x/pandas.git/compare/v1.4.2...v1.4.3
+[1.4.2]: https://gitee.com/quant1x/pandas.git/compare/v1.4.1...v1.4.2
+[1.4.1]: https://gitee.com/quant1x/pandas.git/compare/v1.4.0...v1.4.1
+[1.4.0]: https://gitee.com/quant1x/pandas.git/compare/v1.3.9...v1.4.0
+[1.3.9]: https://gitee.com/quant1x/pandas.git/compare/v1.3.8...v1.3.9
+[1.3.8]: https://gitee.com/quant1x/pandas.git/compare/v1.3.7...v1.3.8
+[1.3.7]: https://gitee.com/quant1x/pandas.git/compare/v1.3.6...v1.3.7
+[1.3.6]: https://gitee.com/quant1x/pandas.git/compare/v1.3.5...v1.3.6
+[1.3.5]: https://gitee.com/quant1x/pandas.git/compare/v1.3.4...v1.3.5
+[1.3.4]: https://gitee.com/quant1x/pandas.git/compare/v1.3.3...v1.3.4
+[1.3.3]: https://gitee.com/quant1x/pandas.git/compare/v1.3.2...v1.3.3
+[1.3.2]: https://gitee.com/quant1x/pandas.git/compare/v1.3.1...v1.3.2
+[1.3.1]: https://gitee.com/quant1x/pandas.git/compare/v1.3.0...v1.3.1
+[1.3.0]: https://gitee.com/quant1x/pandas.git/compare/v1.2.9...v1.3.0
+[1.2.9]: https://gitee.com/quant1x/pandas.git/compare/v1.2.8...v1.2.9
+[1.2.8]: https://gitee.com/quant1x/pandas.git/compare/v1.2.7...v1.2.8
+[1.2.7]: https://gitee.com/quant1x/pandas.git/compare/v1.2.6...v1.2.7
+[1.2.6]: https://gitee.com/quant1x/pandas.git/compare/v1.2.5...v1.2.6
+[1.2.5]: https://gitee.com/quant1x/pandas.git/compare/v1.2.4...v1.2.5
+[1.2.4]: https://gitee.com/quant1x/pandas.git/compare/v1.2.3...v1.2.4
+[1.2.3]: https://gitee.com/quant1x/pandas.git/compare/v1.2.2...v1.2.3
+[1.2.2]: https://gitee.com/quant1x/pandas.git/compare/v1.2.1...v1.2.2
+[1.2.1]: https://gitee.com/quant1x/pandas.git/compare/v1.2.0...v1.2.1
+[1.2.0]: https://gitee.com/quant1x/pandas.git/compare/v1.1.9...v1.2.0
+[1.1.9]: https://gitee.com/quant1x/pandas.git/compare/v1.1.8...v1.1.9
+[1.1.8]: https://gitee.com/quant1x/pandas.git/compare/v1.1.7...v1.1.8
+[1.1.7]: https://gitee.com/quant1x/pandas.git/compare/v1.1.6...v1.1.7
+[1.1.6]: https://gitee.com/quant1x/pandas.git/compare/v1.1.5...v1.1.6
+[1.1.5]: https://gitee.com/quant1x/pandas.git/compare/v1.1.4...v1.1.5
+[1.1.4]: https://gitee.com/quant1x/pandas.git/compare/v1.1.3...v1.1.4
+[1.1.3]: https://gitee.com/quant1x/pandas.git/compare/v1.1.2...v1.1.3
+[1.1.2]: https://gitee.com/quant1x/pandas.git/compare/v1.1.1...v1.1.2
+[1.1.1]: https://gitee.com/quant1x/pandas.git/compare/v1.1.0...v1.1.1
+[1.1.0]: https://gitee.com/quant1x/pandas.git/compare/v1.0.9...v1.1.0
+[1.0.9]: https://gitee.com/quant1x/pandas.git/compare/v1.0.8...v1.0.9
+[1.0.8]: https://gitee.com/quant1x/pandas.git/compare/v1.0.7...v1.0.8
+[1.0.7]: https://gitee.com/quant1x/pandas.git/compare/v1.0.6...v1.0.7
+[1.0.6]: https://gitee.com/quant1x/pandas.git/compare/v1.0.5...v1.0.6
+[1.0.5]: https://gitee.com/quant1x/pandas.git/compare/v1.0.4...v1.0.5
+[1.0.4]: https://gitee.com/quant1x/pandas.git/compare/v1.0.3...v1.0.4
+[1.0.3]: https://gitee.com/quant1x/pandas.git/compare/v1.0.2...v1.0.3
+[1.0.2]: https://gitee.com/quant1x/pandas.git/compare/v1.0.1...v1.0.2
+[1.0.1]: https://gitee.com/quant1x/pandas.git/compare/v1.0.0...v1.0.1
+[1.0.0]: https://gitee.com/quant1x/pandas.git/compare/v0.9.37...v1.0.0
+[0.9.37]: https://gitee.com/quant1x/pandas.git/compare/v0.9.36...v0.9.37
+[0.9.36]: https://gitee.com/quant1x/pandas.git/compare/v0.9.35...v0.9.36
+[0.9.35]: https://gitee.com/quant1x/pandas.git/compare/v0.9.34...v0.9.35
+[0.9.34]: https://gitee.com/quant1x/pandas.git/compare/v0.9.33...v0.9.34
+[0.9.33]: https://gitee.com/quant1x/pandas.git/compare/v0.9.32...v0.9.33
+[0.9.32]: https://gitee.com/quant1x/pandas.git/compare/v0.9.31...v0.9.32
+[0.9.31]: https://gitee.com/quant1x/pandas.git/compare/v0.9.30...v0.9.31
+[0.9.30]: https://gitee.com/quant1x/pandas.git/compare/v0.9.29...v0.9.30
+[0.9.29]: https://gitee.com/quant1x/pandas.git/compare/v0.9.28...v0.9.29
+[0.9.28]: https://gitee.com/quant1x/pandas.git/compare/v0.9.27...v0.9.28
+[0.9.27]: https://gitee.com/quant1x/pandas.git/compare/v0.9.26...v0.9.27
+[0.9.26]: https://gitee.com/quant1x/pandas.git/compare/v0.9.25...v0.9.26
+[0.9.25]: https://gitee.com/quant1x/pandas.git/compare/v0.9.24...v0.9.25
+[0.9.24]: https://gitee.com/quant1x/pandas.git/compare/v0.9.23...v0.9.24
+[0.9.23]: https://gitee.com/quant1x/pandas.git/compare/v0.9.22...v0.9.23
+[0.9.22]: https://gitee.com/quant1x/pandas.git/compare/v0.9.21...v0.9.22
+[0.9.21]: https://gitee.com/quant1x/pandas.git/compare/v0.9.20...v0.9.21
+[0.9.20]: https://gitee.com/quant1x/pandas.git/compare/v0.9.19...v0.9.20
+[0.9.19]: https://gitee.com/quant1x/pandas.git/compare/v0.9.18...v0.9.19
+[0.9.18]: https://gitee.com/quant1x/pandas.git/compare/v0.9.17...v0.9.18
+[0.9.17]: https://gitee.com/quant1x/pandas.git/compare/v0.9.16...v0.9.17
+[0.9.16]: https://gitee.com/quant1x/pandas.git/compare/v0.9.15...v0.9.16
+[0.9.15]: https://gitee.com/quant1x/pandas.git/compare/v0.9.14...v0.9.15
+[0.9.14]: https://gitee.com/quant1x/pandas.git/compare/v0.9.13...v0.9.14
+[0.9.13]: https://gitee.com/quant1x/pandas.git/compare/v0.9.12...v0.9.13
+[0.9.12]: https://gitee.com/quant1x/pandas.git/compare/v0.9.11...v0.9.12
+[0.9.11]: https://gitee.com/quant1x/pandas.git/compare/v0.9.10...v0.9.11
+[0.9.10]: https://gitee.com/quant1x/pandas.git/compare/v0.9.9...v0.9.10
+[0.9.9]: https://gitee.com/quant1x/pandas.git/compare/v0.9.8...v0.9.9
+[0.9.8]: https://gitee.com/quant1x/pandas.git/compare/v0.9.7...v0.9.8
+[0.9.7]: https://gitee.com/quant1x/pandas.git/compare/v0.9.6...v0.9.7
+[0.9.6]: https://gitee.com/quant1x/pandas.git/compare/v0.9.5...v0.9.6
+[0.9.5]: https://gitee.com/quant1x/pandas.git/compare/v0.9.4...v0.9.5
+[0.9.4]: https://gitee.com/quant1x/pandas.git/compare/v0.9.3...v0.9.4
+[0.9.3]: https://gitee.com/quant1x/pandas.git/compare/v0.9.2...v0.9.3
+[0.9.2]: https://gitee.com/quant1x/pandas.git/compare/v0.9.1...v0.9.2
+[0.9.1]: https://gitee.com/quant1x/pandas.git/compare/v0.9.0...v0.9.1
+[0.9.0]: https://gitee.com/quant1x/pandas.git/compare/v0.8.9...v0.9.0
+[0.8.9]: https://gitee.com/quant1x/pandas.git/compare/v0.8.8...v0.8.9
+[0.8.8]: https://gitee.com/quant1x/pandas.git/compare/v0.8.7...v0.8.8
+[0.8.7]: https://gitee.com/quant1x/pandas.git/compare/v0.8.6...v0.8.7
+[0.8.6]: https://gitee.com/quant1x/pandas.git/compare/v0.8.5...v0.8.6
+[0.8.5]: https://gitee.com/quant1x/pandas.git/compare/v0.8.4...v0.8.5
+[0.8.4]: https://gitee.com/quant1x/pandas.git/compare/v0.8.3...v0.8.4
+[0.8.3]: https://gitee.com/quant1x/pandas.git/compare/v0.8.2...v0.8.3
+[0.8.2]: https://gitee.com/quant1x/pandas.git/compare/v0.8.1...v0.8.2
+[0.8.1]: https://gitee.com/quant1x/pandas.git/compare/v0.8.0...v0.8.1
+[0.8.0]: https://gitee.com/quant1x/pandas.git/compare/v0.7.10...v0.8.0
+[0.7.10]: https://gitee.com/quant1x/pandas.git/compare/v0.7.9...v0.7.10
+[0.7.9]: https://gitee.com/quant1x/pandas.git/compare/v0.7.8...v0.7.9
+[0.7.8]: https://gitee.com/quant1x/pandas.git/compare/v0.7.7...v0.7.8
+[0.7.7]: https://gitee.com/quant1x/pandas.git/compare/v0.7.6...v0.7.7
+[0.7.6]: https://gitee.com/quant1x/pandas.git/compare/v0.7.5...v0.7.6
+[0.7.5]: https://gitee.com/quant1x/pandas.git/compare/v0.7.4...v0.7.5
+[0.7.4]: https://gitee.com/quant1x/pandas.git/compare/v0.7.3...v0.7.4
+[0.7.3]: https://gitee.com/quant1x/pandas.git/compare/v0.7.2...v0.7.3
+[0.7.2]: https://gitee.com/quant1x/pandas.git/compare/v0.7.1...v0.7.2
+[0.7.1]: https://gitee.com/quant1x/pandas.git/compare/v0.7.0...v0.7.1
+[0.7.0]: https://gitee.com/quant1x/pandas.git/compare/v0.6.23...v0.7.0
+[0.6.23]: https://gitee.com/quant1x/pandas.git/compare/v0.6.22...v0.6.23
+[0.6.22]: https://gitee.com/quant1x/pandas.git/compare/v0.6.21...v0.6.22
+[0.6.21]: https://gitee.com/quant1x/pandas.git/compare/v0.6.20...v0.6.21
+[0.6.20]: https://gitee.com/quant1x/pandas.git/compare/v0.6.19...v0.6.20
+[0.6.19]: https://gitee.com/quant1x/pandas.git/compare/v0.6.18...v0.6.19
+[0.6.18]: https://gitee.com/quant1x/pandas.git/compare/v0.6.17...v0.6.18
+[0.6.17]: https://gitee.com/quant1x/pandas.git/compare/v0.6.16...v0.6.17
+[0.6.16]: https://gitee.com/quant1x/pandas.git/compare/v0.6.15...v0.6.16
+[0.6.15]: https://gitee.com/quant1x/pandas.git/compare/v0.6.14...v0.6.15
+[0.6.14]: https://gitee.com/quant1x/pandas.git/compare/v0.6.13...v0.6.14
+[0.6.13]: https://gitee.com/quant1x/pandas.git/compare/v0.6.12...v0.6.13
+[0.6.12]: https://gitee.com/quant1x/pandas.git/compare/v0.6.11...v0.6.12
+[0.6.11]: https://gitee.com/quant1x/pandas.git/compare/v0.6.10...v0.6.11
+[0.6.10]: https://gitee.com/quant1x/pandas.git/compare/v0.6.9...v0.6.10
+[0.6.9]: https://gitee.com/quant1x/pandas.git/compare/v0.6.8...v0.6.9
+[0.6.8]: https://gitee.com/quant1x/pandas.git/compare/v0.6.7...v0.6.8
+[0.6.7]: https://gitee.com/quant1x/pandas.git/compare/v0.6.6...v0.6.7
+[0.6.6]: https://gitee.com/quant1x/pandas.git/compare/v0.6.5...v0.6.6
+[0.6.5]: https://gitee.com/quant1x/pandas.git/compare/v0.6.4...v0.6.5
+[0.6.4]: https://gitee.com/quant1x/pandas.git/compare/v0.6.3...v0.6.4
+[0.6.3]: https://gitee.com/quant1x/pandas.git/compare/v0.6.2...v0.6.3
+[0.6.2]: https://gitee.com/quant1x/pandas.git/compare/v0.6.1...v0.6.2
+[0.6.1]: https://gitee.com/quant1x/pandas.git/compare/v0.6.0...v0.6.1
+[0.6.0]: https://gitee.com/quant1x/pandas.git/compare/v0.5.2...v0.6.0
+[0.5.2]: https://gitee.com/quant1x/pandas.git/compare/v0.5.1...v0.5.2
+[0.5.1]: https://gitee.com/quant1x/pandas.git/compare/v0.5.0...v0.5.1
+[0.5.0]: https://gitee.com/quant1x/pandas.git/compare/v0.2.2...v0.5.0
+[0.2.2]: https://gitee.com/quant1x/pandas.git/compare/v0.2.1...v0.2.2
+[0.2.1]: https://gitee.com/quant1x/pandas.git/compare/v0.2.0...v0.2.1
+[0.2.0]: https://gitee.com/quant1x/pandas.git/compare/v0.1.0...v0.2.0
 
-[0.1.0]: https://github.com/quant1x/pandas.git/releases/tag/v0.1.0
+[0.1.0]: https://gitee.com/quant1x/pandas.git/releases/tag/v0.1.0
