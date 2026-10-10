@@ -6,10 +6,10 @@ github.com/petermattis/goid v0.0.0-20260918085751-abfca077860b h1:OzNsuVdSWGwXvW
 github.com/petermattis/goid v0.0.0-20260918085751-abfca077860b/go.mod h1:pxMtw7cyUw6B2bRH0ZBANSPg+AoSud1I1iyJHI69jH4=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
-github.com/quant1x/gox v1.27.0 h1:gKqSAJbqLlbbT1ckVQU/nR3iHozDiQ9Nwehl63yOHLE=
-github.com/quant1x/gox v1.27.0/go.mod h1:sPy63XwYXcySHIGiTbedwnNNiwUVJHaquvuuJr3vIIg=
-github.com/quant1x/num v0.8.2 h1:8yiwS6POA3n28khKL2vxMkAkbU8jaZv+8YDGY6SNALw=
-github.com/quant1x/num v0.8.2/go.mod h1:kXT+3dzGlhi+A4FypSbTxTLqFxlKdt4Gi9RAuO0hSik=
+github.com/quant1x/gox v1.27.1 h1:1MYKhVrXoz0cLugHKR/NZgXBH0AsFhtwRByhyUTm1Sw=
+github.com/quant1x/gox v1.27.1/go.mod h1:VZtEJLx/UNAOiOAxco2Ejjy5La0DwWDky8zIdKCRIdo=
+github.com/quant1x/num v0.8.3 h1:lVMhiU+89BntQ5/fR3okjtARk+wJBxINnU+fH1Go36c=
+github.com/quant1x/num v0.8.3/go.mod h1:+7ExnVdLiPbRjomkdX7iELgJ6EerVGFSvVhP1Ie+ms4=
 github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu7U=
 github.com/stretchr/testify v1.11.1/go.mod h1:wZwfW3scLgRK+23gO65QZefKpKQRnfz6sD981Nm4B6U=
 golang.org/x/sys v0.49.0 h1:XbzkgYJHdqh/8m2Uu0W/dQv8nktxx4BFHp1M0gROTXA=

@@ -3,8 +3,8 @@ module github.com/quant1x/pandas
 go 1.27.2
 
 require (
-	github.com/quant1x/gox v1.27.0
-	github.com/quant1x/num v0.8.2
+	github.com/quant1x/gox v1.27.1
+	github.com/quant1x/num v0.8.3
 )
 
 require (
