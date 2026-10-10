@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.7.2] - 2026-10-10
+### Changed
+- 删除废弃的仓库同步脚本
+- 更新依赖库版本
+- release version 1.7.2
+
 ## [1.7.1] - 2026-10-09
 ### Changed
 - 调整go版本到1.27.2
@@ -1358,7 +1364,8 @@ All notable changes to this project will be documented in this file.
 - 优化package引入
 
 
-[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.7.1...HEAD
+[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.7.2...HEAD
+[1.7.2]: https://gitee.com/quant1x/pandas/compare/v1.7.1...v1.7.2
 [1.7.1]: https://gitee.com/quant1x/pandas/compare/v1.7.0...v1.7.1
 [1.7.0]: https://gitee.com/quant1x/pandas/compare/v1.6.11...v1.7.0
 [1.6.11]: https://gitee.com/quant1x/pandas/compare/v1.6.10...v1.6.11
