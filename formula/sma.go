@@ -1,9 +1,9 @@
 package formula
 
 import (
-	"github.com/quant1x/gox/exception"
 	"github.com/quant1x/num"
 	"github.com/quant1x/pandas"
+	"github.com/quant1x/pandas/api"
 )
 
 // SMA 中国式的SMA,至少需要120周期才精确 (雪球180周期)    alpha=1/(1+com)
@@ -61,7 +61,7 @@ func v4SMA(S pandas.Series, N any, M int) any {
 		X = num.SliceToFloat32(vs)
 		X = num.Align(X, num.Float32NaN(), S.Len())
 	default:
-		panic(exception.New(1, "error window"))
+		panic(api.NewError(1, "error window"))
 	}
 	return S.Rolling(X).Mean().Values()
 }
@@ -80,7 +80,7 @@ func v5SMA(S pandas.Series, N any, M int) any {
 		X = num.SliceToFloat32(vs)
 		X = num.Align(X, num.Float32NaN(), S.Len())
 	default:
-		panic(exception.New(1, "error window"))
+		panic(api.NewError(1, "error window"))
 	}
 	k := X[0]
 	x := S.EWM(pandas.EW{Alpha: num.Float64NaN(), Callback: func(idx int) num.DType {

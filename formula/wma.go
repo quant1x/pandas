@@ -1,10 +1,9 @@
 package formula
 
 import (
-	"github.com/quant1x/gox/api"
-	"github.com/quant1x/gox/exception"
 	"github.com/quant1x/num"
 	"github.com/quant1x/pandas"
+	"github.com/quant1x/pandas/api"
 )
 
 // WMA 通达信S序列的N日加权移动平均 Yn = (1*X1+2*X2+3*X3+...+n*Xn)/(1+2+3+...+Xn)
@@ -17,7 +16,7 @@ func WMA(S pandas.Series, N any) pandas.Series {
 		vs := v.DTypes()
 		X = num.Align(vs, num.NaN(), S.Len())
 	default:
-		panic(exception.New(1, "error window"))
+		panic(api.NewError(1, "error window"))
 	}
 	d := S.Rolling(X).Apply(func(S pandas.Series, N num.DType) num.DType {
 		if S.Len() == 0 {

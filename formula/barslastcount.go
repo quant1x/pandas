@@ -14,7 +14,7 @@ func BARSLASTCOUNT(S pandas.Series) pandas.Series {
 		if s[i] != 0 {
 			rt[i+1] = rt[i] + 1
 		} else {
-			rt[i+1] = rt[i+1]
+			rt[i+1] = 0
 		}
 	}
 	ns := rt[1:]

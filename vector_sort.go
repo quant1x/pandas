@@ -39,8 +39,6 @@ func (this vector[T]) Less(i, j int) bool {
 		// 应该到不了这里, Len()会返回0
 		panic(num.ErrUnsupportedType)
 	}
-	return false
-
 }
 
 // Swap 实现sort.Interface接口的交换元素方法

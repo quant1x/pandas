@@ -1,9 +1,9 @@
 package formula
 
 import (
-	"github.com/quant1x/gox/exception"
 	"github.com/quant1x/num"
 	"github.com/quant1x/pandas"
+	"github.com/quant1x/pandas/api"
 )
 
 // EMA 指数移动平均,为了精度 S>4*N  EMA至少需要120周期
@@ -63,7 +63,7 @@ func errorV2EMA(S pandas.Series, N any) any {
 		fs := num.SliceToFloat32(vs)
 		X = fs[len(fs)-1]
 	default:
-		panic(exception.New(1, "error window"))
+		panic(api.NewError(1, "error window"))
 	}
 	x := S.EWM(pandas.EW{Alpha: float64(M) / float64(X+1), Adjust: false}).Mean().Values()
 	return x
@@ -80,7 +80,7 @@ func errorV3EMA(S pandas.Series, N any) any {
 		fs := num.SliceToFloat32(vs)
 		X = fs[len(fs)-1]
 	default:
-		panic(exception.New(1, "error window"))
+		panic(api.NewError(1, "error window"))
 	}
 	x := S.EWM(pandas.EW{Span: num.DType(X), Adjust: false}).Mean().Values()
 	return x

@@ -1,9 +1,9 @@
 package formula
 
 import (
-	"github.com/quant1x/gox/exception"
 	"github.com/quant1x/num"
 	"github.com/quant1x/pandas"
+	"github.com/quant1x/pandas/api"
 )
 
 // FILTER 过滤连续出现的信号
@@ -21,7 +21,7 @@ func FILTER(S pandas.Series, N any) pandas.Series {
 		vs := v.DTypes()
 		W = num.Align(vs, num.NaN(), S.Len())
 	default:
-		panic(exception.New(1, "error window"))
+		panic(api.NewError(1, "error window"))
 	}
 	length := S.Len()
 	x := S.DTypes()

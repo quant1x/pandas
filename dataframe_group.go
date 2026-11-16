@@ -1,7 +1,7 @@
 package pandas
 
 import (
-	"github.com/quant1x/gox/api"
+	"github.com/quant1x/pandas/api"
 )
 
 // Group 分组

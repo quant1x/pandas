@@ -1,8 +1,8 @@
 package pandas
 
 import (
-	"github.com/quant1x/gox/api"
 	"github.com/quant1x/num"
+	"github.com/quant1x/pandas/api"
 )
 
 func (this vector[T]) Name() string {

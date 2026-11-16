@@ -1,9 +1,9 @@
 package formula
 
 import (
-	"github.com/quant1x/gox/api"
 	"github.com/quant1x/num"
 	"github.com/quant1x/pandas"
+	"github.com/quant1x/pandas/api"
 )
 
 // LAST LAST(X,A,B):持续存在.

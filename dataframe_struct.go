@@ -5,8 +5,8 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/quant1x/gox/api"
 	"github.com/quant1x/num"
+	"github.com/quant1x/pandas/api"
 )
 
 var (

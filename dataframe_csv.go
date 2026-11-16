@@ -5,10 +5,8 @@ import (
 	"io"
 	"os"
 
-	"github.com/quant1x/gox/api"
-	"github.com/quant1x/gox/exception"
-	"github.com/quant1x/gox/util/homedir"
 	"github.com/quant1x/num"
+	"github.com/quant1x/pandas/api"
 )
 
 // ReadCSV reads a CSV file from a io.Reader and builds a DataFrame with the
@@ -28,7 +26,7 @@ func ReadCSV(in any, options ...LoadOption) DataFrame {
 	}
 
 	if !num.IsEmpty(filename) {
-		filepath, err := homedir.Expand(filename)
+		filepath, err := api.Expand(filename)
 		if err != nil {
 			return DataFrame{Err: err}
 		}
@@ -40,7 +38,7 @@ func ReadCSV(in any, options ...LoadOption) DataFrame {
 		reader = csvFile
 	}
 	if reader == nil {
-		return DataFrame{Err: exception.New(1, "csv文件操作失败")}
+		return DataFrame{Err: api.NewError(1, "csv文件操作失败")}
 	}
 
 	csvReader := csv.NewReader(reader)
@@ -80,7 +78,7 @@ func (this DataFrame) WriteCSV(out any, options ...WriteOption) error {
 	}
 
 	if !num.IsEmpty(filename) {
-		filepath, err := homedir.Expand(filename)
+		filepath, err := api.Expand(filename)
 		if err != nil {
 			return err
 		}
