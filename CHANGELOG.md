@@ -3,6 +3,16 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.7.3] - 2026-11-16
+### Changed
+- refactor[go]：移除对 gox 的依赖
+  - 新增本地 api 包，实现 ScopeLimit、Reverse、Expand、NewError 等项目所需工具
+  - 各源码文件由 gox/api、gox/exception、gox/homedir 切换为本地 api 包
+  - go mod tidy 清理 gox 及随之不再使用的 gocsv、goid 依赖
+  - 删除 Less() 中不可达的 return false
+  - BARSLASTCOUNT 条件不满足分支改为显式置 0，替换无效自赋值
+- release version 1.7.3
+
 ## [1.7.2] - 2026-10-10
 ### Changed
 - 删除废弃的仓库同步脚本
@@ -1364,7 +1374,8 @@ All notable changes to this project will be documented in this file.
 - 优化package引入
 
 
-[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.7.2...HEAD
+[Unreleased]: https://gitee.com/quant1x/pandas/compare/v1.7.3...HEAD
+[1.7.3]: https://gitee.com/quant1x/pandas/compare/v1.7.2...v1.7.3
 [1.7.2]: https://gitee.com/quant1x/pandas/compare/v1.7.1...v1.7.2
 [1.7.1]: https://gitee.com/quant1x/pandas/compare/v1.7.0...v1.7.1
 [1.7.0]: https://gitee.com/quant1x/pandas/compare/v1.6.11...v1.7.0
