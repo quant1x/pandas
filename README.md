@@ -3,12 +3,33 @@ pandas
 [![Sourcegraph](https://sourcegraph.com/github.com/quant1x/pandas/-/badge.svg)](https://sourcegraph.com/github.com/quant1x/pandas?badge)
 [![Build Status](https://api.travis-ci.com/repos/quant1x/pandas.png)](https://travis-ci.com/quant1x/pandas)
 [![codecov](https://codecov.io/gh/quant1x/pandas/branch/master/graph/badge.svg)](https://codecov.io/gh/quant1x/pandas)
-![Golang 1.21.6+](https://img.shields.io/badge/Golang-1.21+-orange.svg?style=flat)
+![Golang 1.27.3+](https://img.shields.io/badge/Golang-1.27.3+-orange.svg?style=flat)
 ![tag](https://img.shields.io/github/tag/quant1x/pandas.svg?style=flat)
 ![license](https://img.shields.io/github/license/quant1x/pandas.svg)
 
 ## 1. 介绍
 golang版本的pandas
+
+## 1.1 多语言实现与验收
+
+除 Go 主实现外，公式族在四个方向对齐，口径以 `formula/`（Go）与 `tests/formula/cases.csv` 的期望值为准：
+
+| 目录 | 语言 | 内容 |
+| --- | --- | --- |
+| `formula/` | Go | 通达信公式（B1），权威实现 |
+| `cpp/` | C++ | 39 个公式 + 特征对拍（B2） |
+| `pandas-rust/` | Rust | 41 个公式 + 特征与 ONNX 推理用例（B3） |
+| `zig/` | Zig | 39 个公式（B6，扩展线） |
+| `scripts/` | Python | 研究侧因子报告（B4，不参与交付） |
+
+一键验收（生成器幂等 + Go / C++ / Rust / Zig + 可选 ONNX）：
+
+```bash
+python tests/run_all.py
+```
+
+样本格式、口径与新用例流程见 [tests/README.md](tests/README.md)；`.numb` 二进制格式见
+`num` 仓的 `docs/DATA-FORMAT.md`。
 
 ## 2. 功能/模块划分
 
