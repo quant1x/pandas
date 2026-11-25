@@ -35,6 +35,17 @@ fn parseList(allocator: std.mem.Allocator, text: []const u8) ![]f64 {
     return list.toOwnedSlice(allocator);
 }
 
+/// CROSS 返回布尔序列，fixture 用 0/1 表示。
+fn crossAsFloat(allocator: std.mem.Allocator, x: []const f64, y: []const f64) ![]f64 {
+    const flags = try formula.cross(allocator, x, y);
+    defer allocator.free(flags);
+    const out = try allocator.alloc(f64, flags.len);
+    for (flags, 0..) |flag, index| {
+        out[index] = if (flag) 1.0 else 0.0;
+    }
+    return out;
+}
+
 fn parsePeriod(text: []const u8) !i64 {
     if (text.len == 0) return 0;
     return std.fmt.parseInt(i64, std.mem.trim(u8, text, " \t\r"), 10);
@@ -136,6 +147,54 @@ test "wma 与 sqrt" {
     try expectListEqual("sqrt", roots, &[_]f64{ 1.0, 2.0, 3.0, 4.0 });
 }
 
+test "条件族 count/filter/cross" {
+    const allocator = std.testing.allocator;
+    const condition = [_]f64{ 1.0, 0.0, 1.0, 1.0, 0.0, 1.0 };
+
+    const total = try formula.count(allocator, &condition, 3);
+    defer allocator.free(total);
+    try expectListEqual("count", total, &[_]f64{ 0.0, 0.0, 2.0, 2.0, 2.0, 2.0 });
+
+    const gated = try formula.filter(allocator, &condition, 2);
+    defer allocator.free(gated);
+    try expectListEqual("filter", gated, &[_]f64{ 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 });
+
+    const s1 = [_]f64{ 1.0, 2.0, 1.0, 3.0 };
+    const s2 = [_]f64{ 1.5, 1.5, 2.5, 2.5 };
+    const flags = try crossAsFloat(allocator, &s1, &s2);
+    defer allocator.free(flags);
+    try expectListEqual("cross", flags, &[_]f64{ 0.0, 1.0, 0.0, 1.0 });
+}
+
+test "极值位置与 dma/max/min" {
+    const allocator = std.testing.allocator;
+    const x = [_]f64{ 1.0, 5.0, 3.0, 5.0, 2.0 };
+
+    const high = try formula.hhvbars(allocator, &x, 3);
+    defer allocator.free(high);
+    try expectListEqual("hhvbars", high, &[_]f64{ nan(), nan(), 1.0, 0.0, 1.0 });
+
+    const low = try formula.llvbars(allocator, &x, 3);
+    defer allocator.free(low);
+    try expectListEqual("llvbars", low, &[_]f64{ nan(), nan(), 2.0, 1.0, 0.0 });
+
+    const source = [_]f64{ 1.0, 2.0, 3.0, 4.0 };
+    const alpha = [_]f64{ 2.0, 2.0, 2.0, 2.0 };
+    const average = try formula.dma(allocator, &source, &alpha);
+    defer allocator.free(average);
+    try expectListEqual("dma", average, &[_]f64{ 1.0, 1.5, 2.25, 3.125 });
+
+    const left = [_]f64{ 1.0, 5.0, 3.0 };
+    const right = [_]f64{ 2.0, 4.0, 6.0 };
+    const upper = try formula.maxSeries(allocator, &left, &right);
+    defer allocator.free(upper);
+    try expectListEqual("max", upper, &[_]f64{ 2.0, 5.0, 6.0 });
+
+    const lower = try formula.minSeries(allocator, &left, &right);
+    defer allocator.free(lower);
+    try expectListEqual("min", lower, &[_]f64{ 1.0, 4.0, 3.0 });
+}
+
 test "fixture cases.csv 逐行对拍" {
     const allocator = std.testing.allocator;
     const text = try readFixture(allocator);
@@ -166,6 +225,8 @@ test "fixture cases.csv 逐行对拍" {
         const name = fields[0];
         const x = try parseList(allocator, fields[1]);
         defer allocator.free(x);
+        const y = try parseList(allocator, fields[2]);
+        defer allocator.free(y);
         const n = try parsePeriod(fields[3]);
         const m = try parsePeriod(fields[4]);
         const want = try parseList(allocator, fields[5]);
@@ -193,11 +254,27 @@ test "fixture cases.csv 逐行对拍" {
             try formula.wma(allocator, x, n)
         else if (std.mem.eql(u8, name, "sqrt"))
             try formula.sqrt(allocator, x)
+        else if (std.mem.eql(u8, name, "count"))
+            try formula.count(allocator, x, n)
+        else if (std.mem.eql(u8, name, "filter"))
+            try formula.filter(allocator, x, n)
+        else if (std.mem.eql(u8, name, "hhvbars"))
+            try formula.hhvbars(allocator, x, n)
+        else if (std.mem.eql(u8, name, "llvbars"))
+            try formula.llvbars(allocator, x, n)
+        else if (std.mem.eql(u8, name, "cross"))
+            try crossAsFloat(allocator, x, y)
+        else if (std.mem.eql(u8, name, "dma"))
+            try formula.dma(allocator, x, y)
+        else if (std.mem.eql(u8, name, "max"))
+            try formula.maxSeries(allocator, x, y)
+        else if (std.mem.eql(u8, name, "min"))
+            try formula.minSeries(allocator, x, y)
         else
             return error.UnknownFormula;
         defer allocator.free(got);
         try expectListEqual(name, got, want);
         checked += 1;
     }
-    try std.testing.expect(checked >= 11);
+    try std.testing.expect(checked >= 19);
 }

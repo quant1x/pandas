@@ -1,6 +1,6 @@
 # pandas/cpp —— 公式族 C++ 版（B2）
 
-`quant1x_pandas_cpp` 是 `pandas/formula` 的 C++ 对齐实现起点。当前 33 个公式：ABS / REF / MA / EMA / SMA / HHV / LLV / SUM / STD / COUNT / WMA / DMA / CROSS / MAX / MIN / IF / IFN / BARSLAST / BARSLASTCOUNT / BARSSINCEN / FILTER / SQRT / GT / GTE / LT / LTE / EQ / NEQ / AND / OR / NOT / LAST / BARSLASTS，
+`quant1x_pandas_cpp` 是 `pandas/formula` 的 C++ 对齐实现起点。当前 35 个公式：ABS / REF / MA / EMA / SMA / HHV / LLV / SUM / STD / COUNT / WMA / DMA / CROSS / MAX / MIN / IF / IFN / BARSLAST / BARSLASTCOUNT / BARSSINCEN / FILTER / SQRT / GT / GTE / LT / LTE / EQ / NEQ / AND / OR / NOT / LAST / BARSLASTS / HHVBARS / LLVBARS，
 序列用 `std::vector<double>`，不依赖 num / xtensor，保证在 pandas 仓内可独立构建。
 
 ## 构建与测试
@@ -40,6 +40,7 @@ ctest --test-dir cpp/build -C Debug --output-on-failure   # VS 多配置生成�
 | AND / OR / NOT | `logic_and` / `logic_or` / `logic_not` | 布尔逻辑 |
 | LAST | `last(condition, a, b)` | A+1 窗口排除最近 B 根 |
 | BARSLASTS | `barslasts(condition, n)` | 倒数第 N 次成立 |
+| HHVBARS / LLVBARS | `hhvbars` / `llvbars(x, window)` | 极值点到当前的周期数，并列取最近 |
 
 ## 口径
 
@@ -50,5 +51,5 @@ ctest --test-dir cpp/build -C Debug --output-on-failure   # VS 多配置生成�
 
 ## 后续
 
-- 先补 HHV / LLV / CROSS / SUM / STD / COUNT / WMA / DMA 等公式。
+- 补齐 B3 剩下的条件与逻辑公式（IF / BARSLAST 系列已有，后续对齐整型与 Series 容器）。
 - 再评估是否把序列类型切到 num 的 C++ 包（`num::Vector`），届时与本仓的 `num_core` 安装包对接。

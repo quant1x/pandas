@@ -1,8 +1,9 @@
 # pandas/zig —— 公式族 Zig 版（B6）
 
 `pandas/zig` 是 `pandas/formula` 的 Zig 扩展实现起点，与 Go / C++ / Rust 共用同一份公式口径。
-当前 11 个公式：ABS / REF / MA / EMA / SMA / HHV / LLV / SUM / STD / WMA / SQRT，
-序列用 `[]const f64` + `std.mem.Allocator`，返回调用方负责释放的 `[]f64`。
+当前 19 个公式：ABS / REF / MA / EMA / SMA / HHV / LLV / SUM / STD / WMA / SQRT /
+COUNT / FILTER / HHVBARS / LLVBARS / CROSS / DMA / MAX / MIN，
+序列用 `[]const f64` + `std.mem.Allocator`，返回调用方负责释放的切片。
 
 Zig 版本基线 0.17.1（`std.Io` 新 IO 接口，`std.ArrayList` 为 unmanaged 形态）。
 
@@ -31,15 +32,22 @@ zig test zig/formula_test.zig
 | STD | `stddev(allocator, x, window)` | 滚动总体标准差（避开 `std` 命名） |
 | WMA | `wma(allocator, x, window)` | 权重 1..N，分母 N(N+1)/2 |
 | SQRT | `sqrt(allocator, x)` | 逐元素平方根 |
+| COUNT | `count(allocator, condition, window)` | 窗口内非零个数；窗口不足计 0 |
+| FILTER | `filter(allocator, condition, window)` | 条件成立后 N 位清零 |
+| HHVBARS / LLVBARS | `hhvbars` / `llvbars(allocator, x, window)` | 极值点到当前的周期数，并列取最近 |
+| CROSS | `cross(allocator, s1, s2)` | 金叉，返回 `[]bool` |
+| DMA | `dma(allocator, x, a)` | alpha=1/A，A 可常量或逐位置 |
+| MAX / MIN | `maxSeries` / `minSeries(allocator, x, y)` | 逐元素取大 / 小，要求等长 |
 
 ## 口径
 
 - EMA / SMA 与 Go 的 EWM `Adjust=false` 一致：`y_t=(1-alpha)*y_{t-1}+alpha*x_t`；NaN 位置沿用前值，首值为 NaN 时按 0 起算。
 - 空输入返回空序列；滚动族的窗口为 0 或超过长度时全部 NaN，只算完整窗口。
 - 首批只覆盖 f64 与一维序列；整型与容器封装后续补。
-- 函数名按 Zig 的 camelCase（`refValue`），对应合同名仍是 `REF`；`STD` 落为 `stddev`，与 C++ 侧命名一致。
+- 函数名按 Zig 的 camelCase（`refValue` / `maxSeries`），对应合同名仍是 `REF` / `MAX`；`STD` 落为 `stddev`，与 C++ 侧命名一致。
+- `CROSS` 返回 `[]bool`，fixture 对拍时转 0/1；其余公式输入为 0/1 序列的（`COUNT` / `FILTER`）按非零判断。
 
 ## 后续
 
-- 对齐 B2 / B3 的其余公式（COUNT / DMA / CROSS / IF / BARSLAST 等）。
+- 对齐 B2 / B3 的其余公式（IF / IFN / BARSLAST / BARSLASTCOUNT / BARSSINCEN / LAST / GT 等）。
 - 评估改用 `pandas/` 根目录的 `build.zig` 统一驱动 Go / C++ / Rust / Zig 四端 fixture 对拍。

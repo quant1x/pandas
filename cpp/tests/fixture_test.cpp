@@ -75,6 +75,7 @@ int main() {
         }
         const std::string name = fields[0];
         const Series x = parse_list(fields[1]);
+        const Series y = parse_list(fields[2]);
         const std::int64_t n = parse_optional(fields[3]);
         const std::int64_t m = parse_optional(fields[4]);
         const Series want = parse_list(fields[5]);
@@ -101,6 +102,26 @@ int main() {
             got = quant1x::pandas::wma(x, static_cast<std::size_t>(n));
         } else if (name == "sqrt") {
             got = quant1x::pandas::sqrt(x);
+        } else if (name == "count") {
+            got = quant1x::pandas::count(x, static_cast<std::size_t>(n));
+        } else if (name == "filter") {
+            got = quant1x::pandas::filter(x, static_cast<std::size_t>(n));
+        } else if (name == "hhvbars") {
+            got = quant1x::pandas::hhvbars(x, static_cast<std::size_t>(n));
+        } else if (name == "llvbars") {
+            got = quant1x::pandas::llvbars(x, static_cast<std::size_t>(n));
+        } else if (name == "cross") {
+            const auto flags = quant1x::pandas::cross(x, y);
+            got.assign(flags.size(), 0.0);
+            for (std::size_t i = 0; i < flags.size(); ++i) {
+                got[i] = flags[i] ? 1.0 : 0.0;
+            }
+        } else if (name == "dma") {
+            got = quant1x::pandas::dma(x, y);
+        } else if (name == "max") {
+            got = quant1x::pandas::max_series(x, y);
+        } else if (name == "min") {
+            got = quant1x::pandas::min_series(x, y);
         } else {
             std::printf("unknown formula: %s\n", name.c_str());
             return 1;

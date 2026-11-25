@@ -33,11 +33,13 @@ func TestFormulaFixtures(t *testing.T) {
 		}
 		name := record[0]
 		x := parseList(t, record[1])
+		y := parseList(t, record[2])
 		n := parseOptionalInt(t, record[3])
 		m := parseOptionalInt(t, record[4])
 		want := parseList(t, record[5])
 
 		series := pandas.Vector(x)
+		pair := pandas.Vector(y)
 		var got []float64
 		switch name {
 		case "abs":
@@ -62,6 +64,22 @@ func TestFormulaFixtures(t *testing.T) {
 			got = WMA(series, n).DTypes()
 		case "sqrt":
 			got = SQRT(series)
+		case "count":
+			got = COUNT(series, n).DTypes()
+		case "filter":
+			got = FILTER(series, n).DTypes()
+		case "hhvbars":
+			got = HHVBARS(series, n).DTypes()
+		case "llvbars":
+			got = LLVBARS(series, n).DTypes()
+		case "cross":
+			got = CROSS(series, pair).DTypes()
+		case "dma":
+			got = DMA(series, pair)
+		case "max":
+			got = MAX(series, pair).DTypes()
+		case "min":
+			got = MIN(series, pair).DTypes()
 		default:
 			t.Fatalf("%s: 未覆盖的公式", name)
 		}

@@ -75,6 +75,10 @@ int main() {
                   {nan, 3.0, 3.0, 5.0});
     expect_series("llv-2", quant1x::pandas::llv({1.0, 3.0, 2.0, 5.0}, 2),
                   {nan, 1.0, 2.0, 2.0});
+    expect_series("hhvbars-3", quant1x::pandas::hhvbars({1.0, 5.0, 3.0, 5.0, 2.0}, 3),
+                  {nan, nan, 1.0, 0.0, 1.0});
+    expect_series("llvbars-3", quant1x::pandas::llvbars({1.0, 5.0, 3.0, 5.0, 2.0}, 3),
+                  {nan, nan, 2.0, 1.0, 0.0});
     expect_series("sum-2", quant1x::pandas::sum({1.0, 2.0, 3.0, 4.0}, 2),
                   {nan, 3.0, 5.0, 7.0});
     expect_series("stddev-2", quant1x::pandas::stddev({1.0, 2.0, 3.0, 4.0}, 2),

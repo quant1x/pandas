@@ -78,6 +78,59 @@ def std(x, window: int):
     return rolling(x, window, population)
 
 
+def count(condition, window: int):
+    """窗口内非零条件的个数；窗口不足计 0。"""
+    out = [0.0] * len(condition)
+    if window <= 0 or window > len(condition):
+        return out
+    for i in range(window - 1, len(condition)):
+        out[i] = float(sum(1 for v in condition[i + 1 - window:i + 1] if v != 0))
+    return out
+
+
+def bars_since(condition, window: int, pick_max: bool):
+    """极值点到当前的周期数：并列时取最近的一个。"""
+    def distance(block):
+        extreme = (max if pick_max else min)(block)
+        position = max(i for i, v in enumerate(block) if v == extreme)
+        return float(len(block) - 1 - position)
+
+    return rolling(condition, window, distance)
+
+
+def cross(s1, s2):
+    """金叉：前一根 S1<S2 且当前 S1>S2。"""
+    out = [0.0] * len(s1)
+    for i in range(1, min(len(s1), len(s2))):
+        if s1[i - 1] < s2[i - 1] and s1[i] > s2[i]:
+            out[i] = 1.0
+    return out
+
+
+def dma(x, a):
+    """动态移动平均：alpha = 1/A，非有限按 1，首值等于源序列首值。"""
+    out = [x[0]]
+    for i in range(1, len(x)):
+        period = a[0] if len(a) == 1 else a[i]
+        alpha = 1.0 / period
+        if not math.isfinite(alpha):
+            alpha = 1.0
+        out.append(alpha * x[i] + (1.0 - alpha) * out[-1])
+    return out
+
+
+def filter_signal(condition, window: int):
+    """条件成立后 N 位清零，扫描已处理的序列。"""
+    out = list(condition)
+    for i in range(len(out)):
+        if out[i] == 0:
+            continue
+        for j in range(i + 1, min(i + 1 + window, len(out))):
+            out[j] = 0.0
+    return out
+
+
+
 def main() -> None:
     path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cases.csv")
     rows = []
@@ -111,6 +164,27 @@ def main() -> None:
 
     sqrt_x = [1.0, 4.0, 9.0, 16.0]
     rows.append(["sqrt", series(sqrt_x), "", "", "", series([math.sqrt(v) for v in sqrt_x])])
+
+    condition = [1.0, 0.0, 1.0, 1.0, 0.0, 1.0]
+    rows.append(["count", series(condition), "", 3, "", series(count(condition, 3))])
+    rows.append(["filter", series(condition), "", 2, "", series(filter_signal(condition, 2))])
+
+    bars_x = [1.0, 5.0, 3.0, 5.0, 2.0]
+    rows.append(["hhvbars", series(bars_x), "", 3, "", series(bars_since(bars_x, 3, True))])
+    rows.append(["llvbars", series(bars_x), "", 3, "", series(bars_since(bars_x, 3, False))])
+
+    cross_x = [1.0, 2.0, 1.0, 3.0]
+    cross_y = [1.5, 1.5, 2.5, 2.5]
+    rows.append(["cross", series(cross_x), series(cross_y), "", "", series(cross(cross_x, cross_y))])
+
+    dma_x = [1.0, 2.0, 3.0, 4.0]
+    dma_a = [2.0, 2.0, 2.0, 2.0]
+    rows.append(["dma", series(dma_x), series(dma_a), "", "", series(dma(dma_x, dma_a))])
+
+    max_x = [1.0, 5.0, 3.0]
+    max_y = [2.0, 4.0, 6.0]
+    rows.append(["max", series(max_x), series(max_y), "", "", series([max(a, b) for a, b in zip(max_x, max_y)])])
+    rows.append(["min", series(max_x), series(max_y), "", "", series([min(a, b) for a, b in zip(max_x, max_y)])])
 
     with open(path, "w", encoding="utf-8", newline="") as handle:
         writer = csv.writer(handle, lineterminator="\n")

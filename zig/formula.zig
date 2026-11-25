@@ -103,6 +103,96 @@ pub fn sqrt(allocator: std.mem.Allocator, x: []const f64) ![]f64 {
     return out;
 }
 
+/// COUNT 最近 N 个周期内非零条件的个数；窗口不足计 0。
+pub fn count(allocator: std.mem.Allocator, condition: []const f64, window: i64) ![]f64 {
+    const out = try allocator.alloc(f64, condition.len);
+    @memset(out, 0);
+    if (window <= 0) return out;
+    const size: usize = @intCast(window);
+    if (size > condition.len) return out;
+    var index: usize = size - 1;
+    while (index < condition.len) : (index += 1) {
+        var total: usize = 0;
+        for (condition[index + 1 - size .. index + 1]) |value| {
+            if (value != 0) total += 1;
+        }
+        out[index] = @floatFromInt(total);
+    }
+    return out;
+}
+
+/// HHVBARS 最近 N 周期内最高点到当前的周期数；并列取最近的一个。
+pub fn hhvbars(allocator: std.mem.Allocator, x: []const f64, window: i64) ![]f64 {
+    return rolling(barsSinceMax, allocator, x, window);
+}
+
+/// LLVBARS 最近 N 周期内最低点到当前的周期数；并列取最近的一个。
+pub fn llvbars(allocator: std.mem.Allocator, x: []const f64, window: i64) ![]f64 {
+    return rolling(barsSinceMin, allocator, x, window);
+}
+
+/// CROSS 金叉：前一根 S1 < S2 且当前 S1 > S2。
+pub fn cross(allocator: std.mem.Allocator, s1: []const f64, s2: []const f64) ![]bool {
+    const out = try allocator.alloc(bool, s1.len);
+    @memset(out, false);
+    const length = @min(s1.len, s2.len);
+    var index: usize = 1;
+    while (index < length) : (index += 1) {
+        out[index] = s1[index - 1] < s2[index - 1] and s1[index] > s2[index];
+    }
+    return out;
+}
+
+/// DMA 动态移动平均：alpha = 1/A，A 可常量或逐位置；非有限时按 1。
+pub fn dma(allocator: std.mem.Allocator, x: []const f64, a: []const f64) ![]f64 {
+    const out = try allocator.alloc(f64, x.len);
+    if (x.len == 0) return out;
+    out[0] = x[0];
+    var index: usize = 1;
+    while (index < x.len) : (index += 1) {
+        const period = if (a.len == 1) a[0] else a[index];
+        var alpha = 1.0 / period;
+        if (!std.math.isFinite(alpha)) alpha = 1.0;
+        out[index] = alpha * x[index] + (1 - alpha) * out[index - 1];
+    }
+    return out;
+}
+
+/// FILTER 条件成立后 N 位清零；扫描已处理的序列。
+pub fn filter(allocator: std.mem.Allocator, condition: []const f64, window: i64) ![]f64 {
+    const out = try allocator.alloc(f64, condition.len);
+    @memcpy(out, condition);
+    if (window <= 0) return out;
+    const width: usize = @intCast(window);
+    var index: usize = 0;
+    while (index < out.len) : (index += 1) {
+        if (out[index] == 0) continue;
+        const end = @min(index + 1 + width, out.len);
+        @memset(out[index + 1 .. end], 0);
+    }
+    return out;
+}
+
+/// MAX 两条序列逐元素取大；要求等长。
+pub fn maxSeries(allocator: std.mem.Allocator, x: []const f64, y: []const f64) ![]f64 {
+    if (x.len != y.len) return error.LengthMismatch;
+    const out = try allocator.alloc(f64, x.len);
+    for (x, y, 0..) |left, right, index| {
+        out[index] = @max(left, right);
+    }
+    return out;
+}
+
+/// MIN 两条序列逐元素取小；要求等长。
+pub fn minSeries(allocator: std.mem.Allocator, x: []const f64, y: []const f64) ![]f64 {
+    if (x.len != y.len) return error.LengthMismatch;
+    const out = try allocator.alloc(f64, x.len);
+    for (x, y, 0..) |left, right, index| {
+        out[index] = @min(left, right);
+    }
+    return out;
+}
+
 /// 逐窗口应用：完整窗口才计算，窗口不足为 NaN。
 fn rolling(
     comptime apply: fn ([]const f64) f64,
@@ -145,14 +235,14 @@ fn totalOf(block: []const f64) f64 {
 }
 
 fn deviationOf(block: []const f64) f64 {
-    const count: f64 = @floatFromInt(block.len);
-    const mean = totalOf(block) / count;
+    const size: f64 = @floatFromInt(block.len);
+    const mean = totalOf(block) / size;
     var squares: f64 = 0;
     for (block) |value| {
         const delta = value - mean;
         squares += delta * delta;
     }
-    return @sqrt(squares / count);
+    return @sqrt(squares / size);
 }
 
 fn weightedMeanOf(block: []const f64) f64 {
@@ -164,6 +254,30 @@ fn weightedMeanOf(block: []const f64) f64 {
         weights += weight;
     }
     return total / weights;
+}
+
+fn barsSinceMax(block: []const f64) f64 {
+    var position: usize = 0;
+    var best = block[0];
+    for (block, 0..) |value, index| {
+        if (value >= best) {
+            best = value;
+            position = index;
+        }
+    }
+    return @floatFromInt(block.len - 1 - position);
+}
+
+fn barsSinceMin(block: []const f64) f64 {
+    var position: usize = 0;
+    var best = block[0];
+    for (block, 0..) |value, index| {
+        if (value <= best) {
+            best = value;
+            position = index;
+        }
+    }
+    return @floatFromInt(block.len - 1 - position);
 }
 
 /// EWM `Adjust=false` 递归：首值 NaN 视为 0，NaN 位置沿用前值。
