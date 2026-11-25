@@ -170,6 +170,8 @@ int main() {
         } else if (name == "ifn") {
             const Series fallback(y.size(), static_cast<double>(n));
             got = quant1x::pandas::ifn(x, y, fallback);
+        } else if (name == "last") {
+            got = quant1x::pandas::last(x, static_cast<std::size_t>(n), static_cast<std::size_t>(m));
         } else {
             std::printf("unknown formula: %s\n", name.c_str());
             return 1;
@@ -188,7 +190,7 @@ int main() {
         }
         ++count;
     }
-    if (count < 5 || failures != 0) {
+    if (count < 35 || failures != 0) {
         std::printf("fixture failed: count=%d failures=%d\n", count, failures);
         return 1;
     }

@@ -270,6 +270,10 @@ def main() -> None:
     rows.append(["barslasts", series(signals), "", 2, "", series(bars_lasts(signals, 2))])
     rows.append(["barssincen", series(signals), "", 3, "", series(bars_since_n(signals, 3))])
 
+    last_condition = [1.0, 1.0, 1.0, 0.0, 1.0, 1.0]
+    rows.append(["last", series(last_condition), "", 3, 1,
+                 series([float("nan"), float("nan"), float("nan"), 1.0, 0.0, 0.0])])
+
     values = [10.0, 20.0, 30.0, 40.0, 50.0, 60.0]
     rows.append(["if", series(signals), series(values), -1, "", series([a if c != 0 else -1.0 for c, a in zip(signals, values)])])
     rows.append(["ifn", series(signals), series(values), -1, "", series([-1.0 if c != 0 else a for c, a in zip(signals, values)])])

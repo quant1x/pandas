@@ -110,6 +110,8 @@ func TestFormulaFixtures(t *testing.T) {
 			got = IF(series, pair, int(n)).DTypes()
 		case "ifn":
 			got = IFN(series, pair, int(n)).DTypes()
+		case "last":
+			got = LAST(series, int(n), int(m)).DTypes()
 		default:
 			t.Fatalf("%s: 未覆盖的公式", name)
 		}

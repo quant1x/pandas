@@ -6,7 +6,7 @@ COUNT / FILTER / HHVBARS / LLVBARS / CROSS / DMA / MAX / MIN / GT / GTE / LT / L
 EQ / NEQ / AND / OR / NOT / IF / IFN / BARSLAST / BARSLASTCOUNT / BARSLASTS /
 BARSSINCEN / LAST，
 序列用 `[]const f64` + `std.mem.Allocator`，返回调用方负责释放的切片。
-其中 34 个进 `tests/formula/cases.csv` 四端对拍，`LAST` 因口径待定暂未入表（见下）。
+35 个全部进 `tests/formula/cases.csv` 四端对拍。
 
 Zig 版本基线 0.17.1（`std.Io` 新 IO 接口，`std.ArrayList` 为 unmanaged 形态）。
 
@@ -58,10 +58,9 @@ zig test zig/formula_test.zig
 - 函数名按 Zig 的 camelCase（`refValue` / `maxSeries`），对应合同名仍是 `REF` / `MAX`；`STD` 落为 `stddev`，与 C++ 侧命名一致。
 - `CROSS` 与比较 / 逻辑族返回 `[]bool`，fixture 对拍时转 0/1；输入为 0/1 序列的公式（`COUNT` / `FILTER` / 逻辑族）按非零判断。
 - 双序列公式要求等长，长度不一致返回 `error.LengthMismatch`；Go 侧按最长对齐、缺位补 0 的口径不在 Zig 里复制。
-- `LAST` 的窗口不足位取 NaN，与 C++ / Rust 一致；Go 侧 `num.Fill(d, 1, true)` 把不足位填 1，两者尚未统一，
-  因此 `LAST` 暂不写入 fixture，待口径定稿后补行。
+- `LAST` 的窗口不足位取 NaN，与 Go / C++ / Rust 一致（滚动族的统一口径）。
 
 ## 后续
 
-- 公式族已与 C++ 的 35 个对齐；后续补整型重载与容器封装，并把 `LAST` 写入 fixture。
+- 公式族已与 C++ 的 35 个对齐且全部入表；后续补整型重载与容器封装。
 - 评估改用 `pandas/` 根目录的 `build.zig` 统一驱动 Go / C++ / Rust / Zig 四端 fixture 对拍。

@@ -30,7 +30,5 @@ func LAST(X pandas.Series, A, B int) pandas.Series {
 			return 0
 		}
 	})
-	d := s.Values().([]num.DType)
-	num.Fill(d, 1, true)
 	return s
 }

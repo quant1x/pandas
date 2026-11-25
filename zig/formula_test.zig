@@ -439,11 +439,13 @@ test "fixture cases.csv 逐行对拍" {
             try ifBranch(allocator, x, y, @floatFromInt(n), false)
         else if (std.mem.eql(u8, name, "ifn"))
             try ifBranch(allocator, x, y, @floatFromInt(n), true)
+        else if (std.mem.eql(u8, name, "last"))
+            try formula.last(allocator, x, n, m)
         else
             return error.UnknownFormula;
         defer allocator.free(got);
         try expectListEqual(name, got, want);
         checked += 1;
     }
-    try std.testing.expect(checked >= 34);
+    try std.testing.expect(checked >= 35);
 }

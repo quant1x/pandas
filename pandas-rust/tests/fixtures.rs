@@ -4,8 +4,8 @@ use std::fs;
 
 use quant1x_pandas::{
     abs, and, barslast, barslastcount, barslasts, barssincen, count, cross, dma, ema, eq, filter,
-    gt, gte, hhv, hhvbars, if_select, ifn, llv, llvbars, lt, lte, ma, max_series, min_series, neq,
-    not, or, ref_value, sma, sqrt, std, sum, wma,
+    gt, gte, hhv, hhvbars, if_select, ifn, last, llv, llvbars, lt, lte, ma, max_series, min_series,
+    neq, not, or, ref_value, sma, sqrt, std, sum, wma,
 };
 
 fn parse_list(text: &str) -> Vec<f64> {
@@ -105,6 +105,7 @@ fn formula_fixtures_match_rust() {
             "barssincen" => barssincen(&x, n),
             "if" => if_select(&x, &y, &vec![n as f64; y.len()]),
             "ifn" => ifn(&x, &y, &vec![n as f64; y.len()]),
+            "last" => last(&x, n, m),
             other => panic!("未覆盖的公式 {other}"),
         };
         assert_eq!(got.len(), want.len(), "{name}: 长度");
@@ -121,5 +122,5 @@ fn formula_fixtures_match_rust() {
         }
         checked += 1;
     }
-    assert!(checked >= 34, "fixture 行数不足");
+    assert!(checked >= 35, "fixture 行数不足");
 }
