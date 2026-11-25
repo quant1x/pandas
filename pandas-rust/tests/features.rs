@@ -1,0 +1,93 @@
+//! 读取 tests/features/features.csv，用 quant1x_pandas 重算特征列并逐值对拍（M8 第一步）。
+
+use std::fs;
+
+use quant1x_pandas::{cross, ema, hhv, llv, ma, std as rolling_std};
+
+const FEATURES: [&str; 8] = [
+    "ma5", "ma20", "ema12", "hhv20", "llv20", "std20", "ret1", "cross_up",
+];
+
+fn parse_value(text: &str) -> f64 {
+    let text = text.trim();
+    if text == "nan" {
+        f64::NAN
+    } else {
+        text.parse::<f64>().expect("非法数值")
+    }
+}
+
+fn index_of(header: &[&str], name: &str) -> usize {
+    header
+        .iter()
+        .position(|value| *value == name)
+        .unwrap_or_else(|| panic!("表头缺少 {name}"))
+}
+
+fn close_enough(actual: f64, expected: f64) -> bool {
+    if actual.is_nan() && expected.is_nan() {
+        return true;
+    }
+    if actual == expected {
+        return true;
+    }
+    (actual - expected).abs() <= 1e-12 * 1.0f64.max(expected.abs())
+}
+
+#[test]
+fn feature_fixtures_match_rust() {
+    let path = "../tests/features/features.csv";
+    let text = fs::read_to_string(path).expect("读取 fixture");
+    let mut lines = text.lines();
+    let header: Vec<&str> = lines.next().expect("表头").split(',').collect();
+
+    let close_col = index_of(&header, "close");
+    let high_col = index_of(&header, "high");
+    let low_col = index_of(&header, "low");
+
+    let mut close = Vec::new();
+    let mut high = Vec::new();
+    let mut low = Vec::new();
+    let mut want: Vec<Vec<f64>> = vec![Vec::new(); FEATURES.len()];
+
+    for line in lines {
+        if line.is_empty() {
+            continue;
+        }
+        let fields: Vec<&str> = line.split(',').collect();
+        close.push(parse_value(fields[close_col]));
+        high.push(parse_value(fields[high_col]));
+        low.push(parse_value(fields[low_col]));
+        for (slot, name) in FEATURES.iter().enumerate() {
+            want[slot].push(parse_value(fields[index_of(&header, name)]));
+        }
+    }
+
+    let ma5 = ma(&close, 5);
+    let ma20 = ma(&close, 20);
+    let ema12 = ema(&close, 12);
+    let hhv20 = hhv(&high, 20);
+    let llv20 = llv(&low, 20);
+    let std20 = rolling_std(&close, 20);
+    let cross_up: Vec<f64> = cross(&ma5, &ma20)
+        .into_iter()
+        .map(|flag| if flag { 1.0 } else { 0.0 })
+        .collect();
+
+    let mut ret1 = vec![f64::NAN; close.len()];
+    for index in 1..close.len() {
+        ret1[index] = close[index] / close[index - 1] - 1.0;
+    }
+
+    let computed = [ma5, ma20, ema12, hhv20, llv20, std20, ret1, cross_up];
+    for (slot, name) in FEATURES.iter().enumerate() {
+        assert_eq!(computed[slot].len(), want[slot].len(), "{name}: 长度");
+        for (index, (actual, expected)) in computed[slot].iter().zip(want[slot].iter()).enumerate()
+        {
+            if !close_enough(*actual, *expected) {
+                panic!("{name}: 第 {index} 位 {actual} != {expected}");
+            }
+        }
+    }
+    assert!(close.len() >= 20, "fixture 行数不足");
+}
