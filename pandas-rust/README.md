@@ -1,6 +1,6 @@
 # pandas-rust —— 公式族 Rust 版（B3）
 
-`quant1x_pandas` 是 `pandas/formula` 的 Rust 对齐实现。当前覆盖 38 个基础公式，
+`quant1x_pandas` 是 `pandas/formula` 的 Rust 对齐实现。当前覆盖 40 个基础公式，
 签名与最小参数集对齐 Go 端：
 
 | 公式 | Rust | 最小参数 |
@@ -30,6 +30,8 @@
 | REF（逐位置） | `ref_series(&[f64], &[f64])` | 序列、逐位置周期 |
 | EMA（逐位置） | `ema_series(&[f64], &[f64])` | 序列、逐位置周期 |
 | SMA（序列周期） | `sma_series(&[f64], &[f64], m: i64)` | 序列、周期序列、权重 |
+| SQRT | `sqrt(&[f64])` | 序列 |
+| LAST | `last(&[f64], a: i64, b: i64)` | 条件序列、起止周期 |
 
 ## 构建与测试
 
@@ -64,6 +66,7 @@ cargo fmt --check
 - GT/GTE/LT/LTE/EQ/NEQ 与 AND/OR/NOT 复用 num 的比较/逻辑实现。
 - CONST 先转 float32 再复制（与 Go 的 Float32s 一致），大整数可能丢精度。
 - `ref_series` / `ema_series` 按位置取周期；`sma_series` 与 Go 一致只取周期序列最后一个值。
+- `LAST`：在 A+1 窗口内检查除最近 B 根外的位置是否都非零；窗口不足为 NaN，B 越界视为成立。
 
 剩余公式（HHV / LLV / CROSS / STD / SUM / COUNT 等）与 C++ 版本（B2）、Python 研究脚本（B4）
 按 M5 计划继续补。
