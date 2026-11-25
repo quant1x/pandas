@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import os
 import subprocess
 import sys
 import time
@@ -52,6 +53,15 @@ def check_generators() -> None:
             raise RuntimeError(f"{script} 生成的产物不幂等：{files}")
 
 
+def onnx_step() -> str:
+    """ONNX 推理：需要 ORT_DYLIB_PATH；未设置时返回跳过原因。"""
+    dylib = os.environ.get("ORT_DYLIB_PATH", "")
+    if not dylib:
+        return "未设置 ORT_DYLIB_PATH（onnxruntime 动态库）"
+    run(["cargo", "test", "--manifest-path", "pandas-rust/Cargo.toml", "--test", "onnx"])
+    return ""
+
+
 STEPS = [
     ("fixtures 幂等", check_generators),
     ("go 公式 fixture", lambda: run(["go", "test", "./formula/"])),
@@ -61,6 +71,7 @@ STEPS = [
     ("rust 用例", lambda: run(["cargo", "test", "--manifest-path",
                                "pandas-rust/Cargo.toml"])),
     ("zig 用例", lambda: run(["zig", "test", "zig/formula_test.zig"])),
+    ("rust onnx", onnx_step),
 ]
 
 
@@ -75,12 +86,15 @@ def main() -> int:
             continue
         started = time.time()
         try:
-            action()
+            reason = action()
         except (subprocess.CalledProcessError, RuntimeError) as error:
             failures.append(name)
             print(f"FAIL  {name}  ({time.time() - started:.1f}s)  {error}")
         else:
-            print(f"PASS  {name}  ({time.time() - started:.1f}s)")
+            if reason:
+                print(f"SKIP  {name}  {reason}")
+            else:
+                print(f"PASS  {name}  ({time.time() - started:.1f}s)")
 
     if failures:
         print(f"\n{len(failures)} 步失败：{', '.join(failures)}")

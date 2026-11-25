@@ -11,9 +11,12 @@ Go / C++ / Rust / Zig 各自读取、重算、逐值对拍；生成器固定输�
 ## 一键验收
 
 ```bash
-python tests/run_all.py            # 生成器幂等 + Go / C++ / Rust / Zig
+python tests/run_all.py            # 生成器幂等 + Go / C++ / Rust / Zig + 可选 ONNX
 python tests/run_all.py --only go  # 只跑名字含 go 的步骤
 ```
+
+`rust onnx` 这一步是可选的：设置了 `ORT_DYLIB_PATH`（指向 onnxruntime 动态库）才执行，
+否则打印 `SKIP` 且不算失败 —— CI 上没有这份库。
 
 `fixtures 幂等` 这一步会把两个生成器重跑一遍，比较产物的 SHA256：不一致即失败
 （说明有人改了 fixture 没重跑生成器，或生成器引入不确定性）。

@@ -39,6 +39,8 @@ ORT_DYLIB_PATH=/path/to/onnxruntime.dll cargo test --manifest-path pandas-rust/C
 未设置该变量时用例**跳过**（CI 上通常没有这份库）；设置后它会读 `features.csv` 的 11 个特征，
 跑 `mlp.onnx`，与 `pred_mlp` 列逐值比对（相对 1e-12，NaN 对 NaN 视为相等）。
 
+`python tests/run_all.py` 已把它接成可跳过的一步：不设 `ORT_DYLIB_PATH` 时显示 `SKIP`，不算失败。
+
 判据不变：输入喂给运行时，输出必须与 `pred_mlp` 一致。C++ / Go 接上后同样按这条判。
 
 ## 为什么仓库里没有动态库
