@@ -19,3 +19,6 @@ coverage.out
 
 # test
 test-*-w*
+
+# C++ 构建产物（B2）
+cpp/build/
