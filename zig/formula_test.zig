@@ -103,6 +103,39 @@ test "sma 中国式平滑" {
     try expectListEqual("sma", got, &[_]f64{ 1.0, 1.3333333333333335, 1.888888888888889 });
 }
 
+test "滚动族 hhv/llv/sum/std" {
+    const allocator = std.testing.allocator;
+    const x = [_]f64{ 1.0, 3.0, 2.0, 5.0, 4.0 };
+
+    const high = try formula.hhv(allocator, &x, 3);
+    defer allocator.free(high);
+    try expectListEqual("hhv", high, &[_]f64{ nan(), nan(), 3.0, 5.0, 5.0 });
+
+    const low = try formula.llv(allocator, &x, 3);
+    defer allocator.free(low);
+    try expectListEqual("llv", low, &[_]f64{ nan(), nan(), 1.0, 2.0, 2.0 });
+
+    const total = try formula.sum(allocator, &x, 2);
+    defer allocator.free(total);
+    try expectListEqual("sum", total, &[_]f64{ nan(), 4.0, 5.0, 7.0, 9.0 });
+
+    const deviation = try formula.stddev(allocator, &x, 3);
+    defer allocator.free(deviation);
+    try expectListEqual("std", deviation, &[_]f64{ nan(), nan(), 0.816496580927726, 1.247219128924647, 1.247219128924647 });
+}
+
+test "wma 与 sqrt" {
+    const allocator = std.testing.allocator;
+    const x = [_]f64{ 1.0, 2.0, 3.0, 4.0 };
+    const weighted = try formula.wma(allocator, &x, 3);
+    defer allocator.free(weighted);
+    try expectListEqual("wma", weighted, &[_]f64{ nan(), nan(), 2.3333333333333335, 3.3333333333333335 });
+
+    const roots = try formula.sqrt(allocator, &[_]f64{ 1.0, 4.0, 9.0, 16.0 });
+    defer allocator.free(roots);
+    try expectListEqual("sqrt", roots, &[_]f64{ 1.0, 2.0, 3.0, 4.0 });
+}
+
 test "fixture cases.csv 逐行对拍" {
     const allocator = std.testing.allocator;
     const text = try readFixture(allocator);
@@ -138,17 +171,33 @@ test "fixture cases.csv 逐行对拍" {
         const want = try parseList(allocator, fields[5]);
         defer allocator.free(want);
 
-        const got = switch (name[0]) {
-            'a' => try formula.abs(allocator, x),
-            'r' => try formula.refValue(allocator, x, n),
-            'm' => try formula.ma(allocator, x, n),
-            'e' => try formula.ema(allocator, x, n),
-            's' => try formula.sma(allocator, x, n, m),
-            else => return error.UnknownFormula,
-        };
+        const got = if (std.mem.eql(u8, name, "abs"))
+            try formula.abs(allocator, x)
+        else if (std.mem.eql(u8, name, "ref"))
+            try formula.refValue(allocator, x, n)
+        else if (std.mem.eql(u8, name, "ma"))
+            try formula.ma(allocator, x, n)
+        else if (std.mem.eql(u8, name, "ema"))
+            try formula.ema(allocator, x, n)
+        else if (std.mem.eql(u8, name, "sma"))
+            try formula.sma(allocator, x, n, m)
+        else if (std.mem.eql(u8, name, "hhv"))
+            try formula.hhv(allocator, x, n)
+        else if (std.mem.eql(u8, name, "llv"))
+            try formula.llv(allocator, x, n)
+        else if (std.mem.eql(u8, name, "sum"))
+            try formula.sum(allocator, x, n)
+        else if (std.mem.eql(u8, name, "std"))
+            try formula.stddev(allocator, x, n)
+        else if (std.mem.eql(u8, name, "wma"))
+            try formula.wma(allocator, x, n)
+        else if (std.mem.eql(u8, name, "sqrt"))
+            try formula.sqrt(allocator, x)
+        else
+            return error.UnknownFormula;
         defer allocator.free(got);
         try expectListEqual(name, got, want);
         checked += 1;
     }
-    try std.testing.expect(checked >= 5);
+    try std.testing.expect(checked >= 11);
 }

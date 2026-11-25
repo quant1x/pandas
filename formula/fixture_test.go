@@ -50,6 +50,18 @@ func TestFormulaFixtures(t *testing.T) {
 			got = EMA(series, n).DTypes()
 		case "sma":
 			got = SMA(series, n, m).DTypes()
+		case "hhv":
+			got = HHV(series, n).DTypes()
+		case "llv":
+			got = LLV(series, n).DTypes()
+		case "sum":
+			got = SUM(series, n).DTypes()
+		case "std":
+			got = STD(series, n).DTypes()
+		case "wma":
+			got = WMA(series, n).DTypes()
+		case "sqrt":
+			got = SQRT(series)
 		default:
 			t.Fatalf("%s: 未覆盖的公式", name)
 		}

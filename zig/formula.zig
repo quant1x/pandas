@@ -69,6 +69,103 @@ pub fn sma(allocator: std.mem.Allocator, x: []const f64, n: i64, m: i64) ![]f64 
     return ewm(allocator, x, weight / period);
 }
 
+/// HHV 最近 N 个周期的最大值。
+pub fn hhv(allocator: std.mem.Allocator, x: []const f64, window: i64) ![]f64 {
+    return rolling(maxOf, allocator, x, window);
+}
+
+/// LLV 最近 N 个周期的最小值。
+pub fn llv(allocator: std.mem.Allocator, x: []const f64, window: i64) ![]f64 {
+    return rolling(minOf, allocator, x, window);
+}
+
+/// SUM 最近 N 个周期的和。
+pub fn sum(allocator: std.mem.Allocator, x: []const f64, window: i64) ![]f64 {
+    return rolling(totalOf, allocator, x, window);
+}
+
+/// STD 最近 N 个周期的总体标准差（符号名 `stddev` 避开 `std`）。
+pub fn stddev(allocator: std.mem.Allocator, x: []const f64, window: i64) ![]f64 {
+    return rolling(deviationOf, allocator, x, window);
+}
+
+/// WMA 加权移动平均：窗口内按 1..N 递增加权，分母 N(N+1)/2。
+pub fn wma(allocator: std.mem.Allocator, x: []const f64, window: i64) ![]f64 {
+    return rolling(weightedMeanOf, allocator, x, window);
+}
+
+/// SQRT 逐元素平方根。
+pub fn sqrt(allocator: std.mem.Allocator, x: []const f64) ![]f64 {
+    const out = try allocator.alloc(f64, x.len);
+    for (x, 0..) |value, index| {
+        out[index] = @sqrt(value);
+    }
+    return out;
+}
+
+/// 逐窗口应用：完整窗口才计算，窗口不足为 NaN。
+fn rolling(
+    comptime apply: fn ([]const f64) f64,
+    allocator: std.mem.Allocator,
+    x: []const f64,
+    window: i64,
+) ![]f64 {
+    const out = try allocator.alloc(f64, x.len);
+    @memset(out, nan());
+    if (window <= 0) return out;
+    const size: usize = @intCast(window);
+    if (size > x.len) return out;
+    var index: usize = size - 1;
+    while (index < x.len) : (index += 1) {
+        out[index] = apply(x[index + 1 - size .. index + 1]);
+    }
+    return out;
+}
+
+fn maxOf(block: []const f64) f64 {
+    var best = block[0];
+    for (block[1..]) |value| {
+        if (value > best) best = value;
+    }
+    return best;
+}
+
+fn minOf(block: []const f64) f64 {
+    var best = block[0];
+    for (block[1..]) |value| {
+        if (value < best) best = value;
+    }
+    return best;
+}
+
+fn totalOf(block: []const f64) f64 {
+    var total: f64 = 0;
+    for (block) |value| total += value;
+    return total;
+}
+
+fn deviationOf(block: []const f64) f64 {
+    const count: f64 = @floatFromInt(block.len);
+    const mean = totalOf(block) / count;
+    var squares: f64 = 0;
+    for (block) |value| {
+        const delta = value - mean;
+        squares += delta * delta;
+    }
+    return @sqrt(squares / count);
+}
+
+fn weightedMeanOf(block: []const f64) f64 {
+    var total: f64 = 0;
+    var weights: f64 = 0;
+    for (block, 0..) |value, index| {
+        const weight: f64 = @floatFromInt(index + 1);
+        total += weight * value;
+        weights += weight;
+    }
+    return total / weights;
+}
+
 /// EWM `Adjust=false` 递归：首值 NaN 视为 0，NaN 位置沿用前值。
 fn ewm(allocator: std.mem.Allocator, x: []const f64, alpha: f64) ![]f64 {
     const out = try allocator.alloc(f64, x.len);

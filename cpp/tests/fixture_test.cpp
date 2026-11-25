@@ -89,6 +89,18 @@ int main() {
             got = quant1x::pandas::ema(x, static_cast<std::size_t>(n));
         } else if (name == "sma") {
             got = quant1x::pandas::sma(x, static_cast<std::size_t>(n), static_cast<int>(m));
+        } else if (name == "hhv") {
+            got = quant1x::pandas::hhv(x, static_cast<std::size_t>(n));
+        } else if (name == "llv") {
+            got = quant1x::pandas::llv(x, static_cast<std::size_t>(n));
+        } else if (name == "sum") {
+            got = quant1x::pandas::sum(x, static_cast<std::size_t>(n));
+        } else if (name == "std") {
+            got = quant1x::pandas::stddev(x, static_cast<std::size_t>(n));
+        } else if (name == "wma") {
+            got = quant1x::pandas::wma(x, static_cast<std::size_t>(n));
+        } else if (name == "sqrt") {
+            got = quant1x::pandas::sqrt(x);
         } else {
             std::printf("unknown formula: %s\n", name.c_str());
             return 1;

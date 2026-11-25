@@ -2,7 +2,7 @@
 
 use std::fs;
 
-use quant1x_pandas::{abs, ema, ma, ref_value, sma};
+use quant1x_pandas::{abs, ema, hhv, llv, ma, ref_value, sma, sqrt, std, sum, wma};
 
 fn parse_list(text: &str) -> Vec<f64> {
     if text.is_empty() {
@@ -55,6 +55,12 @@ fn formula_fixtures_match_rust() {
             "ma" => ma(&x, n),
             "ema" => ema(&x, n),
             "sma" => sma(&x, n, m),
+            "hhv" => hhv(&x, n),
+            "llv" => llv(&x, n),
+            "sum" => sum(&x, n),
+            "std" => std(&x, n),
+            "wma" => wma(&x, n),
+            "sqrt" => sqrt(&x),
             other => panic!("未覆盖的公式 {other}"),
         };
         assert_eq!(got.len(), want.len(), "{name}: 长度");
@@ -71,5 +77,5 @@ fn formula_fixtures_match_rust() {
         }
         count += 1;
     }
-    assert!(count >= 5, "fixture 行数不足");
+    assert!(count >= 11, "fixture 行数不足");
 }
