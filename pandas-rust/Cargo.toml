@@ -1,0 +1,12 @@
+[package]
+name = "quant1x-pandas"
+version = "0.0.0" # 占位；发布流程接管版本
+edition = "2024"
+publish = false
+
+[lib]
+name = "quant1x_pandas"
+path = "src/lib.rs"
+
+[dependencies]
+quant1x-num = { path = "../../num" }
