@@ -38,6 +38,14 @@ void expect_series(const char *label, const Series &got, const Series &want) {
     }
 }
 
+
+void expect_bools(const char *label, const std::vector<bool> &got, const std::vector<bool> &want) {
+    if (got != want) {
+        std::printf("%s: boolean mismatch\n", label);
+        ++failures;
+    }
+}
+
 }  // namespace
 
 int main() {
@@ -107,6 +115,24 @@ int main() {
     expect_series("filter", quant1x::pandas::filter({1.0, 1.0, 1.0, 1.0}, 2),
                   {1.0, 0.0, 0.0, 1.0});
     expect_series("sqrt", quant1x::pandas::sqrt({4.0, 9.0, 0.0}), {2.0, 3.0, 0.0});
+
+
+    expect_bools("gt", quant1x::pandas::gt({1.0, 2.0, 3.0}, {2.0, 2.0, 2.0}), {false, false, true});
+    expect_bools("gte", quant1x::pandas::gte({1.0, 2.0, 3.0}, {2.0, 2.0, 2.0}), {false, true, true});
+    expect_bools("lt", quant1x::pandas::lt({1.0, 2.0, 3.0}, {2.0, 2.0, 2.0}), {true, false, false});
+    expect_bools("lte", quant1x::pandas::lte({1.0, 2.0, 3.0}, {2.0, 2.0, 2.0}), {true, true, false});
+    expect_bools("eq", quant1x::pandas::eq({1.0, 2.0}, {1.0, 3.0}), {true, false});
+    expect_bools("neq", quant1x::pandas::neq({1.0, 2.0}, {1.0, 3.0}), {false, true});
+    expect_bools("and", quant1x::pandas::logic_and({true, true, false}, {true, false, false}),
+                 {true, false, false});
+    expect_bools("or", quant1x::pandas::logic_or({true, true, false}, {false, false, false}),
+                 {true, true, false});
+    expect_bools("not", quant1x::pandas::logic_not({true, false}), {false, true});
+
+    expect_series("last", quant1x::pandas::last({1.0, 1.0, 1.0, 0.0, 1.0, 1.0}, 3, 1),
+                  {nan, nan, nan, 1.0, 0.0, 0.0});
+    expect_series("barslasts", quant1x::pandas::barslasts({1.0, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0}, 3),
+                  {nan, nan, nan, nan, 4.0, 4.0, 4.0, 3.0, 3.0, 4.0});
 
     if (failures != 0) {
         std::printf("%d failure(s)\n", failures);

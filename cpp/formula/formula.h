@@ -352,6 +352,135 @@ namespace quant1x::pandas {
         return out;
     }
 
+
+    // GT / GTE / LT / LTE / EQ / NEQ：按最长对齐，缺位 NaN，比较恒为 false。
+    inline std::vector<bool> gt(const Series &x, const Series &y) {
+        const std::size_t length = x.size() > y.size() ? x.size() : y.size();
+        std::vector<bool> out(length, false);
+        for (std::size_t i = 0; i < length; ++i) {
+            out[i] = (i < x.size() ? x[i] : nan_value()) > (i < y.size() ? y[i] : nan_value());
+        }
+        return out;
+    }
+
+    inline std::vector<bool> gte(const Series &x, const Series &y) {
+        const std::size_t length = x.size() > y.size() ? x.size() : y.size();
+        std::vector<bool> out(length, false);
+        for (std::size_t i = 0; i < length; ++i) {
+            out[i] = (i < x.size() ? x[i] : nan_value()) >= (i < y.size() ? y[i] : nan_value());
+        }
+        return out;
+    }
+
+    inline std::vector<bool> lt(const Series &x, const Series &y) {
+        const std::size_t length = x.size() > y.size() ? x.size() : y.size();
+        std::vector<bool> out(length, false);
+        for (std::size_t i = 0; i < length; ++i) {
+            out[i] = (i < x.size() ? x[i] : nan_value()) < (i < y.size() ? y[i] : nan_value());
+        }
+        return out;
+    }
+
+    inline std::vector<bool> lte(const Series &x, const Series &y) {
+        const std::size_t length = x.size() > y.size() ? x.size() : y.size();
+        std::vector<bool> out(length, false);
+        for (std::size_t i = 0; i < length; ++i) {
+            out[i] = (i < x.size() ? x[i] : nan_value()) <= (i < y.size() ? y[i] : nan_value());
+        }
+        return out;
+    }
+
+    inline std::vector<bool> eq(const Series &x, const Series &y) {
+        const std::size_t length = x.size() > y.size() ? x.size() : y.size();
+        std::vector<bool> out(length, false);
+        for (std::size_t i = 0; i < length; ++i) {
+            out[i] = (i < x.size() ? x[i] : nan_value()) == (i < y.size() ? y[i] : nan_value());
+        }
+        return out;
+    }
+
+    inline std::vector<bool> neq(const Series &x, const Series &y) {
+        const std::size_t length = x.size() > y.size() ? x.size() : y.size();
+        std::vector<bool> out(length, false);
+        for (std::size_t i = 0; i < length; ++i) {
+            out[i] = (i < x.size() ? x[i] : nan_value()) != (i < y.size() ? y[i] : nan_value());
+        }
+        return out;
+    }
+
+    // AND / OR / NOT：逻辑族，缺位按 false。
+    inline std::vector<bool> logic_and(const std::vector<bool> &x, const std::vector<bool> &y) {
+        const std::size_t length = x.size() > y.size() ? x.size() : y.size();
+        std::vector<bool> out(length, false);
+        for (std::size_t i = 0; i < length; ++i) {
+            out[i] = (i < x.size() && x[i]) && (i < y.size() && y[i]);
+        }
+        return out;
+    }
+
+    inline std::vector<bool> logic_or(const std::vector<bool> &x, const std::vector<bool> &y) {
+        const std::size_t length = x.size() > y.size() ? x.size() : y.size();
+        std::vector<bool> out(length, false);
+        for (std::size_t i = 0; i < length; ++i) {
+            out[i] = (i < x.size() && x[i]) || (i < y.size() && y[i]);
+        }
+        return out;
+    }
+
+    inline std::vector<bool> logic_not(const std::vector<bool> &x) {
+        std::vector<bool> out(x.size(), false);
+        for (std::size_t i = 0; i < x.size(); ++i) {
+            out[i] = !x[i];
+        }
+        return out;
+    }
+
+    // LAST 持续存在：A+1 窗口内排除最近 B 根后全部非零；窗口不足 NaN。
+    inline Series last(const Series &condition, std::size_t a, std::size_t b) {
+        return rolling(condition, a + 1, [b](const Series &v, std::size_t begin, std::size_t end) {
+            if (b >= end - begin) {
+                return 1.0;
+            }
+            const std::size_t stop = end - b;
+            for (std::size_t i = begin; i < stop; ++i) {
+                if (v[i] == 0.0) {
+                    return 0.0;
+                }
+            }
+            return 1.0;
+        });
+    }
+
+    // BARSLASTS 倒数第 N 次成立到当前的周期数（Go 递推口径）。
+    inline Series barslasts(const Series &condition, std::int64_t n) {
+        Series current(condition.size(), 0.0);
+        double previous = 0.0;
+        for (std::size_t i = 0; i < condition.size(); ++i) {
+            previous = condition[i] != 0.0 ? 0.0 : previous + 1.0;
+            current[i] = previous;
+        }
+        for (std::int64_t iteration = 1; iteration < n; ++iteration) {
+            Series next(current.size(), nan_value());
+            for (std::size_t i = 0; i < current.size(); ++i) {
+                if (!std::isfinite(current[i])) {
+                    continue;
+                }
+                const double step = current[i] + 1.0;
+                const double source = static_cast<double>(i) - step;
+                if (source < 0.0) {
+                    continue;
+                }
+                const std::size_t index = static_cast<std::size_t>(source);
+                if (index >= current.size() || !std::isfinite(current[index])) {
+                    continue;
+                }
+                next[i] = current[index] + step;
+            }
+            current = next;
+        }
+        return current;
+    }
+
 }  // namespace quant1x::pandas
 
 #endif  // PANDAS_FORMULA_H
