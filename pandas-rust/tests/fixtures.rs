@@ -3,8 +3,8 @@
 use std::fs;
 
 use quant1x_pandas::{
-    abs, count, cross, dma, ema, filter, hhv, hhvbars, llv, llvbars, ma, max_series, min_series,
-    ref_value, sma, sqrt, std, sum, wma,
+    abs, and, count, cross, dma, ema, eq, filter, gt, gte, hhv, hhvbars, llv, llvbars, lt, lte, ma,
+    max_series, min_series, neq, not, or, ref_value, sma, sqrt, std, sum, wma,
 };
 
 fn parse_list(text: &str) -> Vec<f64> {
@@ -21,6 +21,19 @@ fn parse_list(text: &str) -> Vec<f64> {
             }
         })
         .collect()
+}
+
+/// 布尔序列落成 0/1，供 fixture 比对。
+fn flags_to_float(flags: Vec<bool>) -> Vec<f64> {
+    flags
+        .into_iter()
+        .map(|flag| if flag { 1.0 } else { 0.0 })
+        .collect()
+}
+
+/// 0/1 序列转布尔序列，非零即真。
+fn to_bools(values: &[f64]) -> Vec<bool> {
+    values.iter().map(|value| *value != 0.0).collect()
 }
 
 fn parse_optional(text: &str) -> i64 {
@@ -76,6 +89,15 @@ fn formula_fixtures_match_rust() {
             "dma" => dma(&x, &y),
             "max" => max_series(&x, &y),
             "min" => min_series(&x, &y),
+            "gt" => flags_to_float(gt(&x, &y)),
+            "gte" => flags_to_float(gte(&x, &y)),
+            "lt" => flags_to_float(lt(&x, &y)),
+            "lte" => flags_to_float(lte(&x, &y)),
+            "eq" => flags_to_float(eq(&x, &y)),
+            "neq" => flags_to_float(neq(&x, &y)),
+            "and" => flags_to_float(and(&to_bools(&x), &to_bools(&y))),
+            "or" => flags_to_float(or(&to_bools(&x), &to_bools(&y))),
+            "not" => flags_to_float(not(&to_bools(&x))),
             other => panic!("未覆盖的公式 {other}"),
         };
         assert_eq!(got.len(), want.len(), "{name}: 长度");
@@ -92,5 +114,5 @@ fn formula_fixtures_match_rust() {
         }
         checked += 1;
     }
-    assert!(checked >= 19, "fixture 行数不足");
+    assert!(checked >= 28, "fixture 行数不足");
 }

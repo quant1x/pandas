@@ -42,6 +42,22 @@ std::int64_t parse_optional(const std::string &text) {
     return text.empty() ? 0 : std::stoll(text);
 }
 
+Series bools_to_series(const std::vector<bool> &flags) {
+    Series out(flags.size(), 0.0);
+    for (std::size_t i = 0; i < flags.size(); ++i) {
+        out[i] = flags[i] ? 1.0 : 0.0;
+    }
+    return out;
+}
+
+std::vector<bool> to_bools(const Series &values) {
+    std::vector<bool> out(values.size(), false);
+    for (std::size_t i = 0; i < values.size(); ++i) {
+        out[i] = values[i] != 0.0;
+    }
+    return out;
+}
+
 bool close(double actual, double expected) {
     if (std::isnan(actual) && std::isnan(expected)) {
         return true;
@@ -122,6 +138,24 @@ int main() {
             got = quant1x::pandas::max_series(x, y);
         } else if (name == "min") {
             got = quant1x::pandas::min_series(x, y);
+        } else if (name == "gt") {
+            got = bools_to_series(quant1x::pandas::gt(x, y));
+        } else if (name == "gte") {
+            got = bools_to_series(quant1x::pandas::gte(x, y));
+        } else if (name == "lt") {
+            got = bools_to_series(quant1x::pandas::lt(x, y));
+        } else if (name == "lte") {
+            got = bools_to_series(quant1x::pandas::lte(x, y));
+        } else if (name == "eq") {
+            got = bools_to_series(quant1x::pandas::eq(x, y));
+        } else if (name == "neq") {
+            got = bools_to_series(quant1x::pandas::neq(x, y));
+        } else if (name == "and") {
+            got = bools_to_series(quant1x::pandas::logic_and(to_bools(x), to_bools(y)));
+        } else if (name == "or") {
+            got = bools_to_series(quant1x::pandas::logic_or(to_bools(x), to_bools(y)));
+        } else if (name == "not") {
+            got = bools_to_series(quant1x::pandas::logic_not(to_bools(x)));
         } else {
             std::printf("unknown formula: %s\n", name.c_str());
             return 1;

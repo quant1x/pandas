@@ -80,6 +80,24 @@ func TestFormulaFixtures(t *testing.T) {
 			got = MAX(series, pair).DTypes()
 		case "min":
 			got = MIN(series, pair).DTypes()
+		case "gt":
+			got = boolsToFloat(CompareGt(x, y))
+		case "gte":
+			got = boolsToFloat(CompareGte(x, y))
+		case "lt":
+			got = boolsToFloat(CompareLt(x, y))
+		case "lte":
+			got = boolsToFloat(CompareLte(x, y))
+		case "eq":
+			got = boolsToFloat(EQ(series, pair))
+		case "neq":
+			got = boolsToFloat(NEQ(series, pair))
+		case "and":
+			got = boolsToFloat(AND(floatsToBools(x), floatsToBools(y)))
+		case "or":
+			got = boolsToFloat(OR(floatsToBools(x), floatsToBools(y)))
+		case "not":
+			got = NOT(series).DTypes()
 		default:
 			t.Fatalf("%s: 未覆盖的公式", name)
 		}
@@ -96,6 +114,26 @@ func TestFormulaFixtures(t *testing.T) {
 			t.Fatalf("%s: 第 %d 位 %v != %v", name, i, got[i], want[i])
 		}
 	}
+}
+
+// boolsToFloat 把布尔序列落成 0/1，供 fixture 比对。
+func boolsToFloat(flags []bool) []float64 {
+	out := make([]float64, len(flags))
+	for i, flag := range flags {
+		if flag {
+			out[i] = 1
+		}
+	}
+	return out
+}
+
+// floatsToBools 把 0/1 序列转成布尔序列，非零即真。
+func floatsToBools(values []float64) []bool {
+	out := make([]bool, len(values))
+	for i, value := range values {
+		out[i] = value != 0
+	}
+	return out
 }
 
 func parseList(t *testing.T, text string) []float64 {

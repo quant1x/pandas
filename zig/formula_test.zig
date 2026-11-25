@@ -35,15 +35,66 @@ fn parseList(allocator: std.mem.Allocator, text: []const u8) ![]f64 {
     return list.toOwnedSlice(allocator);
 }
 
-/// CROSS 返回布尔序列，fixture 用 0/1 表示。
-fn crossAsFloat(allocator: std.mem.Allocator, x: []const f64, y: []const f64) ![]f64 {
-    const flags = try formula.cross(allocator, x, y);
-    defer allocator.free(flags);
+/// 布尔序列在 fixture 里用 0/1 表示。
+fn boolsAsFloat(allocator: std.mem.Allocator, flags: []const bool) ![]f64 {
     const out = try allocator.alloc(f64, flags.len);
     for (flags, 0..) |flag, index| {
         out[index] = if (flag) 1.0 else 0.0;
     }
     return out;
+}
+
+/// 0/1 序列转布尔序列；非零即真。
+fn floatsAsBools(allocator: std.mem.Allocator, values: []const f64) ![]bool {
+    const out = try allocator.alloc(bool, values.len);
+    for (values, 0..) |value, index| {
+        out[index] = value != 0;
+    }
+    return out;
+}
+
+/// NOT 的 fixture 包装：输入 0/1 序列。
+fn compareNot(allocator: std.mem.Allocator, x: []const f64) ![]f64 {
+    const values = try floatsAsBools(allocator, x);
+    defer allocator.free(values);
+    const flags = try formula.logicNot(allocator, values);
+    defer allocator.free(flags);
+    return boolsAsFloat(allocator, flags);
+}
+
+/// CROSS 返回布尔序列，fixture 用 0/1 表示。
+fn crossAsFloat(allocator: std.mem.Allocator, x: []const f64, y: []const f64) ![]f64 {
+    const flags = try formula.cross(allocator, x, y);
+    defer allocator.free(flags);
+    return boolsAsFloat(allocator, flags);
+}
+
+/// 比较族返回布尔序列，fixture 用 0/1 表示。
+fn compareAsFloat(
+    comptime op: fn (std.mem.Allocator, []const f64, []const f64) anyerror![]bool,
+    allocator: std.mem.Allocator,
+    x: []const f64,
+    y: []const f64,
+) ![]f64 {
+    const flags = try op(allocator, x, y);
+    defer allocator.free(flags);
+    return boolsAsFloat(allocator, flags);
+}
+
+/// 逻辑族返回布尔序列，fixture 用 0/1 表示。
+fn logicBinaryAsFloat(
+    comptime op: fn (std.mem.Allocator, []const bool, []const bool) anyerror![]bool,
+    allocator: std.mem.Allocator,
+    x: []const f64,
+    y: []const f64,
+) ![]f64 {
+    const left = try floatsAsBools(allocator, x);
+    defer allocator.free(left);
+    const right = try floatsAsBools(allocator, y);
+    defer allocator.free(right);
+    const flags = try op(allocator, left, right);
+    defer allocator.free(flags);
+    return boolsAsFloat(allocator, flags);
 }
 
 fn parsePeriod(text: []const u8) !i64 {
@@ -195,6 +246,34 @@ test "极值位置与 dma/max/min" {
     try expectListEqual("min", lower, &[_]f64{ 1.0, 4.0, 3.0 });
 }
 
+test "比较族 gt/gte/lt/lte/eq/neq 与逻辑族" {
+    const allocator = std.testing.allocator;
+    const x = [_]f64{ 1.0, 2.0, 3.0, 4.0 };
+    const y = [_]f64{ 2.0, 2.0, 2.0, 2.0 };
+
+    const greater = try compareAsFloat(formula.gt, allocator, &x, &y);
+    defer allocator.free(greater);
+    try expectListEqual("gt", greater, &[_]f64{ 0.0, 0.0, 1.0, 1.0 });
+
+    const equal = try compareAsFloat(formula.eq, allocator, &x, &y);
+    defer allocator.free(equal);
+    try expectListEqual("eq", equal, &[_]f64{ 0.0, 1.0, 0.0, 0.0 });
+
+    const left = [_]f64{ 1.0, 1.0, 0.0, 0.0 };
+    const right = [_]f64{ 1.0, 0.0, 1.0, 0.0 };
+    const conjunction = try logicBinaryAsFloat(formula.logicAnd, allocator, &left, &right);
+    defer allocator.free(conjunction);
+    try expectListEqual("and", conjunction, &[_]f64{ 1.0, 0.0, 0.0, 0.0 });
+
+    const disjunction = try logicBinaryAsFloat(formula.logicOr, allocator, &left, &right);
+    defer allocator.free(disjunction);
+    try expectListEqual("or", disjunction, &[_]f64{ 1.0, 1.0, 1.0, 0.0 });
+
+    const negation = try compareNot(allocator, &left);
+    defer allocator.free(negation);
+    try expectListEqual("not", negation, &[_]f64{ 0.0, 0.0, 1.0, 1.0 });
+}
+
 test "fixture cases.csv 逐行对拍" {
     const allocator = std.testing.allocator;
     const text = try readFixture(allocator);
@@ -270,11 +349,29 @@ test "fixture cases.csv 逐行对拍" {
             try formula.maxSeries(allocator, x, y)
         else if (std.mem.eql(u8, name, "min"))
             try formula.minSeries(allocator, x, y)
+        else if (std.mem.eql(u8, name, "gt"))
+            try compareAsFloat(formula.gt, allocator, x, y)
+        else if (std.mem.eql(u8, name, "gte"))
+            try compareAsFloat(formula.gte, allocator, x, y)
+        else if (std.mem.eql(u8, name, "lt"))
+            try compareAsFloat(formula.lt, allocator, x, y)
+        else if (std.mem.eql(u8, name, "lte"))
+            try compareAsFloat(formula.lte, allocator, x, y)
+        else if (std.mem.eql(u8, name, "eq"))
+            try compareAsFloat(formula.eq, allocator, x, y)
+        else if (std.mem.eql(u8, name, "neq"))
+            try compareAsFloat(formula.neq, allocator, x, y)
+        else if (std.mem.eql(u8, name, "and"))
+            try logicBinaryAsFloat(formula.logicAnd, allocator, x, y)
+        else if (std.mem.eql(u8, name, "or"))
+            try logicBinaryAsFloat(formula.logicOr, allocator, x, y)
+        else if (std.mem.eql(u8, name, "not"))
+            try compareNot(allocator, x)
         else
             return error.UnknownFormula;
         defer allocator.free(got);
         try expectListEqual(name, got, want);
         checked += 1;
     }
-    try std.testing.expect(checked >= 19);
+    try std.testing.expect(checked >= 28);
 }

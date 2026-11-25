@@ -181,6 +181,21 @@ def main() -> None:
     dma_a = [2.0, 2.0, 2.0, 2.0]
     rows.append(["dma", series(dma_x), series(dma_a), "", "", series(dma(dma_x, dma_a))])
 
+    cmp_x = [1.0, 2.0, 3.0, 4.0]
+    cmp_y = [2.0, 2.0, 2.0, 2.0]
+    rows.append(["gt", series(cmp_x), series(cmp_y), "", "", series([float(a > b) for a, b in zip(cmp_x, cmp_y)])])
+    rows.append(["gte", series(cmp_x), series(cmp_y), "", "", series([float(a >= b) for a, b in zip(cmp_x, cmp_y)])])
+    rows.append(["lt", series(cmp_x), series(cmp_y), "", "", series([float(a < b) for a, b in zip(cmp_x, cmp_y)])])
+    rows.append(["lte", series(cmp_x), series(cmp_y), "", "", series([float(a <= b) for a, b in zip(cmp_x, cmp_y)])])
+    rows.append(["eq", series(cmp_x), series(cmp_y), "", "", series([float(a == b) for a, b in zip(cmp_x, cmp_y)])])
+    rows.append(["neq", series(cmp_x), series(cmp_y), "", "", series([float(a != b) for a, b in zip(cmp_x, cmp_y)])])
+
+    left = [1.0, 1.0, 0.0, 0.0]
+    right = [1.0, 0.0, 1.0, 0.0]
+    rows.append(["and", series(left), series(right), "", "", series([float(a != 0 and b != 0) for a, b in zip(left, right)])])
+    rows.append(["or", series(left), series(right), "", "", series([float(a != 0 or b != 0) for a, b in zip(left, right)])])
+    rows.append(["not", series(left), "", "", "", series([float(a == 0) for a in left])])
+
     max_x = [1.0, 5.0, 3.0]
     max_y = [2.0, 4.0, 6.0]
     rows.append(["max", series(max_x), series(max_y), "", "", series([max(a, b) for a, b in zip(max_x, max_y)])])

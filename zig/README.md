@@ -1,8 +1,9 @@
 # pandas/zig —— 公式族 Zig 版（B6）
 
 `pandas/zig` 是 `pandas/formula` 的 Zig 扩展实现起点，与 Go / C++ / Rust 共用同一份公式口径。
-当前 19 个公式：ABS / REF / MA / EMA / SMA / HHV / LLV / SUM / STD / WMA / SQRT /
-COUNT / FILTER / HHVBARS / LLVBARS / CROSS / DMA / MAX / MIN，
+当前 28 个公式：ABS / REF / MA / EMA / SMA / HHV / LLV / SUM / STD / WMA / SQRT /
+COUNT / FILTER / HHVBARS / LLVBARS / CROSS / DMA / MAX / MIN / GT / GTE / LT / LTE /
+EQ / NEQ / AND / OR / NOT，
 序列用 `[]const f64` + `std.mem.Allocator`，返回调用方负责释放的切片。
 
 Zig 版本基线 0.17.1（`std.Io` 新 IO 接口，`std.ArrayList` 为 unmanaged 形态）。
@@ -38,6 +39,8 @@ zig test zig/formula_test.zig
 | CROSS | `cross(allocator, s1, s2)` | 金叉，返回 `[]bool` |
 | DMA | `dma(allocator, x, a)` | alpha=1/A，A 可常量或逐位置 |
 | MAX / MIN | `maxSeries` / `minSeries(allocator, x, y)` | 逐元素取大 / 小，要求等长 |
+| GT / GTE / LT / LTE / EQ / NEQ | `gt` / `gte` / `lt` / `lte` / `eq` / `neq(allocator, x, y)` | 逐元素比较，返回 `[]bool`，要求等长 |
+| AND / OR / NOT | `logicAnd` / `logicOr` / `logicNot(allocator, x[, y])` | 逻辑族，`and` / `or` 是关键字故加前缀 |
 
 ## 口径
 
@@ -45,9 +48,10 @@ zig test zig/formula_test.zig
 - 空输入返回空序列；滚动族的窗口为 0 或超过长度时全部 NaN，只算完整窗口。
 - 首批只覆盖 f64 与一维序列；整型与容器封装后续补。
 - 函数名按 Zig 的 camelCase（`refValue` / `maxSeries`），对应合同名仍是 `REF` / `MAX`；`STD` 落为 `stddev`，与 C++ 侧命名一致。
-- `CROSS` 返回 `[]bool`，fixture 对拍时转 0/1；其余公式输入为 0/1 序列的（`COUNT` / `FILTER`）按非零判断。
+- `CROSS` 与比较 / 逻辑族返回 `[]bool`，fixture 对拍时转 0/1；输入为 0/1 序列的公式（`COUNT` / `FILTER` / 逻辑族）按非零判断。
+- 双序列公式要求等长，长度不一致返回 `error.LengthMismatch`；Go 侧按最长对齐、缺位补 0 的口径不在 Zig 里复制。
 
 ## 后续
 
-- 对齐 B2 / B3 的其余公式（IF / IFN / BARSLAST / BARSLASTCOUNT / BARSSINCEN / LAST / GT 等）。
+- 对齐 B2 / B3 的其余公式（IF / IFN / BARSLAST / BARSLASTCOUNT / BARSSINCEN / LAST）。
 - 评估改用 `pandas/` 根目录的 `build.zig` 统一驱动 Go / C++ / Rust / Zig 四端 fixture 对拍。
