@@ -20,10 +20,13 @@ struct Table {
     std::vector<double> ma5;
     std::vector<double> ma20;
     std::vector<double> ema12;
+    std::vector<double> wma10;
     std::vector<double> hhv20;
     std::vector<double> llv20;
     std::vector<double> std20;
+    std::vector<double> hhvbars20;
     std::vector<double> ret1;
+    std::vector<double> bias5;
     std::vector<double> cross_up;
 };
 
@@ -91,10 +94,13 @@ int main() {
     std::size_t ma5_col = 0;
     std::size_t ma20_col = 0;
     std::size_t ema12_col = 0;
+    std::size_t wma10_col = 0;
     std::size_t hhv20_col = 0;
     std::size_t llv20_col = 0;
     std::size_t std20_col = 0;
+    std::size_t hhvbars_col = 0;
     std::size_t ret1_col = 0;
+    std::size_t bias5_col = 0;
     std::size_t cross_col = 0;
     for (std::size_t i = 0; i < header.size(); ++i) {
         const std::string &name = header[i];
@@ -106,10 +112,13 @@ int main() {
         else if (name == "ma5") ma5_col = i;
         else if (name == "ma20") ma20_col = i;
         else if (name == "ema12") ema12_col = i;
+        else if (name == "wma10") wma10_col = i;
         else if (name == "hhv20") hhv20_col = i;
         else if (name == "llv20") llv20_col = i;
         else if (name == "std20") std20_col = i;
+        else if (name == "hhvbars20") hhvbars_col = i;
         else if (name == "ret1") ret1_col = i;
+        else if (name == "bias5") bias5_col = i;
         else if (name == "cross_up") cross_col = i;
     }
     (void)date_col;
@@ -127,10 +136,13 @@ int main() {
         data.ma5.push_back(parse_value(fields[ma5_col]));
         data.ma20.push_back(parse_value(fields[ma20_col]));
         data.ema12.push_back(parse_value(fields[ema12_col]));
+        data.wma10.push_back(parse_value(fields[wma10_col]));
         data.hhv20.push_back(parse_value(fields[hhv20_col]));
         data.llv20.push_back(parse_value(fields[llv20_col]));
         data.std20.push_back(parse_value(fields[std20_col]));
+        data.hhvbars20.push_back(parse_value(fields[hhvbars_col]));
         data.ret1.push_back(parse_value(fields[ret1_col]));
+        data.bias5.push_back(parse_value(fields[bias5_col]));
         data.cross_up.push_back(parse_value(fields[cross_col]));
     }
 
@@ -138,14 +150,22 @@ int main() {
     const Series ma5 = quant1x::pandas::ma(close, 5);
     const Series ma20 = quant1x::pandas::ma(close, 20);
     const Series ema12 = quant1x::pandas::ema(close, 12);
+    const Series wma10 = quant1x::pandas::wma(close, 10);
     const Series hhv20 = quant1x::pandas::hhv(data.high, 20);
     const Series llv20 = quant1x::pandas::llv(data.low, 20);
     const Series std20 = quant1x::pandas::stddev(close, 20);
+    const Series hhvbars20 = quant1x::pandas::hhvbars(data.high, 20);
     const auto cross = quant1x::pandas::cross(ma5, ma20);
 
     Series ret1(close.size(), std::numeric_limits<double>::quiet_NaN());
     for (std::size_t i = 1; i < close.size(); ++i) {
         ret1[i] = close[i] / close[i - 1] - 1.0;
+    }
+    Series bias5(close.size(), std::numeric_limits<double>::quiet_NaN());
+    for (std::size_t i = 0; i < close.size(); ++i) {
+        if (!std::isnan(ma5[i])) {
+            bias5[i] = close[i] / ma5[i] - 1.0;
+        }
     }
     Series cross_up(cross.size(), 0.0);
     for (std::size_t i = 0; i < cross.size(); ++i) {
@@ -156,10 +176,13 @@ int main() {
         expect_column("ma5", ma5, data.ma5) &&
         expect_column("ma20", ma20, data.ma20) &&
         expect_column("ema12", ema12, data.ema12) &&
+        expect_column("wma10", wma10, data.wma10) &&
         expect_column("hhv20", hhv20, data.hhv20) &&
         expect_column("llv20", llv20, data.llv20) &&
         expect_column("std20", std20, data.std20) &&
+        expect_column("hhvbars20", hhvbars20, data.hhvbars20) &&
         expect_column("ret1", ret1, data.ret1) &&
+        expect_column("bias5", bias5, data.bias5) &&
         expect_column("cross_up", cross_up, data.cross_up);
     if (!ok) {
         return 1;

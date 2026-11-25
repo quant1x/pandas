@@ -16,7 +16,7 @@ import (
 )
 
 // featureColumns 是参与对拍的特征列，顺序即 CSV 表头顺序。
-var featureColumns = []string{"ma5", "ma20", "ema12", "hhv20", "llv20", "std20", "ret1", "cross_up"}
+var featureColumns = []string{"ma5", "ma20", "ema12", "wma10", "hhv20", "llv20", "std20", "hhvbars20", "ret1", "bias5", "cross_up"}
 
 type table struct {
 	close  []float64
@@ -94,7 +94,9 @@ func TestFeatureFixtures(t *testing.T) {
 	ema12 := formula.EMA(series, 12).DTypes()
 	hhv20 := formula.HHV(pandas.Vector(data.high), 20).DTypes()
 	llv20 := formula.LLV(pandas.Vector(data.low), 20).DTypes()
+	wma10 := formula.WMA(series, 10).DTypes()
 	std20 := formula.STD(series, 20).DTypes()
+	hhvbars20 := formula.HHVBARS(pandas.Vector(data.high), 20).DTypes()
 	crossUp := formula.CROSS(pandas.Vector(ma5), pandas.Vector(ma20)).DTypes()
 
 	ret1 := make([]float64, len(data.close))
@@ -102,10 +104,19 @@ func TestFeatureFixtures(t *testing.T) {
 	for i := 1; i < len(data.close); i++ {
 		ret1[i] = data.close[i]/data.close[i-1] - 1
 	}
+	bias5 := make([]float64, len(data.close))
+	for i := range data.close {
+		if math.IsNaN(ma5[i]) {
+			bias5[i] = math.NaN()
+			continue
+		}
+		bias5[i] = data.close[i]/ma5[i] - 1
+	}
 
 	computed := map[string][]float64{
-		"ma5": ma5, "ma20": ma20, "ema12": ema12, "hhv20": hhv20,
-		"llv20": llv20, "std20": std20, "ret1": ret1, "cross_up": crossUp,
+		"ma5": ma5, "ma20": ma20, "ema12": ema12, "wma10": wma10,
+		"hhv20": hhv20, "llv20": llv20, "std20": std20, "hhvbars20": hhvbars20,
+		"ret1": ret1, "bias5": bias5, "cross_up": crossUp,
 	}
 	for _, name := range featureColumns {
 		expectColumn(t, name, computed[name], data.column[name])

@@ -2,10 +2,20 @@
 
 use std::fs;
 
-use quant1x_pandas::{cross, ema, hhv, llv, ma, std as rolling_std};
+use quant1x_pandas::{cross, ema, hhv, hhvbars, llv, ma, std as rolling_std, wma};
 
-const FEATURES: [&str; 8] = [
-    "ma5", "ma20", "ema12", "hhv20", "llv20", "std20", "ret1", "cross_up",
+const FEATURES: [&str; 11] = [
+    "ma5",
+    "ma20",
+    "ema12",
+    "wma10",
+    "hhv20",
+    "llv20",
+    "std20",
+    "hhvbars20",
+    "ret1",
+    "bias5",
+    "cross_up",
 ];
 
 fn parse_value(text: &str) -> f64 {
@@ -66,9 +76,11 @@ fn feature_fixtures_match_rust() {
     let ma5 = ma(&close, 5);
     let ma20 = ma(&close, 20);
     let ema12 = ema(&close, 12);
+    let wma10 = wma(&close, 10);
     let hhv20 = hhv(&high, 20);
     let llv20 = llv(&low, 20);
     let std20 = rolling_std(&close, 20);
+    let hhvbars20 = hhvbars(&high, 20);
     let cross_up: Vec<f64> = cross(&ma5, &ma20)
         .into_iter()
         .map(|flag| if flag { 1.0 } else { 0.0 })
@@ -79,7 +91,16 @@ fn feature_fixtures_match_rust() {
         ret1[index] = close[index] / close[index - 1] - 1.0;
     }
 
-    let computed = [ma5, ma20, ema12, hhv20, llv20, std20, ret1, cross_up];
+    let mut bias5 = vec![f64::NAN; close.len()];
+    for index in 0..close.len() {
+        if !ma5[index].is_nan() {
+            bias5[index] = close[index] / ma5[index] - 1.0;
+        }
+    }
+
+    let computed = [
+        ma5, ma20, ema12, wma10, hhv20, llv20, std20, hhvbars20, ret1, bias5, cross_up,
+    ];
     for (slot, name) in FEATURES.iter().enumerate() {
         assert_eq!(computed[slot].len(), want[slot].len(), "{name}: 长度");
         for (index, (actual, expected)) in computed[slot].iter().zip(want[slot].iter()).enumerate()

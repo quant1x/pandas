@@ -8,7 +8,7 @@
 | 文件 | 内容 |
 | --- | --- |
 | `gen_features.py` | 生成器：确定性价格路径 + 特征计算 |
-| `features.csv` | 输入 OHLCV 与期望特征同表，40 根 Bar |
+| `features.csv` | 输入 OHLCV 与期望特征同表，40 根 Bar、11 个特征列 |
 | `features_test.go` | Go 侧对拍（`go test ./tests/features/`） |
 | `../../cpp/tests/features_test.cpp` | C++ 侧对拍（ctest 的 `features_fixture_test`） |
 | `../../pandas-rust/tests/features.rs` | Rust 侧对拍（`cargo test --test features`） |
@@ -16,12 +16,14 @@
 ## 列
 
 ```text
-date,open,high,low,close,ma5,ma20,ema12,hhv20,llv20,std20,ret1,cross_up
+date,open,high,low,close,ma5,ma20,ema12,wma10,hhv20,llv20,std20,hhvbars20,ret1,bias5,cross_up
 ```
 
 - 前五列是输入；其余是期望值，缺失写 `nan`；
-- 特征只用已四端落地的公式口径组合：`ma` / `ema` / `hhv` / `llv` / `std`（总体标准差）/ `ref` / `cross`；
-- `ret1 = close / ref(close,1) - 1`，`cross_up = cross(ma5, ma20)`（0/1）；
+- 特征只用已四端落地的公式口径组合：`ma` / `ema` / `wma` / `hhv` / `llv` / `std`（总体标准差）/
+  `hhvbars` / `ref` / `cross`；
+- `hhv20` / `llv20` / `hhvbars20` 取**最高价**窗口；`std20` / `bias5` / `wma10` 取收盘价；
+- `ret1 = close / ref(close,1) - 1`，`bias5 = close / ma5 - 1`，`cross_up = cross(ma5, ma20)`（0/1）；
 - 这是 fixture 的内部格式，不进入 D1 交换层。
 
 ## 生成

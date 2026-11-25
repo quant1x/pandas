@@ -4,7 +4,7 @@
 输入是一段确定性的 OHLCV（无随机数），输出特征列只在已落地的公式口径上组合：
 MA / EMA / HHV / LLV / STD / REF / CROSS。列顺序即 `features.csv` 的表头顺序。
 
-CSV 列：date,open,high,low,close,ma5,ma20,ema12,hhv20,llv20,std20,ret1,cross_up
+CSV 列：date,open,high,low,close,ma5,ma20,ema12,wma10,hhv20,llv20,std20,hhvbars20,ret1,bias5,cross_up
 缺失写 `nan`；文件 UTF-8 无 BOM、LF、末尾一个换行，重复生成逐字节一致。
 """
 
@@ -66,6 +66,33 @@ def rolling_std(x: list[float], window: int) -> list[float]:
     return out
 
 
+def weighted_average(x: list[float], window: int) -> list[float]:
+    out = [math.nan] * len(x)
+    denominator = window * (window + 1) / 2
+    for i in range(window - 1, len(x)):
+        block = x[i + 1 - window:i + 1]
+        out[i] = sum((j + 1) * v for j, v in enumerate(block)) / denominator
+    return out
+
+
+def bars_since_max(x: list[float], window: int) -> list[float]:
+    out = [math.nan] * len(x)
+    for i in range(window - 1, len(x)):
+        block = x[i + 1 - window:i + 1]
+        extreme = max(block)
+        position = max(j for j, v in enumerate(block) if v == extreme)
+        out[i] = float(len(block) - 1 - position)
+    return out
+
+
+def bias(x: list[float], average: list[float]) -> list[float]:
+    out = [math.nan] * len(x)
+    for i in range(len(x)):
+        if not math.isnan(average[i]):
+            out[i] = x[i] / average[i] - 1.0
+    return out
+
+
 def change_rate(x: list[float]) -> list[float]:
     out = [math.nan] * len(x)
     for i in range(1, len(x)):
@@ -94,14 +121,18 @@ def main() -> None:
     ma5 = moving_average(close, 5)
     ma20 = moving_average(close, 20)
     ema12 = exponential_average(close, 12)
+    wma10 = weighted_average(close, 10)
     hhv20 = rolling_extreme(high, 20, True)
     llv20 = rolling_extreme(low, 20, False)
     std20 = rolling_std(close, 20)
+    hhvbars20 = bars_since_max(high, 20)
+    bias5 = bias(close, ma5)
     ret1 = change_rate(close)
     cross_up = crossing(ma5, ma20)
 
     header = ["date", "open", "high", "low", "close",
-              "ma5", "ma20", "ema12", "hhv20", "llv20", "std20", "ret1", "cross_up"]
+              "ma5", "ma20", "ema12", "wma10", "hhv20", "llv20", "std20", "hhvbars20",
+              "ret1", "bias5", "cross_up"]
     rows = []
     for i in range(BARS):
         rows.append([
@@ -113,10 +144,13 @@ def main() -> None:
             fmt(ma5[i]),
             fmt(ma20[i]),
             fmt(ema12[i]),
+            fmt(wma10[i]),
             fmt(hhv20[i]),
             fmt(llv20[i]),
             fmt(std20[i]),
+            fmt(hhvbars20[i]),
             fmt(ret1[i]),
+            fmt(bias5[i]),
             fmt(cross_up[i]),
         ])
 
