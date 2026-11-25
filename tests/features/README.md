@@ -14,6 +14,7 @@
 | `features_test.go` | Go 侧对拍（`go test ./tests/features/`） |
 | `../../cpp/tests/features_test.cpp` | C++ 侧对拍（ctest 的 `features_fixture_test`） |
 | `../../pandas-rust/tests/features.rs` | Rust 侧对拍（`cargo test --test features`） |
+| `onnx/` | `model_mlp` 的 ONNX 导出与 onnxruntime 复核（三侧运行时未接，见其 README） |
 
 ## 列
 
