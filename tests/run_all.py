@@ -26,6 +26,7 @@ GENERATORS = [
     ("tests/formula/gen_fixtures.py", ["tests/formula/cases.csv"]),
     ("tests/features/gen_features.py",
      ["tests/features/features.csv", "tests/features/model.csv", "tests/features/model_mlp.csv"]),
+    ("scripts/factor_report.py", ["tests/features/report.csv"]),
 ]
 
 
