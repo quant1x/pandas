@@ -9,6 +9,7 @@
 //   - MA 只有完整窗口才计算，窗口不足为 NaN；
 //   - EMA alpha=2/(N+1)、SMA alpha=M/N（M=0 视为 1），均按 EWM Adjust=false。
 
+#include <algorithm>
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
@@ -226,6 +227,127 @@ namespace quant1x::pandas {
         std::vector<bool> out(s1.size(), false);
         for (std::size_t i = 1; i < length; ++i) {
             out[i] = s1[i - 1] < s2[i - 1] && s1[i] > s2[i];
+        }
+        return out;
+    }
+
+
+    // MAX 两条序列逐元素取大，按最长对齐，缺位为 NaN。
+    inline Series max_series(const Series &x, const Series &y) {
+        const std::size_t length = x.size() > y.size() ? x.size() : y.size();
+        Series out(length, nan_value());
+        for (std::size_t i = 0; i < length; ++i) {
+            const double a = i < x.size() ? x[i] : nan_value();
+            const double b = i < y.size() ? y[i] : nan_value();
+            out[i] = b > a ? b : a;
+        }
+        return out;
+    }
+
+    // MIN 两条序列逐元素取小。
+    inline Series min_series(const Series &x, const Series &y) {
+        const std::size_t length = x.size() > y.size() ? x.size() : y.size();
+        Series out(length, nan_value());
+        for (std::size_t i = 0; i < length; ++i) {
+            const double a = i < x.size() ? x[i] : nan_value();
+            const double b = i < y.size() ? y[i] : nan_value();
+            out[i] = b < a ? b : a;
+        }
+        return out;
+    }
+
+    // IF / IFF 条件非零取 a，否则取 b；按最长对齐，缺位 NaN。
+    inline Series if_select(const Series &condition, const Series &a, const Series &b) {
+        std::size_t length = condition.size();
+        if (a.size() > length) {
+            length = a.size();
+        }
+        if (b.size() > length) {
+            length = b.size();
+        }
+        Series out(length, nan_value());
+        for (std::size_t i = 0; i < length; ++i) {
+            const double flag = i < condition.size() ? condition[i] : 0.0;
+            const double chosen = flag != 0.0 ? (i < a.size() ? a[i] : nan_value())
+                                              : (i < b.size() ? b[i] : nan_value());
+            out[i] = chosen;
+        }
+        return out;
+    }
+
+    // IFN 条件为零取 a，否则取 b。
+    inline Series ifn(const Series &condition, const Series &a, const Series &b) {
+        return if_select(condition, b, a);
+    }
+
+    // BARSLAST 上一次条件成立到当前的周期数；从未成立为 -1。
+    inline Series barslast(const Series &condition) {
+        Series out(condition.size(), -1.0);
+        std::int64_t last_true = -1;
+        for (std::size_t i = 0; i < condition.size(); ++i) {
+            if (condition[i] != 0.0) {
+                last_true = static_cast<std::int64_t>(i);
+                out[i] = 0.0;
+            } else if (last_true >= 0) {
+                out[i] = static_cast<double>(static_cast<std::int64_t>(i) - last_true);
+            }
+        }
+        return out;
+    }
+
+    // BARSLASTCOUNT 连续满足条件的周期数。
+    inline Series barslastcount(const Series &condition) {
+        Series out(condition.size(), 0.0);
+        double streak = 0.0;
+        for (std::size_t i = 0; i < condition.size(); ++i) {
+            if (condition[i] != 0.0) {
+                streak += 1.0;
+                out[i] = streak;
+            } else {
+                streak = 0.0;
+            }
+        }
+        return out;
+    }
+
+    // BARSSINCEN 窗口内第一次条件成立到当前的周期数；没有成立为 0。
+    inline Series barssincen(const Series &condition, std::size_t window) {
+        Series out(condition.size(), 0.0);
+        if (window == 0 || window > condition.size()) {
+            return out;
+        }
+        for (std::size_t i = window - 1; i < condition.size(); ++i) {
+            const std::size_t begin = i + 1 - window;
+            for (std::size_t j = begin; j <= i; ++j) {
+                if (condition[j] != 0.0) {
+                    out[i] = static_cast<double>(i - j);
+                    break;
+                }
+            }
+        }
+        return out;
+    }
+
+    // FILTER 条件为真后把其后 N 个位置置零，按处理后序列继续扫描。
+    inline Series filter(const Series &x, std::size_t n) {
+        Series out = x;
+        for (std::size_t i = 0; i < out.size(); ++i) {
+            if (out[i] == 0.0) {
+                continue;
+            }
+            const std::size_t end = std::min(out.size(), i + 1 + n);
+            for (std::size_t j = i + 1; j < end; ++j) {
+                out[j] = 0.0;
+            }
+        }
+        return out;
+    }
+
+    // SQRT 逐元素平方根。
+    inline Series sqrt(const Series &x) {
+        Series out(x.size());
+        for (std::size_t i = 0; i < x.size(); ++i) {
+            out[i] = std::sqrt(x[i]);
         }
         return out;
     }

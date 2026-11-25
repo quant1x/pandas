@@ -1,6 +1,6 @@
 # pandas/cpp —— 公式族 C++ 版（B2）
 
-`quant1x_pandas_cpp` 是 `pandas/formula` 的 C++ 对齐实现起点。首批 13 个公式：ABS / REF / MA / EMA / SMA / HHV / LLV / SUM / STD / COUNT / WMA / DMA / CROSS，
+`quant1x_pandas_cpp` 是 `pandas/formula` 的 C++ 对齐实现起点。当前 22 个公式：ABS / REF / MA / EMA / SMA / HHV / LLV / SUM / STD / COUNT / WMA / DMA / CROSS / MAX / MIN / IF / IFN / BARSLAST / BARSLASTCOUNT / BARSSINCEN / FILTER / SQRT，
 序列用 `std::vector<double>`，不依赖 num / xtensor，保证在 pandas 仓内可独立构建。
 
 ## 构建与测试
@@ -29,6 +29,12 @@ ctest --test-dir cpp/build -C Debug --output-on-failure   # VS 多配置生成�
 | WMA | `wma(x, window)` | 权重 1..N |
 | DMA | `dma(x, a)` | alpha=1/A，A 可常量/逐位置 |
 | CROSS | `cross(s1, s2)` | 前一根 S1<S2 且当前 S1>S2 |
+| MAX / MIN | `max_series` / `min_series` | 逐元素取大 / 小 |
+| IF / IFF / IFN | `if_select` / `ifn` | 条件选择 |
+| BARSLAST / BARSLASTCOUNT | `barslast` / `barslastcount` | 距上次成立 / 连续成立 |
+| BARSSINCEN | `barssincen(condition, window)` | 窗口内首次成立到当前 |
+| FILTER | `filter(x, n)` | 条件后 N 位清零 |
+| SQRT | `sqrt(x)` | 逐元素平方根 |
 
 ## 口径
 

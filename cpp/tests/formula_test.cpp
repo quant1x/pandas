@@ -87,6 +87,27 @@ int main() {
         ++failures;
     }
 
+
+    expect_series("max", quant1x::pandas::max_series({1.0, 5.0, 3.0}, {2.0, 4.0, 3.0}),
+                  {2.0, 5.0, 3.0});
+    expect_series("min", quant1x::pandas::min_series({1.0, 5.0, 3.0}, {2.0, 4.0, 3.0}),
+                  {1.0, 4.0, 3.0});
+    expect_series("if", quant1x::pandas::if_select({1.0, 0.0, 2.0, 0.0}, {10.0, 20.0, 30.0, 40.0},
+                                                     {1.0, 2.0, 3.0, 4.0}),
+                  {10.0, 2.0, 30.0, 4.0});
+    expect_series("ifn", quant1x::pandas::ifn({1.0, 0.0, 2.0, 0.0}, {10.0, 20.0, 30.0, 40.0},
+                                                {1.0, 2.0, 3.0, 4.0}),
+                  {1.0, 20.0, 3.0, 40.0});
+    expect_series("barslast", quant1x::pandas::barslast({0.0, 1.0, 0.0, 0.0, 1.0, 0.0}),
+                  {-1.0, 0.0, 1.0, 2.0, 0.0, 1.0});
+    expect_series("barslastcount", quant1x::pandas::barslastcount({1.0, 1.0, 0.0, 1.0, 1.0, 1.0}),
+                  {1.0, 2.0, 0.0, 1.0, 2.0, 3.0});
+    expect_series("barssincen", quant1x::pandas::barssincen({0.0, 1.0, 0.0, 0.0, 1.0}, 3),
+                  {0.0, 0.0, 1.0, 2.0, 0.0});
+    expect_series("filter", quant1x::pandas::filter({1.0, 1.0, 1.0, 1.0}, 2),
+                  {1.0, 0.0, 0.0, 1.0});
+    expect_series("sqrt", quant1x::pandas::sqrt({4.0, 9.0, 0.0}), {2.0, 3.0, 0.0});
+
     if (failures != 0) {
         std::printf("%d failure(s)\n", failures);
         return 1;
