@@ -15,7 +15,7 @@ import (
 	"github.com/quant1x/pandas/formula"
 )
 
-// featureColumns 是参与对拍的特征列，顺序即 CSV 表头顺序。
+// featureColumns 是参与对拍的特征列，顺序即 CSV 表头顺序（也是模型求和顺序）。
 var featureColumns = []string{"ma5", "ma20", "ema12", "wma10", "hhv20", "llv20", "std20", "hhvbars20", "ret1", "bias5", "cross_up"}
 
 type table struct {
@@ -49,7 +49,7 @@ func loadTable(t *testing.T) *table {
 		out.close = append(out.close, parseValue(t, record[index["close"]]))
 		out.high = append(out.high, parseValue(t, record[index["high"]]))
 		out.low = append(out.low, parseValue(t, record[index["low"]]))
-		for _, name := range featureColumns {
+		for _, name := range append(featureColumns, "pred") {
 			out.column[name] = append(out.column[name], parseValue(t, record[index[name]]))
 		}
 	}
@@ -83,6 +83,43 @@ func expectColumn(t *testing.T, name string, got, want []float64) {
 		}
 		t.Fatalf("%s: 第 %d 位 %v != %v", name, i, got[i], want[i])
 	}
+}
+
+// loadModel 读取 model.csv 的冻结权重。
+func loadModel(t *testing.T) map[string]float64 {
+	t.Helper()
+	file, err := os.Open("model.csv")
+	if err != nil {
+		t.Fatalf("打开模型: %v", err)
+	}
+	defer file.Close()
+
+	records, err := csv.NewReader(file).ReadAll()
+	if err != nil {
+		t.Fatalf("解析模型: %v", err)
+	}
+	weights := make(map[string]float64, len(records))
+	for _, record := range records[1:] {
+		value, err := strconv.ParseFloat(strings.TrimSpace(record[1]), 64)
+		if err != nil {
+			t.Fatalf("非法权重 %q: %v", record[1], err)
+		}
+		weights[strings.TrimSpace(record[0])] = value
+	}
+	return weights
+}
+
+// predict 按表头顺序线性组合，最后加 bias；任一特征缺失则为 NaN。
+func predict(weights map[string]float64, features map[string][]float64, index int) float64 {
+	total := weights["bias"]
+	for _, name := range featureColumns {
+		value := features[name][index]
+		if math.IsNaN(value) {
+			return math.NaN()
+		}
+		total += weights[name] * value
+	}
+	return total
 }
 
 func TestFeatureFixtures(t *testing.T) {
@@ -121,4 +158,11 @@ func TestFeatureFixtures(t *testing.T) {
 	for _, name := range featureColumns {
 		expectColumn(t, name, computed[name], data.column[name])
 	}
+
+	weights := loadModel(t)
+	pred := make([]float64, len(data.close))
+	for i := range pred {
+		pred[i] = predict(weights, computed, i)
+	}
+	expectColumn(t, "pred", pred, data.column["pred"])
 }

@@ -1,0 +1,13 @@
+term,weight
+bias,0.01
+ma5,-0.05
+ma20,0.04
+ema12,0.03
+wma10,-0.02
+hhv20,0.01
+llv20,-0.01
+std20,0.5
+hhvbars20,0.002
+ret1,2.0
+bias5,-1.5
+cross_up,0.8

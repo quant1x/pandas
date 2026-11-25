@@ -6,6 +6,7 @@
 #include <cstdio>
 #include <fstream>
 #include <sstream>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -28,6 +29,7 @@ struct Table {
     std::vector<double> ret1;
     std::vector<double> bias5;
     std::vector<double> cross_up;
+    std::vector<double> pred;
 };
 
 std::vector<std::string> split(const std::string &text, char delimiter) {
@@ -102,6 +104,7 @@ int main() {
     std::size_t ret1_col = 0;
     std::size_t bias5_col = 0;
     std::size_t cross_col = 0;
+    std::size_t pred_col = 0;
     for (std::size_t i = 0; i < header.size(); ++i) {
         const std::string &name = header[i];
         if (name == "date") date_col = i;
@@ -120,6 +123,7 @@ int main() {
         else if (name == "ret1") ret1_col = i;
         else if (name == "bias5") bias5_col = i;
         else if (name == "cross_up") cross_col = i;
+        else if (name == "pred") pred_col = i;
     }
     (void)date_col;
     (void)open_col;
@@ -144,6 +148,7 @@ int main() {
         data.ret1.push_back(parse_value(fields[ret1_col]));
         data.bias5.push_back(parse_value(fields[bias5_col]));
         data.cross_up.push_back(parse_value(fields[cross_col]));
+        data.pred.push_back(parse_value(fields[pred_col]));
     }
 
     const Series close = data.close;
@@ -172,6 +177,43 @@ int main() {
         cross_up[i] = cross[i] ? 1.0 : 0.0;
     }
 
+    std::ifstream model_input(PANDAS_FEATURE_MODEL);
+    if (!model_input) {
+        std::printf("cannot open model: %s\n", PANDAS_FEATURE_MODEL);
+        return 1;
+    }
+    std::map<std::string, double> weights;
+    std::string model_line;
+    std::getline(model_input, model_line);  // 表头 term,weight
+    while (std::getline(model_input, model_line)) {
+        if (model_line.empty()) {
+            continue;
+        }
+        const auto cells = split(model_line, ',');
+        weights[cells[0]] = std::stod(cells[1]);
+    }
+
+    const char *order[] = {"ma5", "ma20", "ema12", "wma10", "hhv20", "llv20",
+                           "std20", "hhvbars20", "ret1", "bias5", "cross_up"};
+    const Series *sources[] = {&ma5, &ma20, &ema12, &wma10, &hhv20, &llv20,
+                               &std20, &hhvbars20, &ret1, &bias5, &cross_up};
+    Series pred(close.size(), std::numeric_limits<double>::quiet_NaN());
+    for (std::size_t i = 0; i < close.size(); ++i) {
+        double total = weights["bias"];
+        bool missing = false;
+        for (std::size_t k = 0; k < 11; ++k) {
+            const double value = (*sources[k])[i];
+            if (std::isnan(value)) {
+                missing = true;
+                break;
+            }
+            total += weights[order[k]] * value;
+        }
+        if (!missing) {
+            pred[i] = total;
+        }
+    }
+
     const bool ok =
         expect_column("ma5", ma5, data.ma5) &&
         expect_column("ma20", ma20, data.ma20) &&
@@ -183,7 +225,8 @@ int main() {
         expect_column("hhvbars20", hhvbars20, data.hhvbars20) &&
         expect_column("ret1", ret1, data.ret1) &&
         expect_column("bias5", bias5, data.bias5) &&
-        expect_column("cross_up", cross_up, data.cross_up);
+        expect_column("cross_up", cross_up, data.cross_up) &&
+        expect_column("pred", pred, data.pred);
     if (!ok) {
         return 1;
     }

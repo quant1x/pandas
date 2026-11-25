@@ -1,5 +1,6 @@
 //! 读取 tests/features/features.csv，用 quant1x_pandas 重算特征列并逐值对拍（M8 第一步）。
 
+use std::collections::HashMap;
 use std::fs;
 
 use quant1x_pandas::{cross, ema, hhv, hhvbars, llv, ma, std as rolling_std, wma};
@@ -34,6 +35,20 @@ fn index_of(header: &[&str], name: &str) -> usize {
         .unwrap_or_else(|| panic!("表头缺少 {name}"))
 }
 
+/// 读取冻结模型权重（term,weight）。
+fn load_model(path: &str) -> HashMap<String, f64> {
+    let text = fs::read_to_string(path).expect("读取模型");
+    let mut weights = HashMap::new();
+    for line in text.lines().skip(1) {
+        if line.is_empty() {
+            continue;
+        }
+        let fields: Vec<&str> = line.split(',').collect();
+        weights.insert(fields[0].to_string(), parse_value(fields[1]));
+    }
+    weights
+}
+
 fn close_enough(actual: f64, expected: f64) -> bool {
     if actual.is_nan() && expected.is_nan() {
         return true;
@@ -59,6 +74,8 @@ fn feature_fixtures_match_rust() {
     let mut high = Vec::new();
     let mut low = Vec::new();
     let mut want: Vec<Vec<f64>> = vec![Vec::new(); FEATURES.len()];
+    let pred_col = index_of(&header, "pred");
+    let mut want_pred = Vec::new();
 
     for line in lines {
         if line.is_empty() {
@@ -71,6 +88,7 @@ fn feature_fixtures_match_rust() {
         for (slot, name) in FEATURES.iter().enumerate() {
             want[slot].push(parse_value(fields[index_of(&header, name)]));
         }
+        want_pred.push(parse_value(fields[pred_col]));
     }
 
     let ma5 = ma(&close, 5);
@@ -109,6 +127,29 @@ fn feature_fixtures_match_rust() {
                 panic!("{name}: 第 {index} 位 {actual} != {expected}");
             }
         }
+    }
+    let weights = load_model("../tests/features/model.csv");
+    let mut pred = vec![f64::NAN; close.len()];
+    for (index, slot) in pred.iter_mut().enumerate() {
+        let mut total = weights["bias"];
+        let mut missing = false;
+        for (position, name) in FEATURES.iter().enumerate() {
+            let value = computed[position][index];
+            if value.is_nan() {
+                missing = true;
+                break;
+            }
+            total += weights[*name] * value;
+        }
+        if !missing {
+            *slot = total;
+        }
+    }
+    for (index, (actual, expected)) in pred.iter().zip(want_pred.iter()).enumerate() {
+        assert!(
+            close_enough(*actual, *expected),
+            "pred: 第 {index} 位 {actual} != {expected}"
+        );
     }
     assert!(close.len() >= 20, "fixture 行数不足");
 }

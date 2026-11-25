@@ -8,7 +8,8 @@
 | 文件 | 内容 |
 | --- | --- |
 | `gen_features.py` | 生成器：确定性价格路径 + 特征计算 |
-| `features.csv` | 输入 OHLCV 与期望特征同表，40 根 Bar、11 个特征列 |
+| `features.csv` | 输入 OHLCV 与期望特征同表，40 根 Bar、11 个特征列 + `pred` |
+| `model.csv` | 冻结的线性模型参数（`term,weight`），推理侧只做线性组合 |
 | `features_test.go` | Go 侧对拍（`go test ./tests/features/`） |
 | `../../cpp/tests/features_test.cpp` | C++ 侧对拍（ctest 的 `features_fixture_test`） |
 | `../../pandas-rust/tests/features.rs` | Rust 侧对拍（`cargo test --test features`） |
@@ -16,7 +17,7 @@
 ## 列
 
 ```text
-date,open,high,low,close,ma5,ma20,ema12,wma10,hhv20,llv20,std20,hhvbars20,ret1,bias5,cross_up
+date,open,high,low,close,ma5,ma20,ema12,wma10,hhv20,llv20,std20,hhvbars20,ret1,bias5,cross_up,pred
 ```
 
 - 前五列是输入；其余是期望值，缺失写 `nan`；
@@ -25,6 +26,14 @@ date,open,high,low,close,ma5,ma20,ema12,wma10,hhv20,llv20,std20,hhvbars20,ret1,b
 - `hhv20` / `llv20` / `hhvbars20` 取**最高价**窗口；`std20` / `bias5` / `wma10` 取收盘价；
 - `ret1 = close / ref(close,1) - 1`，`bias5 = close / ma5 - 1`，`cross_up = cross(ma5, ma20)`（0/1）；
 - 这是 fixture 的内部格式，不进入 D1 交换层。
+
+`pred` 是推理侧口径：按 `model.csv` 的冻结权重做线性组合，求和顺序固定为特征列顺序，最后加 `bias`：
+
+```text
+pred = bias + Σ weight[term] × feature[term]
+```
+
+任一特征为 NaN 则 `pred` 为 NaN。三端必须照抄这个顺序 —— 换顺序会改变浮点结果。
 
 ## 生成
 
