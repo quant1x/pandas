@@ -426,6 +426,48 @@ pub fn last(condition: &[f64], a: i64, b: i64) -> Vec<f64> {
     })
 }
 
+/// BARSLASTS 倒数第 N 次条件成立到当前的周期数。
+///
+/// 按 Go 的递推实现：先算 BARSLAST 计数序列，再迭代 `N-1` 次
+/// `m[i] = m[i - (m[i]+1)] + (m[i]+1)`，越界为 NaN。
+pub fn barslasts(condition: &[f64], n: i64) -> Vec<f64> {
+    let mut current = barslast_zero(condition);
+    for _ in 1..n {
+        let mut next = vec![f64::NAN; current.len()];
+        for (index, value) in current.iter().enumerate() {
+            if value.is_nan() {
+                continue;
+            }
+            let step = *value + 1.0;
+            let source = index as f64 - step;
+            if source < 0.0 {
+                continue;
+            }
+            let source = source as usize;
+            if source >= current.len() || current[source].is_nan() {
+                continue;
+            }
+            next[index] = current[source] + step;
+        }
+        current = next;
+    }
+    current
+}
+
+fn barslast_zero(condition: &[f64]) -> Vec<f64> {
+    let mut out = Vec::with_capacity(condition.len());
+    let mut previous = 0.0;
+    for value in condition {
+        if *value != 0.0 {
+            previous = 0.0;
+        } else {
+            previous += 1.0;
+        }
+        out.push(previous);
+    }
+    out
+}
+
 fn ewm(x: &[f64], alpha: f64) -> Vec<f64> {
     if x.is_empty() {
         return Vec::new();
@@ -705,6 +747,26 @@ mod tests {
         assert_close(
             &last(&[1.0, 0.0, 1.0, 1.0], 2, 0),
             &[f64::NAN, f64::NAN, 0.0, 0.0],
+        );
+    }
+
+    #[test]
+    fn barslasts_matches_go() {
+        let condition = [1.0, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0];
+        assert_close(
+            &barslasts(&condition, 3),
+            &[
+                f64::NAN,
+                f64::NAN,
+                f64::NAN,
+                f64::NAN,
+                4.0,
+                4.0,
+                4.0,
+                3.0,
+                3.0,
+                4.0,
+            ],
         );
     }
 
