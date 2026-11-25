@@ -1,0 +1,116 @@
+// 读取 tests/formula/cases.csv，与 B2 实现逐值对拍。
+#include "formula/formula.h"
+
+#include <algorithm>
+#include <cmath>
+#include <cstdio>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <vector>
+
+namespace {
+
+using quant1x::pandas::Series;
+
+std::vector<std::string> split(const std::string &text, char delimiter) {
+    std::vector<std::string> out;
+    std::string item;
+    std::istringstream stream(text);
+    while (std::getline(stream, item, delimiter)) {
+        out.push_back(item);
+    }
+    return out;
+}
+
+Series parse_list(const std::string &text) {
+    Series out;
+    if (text.empty()) {
+        return out;
+    }
+    for (const auto &item : split(text, ';')) {
+        if (item == "nan") {
+            out.push_back(std::numeric_limits<double>::quiet_NaN());
+        } else {
+            out.push_back(std::stod(item));
+        }
+    }
+    return out;
+}
+
+std::int64_t parse_optional(const std::string &text) {
+    return text.empty() ? 0 : std::stoll(text);
+}
+
+bool close(double actual, double expected) {
+    if (std::isnan(actual) && std::isnan(expected)) {
+        return true;
+    }
+    if (actual == expected) {
+        return true;
+    }
+    return std::abs(actual - expected) <= 1e-12 * std::max(1.0, std::abs(expected));
+}
+
+}  // namespace
+
+int main() {
+    std::ifstream input(PANDAS_FORMULA_FIXTURES);
+    if (!input) {
+        std::printf("cannot open fixture: %s\n", PANDAS_FORMULA_FIXTURES);
+        return 1;
+    }
+    std::string line;
+    std::getline(input, line);
+    int failures = 0;
+    int count = 0;
+    while (std::getline(input, line)) {
+        if (line.empty()) {
+            continue;
+        }
+        const auto fields = split(line, ',');
+        if (fields.size() != 6) {
+            std::printf("bad row: %s\n", line.c_str());
+            return 1;
+        }
+        const std::string name = fields[0];
+        const Series x = parse_list(fields[1]);
+        const std::int64_t n = parse_optional(fields[3]);
+        const std::int64_t m = parse_optional(fields[4]);
+        const Series want = parse_list(fields[5]);
+        Series got;
+        if (name == "abs") {
+            got = quant1x::pandas::abs(x);
+        } else if (name == "ref") {
+            got = quant1x::pandas::ref(x, n);
+        } else if (name == "ma") {
+            got = quant1x::pandas::ma(x, static_cast<std::size_t>(n));
+        } else if (name == "ema") {
+            got = quant1x::pandas::ema(x, static_cast<std::size_t>(n));
+        } else if (name == "sma") {
+            got = quant1x::pandas::sma(x, static_cast<std::size_t>(n), static_cast<int>(m));
+        } else {
+            std::printf("unknown formula: %s\n", name.c_str());
+            return 1;
+        }
+        if (got.size() != want.size()) {
+            std::printf("%s: size mismatch\n", name.c_str());
+            ++failures;
+            continue;
+        }
+        for (std::size_t i = 0; i < want.size(); ++i) {
+            if (!close(got[i], want[i])) {
+                std::printf("%s: index %zu: %g != %g\n", name.c_str(), i, got[i], want[i]);
+                ++failures;
+                break;
+            }
+        }
+        ++count;
+    }
+    if (count < 5 || failures != 0) {
+        std::printf("fixture failed: count=%d failures=%d\n", count, failures);
+        return 1;
+    }
+    std::printf("formula fixtures passed (%d cases)\n", count);
+    return 0;
+}

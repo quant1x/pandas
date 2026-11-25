@@ -9,6 +9,7 @@
 cmake -S cpp -B cpp/build
 cmake --build cpp/build
 ctest --test-dir cpp/build -C Debug --output-on-failure   # VS 多配置生成器需要 -C
+# 其中 formula_fixture_test 读取 ../tests/formula/cases.csv
 ```
 
 `cpp/build/` 是构建产物，不入库。

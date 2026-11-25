@@ -39,6 +39,7 @@
 ```bash
 # 要求 num 仓与本目录的父目录并排（path 依赖 ../../num）
 cargo test
+cargo test --test fixtures   # 读取 ../tests/formula/cases.csv
 cargo clippy --all-targets -- -D warnings
 cargo fmt --check
 ```

@@ -19,7 +19,13 @@ target_include_directories(quant1x_pandas_cpp INTERFACE "${CMAKE_CURRENT_SOURCE_
 add_executable(formula_test tests/formula_test.cpp)
 target_link_libraries(formula_test PRIVATE quant1x_pandas_cpp)
 
+add_executable(formula_fixture_test tests/fixture_test.cpp)
+target_link_libraries(formula_fixture_test PRIVATE quant1x_pandas_cpp)
+target_compile_definitions(formula_fixture_test PRIVATE
+        PANDAS_FORMULA_FIXTURES="${CMAKE_CURRENT_SOURCE_DIR}/../tests/formula/cases.csv")
+
 include(CTest)
 if(BUILD_TESTING)
     add_test(NAME formula_test COMMAND formula_test)
+    add_test(NAME formula_fixture_test COMMAND formula_fixture_test)
 endif()
