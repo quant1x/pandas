@@ -3,8 +3,9 @@
 use std::fs;
 
 use quant1x_pandas::{
-    abs, and, count, cross, dma, ema, eq, filter, gt, gte, hhv, hhvbars, llv, llvbars, lt, lte, ma,
-    max_series, min_series, neq, not, or, ref_value, sma, sqrt, std, sum, wma,
+    abs, and, barslast, barslastcount, barslasts, barssincen, count, cross, dma, ema, eq, filter,
+    gt, gte, hhv, hhvbars, if_select, ifn, llv, llvbars, lt, lte, ma, max_series, min_series, neq,
+    not, or, ref_value, sma, sqrt, std, sum, wma,
 };
 
 fn parse_list(text: &str) -> Vec<f64> {
@@ -98,6 +99,12 @@ fn formula_fixtures_match_rust() {
             "and" => flags_to_float(and(&to_bools(&x), &to_bools(&y))),
             "or" => flags_to_float(or(&to_bools(&x), &to_bools(&y))),
             "not" => flags_to_float(not(&to_bools(&x))),
+            "barslast" => barslast(&x),
+            "barslastcount" => barslastcount(&x),
+            "barslasts" => barslasts(&x, n),
+            "barssincen" => barssincen(&x, n),
+            "if" => if_select(&x, &y, &vec![n as f64; y.len()]),
+            "ifn" => ifn(&x, &y, &vec![n as f64; y.len()]),
             other => panic!("未覆盖的公式 {other}"),
         };
         assert_eq!(got.len(), want.len(), "{name}: 长度");
@@ -114,5 +121,5 @@ fn formula_fixtures_match_rust() {
         }
         checked += 1;
     }
-    assert!(checked >= 28, "fixture 行数不足");
+    assert!(checked >= 34, "fixture 行数不足");
 }

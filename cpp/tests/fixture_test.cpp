@@ -156,6 +156,20 @@ int main() {
             got = bools_to_series(quant1x::pandas::logic_or(to_bools(x), to_bools(y)));
         } else if (name == "not") {
             got = bools_to_series(quant1x::pandas::logic_not(to_bools(x)));
+        } else if (name == "barslast") {
+            got = quant1x::pandas::barslast(x);
+        } else if (name == "barslastcount") {
+            got = quant1x::pandas::barslastcount(x);
+        } else if (name == "barslasts") {
+            got = quant1x::pandas::barslasts(x, n);
+        } else if (name == "barssincen") {
+            got = quant1x::pandas::barssincen(x, static_cast<std::size_t>(n));
+        } else if (name == "if") {
+            const Series fallback(y.size(), static_cast<double>(n));
+            got = quant1x::pandas::if_select(x, y, fallback);
+        } else if (name == "ifn") {
+            const Series fallback(y.size(), static_cast<double>(n));
+            got = quant1x::pandas::ifn(x, y, fallback);
         } else {
             std::printf("unknown formula: %s\n", name.c_str());
             return 1;

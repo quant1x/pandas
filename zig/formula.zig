@@ -290,6 +290,140 @@ fn notEqualTo(a: f64, b: f64) bool {
     return a != b;
 }
 
+/// IF 条件选择：条件非零取 A，否则取 B；三条序列等长。
+pub fn ifSelect(
+    allocator: std.mem.Allocator,
+    condition: []const f64,
+    a: []const f64,
+    b: []const f64,
+) ![]f64 {
+    if (condition.len != a.len or condition.len != b.len) return error.LengthMismatch;
+    const out = try allocator.alloc(f64, condition.len);
+    for (condition, a, b, 0..) |flag, left, right, index| {
+        out[index] = if (flag != 0) left else right;
+    }
+    return out;
+}
+
+/// IFN 反向条件选择：条件非零取 B，否则取 A。
+pub fn ifn(
+    allocator: std.mem.Allocator,
+    condition: []const f64,
+    a: []const f64,
+    b: []const f64,
+) ![]f64 {
+    return ifSelect(allocator, condition, b, a);
+}
+
+/// BARSLAST 上一次条件成立到当前的周期数；从未成立为 -1。
+pub fn barslast(allocator: std.mem.Allocator, condition: []const f64) ![]f64 {
+    const out = try allocator.alloc(f64, condition.len);
+    var last_true: ?usize = null;
+    for (condition, 0..) |value, index| {
+        if (value != 0) {
+            last_true = index;
+            out[index] = 0;
+        } else if (last_true) |position| {
+            out[index] = @floatFromInt(index - position);
+        } else {
+            out[index] = -1;
+        }
+    }
+    return out;
+}
+
+/// BARSLASTCOUNT 连续成立的周期数；遇到不成立归零。
+pub fn barslastcount(allocator: std.mem.Allocator, condition: []const f64) ![]f64 {
+    const out = try allocator.alloc(f64, condition.len);
+    var streak: f64 = 0;
+    for (condition, 0..) |value, index| {
+        streak = if (value != 0) streak + 1 else 0;
+        out[index] = streak;
+    }
+    return out;
+}
+
+/// BARSSINCEN N 周期内第一次成立到当前的周期数；窗口不足为 0。
+pub fn barssincen(allocator: std.mem.Allocator, condition: []const f64, window: i64) ![]f64 {
+    const out = try allocator.alloc(f64, condition.len);
+    @memset(out, 0);
+    if (window <= 0) return out;
+    const size: usize = @intCast(window);
+    if (size > condition.len) return out;
+    var index: usize = size - 1;
+    while (index < condition.len) : (index += 1) {
+        const begin = index + 1 - size;
+        for (condition[begin .. index + 1], begin..) |value, position| {
+            if (value != 0) {
+                out[index] = @floatFromInt(index - position);
+                break;
+            }
+        }
+    }
+    return out;
+}
+
+/// BARSLASTS 倒数第 N 次成立到当前的周期数；越界为 NaN。
+pub fn barslasts(allocator: std.mem.Allocator, condition: []const f64, n: i64) ![]f64 {
+    var current = try barslastZero(allocator, condition);
+    var iteration: i64 = 1;
+    while (iteration < n) : (iteration += 1) {
+        const following = try allocator.alloc(f64, current.len);
+        @memset(following, nan());
+        for (current, 0..) |value, index| {
+            if (std.math.isNan(value)) continue;
+            const step = value + 1;
+            const source = @as(f64, @floatFromInt(index)) - step;
+            if (source < 0) continue;
+            const source_index: usize = @intFromFloat(source);
+            if (source_index >= current.len) continue;
+            if (std.math.isNan(current[source_index])) continue;
+            following[index] = current[source_index] + step;
+        }
+        allocator.free(current);
+        current = following;
+    }
+    return current;
+}
+
+/// LAST 持续存在：A+1 窗口内排除最近 B 根后全部非零；窗口不足为 NaN。
+pub fn last(allocator: std.mem.Allocator, condition: []const f64, a: i64, b: i64) ![]f64 {
+    const out = try allocator.alloc(f64, condition.len);
+    @memset(out, nan());
+    if (a < 0) return out;
+    const size: usize = @intCast(a + 1);
+    if (size == 0 or size > condition.len) return out;
+    const skip: usize = if (b < 0) 0 else @intCast(b);
+    var index: usize = size - 1;
+    while (index < condition.len) : (index += 1) {
+        if (skip >= size) {
+            out[index] = 1;
+            continue;
+        }
+        const begin = index + 1 - size;
+        const stop = index + 1 - skip;
+        var satisfied = true;
+        for (condition[begin..stop]) |value| {
+            if (value == 0) {
+                satisfied = false;
+                break;
+            }
+        }
+        out[index] = if (satisfied) 1 else 0;
+    }
+    return out;
+}
+
+fn barslastZero(allocator: std.mem.Allocator, condition: []const f64) ![]f64 {
+    const out = try allocator.alloc(f64, condition.len);
+    var previous: f64 = 0;
+    for (condition, 0..) |value, index| {
+        previous = if (value != 0) 0 else previous + 1;
+        out[index] = previous;
+    }
+    return out;
+}
+
 /// 逐窗口应用：完整窗口才计算，窗口不足为 NaN。
 fn rolling(
     comptime apply: fn ([]const f64) f64,
@@ -381,20 +515,20 @@ fn barsSinceMin(block: []const f64) f64 {
 fn ewm(allocator: std.mem.Allocator, x: []const f64, alpha: f64) ![]f64 {
     const out = try allocator.alloc(f64, x.len);
     if (x.len == 0) return out;
-    var last = x[0];
-    if (std.math.isNan(last)) last = 0;
-    out[0] = last;
+    var previous = x[0];
+    if (std.math.isNan(previous)) previous = 0;
+    out[0] = previous;
     const beta = 1 - alpha;
     var index: usize = 1;
     while (index < x.len) : (index += 1) {
         const value = x[index];
         if (std.math.isNan(value)) {
-            out[index] = last;
+            out[index] = previous;
             continue;
         }
-        last = beta * last + alpha * value;
-        if (std.math.isNan(last)) last = out[index - 1];
-        out[index] = last;
+        previous = beta * previous + alpha * value;
+        if (std.math.isNan(previous)) previous = out[index - 1];
+        out[index] = previous;
     }
     return out;
 }

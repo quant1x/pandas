@@ -98,6 +98,18 @@ func TestFormulaFixtures(t *testing.T) {
 			got = boolsToFloat(OR(floatsToBools(x), floatsToBools(y)))
 		case "not":
 			got = NOT(series).DTypes()
+		case "barslast":
+			got = BARSLAST(series).DTypes()
+		case "barslastcount":
+			got = BARSLASTCOUNT(series).DTypes()
+		case "barslasts":
+			got = BARSLASTS(series, int(n)).DTypes()
+		case "barssincen":
+			got = BARSSINCEN(series, n).DTypes()
+		case "if":
+			got = IF(series, pair, int(n)).DTypes()
+		case "ifn":
+			got = IFN(series, pair, int(n)).DTypes()
 		default:
 			t.Fatalf("%s: 未覆盖的公式", name)
 		}

@@ -62,6 +62,23 @@ fn compareNot(allocator: std.mem.Allocator, x: []const f64) ![]f64 {
     return boolsAsFloat(allocator, flags);
 }
 
+/// IF / IFN 的 fixture 包装：B 支用常量序列填充。
+fn ifBranch(
+    allocator: std.mem.Allocator,
+    condition: []const f64,
+    values: []const f64,
+    fallback: f64,
+    invert: bool,
+) ![]f64 {
+    const filler = try allocator.alloc(f64, condition.len);
+    defer allocator.free(filler);
+    @memset(filler, fallback);
+    return if (invert)
+        formula.ifn(allocator, condition, values, filler)
+    else
+        formula.ifSelect(allocator, condition, values, filler);
+}
+
 /// CROSS 返回布尔序列，fixture 用 0/1 表示。
 fn crossAsFloat(allocator: std.mem.Allocator, x: []const f64, y: []const f64) ![]f64 {
     const flags = try formula.cross(allocator, x, y);
@@ -274,6 +291,49 @@ test "比较族 gt/gte/lt/lte/eq/neq 与逻辑族" {
     try expectListEqual("not", negation, &[_]f64{ 0.0, 0.0, 1.0, 1.0 });
 }
 
+test "条件选择 if/ifn" {
+    const allocator = std.testing.allocator;
+    const condition = [_]f64{ 1.0, 0.0, 1.0, 1.0, 0.0, 1.0 };
+    const values = [_]f64{ 10.0, 20.0, 30.0, 40.0, 50.0, 60.0 };
+
+    const chosen = try ifBranch(allocator, &condition, &values, -1.0, false);
+    defer allocator.free(chosen);
+    try expectListEqual("if", chosen, &[_]f64{ 10.0, -1.0, 30.0, 40.0, -1.0, 60.0 });
+
+    const inverted = try ifBranch(allocator, &condition, &values, -1.0, true);
+    defer allocator.free(inverted);
+    try expectListEqual("ifn", inverted, &[_]f64{ -1.0, 20.0, -1.0, -1.0, 50.0, -1.0 });
+}
+
+test "条件距离族 barslast/barslastcount/barslasts/barssincen" {
+    const allocator = std.testing.allocator;
+    const condition = [_]f64{ 1.0, 0.0, 1.0, 1.0, 0.0, 1.0 };
+
+    const distance = try formula.barslast(allocator, &condition);
+    defer allocator.free(distance);
+    try expectListEqual("barslast", distance, &[_]f64{ 0.0, 1.0, 0.0, 0.0, 1.0, 0.0 });
+
+    const streak = try formula.barslastcount(allocator, &condition);
+    defer allocator.free(streak);
+    try expectListEqual("barslastcount", streak, &[_]f64{ 1.0, 0.0, 1.0, 2.0, 0.0, 1.0 });
+
+    const nth = try formula.barslasts(allocator, &condition, 2);
+    defer allocator.free(nth);
+    try expectListEqual("barslasts", nth, &[_]f64{ nan(), nan(), 2.0, 1.0, 2.0, 2.0 });
+
+    const since = try formula.barssincen(allocator, &condition, 3);
+    defer allocator.free(since);
+    try expectListEqual("barssincen", since, &[_]f64{ 0.0, 0.0, 2.0, 1.0, 2.0, 2.0 });
+}
+
+test "last 窗口不足为 NaN" {
+    const allocator = std.testing.allocator;
+    const condition = [_]f64{ 1.0, 1.0, 1.0, 0.0, 1.0, 1.0 };
+    const result = try formula.last(allocator, &condition, 3, 1);
+    defer allocator.free(result);
+    try expectListEqual("last", result, &[_]f64{ nan(), nan(), nan(), 1.0, 0.0, 0.0 });
+}
+
 test "fixture cases.csv 逐行对拍" {
     const allocator = std.testing.allocator;
     const text = try readFixture(allocator);
@@ -367,11 +427,23 @@ test "fixture cases.csv 逐行对拍" {
             try logicBinaryAsFloat(formula.logicOr, allocator, x, y)
         else if (std.mem.eql(u8, name, "not"))
             try compareNot(allocator, x)
+        else if (std.mem.eql(u8, name, "barslast"))
+            try formula.barslast(allocator, x)
+        else if (std.mem.eql(u8, name, "barslastcount"))
+            try formula.barslastcount(allocator, x)
+        else if (std.mem.eql(u8, name, "barslasts"))
+            try formula.barslasts(allocator, x, n)
+        else if (std.mem.eql(u8, name, "barssincen"))
+            try formula.barssincen(allocator, x, n)
+        else if (std.mem.eql(u8, name, "if"))
+            try ifBranch(allocator, x, y, @floatFromInt(n), false)
+        else if (std.mem.eql(u8, name, "ifn"))
+            try ifBranch(allocator, x, y, @floatFromInt(n), true)
         else
             return error.UnknownFormula;
         defer allocator.free(got);
         try expectListEqual(name, got, want);
         checked += 1;
     }
-    try std.testing.expect(checked >= 28);
+    try std.testing.expect(checked >= 34);
 }

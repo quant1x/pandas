@@ -131,6 +131,74 @@ def filter_signal(condition, window: int):
 
 
 
+def bars_last(condition):
+    """上一次成立到当前的周期数；从未成立为 -1。"""
+    out = []
+    last_true = None
+    for i, v in enumerate(condition):
+        if v != 0:
+            last_true = i
+            out.append(0.0)
+        elif last_true is not None:
+            out.append(float(i - last_true))
+        else:
+            out.append(-1.0)
+    return out
+
+
+def bars_last_count(condition):
+    """连续成立的周期数，遇到不成立归零。"""
+    out = []
+    streak = 0
+    for v in condition:
+        streak = streak + 1 if v != 0 else 0
+        out.append(float(streak))
+    return out
+
+
+def bars_last_zero(condition):
+    """从 0 起算的递推种子：成立归零，否则前值加一。"""
+    out = []
+    previous = 0.0
+    for v in condition:
+        previous = 0.0 if v != 0 else previous + 1.0
+        out.append(previous)
+    return out
+
+
+def bars_lasts(condition, n: int):
+    """倒数第 N 次成立到当前的周期数；越界为 NaN。"""
+    current = bars_last_zero(condition)
+    for _ in range(1, n):
+        following = [float("nan")] * len(current)
+        for i, value in enumerate(current):
+            if math.isnan(value):
+                continue
+            step = value + 1.0
+            source = float(i) - step
+            if source < 0:
+                continue
+            index = int(source)
+            if index >= len(current) or math.isnan(current[index]):
+                continue
+            following[i] = current[index] + step
+        current = following
+    return current
+
+
+def bars_since_n(condition, window: int):
+    """N 周期内第一次成立到当前的周期数；窗口不足为 0。"""
+    out = [0.0] * len(condition)
+    if window <= 0 or window > len(condition):
+        return out
+    for i in range(window - 1, len(condition)):
+        for j in range(i + 1 - window, i + 1):
+            if condition[j] != 0:
+                out[i] = float(i - j)
+                break
+    return out
+
+
 def main() -> None:
     path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cases.csv")
     rows = []
@@ -195,6 +263,16 @@ def main() -> None:
     rows.append(["and", series(left), series(right), "", "", series([float(a != 0 and b != 0) for a, b in zip(left, right)])])
     rows.append(["or", series(left), series(right), "", "", series([float(a != 0 or b != 0) for a, b in zip(left, right)])])
     rows.append(["not", series(left), "", "", "", series([float(a == 0) for a in left])])
+
+    signals = [1.0, 0.0, 1.0, 1.0, 0.0, 1.0]
+    rows.append(["barslast", series(signals), "", "", "", series(bars_last(signals))])
+    rows.append(["barslastcount", series(signals), "", "", "", series(bars_last_count(signals))])
+    rows.append(["barslasts", series(signals), "", 2, "", series(bars_lasts(signals, 2))])
+    rows.append(["barssincen", series(signals), "", 3, "", series(bars_since_n(signals, 3))])
+
+    values = [10.0, 20.0, 30.0, 40.0, 50.0, 60.0]
+    rows.append(["if", series(signals), series(values), -1, "", series([a if c != 0 else -1.0 for c, a in zip(signals, values)])])
+    rows.append(["ifn", series(signals), series(values), -1, "", series([-1.0 if c != 0 else a for c, a in zip(signals, values)])])
 
     max_x = [1.0, 5.0, 3.0]
     max_y = [2.0, 4.0, 6.0]
