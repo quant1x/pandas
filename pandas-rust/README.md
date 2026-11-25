@@ -1,6 +1,6 @@
 # pandas-rust —— 公式族 Rust 版（B3）
 
-`quant1x_pandas` 是 `pandas/formula` 的 Rust 对齐实现。当前覆盖 34 个基础公式，
+`quant1x_pandas` 是 `pandas/formula` 的 Rust 对齐实现。当前覆盖 38 个基础公式，
 签名与最小参数集对齐 Go 端：
 
 | 公式 | Rust | 最小参数 |
@@ -26,6 +26,10 @@
 | BARSSINCEN | `barssincen(&[f64], window: i64)` | 条件序列、窗口 |
 | GT / GTE / LT / LTE / EQ / NEQ | `gt` / `gte` / `lt` / `lte` / `eq` / `neq(&[f64], &[f64])` | 两条序列 |
 | AND / OR / NOT | `and` / `or` / `not(&[bool], …)` | 布尔序列 |
+| CONST | `const_series(&[f64])` | 序列（按 f32 精度取末值） |
+| REF（逐位置） | `ref_series(&[f64], &[f64])` | 序列、逐位置周期 |
+| EMA（逐位置） | `ema_series(&[f64], &[f64])` | 序列、逐位置周期 |
+| SMA（序列周期） | `sma_series(&[f64], &[f64], m: i64)` | 序列、周期序列、权重 |
 
 ## 构建与测试
 
@@ -58,6 +62,8 @@ cargo fmt --check
 - BARSLAST：上一次条件成立到当前的周期数，从未成立为 -1；BARSLASTCOUNT：连续成立计数。
 - BARSSINCEN：窗口内第一次条件成立到当前的周期数；窗口内没有成立时为 0。
 - GT/GTE/LT/LTE/EQ/NEQ 与 AND/OR/NOT 复用 num 的比较/逻辑实现。
+- CONST 先转 float32 再复制（与 Go 的 Float32s 一致），大整数可能丢精度。
+- `ref_series` / `ema_series` 按位置取周期；`sma_series` 与 Go 一致只取周期序列最后一个值。
 
 剩余公式（HHV / LLV / CROSS / STD / SUM / COUNT 等）与 C++ 版本（B2）、Python 研究脚本（B4）
 按 M5 计划继续补。

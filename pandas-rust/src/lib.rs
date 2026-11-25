@@ -350,6 +350,59 @@ pub fn barssincen(condition: &[f64], window: i64) -> Vec<f64> {
     out
 }
 
+/// CONST 取序列最后值为常量序列（Go 先转 float32，精度按 f32）。
+pub fn const_series(x: &[f64]) -> Vec<f64> {
+    let last = x.last().copied().unwrap_or(f64::NAN) as f32;
+    vec![f64::from(last); x.len()]
+}
+
+/// REF 的逐位置窗口形态：第 i 位引用 i - periods[i] 的值，越界为 NaN。
+pub fn ref_series(x: &[f64], periods: &[f64]) -> Vec<f64> {
+    x.iter()
+        .enumerate()
+        .map(|(index, _)| {
+            let period = periods.get(index).copied().unwrap_or(f64::NAN);
+            if period.is_nan() || period < 0.0 {
+                return f64::NAN;
+            }
+            let source = index as i64 - period as i64;
+            if source < 0 || source as usize >= x.len() {
+                f64::NAN
+            } else {
+                x[source as usize]
+            }
+        })
+        .collect()
+}
+
+/// EMA 的逐位置周期形态：第 i 位用 spans[i] 计算 alpha=2/(span+1)。
+pub fn ema_series(x: &[f64], spans: &[f64]) -> Vec<f64> {
+    if x.is_empty() {
+        return Vec::new();
+    }
+    let mut out = Vec::with_capacity(x.len());
+    let mut previous = x[0];
+    out.push(previous);
+    for (index, value) in x.iter().enumerate().skip(1) {
+        let span = spans.get(index).copied().unwrap_or(1.0);
+        let span = if span.is_nan() || span <= 0.0 {
+            1.0
+        } else {
+            span
+        };
+        let alpha = 2.0 / (span + 1.0);
+        previous = (1.0 - alpha) * previous + alpha * value;
+        out.push(previous);
+    }
+    out
+}
+
+/// SMA 的序列周期形态：Go 取序列最后一个值作为 N（不是逐位置），M=0 视为 1。
+pub fn sma_series(x: &[f64], periods: &[f64], m: i64) -> Vec<f64> {
+    let n = periods.last().copied().unwrap_or(1.0);
+    sma(x, n as i64, m)
+}
+
 fn ewm(x: &[f64], alpha: f64) -> Vec<f64> {
     if x.is_empty() {
         return Vec::new();
@@ -575,6 +628,43 @@ mod tests {
         assert_close(
             &barssincen(&[0.0, 1.0, 0.0, 0.0, 1.0], 3),
             &[0.0, 0.0, 1.0, 2.0, 0.0],
+        );
+    }
+
+    #[test]
+    fn const_series_basic() {
+        assert_close(&const_series(&[1.0, 2.0, 3.0]), &[3.0, 3.0, 3.0]);
+        assert!(const_series(&[]).is_empty());
+    }
+
+    #[test]
+    fn ref_series_basic() {
+        assert_close(
+            &ref_series(&[1.0, 2.0, 3.0, 4.0], &[1.0, 2.0, 0.0, 1.0]),
+            &[f64::NAN, f64::NAN, 3.0, 3.0],
+        );
+    }
+
+    #[test]
+    fn ema_series_basic() {
+        let alpha1 = 2.0 / 3.0;
+        let y1 = (1.0 - alpha1) * 1.0 + alpha1 * 2.0;
+        let alpha2 = 2.0 / 5.0;
+        let y2 = (1.0 - alpha2) * y1 + alpha2 * 3.0;
+        assert_close(
+            &ema_series(&[1.0, 2.0, 3.0], &[2.0, 2.0, 4.0]),
+            &[1.0, y1, y2],
+        );
+    }
+
+    #[test]
+    fn sma_series_uses_last_period() {
+        let alpha: f64 = 0.25;
+        let y1 = (1.0 - alpha) * 1.0 + alpha * 2.0;
+        let y2 = (1.0 - alpha) * y1 + alpha * 3.0;
+        assert_close(
+            &sma_series(&[1.0, 2.0, 3.0], &[2.0, 2.0, 4.0], 1),
+            &[1.0, y1, y2],
         );
     }
 
