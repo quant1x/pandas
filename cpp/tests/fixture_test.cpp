@@ -1,5 +1,5 @@
 // 读取 tests/formula/cases.csv，与 B2 实现逐值对拍。
-#include "formula/formula.h"
+#include <formula/formula.h>
 
 #include <algorithm>
 #include <cmath>

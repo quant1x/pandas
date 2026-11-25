@@ -1,5 +1,5 @@
 // B2 首批公式的自包含测试：不依赖 gtest / catch2。
-#include "formula/formula.h"
+#include <formula/formula.h>
 
 #include <algorithm>
 #include <cmath>

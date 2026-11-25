@@ -1,5 +1,5 @@
 // 读取 tests/features/features.csv，用 quant1x_pandas_cpp 重算特征列并逐值对拍。
-#include "formula/formula.h"
+#include <formula/formula.h>
 
 #include <algorithm>
 #include <cmath>

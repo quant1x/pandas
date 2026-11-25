@@ -14,7 +14,8 @@ endif()
 
 # header-only 公式库；首批不依赖 num / xtensor，后续再评估切换。
 add_library(quant1x_pandas_cpp INTERFACE)
-target_include_directories(quant1x_pandas_cpp INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}")
+# 头文件与 Go 的 formula/*.go 同目录（仓库根的 formula/），包含根是仓库根
+target_include_directories(quant1x_pandas_cpp INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/..")
 
 add_executable(formula_test tests/formula_test.cpp)
 target_link_libraries(formula_test PRIVATE quant1x_pandas_cpp)
