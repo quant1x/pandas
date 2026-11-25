@@ -1,6 +1,6 @@
 # pandas/cpp —— 公式族 C++ 版（B2）
 
-`quant1x_pandas_cpp` 是 `pandas/formula` 的 C++ 对齐实现起点。当前 39 个公式：ABS / REF / MA / EMA / SMA / HHV / LLV / SUM / STD / COUNT / WMA / DMA / CROSS / MAX / MIN / IF / IFN / BARSLAST / BARSLASTCOUNT / BARSSINCEN / FILTER / SQRT / GT / GTE / LT / LTE / EQ / NEQ / AND / OR / NOT / LAST / BARSLASTS / HHVBARS / LLVBARS / AVEDEV / SLOPE / FORCAST / CONST，
+`quant1x_pandas_cpp` 是 `pandas/formula` 的 C++ 对齐实现：头文件在 `formula/*.h`（与 `.go` 同名同目录），本目录只放构建脚本与用例。当前 39 个公式：ABS / REF / MA / EMA / SMA / HHV / LLV / SUM / STD / COUNT / WMA / DMA / CROSS / MAX / MIN / IF / IFN / BARSLAST / BARSLASTCOUNT / BARSSINCEN / FILTER / SQRT / GT / GTE / LT / LTE / EQ / NEQ / AND / OR / NOT / LAST / BARSLASTS / HHVBARS / LLVBARS / AVEDEV / SLOPE / FORCAST / CONST，
 序列用 `std::vector<double>`，不依赖 num / xtensor，保证在 pandas 仓内可独立构建。
 
 ## 构建与测试

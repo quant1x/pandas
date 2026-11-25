@@ -17,7 +17,7 @@ golang版本的pandas
 | 目录 | 语言 | 内容 |
 | --- | --- | --- |
 | `formula/` | Go | 通达信公式（B1），权威实现 |
-| `cpp/` | C++ | 39 个公式 + 特征对拍（B2） |
+| `formula/*.h` | C++ | 39 个公式（B2，与 `.go` 同目录；构建与用例在 `cpp/`） |
 | `formula/lib.rs` | Rust | 41 个公式 + 特征与 ONNX 推理用例（B3，与 `.go` 同目录） |
 | `formula/formula.zig` | Zig | 39 个公式（B6，扩展线，与 `.go` 同目录） |
 | `scripts/` | Python | 研究侧因子报告（B4，不参与交付） |
