@@ -5,6 +5,7 @@ package features
 
 import (
 	"encoding/csv"
+	"fmt"
 	"math"
 	"os"
 	"strconv"
@@ -49,7 +50,7 @@ func loadTable(t *testing.T) *table {
 		out.close = append(out.close, parseValue(t, record[index["close"]]))
 		out.high = append(out.high, parseValue(t, record[index["high"]]))
 		out.low = append(out.low, parseValue(t, record[index["low"]]))
-		for _, name := range append(featureColumns, "pred") {
+		for _, name := range append(featureColumns, "pred", "pred_mlp") {
 			out.column[name] = append(out.column[name], parseValue(t, record[index[name]]))
 		}
 	}
@@ -85,10 +86,10 @@ func expectColumn(t *testing.T, name string, got, want []float64) {
 	}
 }
 
-// loadModel 读取 model.csv 的冻结权重。
-func loadModel(t *testing.T) map[string]float64 {
+// loadModel 读取模型权重（term,weight）。
+func loadModel(t *testing.T, name string) map[string]float64 {
 	t.Helper()
-	file, err := os.Open("model.csv")
+	file, err := os.Open(name)
 	if err != nil {
 		t.Fatalf("打开模型: %v", err)
 	}
@@ -118,6 +119,31 @@ func predict(weights map[string]float64, features map[string][]float64, index in
 			return math.NaN()
 		}
 		total += weights[name] * value
+	}
+	return total
+}
+
+// predictMLP 两级小网络：h_j = b1_j + Σ_i W1[i][j]*f_i，y = b2 + Σ_j W2[j]*tanh(h_j)。
+func predictMLP(weights map[string]float64, features map[string][]float64, index int, hidden int) float64 {
+	values := make([]float64, len(featureColumns))
+	for position, name := range featureColumns {
+		value := features[name][index]
+		if math.IsNaN(value) {
+			return math.NaN()
+		}
+		values[position] = value
+	}
+	activations := make([]float64, hidden)
+	for j := 0; j < hidden; j++ {
+		total := weights[fmt.Sprintf("b1_%d", j)]
+		for i, value := range values {
+			total += weights[fmt.Sprintf("w1_%d_%d", i, j)] * value
+		}
+		activations[j] = math.Tanh(total)
+	}
+	total := weights["b2"]
+	for j := 0; j < hidden; j++ {
+		total += weights[fmt.Sprintf("w2_%d", j)] * activations[j]
 	}
 	return total
 }
@@ -159,10 +185,17 @@ func TestFeatureFixtures(t *testing.T) {
 		expectColumn(t, name, computed[name], data.column[name])
 	}
 
-	weights := loadModel(t)
+	weights := loadModel(t, "model.csv")
 	pred := make([]float64, len(data.close))
 	for i := range pred {
 		pred[i] = predict(weights, computed, i)
 	}
 	expectColumn(t, "pred", pred, data.column["pred"])
+
+	mlpWeights := loadModel(t, "model_mlp.csv")
+	predMLP := make([]float64, len(data.close))
+	for i := range predMLP {
+		predMLP[i] = predictMLP(mlpWeights, computed, i, 4)
+	}
+	expectColumn(t, "pred_mlp", predMLP, data.column["pred_mlp"])
 }

@@ -5,7 +5,8 @@
 MA / EMA / HHV / LLV / STD / REF / CROSS。列顺序即 `features.csv` 的表头顺序。
 
 CSV 列：date,open,high,low,close,ma5,ma20,ema12,wma10,hhv20,llv20,std20,hhvbars20,ret1,bias5,cross_up,pred
-`pred` 由 `model.csv` 的冻结权重按表头顺序线性组合得出（M8 的推理侧口径）。
+`pred` 由 `model.csv` 的冻结权重按表头顺序线性组合得出；`pred_mlp` 由 `model_mlp.csv` 的
+两层小网络（11 → 4 → 1，tanh 隐层）得出（M8 的推理侧口径）。
 缺失写 `nan`；文件 UTF-8 无 BOM、LF、末尾一个换行，重复生成逐字节一致。
 """
 
@@ -140,6 +141,45 @@ def predict(weights: dict[str, float], features: dict[str, float]) -> float:
     return total
 
 
+# 两层小网络（11 → 4 → 1）：tanh 隐层 + 线性输出。
+# 权重由下标确定性生成（无随机数），三端必须按同一求和顺序计算：
+#   h_j = b1[j] + Σ_i W1[i][j] * f_i      （i 升序）
+#   y   = b2 + Σ_j W2[j] * tanh(h_j)      （j 升序）
+HIDDEN = 4
+
+
+def mlp_weights() -> list[tuple[str, float]]:
+    rows: list[tuple[str, float]] = []
+    for j in range(HIDDEN):
+        rows.append((f"b1_{j}", ((j * 7) % 11 - 5) / 20.0))
+    for i in range(len(FEATURE_ORDER)):
+        for j in range(HIDDEN):
+            rows.append((f"w1_{i}_{j}", ((i * 37 + j * 11) % 21 - 10) / 50.0))
+    for j in range(HIDDEN):
+        rows.append((f"w2_{j}", ((j * 13) % 17 - 8) / 20.0))
+    rows.append(("b2", 0.05))
+    return rows
+
+
+def predict_mlp(weights: dict[str, float], features: dict[str, float]) -> float:
+    values = []
+    for name in FEATURE_ORDER:
+        value = features[name]
+        if isinstance(value, float) and math.isnan(value):
+            return math.nan
+        values.append(value)
+    hidden = []
+    for j in range(HIDDEN):
+        total = weights[f"b1_{j}"]
+        for i, value in enumerate(values):
+            total += weights[f"w1_{i}_{j}"] * value
+        hidden.append(math.tanh(total))
+    total = weights["b2"]
+    for j in range(HIDDEN):
+        total += weights[f"w2_{j}"] * hidden[j]
+    return total
+
+
 def fmt(value: float) -> str:
     if isinstance(value, float) and math.isnan(value):
         return "nan"
@@ -171,9 +211,13 @@ def main() -> None:
     pred = [predict(weights, {name: values[i] for name, values in columns.items()})
             for i in range(BARS)]
 
+    mlp = dict(mlp_weights())
+    pred_mlp = [predict_mlp(mlp, {name: values[i] for name, values in columns.items()})
+                for i in range(BARS)]
+
     header = ["date", "open", "high", "low", "close",
               "ma5", "ma20", "ema12", "wma10", "hhv20", "llv20", "std20", "hhvbars20",
-              "ret1", "bias5", "cross_up", "pred"]
+              "ret1", "bias5", "cross_up", "pred", "pred_mlp"]
     rows = []
     for i in range(BARS):
         rows.append([
@@ -194,6 +238,7 @@ def main() -> None:
             fmt(bias5[i]),
             fmt(cross_up[i]),
             fmt(pred[i]),
+            fmt(pred_mlp[i]),
         ])
 
     model_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "model.csv")
@@ -201,6 +246,12 @@ def main() -> None:
         writer = csv.writer(handle, lineterminator="\n")
         writer.writerow(["term", "weight"])
         writer.writerows([[name, fmt(weight)] for name, weight in MODEL_WEIGHTS])
+
+    mlp_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "model_mlp.csv")
+    with open(mlp_path, "w", encoding="utf-8", newline="") as handle:
+        writer = csv.writer(handle, lineterminator="\n")
+        writer.writerow(["term", "weight"])
+        writer.writerows([[name, fmt(weight)] for name, weight in mlp_weights()])
 
     path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "features.csv")
     with open(path, "w", encoding="utf-8", newline="") as handle:

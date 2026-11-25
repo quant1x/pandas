@@ -8,8 +8,9 @@
 | 文件 | 内容 |
 | --- | --- |
 | `gen_features.py` | 生成器：确定性价格路径 + 特征计算 |
-| `features.csv` | 输入 OHLCV 与期望特征同表，40 根 Bar、11 个特征列 + `pred` |
+| `features.csv` | 输入 OHLCV 与期望特征同表，40 根 Bar、11 个特征列 + `pred` + `pred_mlp` |
 | `model.csv` | 冻结的线性模型参数（`term,weight`），推理侧只做线性组合 |
+| `model_mlp.csv` | 冻结的两层小网络（11 → 4 → 1，tanh 隐层）参数 |
 | `features_test.go` | Go 侧对拍（`go test ./tests/features/`） |
 | `../../cpp/tests/features_test.cpp` | C++ 侧对拍（ctest 的 `features_fixture_test`） |
 | `../../pandas-rust/tests/features.rs` | Rust 侧对拍（`cargo test --test features`） |
@@ -17,7 +18,7 @@
 ## 列
 
 ```text
-date,open,high,low,close,ma5,ma20,ema12,wma10,hhv20,llv20,std20,hhvbars20,ret1,bias5,cross_up,pred
+date,open,high,low,close,ma5,ma20,ema12,wma10,hhv20,llv20,std20,hhvbars20,ret1,bias5,cross_up,pred,pred_mlp
 ```
 
 - 前五列是输入；其余是期望值，缺失写 `nan`；
@@ -33,7 +34,15 @@ date,open,high,low,close,ma5,ma20,ema12,wma10,hhv20,llv20,std20,hhvbars20,ret1,b
 pred = bias + Σ weight[term] × feature[term]
 ```
 
-任一特征为 NaN 则 `pred` 为 NaN。三端必须照抄这个顺序 —— 换顺序会改变浮点结果。
+`pred_mlp` 是同一条链路的非线性版本（`model_mlp.csv`，11 → 4 → 1，tanh 隐层）：
+
+```text
+h_j = b1[j] + Σ_i W1[i][j] × f_i      （i 升序）
+pred_mlp = b2 + Σ_j W2[j] × tanh(h_j)  （j 升序）
+```
+
+任一特征为 NaN 则两列都为 NaN。三端必须照抄求和顺序 —— 换顺序会改变浮点结果。
+`pred_mlp` 是接 ONNX 之前的替身：结构与一次小网络推理相同，只是执行器是自己写的。
 
 ## 生成
 

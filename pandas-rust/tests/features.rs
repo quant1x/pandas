@@ -75,7 +75,9 @@ fn feature_fixtures_match_rust() {
     let mut low = Vec::new();
     let mut want: Vec<Vec<f64>> = vec![Vec::new(); FEATURES.len()];
     let pred_col = index_of(&header, "pred");
+    let mlp_col = index_of(&header, "pred_mlp");
     let mut want_pred = Vec::new();
+    let mut want_mlp = Vec::new();
 
     for line in lines {
         if line.is_empty() {
@@ -89,6 +91,7 @@ fn feature_fixtures_match_rust() {
             want[slot].push(parse_value(fields[index_of(&header, name)]));
         }
         want_pred.push(parse_value(fields[pred_col]));
+        want_mlp.push(parse_value(fields[mlp_col]));
     }
 
     let ma5 = ma(&close, 5);
@@ -151,5 +154,42 @@ fn feature_fixtures_match_rust() {
             "pred: 第 {index} 位 {actual} != {expected}"
         );
     }
+    let mlp_weights = load_model("../tests/features/model_mlp.csv");
+    let mut pred_mlp = vec![f64::NAN; close.len()];
+    for (index, slot) in pred_mlp.iter_mut().enumerate() {
+        let mut values = Vec::with_capacity(FEATURES.len());
+        let mut missing = false;
+        for (position, _) in FEATURES.iter().enumerate() {
+            let value = computed[position][index];
+            if value.is_nan() {
+                missing = true;
+                break;
+            }
+            values.push(value);
+        }
+        if missing {
+            continue;
+        }
+        let mut hidden = [0.0f64; 4];
+        for (j, activation) in hidden.iter_mut().enumerate() {
+            let mut total = mlp_weights[&format!("b1_{j}")];
+            for (i, value) in values.iter().enumerate() {
+                total += mlp_weights[&format!("w1_{i}_{j}")] * value;
+            }
+            *activation = total.tanh();
+        }
+        let mut total = mlp_weights["b2"];
+        for (j, activation) in hidden.iter().enumerate() {
+            total += mlp_weights[&format!("w2_{j}")] * activation;
+        }
+        *slot = total;
+    }
+    for (index, (actual, expected)) in pred_mlp.iter().zip(want_mlp.iter()).enumerate() {
+        assert!(
+            close_enough(*actual, *expected),
+            "pred_mlp: 第 {index} 位 {actual} != {expected}"
+        );
+    }
+
     assert!(close.len() >= 20, "fixture 行数不足");
 }

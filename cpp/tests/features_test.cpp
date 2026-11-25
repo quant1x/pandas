@@ -30,6 +30,7 @@ struct Table {
     std::vector<double> bias5;
     std::vector<double> cross_up;
     std::vector<double> pred;
+    std::vector<double> pred_mlp;
 };
 
 std::vector<std::string> split(const std::string &text, char delimiter) {
@@ -57,6 +58,25 @@ bool close_enough(double actual, double expected) {
         return true;
     }
     return std::abs(actual - expected) <= 1e-12 * std::max(1.0, std::abs(expected));
+}
+
+std::map<std::string, double> load_weights(const char *path) {
+    std::ifstream input(path);
+    if (!input) {
+        std::printf("cannot open model: %s\n", path);
+        return {};
+    }
+    std::map<std::string, double> weights;
+    std::string line;
+    std::getline(input, line);  // 表头 term,weight
+    while (std::getline(input, line)) {
+        if (line.empty()) {
+            continue;
+        }
+        const auto cells = split(line, ',');
+        weights[cells[0]] = std::stod(cells[1]);
+    }
+    return weights;
 }
 
 bool expect_column(const char *name, const std::vector<double> &got, const std::vector<double> &want) {
@@ -105,6 +125,7 @@ int main() {
     std::size_t bias5_col = 0;
     std::size_t cross_col = 0;
     std::size_t pred_col = 0;
+    std::size_t pred_mlp_col = 0;
     for (std::size_t i = 0; i < header.size(); ++i) {
         const std::string &name = header[i];
         if (name == "date") date_col = i;
@@ -124,6 +145,7 @@ int main() {
         else if (name == "bias5") bias5_col = i;
         else if (name == "cross_up") cross_col = i;
         else if (name == "pred") pred_col = i;
+        else if (name == "pred_mlp") pred_mlp_col = i;
     }
     (void)date_col;
     (void)open_col;
@@ -149,6 +171,7 @@ int main() {
         data.bias5.push_back(parse_value(fields[bias5_col]));
         data.cross_up.push_back(parse_value(fields[cross_col]));
         data.pred.push_back(parse_value(fields[pred_col]));
+        data.pred_mlp.push_back(parse_value(fields[pred_mlp_col]));
     }
 
     const Series close = data.close;
@@ -177,20 +200,13 @@ int main() {
         cross_up[i] = cross[i] ? 1.0 : 0.0;
     }
 
-    std::ifstream model_input(PANDAS_FEATURE_MODEL);
-    if (!model_input) {
-        std::printf("cannot open model: %s\n", PANDAS_FEATURE_MODEL);
+    const auto weights = load_weights(PANDAS_FEATURE_MODEL);
+    if (weights.empty()) {
         return 1;
     }
-    std::map<std::string, double> weights;
-    std::string model_line;
-    std::getline(model_input, model_line);  // 表头 term,weight
-    while (std::getline(model_input, model_line)) {
-        if (model_line.empty()) {
-            continue;
-        }
-        const auto cells = split(model_line, ',');
-        weights[cells[0]] = std::stod(cells[1]);
+    const auto mlp_weights = load_weights(PANDAS_FEATURE_MLP);
+    if (mlp_weights.empty()) {
+        return 1;
     }
 
     const char *order[] = {"ma5", "ma20", "ema12", "wma10", "hhv20", "llv20",
@@ -199,7 +215,7 @@ int main() {
                                &std20, &hhvbars20, &ret1, &bias5, &cross_up};
     Series pred(close.size(), std::numeric_limits<double>::quiet_NaN());
     for (std::size_t i = 0; i < close.size(); ++i) {
-        double total = weights["bias"];
+        double total = weights.at("bias");
         bool missing = false;
         for (std::size_t k = 0; k < 11; ++k) {
             const double value = (*sources[k])[i];
@@ -207,11 +223,41 @@ int main() {
                 missing = true;
                 break;
             }
-            total += weights[order[k]] * value;
+            total += weights.at(order[k]) * value;
         }
         if (!missing) {
             pred[i] = total;
         }
+    }
+
+    constexpr int hidden = 4;
+    Series pred_mlp(close.size(), std::numeric_limits<double>::quiet_NaN());
+    for (std::size_t i = 0; i < close.size(); ++i) {
+        double values[11];
+        bool missing = false;
+        for (std::size_t k = 0; k < 11; ++k) {
+            values[k] = (*sources[k])[i];
+            if (std::isnan(values[k])) {
+                missing = true;
+                break;
+            }
+        }
+        if (missing) {
+            continue;
+        }
+        double activations[hidden];
+        for (int j = 0; j < hidden; ++j) {
+            double total = mlp_weights.at("b1_" + std::to_string(j));
+            for (std::size_t k = 0; k < 11; ++k) {
+                total += mlp_weights.at("w1_" + std::to_string(k) + "_" + std::to_string(j)) * values[k];
+            }
+            activations[j] = std::tanh(total);
+        }
+        double total = mlp_weights.at("b2");
+        for (int j = 0; j < hidden; ++j) {
+            total += mlp_weights.at("w2_" + std::to_string(j)) * activations[j];
+        }
+        pred_mlp[i] = total;
     }
 
     const bool ok =
@@ -226,7 +272,8 @@ int main() {
         expect_column("ret1", ret1, data.ret1) &&
         expect_column("bias5", bias5, data.bias5) &&
         expect_column("cross_up", cross_up, data.cross_up) &&
-        expect_column("pred", pred, data.pred);
+        expect_column("pred", pred, data.pred) &&
+        expect_column("pred_mlp", pred_mlp, data.pred_mlp);
     if (!ok) {
         return 1;
     }

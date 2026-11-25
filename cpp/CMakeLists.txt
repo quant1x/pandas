@@ -29,7 +29,8 @@ add_executable(features_fixture_test tests/features_test.cpp)
 target_link_libraries(features_fixture_test PRIVATE quant1x_pandas_cpp)
 target_compile_definitions(features_fixture_test PRIVATE
         PANDAS_FEATURE_FIXTURES="${CMAKE_CURRENT_SOURCE_DIR}/../tests/features/features.csv"
-        PANDAS_FEATURE_MODEL="${CMAKE_CURRENT_SOURCE_DIR}/../tests/features/model.csv")
+        PANDAS_FEATURE_MODEL="${CMAKE_CURRENT_SOURCE_DIR}/../tests/features/model.csv"
+        PANDAS_FEATURE_MLP="${CMAKE_CURRENT_SOURCE_DIR}/../tests/features/model_mlp.csv")
 
 include(CTest)
 if(BUILD_TESTING)
