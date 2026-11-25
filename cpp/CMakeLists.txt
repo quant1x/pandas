@@ -32,9 +32,30 @@ target_compile_definitions(features_fixture_test PRIVATE
         PANDAS_FEATURE_MODEL="${CMAKE_CURRENT_SOURCE_DIR}/../tests/features/model.csv"
         PANDAS_FEATURE_MLP="${CMAKE_CURRENT_SOURCE_DIR}/../tests/features/model_mlp.csv")
 
+
+# M8：ONNX 推理对拍（需要 onnxruntime SDK；缺省不构建）
+option(PANDAS_WITH_ONNX "构建 ONNX 推理对拍（需 onnxruntime SDK 的 include / lib / dll）" OFF)
+set(PANDAS_ORT_INCLUDE_DIR "" CACHE PATH "onnxruntime 头文件目录（含 onnxruntime_c_api.h）")
+set(PANDAS_ORT_LIB "" CACHE FILEPATH "onnxruntime 导入库")
+set(PANDAS_ORT_DLL "" CACHE FILEPATH "onnxruntime 动态库（构建后拷到可执行文件旁）")
+if(PANDAS_WITH_ONNX)
+    add_executable(onnx_fixture_test tests/onnx_test.cpp)
+    target_include_directories(onnx_fixture_test PRIVATE ${PANDAS_ORT_INCLUDE_DIR})
+    target_link_libraries(onnx_fixture_test PRIVATE quant1x_pandas_cpp ${PANDAS_ORT_LIB})
+    target_compile_definitions(onnx_fixture_test PRIVATE
+            PANDAS_FEATURE_FIXTURES="${CMAKE_CURRENT_SOURCE_DIR}/../tests/features/features.csv"
+            PANDAS_ONNX_MODEL="${CMAKE_CURRENT_SOURCE_DIR}/../tests/features/onnx/mlp.onnx")
+    add_custom_command(TARGET onnx_fixture_test POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            ${PANDAS_ORT_DLL} $<TARGET_FILE_DIR:onnx_fixture_test>)
+endif()
+
 include(CTest)
 if(BUILD_TESTING)
     add_test(NAME formula_test COMMAND formula_test)
     add_test(NAME formula_fixture_test COMMAND formula_fixture_test)
     add_test(NAME features_fixture_test COMMAND features_fixture_test)
+    if(PANDAS_WITH_ONNX)
+        add_test(NAME onnx_fixture_test COMMAND onnx_fixture_test)
+    endif()
 endif()

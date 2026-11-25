@@ -24,24 +24,43 @@ python tests/features/onnx/export_mlp.py
 
 ## 生产侧运行时
 
-| 语言 | 状态 | 接法 |
-| --- | --- | --- |
-| Rust | **已接并复核** | `ort` crate（`load-dynamic`，构建期不下载二进制），见 `pandas-rust/tests/onnx.rs` |
-| C++ | 待接 | 需 onnxruntime C API 头文件与导入库（官方包或 `ort-sys` 自带头） |
-| Go | 待接 | 需 cgo + 同一份头文件与库，`CGO_ENABLED=1` |
+三侧都已接上，判据一致：`features.csv` 的 11 个特征 → `mlp.onnx` → 与 `pred_mlp` 逐列一致（相对 1e-12）。
 
-Rust 侧的运行方式（把 `ORT_DYLIB_PATH` 指向任意一份 onnxruntime 动态库）：
+| 语言 | 入口 | 依赖来源 |
+| --- | --- | --- |
+| Rust | `pandas-rust/tests/onnx.rs` | `ort` crate（`load-dynamic`） |
+| C++ | `cpp/tests/onnx_test.cpp` | onnxruntime SDK 的 `include/` + `onnxruntime.lib` |
+| Go | `tests/features/onnx.go` / `onnx_test.go`（`-tags onnx`） | 同一份头文件；运行时按绝对路径加载 dll |
+
+### SDK 从哪来
+
+不用 GitHub 也能拿到：NuGet 上的 `Microsoft.ML.OnnxRuntime` 包就是官方 C/C++ SDK（含
+`build/native/include/onnxruntime_c_api.h`、`runtimes/win-x64/native/onnxruntime.{lib,dll}`）：
 
 ```bash
-ORT_DYLIB_PATH=/path/to/onnxruntime.dll cargo test --manifest-path pandas-rust/Cargo.toml --test onnx
+curl -L -o ort.nupkg   https://api.nuget.org/v3-flatcontainer/microsoft.ml.onnxruntime/1.32.0/microsoft.ml.onnxruntime.1.32.0.nupkg
+unzip -q ort.nupkg "build/native/include/*" "runtimes/win-x64/native/*" -d ort-sdk
 ```
 
-未设置该变量时用例**跳过**（CI 上通常没有这份库）；设置后它会读 `features.csv` 的 11 个特征，
-跑 `mlp.onnx`，与 `pred_mlp` 列逐值比对（相对 1e-12，NaN 对 NaN 视为相等）。
+（pip 的 `onnxruntime` wheel 只有 dll、没有头文件，所以它帮不上 C++ / Go。）
 
-`python tests/run_all.py` 已把它接成可跳过的一步：不设 `ORT_DYLIB_PATH` 时显示 `SKIP`，不算失败。
+### 三种运行方式
 
-判据不变：输入喂给运行时，输出必须与 `pred_mlp` 一致。C++ / Go 接上后同样按这条判。
+```bash
+# Rust
+ORT_DYLIB_PATH=<ort-sdk>/runtimes/win-x64/native/onnxruntime.dll   cargo test --manifest-path pandas-rust/Cargo.toml --test onnx
+
+# C++（配置期给 SDK，构建后自动把 dll 拷到可执行文件旁）
+cmake -S cpp -B cpp/build -DPANDAS_WITH_ONNX=ON       -DPANDAS_ORT_INCLUDE_DIR=<ort-sdk>/build/native/include       -DPANDAS_ORT_LIB=<ort-sdk>/runtimes/win-x64/native/onnxruntime.lib       -DPANDAS_ORT_DLL=<ort-sdk>/runtimes/win-x64/native/onnxruntime.dll
+cmake --build cpp/build --config Debug
+ctest --test-dir cpp/build -C Debug -R onnx_fixture_test
+
+# Go（只需头文件；运行时按 ORT_DYLIB_PATH 绝对路径加载）
+CGO_ENABLED=1 CGO_CFLAGS="-I<ort-sdk>/build/native/include"   ORT_DYLIB_PATH=<ort-sdk>/runtimes/win-x64/native/onnxruntime.dll   go test -tags onnx ./tests/features/ -run TestONNX
+```
+
+三侧都遵循「没有 SDK 就跳过」：Rust 未设 `ORT_DYLIB_PATH`、Go 未设 `ORT_DYLIB_PATH`、
+C++ 未开 `PANDAS_WITH_ONNX` 时不参与构建 / 直接 SKIP，CI 不受影响。
 
 ## 为什么仓库里没有动态库
 
