@@ -22,15 +22,26 @@ python tests/features/onnx/export_mlp.py
 
 `mlp.onnx` 是产物，随 fixture 一起入库（766 字节）。
 
-## 三侧运行时（未接）
+## 生产侧运行时
 
-ONNX 文件已就绪，生产侧还差运行时。需要在 issue 里定方案，建议三侧共用同一份
-官方 release 动态库，版本天然一致：
-
-| 语言 | 接入方式 | 备注 |
+| 语言 | 状态 | 接法 |
 | --- | --- | --- |
-| C++ | CMake `FetchContent` 拉官方 win/linux 包（带 SHA256），链 C API | 不把二进制打进仓库 |
-| Rust | `ort` crate + `load-dynamic` 特性，运行时指向同一份动态库 | 避免 crate 自带第二份运行时 |
-| Go | `onnxruntime_go` + cgo，`ONNXRUNTIME_LIB` 指向同一路径 | 需 `CGO_ENABLED=1` |
+| Rust | **已接并复核** | `ort` crate（`load-dynamic`，构建期不下载二进制），见 `pandas-rust/tests/onnx.rs` |
+| C++ | 待接 | 需 onnxruntime C API 头文件与导入库（官方包或 `ort-sys` 自带头） |
+| Go | 待接 | 需 cgo + 同一份头文件与库，`CGO_ENABLED=1` |
 
-接上后判据不变：`features.csv` 的输入喂给三侧运行时，输出必须与 `pred_mlp` 一致。
+Rust 侧的运行方式（把 `ORT_DYLIB_PATH` 指向任意一份 onnxruntime 动态库）：
+
+```bash
+ORT_DYLIB_PATH=/path/to/onnxruntime.dll cargo test --manifest-path pandas-rust/Cargo.toml --test onnx
+```
+
+未设置该变量时用例**跳过**（CI 上通常没有这份库）；设置后它会读 `features.csv` 的 11 个特征，
+跑 `mlp.onnx`，与 `pred_mlp` 列逐值比对（相对 1e-12，NaN 对 NaN 视为相等）。
+
+判据不变：输入喂给运行时，输出必须与 `pred_mlp` 一致。C++ / Go 接上后同样按这条判。
+
+## 为什么仓库里没有动态库
+
+onnxruntime 的二进制体积大、且按平台分发，不随仓库提交；`ort` 以 `load-dynamic` 方式在运行时加载，
+所以构建不受影响、也不需要联网拉二进制。
