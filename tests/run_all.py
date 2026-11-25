@@ -58,7 +58,7 @@ def onnx_step() -> str:
     dylib = os.environ.get("ORT_DYLIB_PATH", "")
     if not dylib:
         return "未设置 ORT_DYLIB_PATH（onnxruntime 动态库）"
-    run(["cargo", "test", "--manifest-path", "pandas-rust/Cargo.toml", "--test", "onnx"])
+    run(["cargo", "test", "--test", "onnx"])
     return ""
 
 
@@ -68,9 +68,8 @@ STEPS = [
     ("go 特征 fixture", lambda: run(["go", "test", "./tests/features/"])),
     ("cpp ctest", lambda: run(["ctest", "--test-dir", "cpp/build", "-C", "Debug",
                                "--output-on-failure"])),
-    ("rust 用例", lambda: run(["cargo", "test", "--manifest-path",
-                               "pandas-rust/Cargo.toml"])),
-    ("zig 用例", lambda: run(["zig", "test", "zig/formula_test.zig"])),
+    ("rust 用例", lambda: run(["cargo", "test"])),
+    ("zig 用例", lambda: run(["zig", "test", "formula/formula_test.zig"])),
     ("rust onnx", onnx_step),
 ]
 

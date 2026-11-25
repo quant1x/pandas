@@ -1,0 +1,30 @@
+[package]
+name = "quant1x-pandas"
+version = "0.0.0" # 占位；发布流程接管版本
+edition = "2024"
+publish = false
+
+# 与 Go 的 formula/*.go 同目录：Rust 侧按「家族」聚合在一个 lib.rs 里，
+# 不再单独开 pandas-rust/ 这类语言目录（CONTRIBUTING §3.2）。
+[lib]
+name = "quant1x_pandas"
+path = "formula/lib.rs"
+
+[[test]]
+name = "fixtures"
+path = "formula/tests/fixtures.rs"
+
+[[test]]
+name = "features"
+path = "formula/tests/features.rs"
+
+[[test]]
+name = "onnx"
+path = "formula/tests/onnx.rs"
+
+[dependencies]
+quant1x-num = { path = "../num" }
+
+[dev-dependencies]
+# ONNX 推理（M8）：只动态加载，构建期不下载二进制；运行时用 ORT_DYLIB_PATH 指定库
+ort = { version = "2.0.0-rc.15", default-features = false, features = ["std", "load-dynamic", "api-31"] }

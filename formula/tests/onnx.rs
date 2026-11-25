@@ -24,7 +24,7 @@ const FEATURES: [&str; 11] = [
 ];
 
 fn features_root() -> PathBuf {
-    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../tests/features")
+    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests/features")
 }
 
 fn parse(text: &str) -> f64 {

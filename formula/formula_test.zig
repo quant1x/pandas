@@ -10,7 +10,7 @@ fn nan() f64 {
     return std.math.nan(f64);
 }
 
-/// 读取 fixture：先按项目根目录解析，再按 `zig/` 目录解析。
+/// 读取 fixture：先按仓库根目录解析，再按 `formula/` 目录解析。
 fn readFixture(allocator: std.mem.Allocator) ![]u8 {
     const dir = std.Io.Dir.cwd();
     const limit = std.Io.Limit.limited(1 << 20);

@@ -9,7 +9,7 @@ column,count,nan_ratio,mean,std,min,max,autocorr1
 
 约束（B4 的定位）：
 
-- **不 import 生产实现**（`formula/` / `cpp/` / `pandas-rust/`），自带一份 NumPy 计算，做交叉视角；
+- **不 import 生产实现**（`formula/` / `cpp/`），自带一份 NumPy 计算，做交叉视角；
 - 产物只用于研究对照，不参与交付链路；重复执行逐字节一致。
 """
 

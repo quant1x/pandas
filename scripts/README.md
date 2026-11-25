@@ -8,7 +8,7 @@
 
 约束：
 
-- **不 import 生产实现**（`formula/` / `cpp/` / `pandas-rust/` / `zig/`），自带一份 NumPy 计算，
+- **不 import 生产实现**（`formula/` / `cpp/`），自带一份 NumPy 计算，
   用来提供「另一条路径」的视角；生产侧一致性由 `tests/formula` 与 `tests/features` 的对拍负责；
 - 输出固定、无随机数，重复执行逐字节一致（`tests/run_all.py` 会校验）；
 - 只写 `tests/features/report.csv`，不碰其它文件。

@@ -13,7 +13,7 @@
 | `model_mlp.csv` | 冻结的两层小网络（11 → 4 → 1，tanh 隐层）参数 |
 | `features_test.go` | Go 侧对拍（`go test ./tests/features/`） |
 | `../../cpp/tests/features_test.cpp` | C++ 侧对拍（ctest 的 `features_fixture_test`） |
-| `../../pandas-rust/tests/features.rs` | Rust 侧对拍（`cargo test --test features`） |
+| `../../formula/tests/features.rs` | Rust 侧对拍（`cargo test --test features`） |
 | `onnx/` | `model_mlp` 的 ONNX 导出与 onnxruntime 复核（三侧运行时未接，见其 README） |
 
 ## 列
@@ -58,7 +58,7 @@ python tests/features/gen_features.py
 ```bash
 go test ./tests/features/
 ctest --test-dir cpp/build -C Debug -R features_fixture_test
-cargo test --manifest-path pandas-rust/Cargo.toml --test features
+cargo test --test features
 ```
 
 ## 口径

@@ -61,7 +61,7 @@ fn close_enough(actual: f64, expected: f64) -> bool {
 
 #[test]
 fn feature_fixtures_match_rust() {
-    let path = "../tests/features/features.csv";
+    let path = "tests/features/features.csv";
     let text = fs::read_to_string(path).expect("读取 fixture");
     let mut lines = text.lines();
     let header: Vec<&str> = lines.next().expect("表头").split(',').collect();
@@ -131,7 +131,7 @@ fn feature_fixtures_match_rust() {
             }
         }
     }
-    let weights = load_model("../tests/features/model.csv");
+    let weights = load_model("tests/features/model.csv");
     let mut pred = vec![f64::NAN; close.len()];
     for (index, slot) in pred.iter_mut().enumerate() {
         let mut total = weights["bias"];
@@ -154,7 +154,7 @@ fn feature_fixtures_match_rust() {
             "pred: 第 {index} 位 {actual} != {expected}"
         );
     }
-    let mlp_weights = load_model("../tests/features/model_mlp.csv");
+    let mlp_weights = load_model("tests/features/model_mlp.csv");
     let mut pred_mlp = vec![f64::NAN; close.len()];
     for (index, slot) in pred_mlp.iter_mut().enumerate() {
         let mut values = Vec::with_capacity(FEATURES.len());

@@ -1,6 +1,6 @@
 # pandas/zig —— 公式族 Zig 版（B6）
 
-`pandas/zig` 是 `pandas/formula` 的 Zig 扩展实现起点，与 Go / C++ / Rust 共用同一份公式口径。
+`pandas/formula` 是 `pandas/formula` 的 Zig 扩展实现起点，与 Go / C++ / Rust 共用同一份公式口径。
 当前 39 个公式：ABS / REF / MA / EMA / SMA / HHV / LLV / SUM / STD / WMA / SQRT /
 COUNT / FILTER / HHVBARS / LLVBARS / CROSS / DMA / MAX / MIN / GT / GTE / LT / LTE /
 EQ / NEQ / AND / OR / NOT / IF / IFN / BARSLAST / BARSLASTCOUNT / BARSLASTS /
@@ -15,10 +15,10 @@ Zig 版本基线 0.17.1（`std.Io` 新 IO 接口，`std.ArrayList` 为 unmanaged
 在 `pandas/` 目录下：
 
 ```bash
-zig test zig/formula_test.zig
+zig test formula/formula_test.zig
 ```
 
-也可以在 `pandas/zig/` 目录下执行 `zig test formula_test.zig`，fixture 路径两种工作目录都能解析。
+也可以在 `formula/` 目录下执行 `zig test formula_test.zig`，fixture 路径两种工作目录都能解析。
 本目录不提供 `build.zig`：单文件测试直接由 `zig test` 编译，产物走默认缓存目录。
 
 ## 公式

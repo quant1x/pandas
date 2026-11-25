@@ -47,7 +47,7 @@ fn parse_optional(text: &str) -> i64 {
 
 #[test]
 fn formula_fixtures_match_rust() {
-    let path = "../tests/formula/cases.csv";
+    let path = "tests/formula/cases.csv";
     let text = fs::read_to_string(path).expect("读取 fixture");
     let mut lines = text.lines();
     let header = lines.next().expect("表头");

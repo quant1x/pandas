@@ -28,7 +28,7 @@ python tests/features/onnx/export_mlp.py
 
 | 语言 | 入口 | 依赖来源 |
 | --- | --- | --- |
-| Rust | `pandas-rust/tests/onnx.rs` | `ort` crate（`load-dynamic`） |
+| Rust | `formula/tests/onnx.rs` | `ort` crate（`load-dynamic`） |
 | C++ | `cpp/tests/onnx_test.cpp` | onnxruntime SDK 的 `include/` + `onnxruntime.lib` |
 | Go | `tests/features/onnx.go` / `onnx_test.go`（`-tags onnx`） | 同一份头文件；运行时按绝对路径加载 dll |
 
@@ -48,7 +48,7 @@ unzip -q ort.nupkg "build/native/include/*" "runtimes/win-x64/native/*" -d ort-s
 
 ```bash
 # Rust
-ORT_DYLIB_PATH=<ort-sdk>/runtimes/win-x64/native/onnxruntime.dll   cargo test --manifest-path pandas-rust/Cargo.toml --test onnx
+ORT_DYLIB_PATH=<ort-sdk>/runtimes/win-x64/native/onnxruntime.dll cargo test --test onnx
 
 # C++（配置期给 SDK，构建后自动把 dll 拷到可执行文件旁）
 cmake -S cpp -B cpp/build -DPANDAS_WITH_ONNX=ON       -DPANDAS_ORT_INCLUDE_DIR=<ort-sdk>/build/native/include       -DPANDAS_ORT_LIB=<ort-sdk>/runtimes/win-x64/native/onnxruntime.lib       -DPANDAS_ORT_DLL=<ort-sdk>/runtimes/win-x64/native/onnxruntime.dll
