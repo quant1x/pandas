@@ -226,6 +226,87 @@ namespace quant1x::pandas {
         });
     }
 
+    // 最小二乘直线：t 取 0..n-1，返回斜率与截距；不足两点为 NaN。
+    inline void linear_regression(const Series &v, std::size_t begin, std::size_t end,
+                                  double &slope, double &intercept) {
+        const std::size_t n = end - begin;
+        if (n < 2) {
+            slope = nan_value();
+            intercept = nan_value();
+            return;
+        }
+        const double count = static_cast<double>(n);
+        const double mean_t = static_cast<double>(n - 1) / 2.0;
+        double mean_y = 0.0;
+        for (std::size_t i = begin; i < end; ++i) {
+            mean_y += v[i];
+        }
+        mean_y /= count;
+        double numerator = 0.0;
+        double denominator = 0.0;
+        for (std::size_t k = 0; k < n; ++k) {
+            const double t = static_cast<double>(k) - mean_t;
+            numerator += t * (v[begin + k] - mean_y);
+            denominator += t * t;
+        }
+        slope = numerator / denominator;
+        intercept = mean_y - slope * mean_t;
+    }
+
+    // AVEDEV 平均绝对偏差：窗口内「与均值之差的绝对值」的平均。
+    inline Series avedev(const Series &x, std::size_t window) {
+        return rolling(x, window, [](const Series &v, std::size_t begin, std::size_t end) {
+            const double count = static_cast<double>(end - begin);
+            double mean = 0.0;
+            for (std::size_t i = begin; i < end; ++i) {
+                mean += v[i];
+            }
+            mean /= count;
+            double total = 0.0;
+            for (std::size_t i = begin; i < end; ++i) {
+                total += std::abs(v[i] - mean);
+            }
+            return total / count;
+        });
+    }
+
+    // SLOPE 窗口内线性回归斜率；不足两点为 NaN。
+    inline Series slope(const Series &x, std::size_t window) {
+        return rolling(x, window, [](const Series &v, std::size_t begin, std::size_t end) {
+            double slope_value = nan_value();
+            double intercept = nan_value();
+            linear_regression(v, begin, end, slope_value, intercept);
+            return slope_value;
+        });
+    }
+
+    // FORCAST 窗口内线性回归在最后一根上的预测值。
+    inline Series forcast(const Series &x, std::size_t window) {
+        return rolling(x, window, [](const Series &v, std::size_t begin, std::size_t end) {
+            double slope_value = nan_value();
+            double intercept = nan_value();
+            linear_regression(v, begin, end, slope_value, intercept);
+            if (std::isnan(slope_value)) {
+                return nan_value();
+            }
+            const double last = static_cast<double>(end - begin - 1);
+            return intercept + slope_value * last;
+        });
+    }
+
+    // CONST 取序列最后值为常量序列；Go 先转 float32，故按 f32 精度落值。
+    inline Series const_series(const Series &x) {
+        Series out(x.size(), nan_value());
+        if (x.empty()) {
+            return out;
+        }
+        const double last = static_cast<double>(static_cast<float>(x.back()));
+        for (std::size_t i = 0; i < out.size(); ++i) {
+            out[i] = last;
+        }
+        return out;
+    }
+
     // DMA 动态移动平均：alpha = 1/A，A 可常量或逐位置；非有限时按 1。
     inline Series dma(const Series &x, const Series &a) {
         if (x.empty()) {

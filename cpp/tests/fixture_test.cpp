@@ -170,6 +170,14 @@ int main() {
         } else if (name == "ifn") {
             const Series fallback(y.size(), static_cast<double>(n));
             got = quant1x::pandas::ifn(x, y, fallback);
+        } else if (name == "avedev") {
+            got = quant1x::pandas::avedev(x, static_cast<std::size_t>(n));
+        } else if (name == "slope") {
+            got = quant1x::pandas::slope(x, static_cast<std::size_t>(n));
+        } else if (name == "forcast") {
+            got = quant1x::pandas::forcast(x, static_cast<std::size_t>(n));
+        } else if (name == "const") {
+            got = quant1x::pandas::const_series(x);
         } else if (name == "last") {
             got = quant1x::pandas::last(x, static_cast<std::size_t>(n), static_cast<std::size_t>(m));
         } else {
@@ -190,7 +198,7 @@ int main() {
         }
         ++count;
     }
-    if (count < 35 || failures != 0) {
+    if (count < 39 || failures != 0) {
         std::printf("fixture failed: count=%d failures=%d\n", count, failures);
         return 1;
     }

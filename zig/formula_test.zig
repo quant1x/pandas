@@ -334,6 +334,27 @@ test "last 窗口不足为 NaN" {
     try expectListEqual("last", result, &[_]f64{ nan(), nan(), nan(), 1.0, 0.0, 0.0 });
 }
 
+test "统计与回归族 avedev/slope/forcast/const" {
+    const allocator = std.testing.allocator;
+    const x = [_]f64{ 1.0, 2.0, 3.0, 4.0, 5.0 };
+
+    const deviation = try formula.avedev(allocator, &x, 3);
+    defer allocator.free(deviation);
+    try expectListEqual("avedev", deviation, &[_]f64{ nan(), nan(), 0.6666666666666666, 0.6666666666666666, 0.6666666666666666 });
+
+    const fitted = try formula.slope(allocator, &x, 3);
+    defer allocator.free(fitted);
+    try expectListEqual("slope", fitted, &[_]f64{ nan(), nan(), 1.0, 1.0, 1.0 });
+
+    const prediction = try formula.forcast(allocator, &[_]f64{ 1.0, 2.0, 4.0, 8.0 }, 3);
+    defer allocator.free(prediction);
+    try expectListEqual("forcast", prediction, &[_]f64{ nan(), nan(), 3.8333333333333335, 7.666666666666667 });
+
+    const constant = try formula.constSeries(allocator, &[_]f64{ 1.5, 2.5, 3.1 });
+    defer allocator.free(constant);
+    try expectListEqual("const", constant, &[_]f64{ 3.0999999046325684, 3.0999999046325684, 3.0999999046325684 });
+}
+
 test "fixture cases.csv 逐行对拍" {
     const allocator = std.testing.allocator;
     const text = try readFixture(allocator);
@@ -441,11 +462,19 @@ test "fixture cases.csv 逐行对拍" {
             try ifBranch(allocator, x, y, @floatFromInt(n), true)
         else if (std.mem.eql(u8, name, "last"))
             try formula.last(allocator, x, n, m)
+        else if (std.mem.eql(u8, name, "avedev"))
+            try formula.avedev(allocator, x, n)
+        else if (std.mem.eql(u8, name, "slope"))
+            try formula.slope(allocator, x, n)
+        else if (std.mem.eql(u8, name, "forcast"))
+            try formula.forcast(allocator, x, n)
+        else if (std.mem.eql(u8, name, "const"))
+            try formula.constSeries(allocator, x)
         else
             return error.UnknownFormula;
         defer allocator.free(got);
         try expectListEqual(name, got, want);
         checked += 1;
     }
-    try std.testing.expect(checked >= 35);
+    try std.testing.expect(checked >= 39);
 }

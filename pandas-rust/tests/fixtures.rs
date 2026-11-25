@@ -3,9 +3,9 @@
 use std::fs;
 
 use quant1x_pandas::{
-    abs, and, barslast, barslastcount, barslasts, barssincen, count, cross, dma, ema, eq, filter,
-    gt, gte, hhv, hhvbars, if_select, ifn, last, llv, llvbars, lt, lte, ma, max_series, min_series,
-    neq, not, or, ref_value, sma, sqrt, std, sum, wma,
+    abs, and, avedev, barslast, barslastcount, barslasts, barssincen, const_series, count, cross,
+    dma, ema, eq, filter, forcast, gt, gte, hhv, hhvbars, if_select, ifn, last, llv, llvbars, lt,
+    lte, ma, max_series, min_series, neq, not, or, ref_value, slope, sma, sqrt, std, sum, wma,
 };
 
 fn parse_list(text: &str) -> Vec<f64> {
@@ -105,6 +105,10 @@ fn formula_fixtures_match_rust() {
             "barssincen" => barssincen(&x, n),
             "if" => if_select(&x, &y, &vec![n as f64; y.len()]),
             "ifn" => ifn(&x, &y, &vec![n as f64; y.len()]),
+            "avedev" => avedev(&x, n),
+            "slope" => slope(&x, n),
+            "forcast" => forcast(&x, n),
+            "const" => const_series(&x),
             "last" => last(&x, n, m),
             other => panic!("未覆盖的公式 {other}"),
         };
@@ -122,5 +126,5 @@ fn formula_fixtures_match_rust() {
         }
         checked += 1;
     }
-    assert!(checked >= 35, "fixture 行数不足");
+    assert!(checked >= 39, "fixture 行数不足");
 }

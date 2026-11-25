@@ -1,12 +1,12 @@
 # pandas/zig —— 公式族 Zig 版（B6）
 
 `pandas/zig` 是 `pandas/formula` 的 Zig 扩展实现起点，与 Go / C++ / Rust 共用同一份公式口径。
-当前 35 个公式：ABS / REF / MA / EMA / SMA / HHV / LLV / SUM / STD / WMA / SQRT /
+当前 39 个公式：ABS / REF / MA / EMA / SMA / HHV / LLV / SUM / STD / WMA / SQRT /
 COUNT / FILTER / HHVBARS / LLVBARS / CROSS / DMA / MAX / MIN / GT / GTE / LT / LTE /
 EQ / NEQ / AND / OR / NOT / IF / IFN / BARSLAST / BARSLASTCOUNT / BARSLASTS /
-BARSSINCEN / LAST，
+BARSSINCEN / LAST / AVEDEV / SLOPE / FORCAST / CONST，
 序列用 `[]const f64` + `std.mem.Allocator`，返回调用方负责释放的切片。
-35 个全部进 `tests/formula/cases.csv` 四端对拍。
+39 个全部进 `tests/formula/cases.csv` 四端对拍。
 
 Zig 版本基线 0.17.1（`std.Io` 新 IO 接口，`std.ArrayList` 为 unmanaged 形态）。
 
@@ -49,6 +49,10 @@ zig test zig/formula_test.zig
 | BARSLASTS | `barslasts(allocator, condition, n)` | 倒数第 N 次成立到当前的周期数 |
 | BARSSINCEN | `barssincen(allocator, condition, window)` | N 周期内第一次成立到当前的周期数 |
 | LAST | `last(allocator, condition, a, b)` | A+1 窗口排除最近 B 根后全非零 |
+| AVEDEV | `avedev(allocator, x, window)` | 窗口内与均值之差的绝对值的平均 |
+| SLOPE | `slope(allocator, x, window)` | 窗口内线性回归斜率 |
+| FORCAST | `forcast(allocator, x, window)` | 线性回归在窗口最后一根的预测值 |
+| CONST | `constSeries(allocator, x)` | 取最后值为常量序列（按 f32 精度） |
 
 ## 口径
 
@@ -62,5 +66,5 @@ zig test zig/formula_test.zig
 
 ## 后续
 
-- 公式族已与 C++ 的 35 个对齐且全部入表；后续补整型重载与容器封装。
+- 公式族已与 C++ 的 39 个对齐且全部入表；后续补整型重载与容器封装。
 - 评估改用 `pandas/` 根目录的 `build.zig` 统一驱动 Go / C++ / Rust / Zig 四端 fixture 对拍。

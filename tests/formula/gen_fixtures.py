@@ -9,6 +9,7 @@ from __future__ import annotations
 import csv
 import math
 import os
+import struct
 
 
 def fmt(value: float) -> str:
@@ -129,6 +130,48 @@ def filter_signal(condition, window: int):
             out[j] = 0.0
     return out
 
+
+
+def avedev(x, window: int):
+    """窗口内「与均值之差的绝对值」的平均。"""
+    def deviation(block):
+        mean = sum(block) / len(block)
+        return sum(abs(v - mean) for v in block) / len(block)
+
+    return rolling(x, window, deviation)
+
+
+def regression(block):
+    """最小二乘直线：t 取 0..n-1，返回 (slope, intercept)；不足两点为 NaN。"""
+    n = len(block)
+    if n < 2:
+        return float("nan"), float("nan")
+    mean_t = (n - 1) / 2.0
+    mean_y = sum(block) / n
+    numerator = sum((t - mean_t) * (v - mean_y) for t, v in enumerate(block))
+    denominator = sum((t - mean_t) ** 2 for t in range(n))
+    slope = numerator / denominator
+    return slope, mean_y - slope * mean_t
+
+
+def slope(x, window: int):
+    return rolling(x, window, lambda block: regression(block)[0])
+
+
+def forcast(x, window: int):
+    def value(block):
+        slope, intercept = regression(block)
+        if math.isnan(slope):
+            return float("nan")
+        return intercept + slope * (len(block) - 1)
+
+    return rolling(x, window, value)
+
+
+def const_series(x):
+    """取最后一个值为常量；Go 先转 float32，故按 f32 精度落值。"""
+    last = struct.unpack("f", struct.pack("f", x[-1]))[0]
+    return [last] * len(x)
 
 
 def bars_last(condition):
@@ -277,6 +320,13 @@ def main() -> None:
     values = [10.0, 20.0, 30.0, 40.0, 50.0, 60.0]
     rows.append(["if", series(signals), series(values), -1, "", series([a if c != 0 else -1.0 for c, a in zip(signals, values)])])
     rows.append(["ifn", series(signals), series(values), -1, "", series([-1.0 if c != 0 else a for c, a in zip(signals, values)])])
+
+    avedev_x = [1.0, 2.0, 3.0, 4.0, 5.0]
+    rows.append(["avedev", series(avedev_x), "", 3, "", series(avedev(avedev_x, 3))])
+    rows.append(["slope", series(avedev_x), "", 3, "", series(slope(avedev_x, 3))])
+    rows.append(["forcast", series([1.0, 2.0, 4.0, 8.0]), "", 3, "",
+                 series(forcast([1.0, 2.0, 4.0, 8.0], 3))])
+    rows.append(["const", series([1.5, 2.5, 3.1]), "", "", "", series(const_series([1.5, 2.5, 3.1]))])
 
     max_x = [1.0, 5.0, 3.0]
     max_y = [2.0, 4.0, 6.0]

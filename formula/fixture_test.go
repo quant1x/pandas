@@ -110,6 +110,14 @@ func TestFormulaFixtures(t *testing.T) {
 			got = IF(series, pair, int(n)).DTypes()
 		case "ifn":
 			got = IFN(series, pair, int(n)).DTypes()
+		case "avedev":
+			got = AVEDEV(series, n).DTypes()
+		case "slope":
+			got = SLOPE(series, n).([]float64)
+		case "forcast":
+			got = FORCAST(series, n).([]float64)
+		case "const":
+			got = CONST(series).DTypes()
 		case "last":
 			got = LAST(series, int(n), int(m)).DTypes()
 		default:

@@ -3,7 +3,8 @@
 同一份 CSV 由 NumPy 生成，Go / C++ / Rust / Zig 各自读取并计算，结果必须一致。当前覆盖
 ABS / REF / MA / EMA / SMA / HHV / LLV / SUM / STD / WMA / SQRT / COUNT / FILTER /
 HHVBARS / LLVBARS / CROSS / DMA / MAX / MIN / GT / GTE / LT / LTE / EQ / NEQ / AND / OR / NOT /
-IF / IFN / BARSLAST / BARSLASTCOUNT / BARSLASTS / BARSSINCEN / LAST，对应 M5 的 B1 / B2 / B3 / B6 对拍入口。
+IF / IFN / BARSLAST / BARSLASTCOUNT / BARSLASTS / BARSSINCEN / LAST / AVEDEV / SLOPE /
+FORCAST / CONST，对应 M5 的 B1 / B2 / B3 / B6 对拍入口。
 布尔序列在 CSV 里写作 0/1；`CROSS`、比较族与逻辑族的输出同样落成 0/1。
 滚动族（含 `LAST`）的窗口不足位一律为 NaN，四端同口径。
 

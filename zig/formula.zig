@@ -424,6 +424,68 @@ fn barslastZero(allocator: std.mem.Allocator, condition: []const f64) ![]f64 {
     return out;
 }
 
+/// AVEDEV 平均绝对偏差：窗口内「与均值之差的绝对值」的平均。
+pub fn avedev(allocator: std.mem.Allocator, x: []const f64, window: i64) ![]f64 {
+    return rolling(absoluteDeviationOf, allocator, x, window);
+}
+
+/// SLOPE 窗口内线性回归斜率；不足两点为 NaN。
+pub fn slope(allocator: std.mem.Allocator, x: []const f64, window: i64) ![]f64 {
+    return rolling(slopeOf, allocator, x, window);
+}
+
+/// FORCAST 窗口内线性回归在最后一根上的预测值。
+pub fn forcast(allocator: std.mem.Allocator, x: []const f64, window: i64) ![]f64 {
+    return rolling(forecastOf, allocator, x, window);
+}
+
+/// CONST 取序列最后值为常量序列；Go 先转 float32，故按 f32 精度落值。
+pub fn constSeries(allocator: std.mem.Allocator, x: []const f64) ![]f64 {
+    const out = try allocator.alloc(f64, x.len);
+    if (x.len == 0) return out;
+    const narrowed: f32 = @floatCast(x[x.len - 1]);
+    @memset(out, @as(f64, narrowed));
+    return out;
+}
+
+const Line = struct { slope: f64, intercept: f64 };
+
+fn linearRegression(block: []const f64) Line {
+    if (block.len < 2) return .{ .slope = nan(), .intercept = nan() };
+    const size: f64 = @floatFromInt(block.len);
+    const mean_t = (size - 1) / 2;
+    var mean_y: f64 = 0;
+    for (block) |value| mean_y += value;
+    mean_y /= size;
+    var numerator: f64 = 0;
+    var denominator: f64 = 0;
+    for (block, 0..) |value, index| {
+        const t = @as(f64, @floatFromInt(index)) - mean_t;
+        numerator += t * (value - mean_y);
+        denominator += t * t;
+    }
+    const fitted = numerator / denominator;
+    return .{ .slope = fitted, .intercept = mean_y - fitted * mean_t };
+}
+
+fn absoluteDeviationOf(block: []const f64) f64 {
+    const size: f64 = @floatFromInt(block.len);
+    const mean = totalOf(block) / size;
+    var total: f64 = 0;
+    for (block) |value| total += @abs(value - mean);
+    return total / size;
+}
+
+fn slopeOf(block: []const f64) f64 {
+    return linearRegression(block).slope;
+}
+
+fn forecastOf(block: []const f64) f64 {
+    const line = linearRegression(block);
+    if (std.math.isNan(line.slope)) return nan();
+    return line.intercept + line.slope * @as(f64, @floatFromInt(block.len - 1));
+}
+
 /// 逐窗口应用：完整窗口才计算，窗口不足为 NaN。
 fn rolling(
     comptime apply: fn ([]const f64) f64,
