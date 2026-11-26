@@ -1,6 +1,6 @@
-# pandas/zig —— 公式族 Zig 版（B6）
+# formula/*.zig —— 公式族 Zig 版（B6）
 
-`pandas/formula` 是 `pandas/formula` 的 Zig 扩展实现起点，与 Go / C++ / Rust 共用同一份公式口径。
+`pandas/formula` 的 Zig 扩展实现，与 Go / C++ / Rust 共用同一份公式口径。
 当前 39 个公式：ABS / REF / MA / EMA / SMA / HHV / LLV / SUM / STD / WMA / SQRT /
 COUNT / FILTER / HHVBARS / LLVBARS / CROSS / DMA / MAX / MIN / GT / GTE / LT / LTE /
 EQ / NEQ / AND / OR / NOT / IF / IFN / BARSLAST / BARSLASTCOUNT / BARSLASTS /

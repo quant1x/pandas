@@ -1,6 +1,6 @@
-# formula/lib.rs —— 公式族 Rust 版（B3）
+# formula/*.rs —— 公式族 Rust 版（B3）
 
-`quant1x_pandas` 是 `pandas/formula` 的 Rust 对齐实现，源码与 `.go` 同目录（`formula/lib.rs`），
+`quant1x_pandas` 是 `pandas/formula` 的 Rust 对齐实现，源码与 `.go` 同目录（`formula/*.rs`，`lib.rs` 只做模块声明与重导出），
 构建入口在仓库根的 `Cargo.toml`（`[lib] path = "formula/lib.rs"`）。当前覆盖 41 个基础公式，
 签名与最小参数集对齐 Go 端：
 

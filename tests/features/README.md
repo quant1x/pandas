@@ -65,9 +65,9 @@ cargo test --test features
 
 - 滚动族窗口不足为 NaN（`ma` / `hhv` / `llv` / `std`），`ema` 首值等于源序列首值；
 - 容差：相对 1e-12，NaN 对 NaN 视为相等；
-- Zig 不接：`pandas/zig` 只有公式层，没有特征入口。
+- Zig 不接：`formula/*.zig` 只有公式层，没有特征入口。
 
 ## 下一步
 
-- 接 ONNX 推理侧（M8 的后半），同一模型在 C++ / Rust / Go 三侧输出一致；
+- ONNX 推理侧已接（M8）：`formula/tests/onnx.rs`、`cpp/tests/onnx_test.cpp`、`tests/features/onnx.go` 三侧同值；
 - 特征集扩充时同步三端实现与 `gen_features.py`，不要只改一侧迁就。

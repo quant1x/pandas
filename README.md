@@ -18,8 +18,8 @@ golang版本的pandas
 | --- | --- | --- |
 | `formula/` | Go | 通达信公式（B1），权威实现 |
 | `formula/*.h` | C++ | 39 个公式（B2，与 `.go` 同目录；构建与用例在 `cpp/`） |
-| `formula/lib.rs` | Rust | 41 个公式 + 特征与 ONNX 推理用例（B3，与 `.go` 同目录） |
-| `formula/formula.zig` | Zig | 39 个公式（B6，扩展线，与 `.go` 同目录） |
+| `formula/*.rs` | Rust | 41 个公式 + 特征与 ONNX 推理用例（B3，与 `.go` 同目录；`lib.rs` 只做模块声明与重导出） |
+| `formula/*.zig` | Zig | 39 个公式（B6，扩展线，与 `.go` 同目录；`formula.zig` 只做模块声明与重导出） |
 | `scripts/` | Python | 研究侧因子报告（B4，不参与交付） |
 
 一键验收（生成器幂等 + Go / C++ / Rust / Zig + 可选 ONNX）：

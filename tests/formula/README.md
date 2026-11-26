@@ -34,7 +34,7 @@ python tests/formula/gen_fixtures.py
 # Go（pandas/formula）
 go test ./formula/ -run TestFormulaFixtures
 
-# Rust（formula/lib.rs）
+# Rust（formula/*.rs）
 cargo test --test fixtures
 
 # C++
@@ -42,7 +42,7 @@ cmake -S cpp -B cpp/build
 cmake --build cpp/build
 ctest --test-dir cpp/build -C Debug -R formula_fixture_test
 
-# Zig（pandas/zig）
+# Zig（formula/*.zig）
 zig test formula/formula_test.zig
 ```
 
